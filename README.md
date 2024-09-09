@@ -6,8 +6,11 @@ This repository contains the source code for Enigmatika, a Mystery Adventure 3D 
 Project Structure
 
 [main] - The main branch of the project, where the final, merged code resides.
+
 [Adrian] - A branch for Adrian's work.
+
 [Vince] - A branch for Vince's work.
+
 [JJ] - A branch for JJ's work.
 
 Workflow Guidelines
