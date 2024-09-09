@@ -1,4 +1,5 @@
 Project: Enigmatika
+
 Introduction
 
 This repository contains the source code for Enigmatika, a Mystery Adventure 3D Mobile Game. It is developed by a three-person team: JJ, Adrian, and Vince.
@@ -12,6 +13,7 @@ Project Structure
 [Vince] - A branch for Vince's work.
 
 [JJ] - A branch for JJ's work.
+
 
 Workflow Guidelines
 
