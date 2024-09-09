@@ -340,7 +340,7 @@ namespace DialogueEditor
 
         private void ScrollingText_Update()
         {
-            const float charactersPerSecond = 2200;
+            const float charactersPerSecond = 2300;
             float timePerChar = (60.0f / charactersPerSecond);
             timePerChar *= ScrollSpeed;
 
