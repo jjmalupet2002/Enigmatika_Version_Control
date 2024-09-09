@@ -1,10 +1,9 @@
 Project: Enigmatika
 
-Introduction
+Introduction: This repository contains the source code for Enigmatika, a Mystery Adventure 3D Mobile Game. It is developed by a three-person team: JJ, Adrian, and Vince.
 
-This repository contains the source code for Enigmatika, a Mystery Adventure 3D Mobile Game. It is developed by a three-person team: JJ, Adrian, and Vince.
 
-Project Structure
+Project Structure:
 
 [main] - The main branch of the project, where the final, merged code resides.
 
@@ -15,7 +14,7 @@ Project Structure
 [JJ] - A branch for JJ's work.
 
 
-Workflow Guidelines
+Workflow Guidelines:
 
 1) Create a New Branch: Before starting any new work, create a new branch from the main branch.
 Name the branch appropriately, e.g., feature-new-feature or bugfix-issue-123.
