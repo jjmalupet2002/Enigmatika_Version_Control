@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,19 @@ public class PlayerJoystickControl : MonoBehaviour
 
     private Vector2 movementInput; // Stores joystick input
     private bool isInputEnabled = true; // Flag to control input processing
+
+    private void Awake()
+    {
+        // Automatically assign the main camera transform if not already set
+        if (cameraTransform == null)
+        {
+            cameraTransform = Camera.main?.transform; // Assuming the main camera is tagged as "MainCamera"
+            if (cameraTransform == null)
+            {
+                UnityEngine.Debug.LogError("Main Camera not found in the scene!");
+            }
+        }
+    }
 
     private void OnEnable()
     {
