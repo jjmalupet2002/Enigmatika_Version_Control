@@ -367,7 +367,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC 2 (Intrigued Scholar)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6785685929721850971, guid: 637f27c62a13371479eab058a07838cd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -686,6 +687,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &909568922 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5793705962769436086, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
+  m_PrefabInstance: {fileID: 1306961987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &909568929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909568922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98a66ab83ab447448afabb1e9e91cc35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 8
+  stopDistance: 5
+  moveSpeed: 1
+  player: {fileID: 455208185}
+  animator: {fileID: 0}
+  isWalking: 0
 --- !u!114 &909692723 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5115828921151060344, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
@@ -1001,9 +1025,13 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 455208185}
+    - target: {fileID: 698868704327394294, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 920909291050789010, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.25
+      value: 1.44
       objectReference: {fileID: 0}
     - target: {fileID: 920909291050789010, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1011,7 +1039,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 920909291050789010, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.9
+      value: 13.98
       objectReference: {fileID: 0}
     - target: {fileID: 920909291050789010, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1048,7 +1076,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5793705962769436086, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 909568929}
   m_SourcePrefab: {fileID: 100100000, guid: e3ed64231b506c3499e28473a4cea447, type: 3}
 --- !u!225 &1309359390 stripped
 CanvasGroup:
