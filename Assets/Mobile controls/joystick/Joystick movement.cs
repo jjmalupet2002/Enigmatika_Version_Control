@@ -14,6 +14,9 @@ public class PlayerJoystickControl : MonoBehaviour
     private Vector2 movementInput; // Stores joystick input
     private bool isInputEnabled = true; // Flag to control input processing
 
+    private float idleTimer = 0f; // Timer to track idle time
+    private const float idleThreshold = 15f; // Time threshold for secondary idle animation
+
     private void Awake()
     {
         // Automatically assign the main camera transform if not already set
@@ -46,6 +49,7 @@ public class PlayerJoystickControl : MonoBehaviour
         if (isInputEnabled)
         {
             movementInput = context.ReadValue<Vector2>() * -1f;
+            idleTimer = 0f; // Reset idle timer on movement
         }
     }
 
@@ -88,12 +92,22 @@ public class PlayerJoystickControl : MonoBehaviour
                     playerAnim.SetTrigger("Walk");
                     playerAnim.ResetTrigger("Run");
                 }
+
+                // Reset idle timer when moving
+                idleTimer = 0f;
             }
             else
             {
                 playerAnim.SetTrigger("Idle");
                 playerAnim.ResetTrigger("Run");
                 playerAnim.ResetTrigger("Walk");
+
+                // Increment idle timer when not moving
+                idleTimer += Time.fixedDeltaTime;
+                if (idleTimer >= idleThreshold)
+                {
+                    playerAnim.SetTrigger("IdleLong");
+                }
             }
         }
     }
