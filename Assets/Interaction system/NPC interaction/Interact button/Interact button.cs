@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class NPCInteraction : MonoBehaviour
+public class TalkandInteract : MonoBehaviour
 {
     public Button defaultButton; // Assign in the Inspector
     public Button talkButton;    // Assign in the Inspector
@@ -91,6 +91,10 @@ public class NPCInteraction : MonoBehaviour
         if (currentNPC != null)
         {
             UnityEngine.Debug.Log("Interacting with NPC");
+
+            // Disable player movement while interacting
+            GameStateManager.Instance.SetPlayerMovementState(false);
+
             currentNPC.Interact();
 
             // Start making the NPC face the player
@@ -99,6 +103,9 @@ public class NPCInteraction : MonoBehaviour
             {
                 npcLookAtPlayer.StartFacingPlayer();
             }
+
+            // Re-enable player movement after interaction is done
+            GameStateManager.Instance.SetPlayerMovementState(true);
         }
     }
 

@@ -24,6 +24,9 @@ public class InventoryToggle : MonoBehaviour
             openSound.Play();
         gameObject.SetActive(true);
         SetControlsInteractable(false);
+
+        // Disable player movement
+        GameStateManager.Instance.SetPlayerMovementState(false);
     }
 
     // Method to close the inventory
@@ -42,6 +45,9 @@ public class InventoryToggle : MonoBehaviour
     {
         gameObject.SetActive(false);
         SetControlsInteractable(true);
+
+        // Enable player movement
+        GameStateManager.Instance.SetPlayerMovementState(true);
     }
 
     // Helper method to enable/disable interactivity
