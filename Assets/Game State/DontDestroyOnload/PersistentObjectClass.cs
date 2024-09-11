@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class PersistentObjectManager : MonoBehaviour
@@ -11,6 +12,11 @@ public class PersistentObjectManager : MonoBehaviour
         {
             persistentObjects.Add(obj);
             DontDestroyOnLoad(obj);
+            UnityEngine.Debug.Log($"Registered persistent object: {obj.name}");
+        }
+        else
+        {
+            UnityEngine.Debug.Log($"Object already registered: {obj.name}");
         }
     }
 }
