@@ -46,7 +46,7 @@ public class PlayerJoystickControl : MonoBehaviour
 
     private void HandleMovement(InputAction.CallbackContext context)
     {
-        if (isInputEnabled)
+        if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
         {
             movementInput = context.ReadValue<Vector2>() * -1f;
             idleTimer = 0f; // Reset idle timer on movement
@@ -63,7 +63,7 @@ public class PlayerJoystickControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isInputEnabled)
+        if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
         {
             Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y);
             Vector3 cameraForward = cameraTransform.forward;
