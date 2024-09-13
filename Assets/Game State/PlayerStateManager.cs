@@ -12,24 +12,20 @@ public class GameStateManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            UnityEngine.Debug.Log("GameStateManager Instance initialized.");
         }
         else
         {
             Destroy(gameObject);
-            UnityEngine.Debug.LogWarning("Duplicate GameStateManager instance detected and destroyed.");
         }
     }
 
     public bool CanPlayerMove()
     {
-        UnityEngine.Debug.Log("CanPlayerMove called. Returning: " + canPlayerMove);
         return canPlayerMove;
     }
 
     public void SetPlayerMovementState(bool state)
     {
         canPlayerMove = state;
-        UnityEngine.Debug.Log("SetPlayerMovementState called. New state: " + state);
     }
 }

@@ -15,9 +15,12 @@ public class InventoryToggle : MonoBehaviour
         // Set up the interact button (back button) to play the close sound
         if (interactButton != null)
             interactButton.onClick.AddListener(CloseInventory);
+
+        // Set up the inventory button to open the inventory
+        if (InventoryButton != null)
+            InventoryButton.onClick.AddListener(OpenInventory);
     }
 
-    // Method to open the inventory
     public void OpenInventory()
     {
         if (openSound != null)
@@ -25,29 +28,35 @@ public class InventoryToggle : MonoBehaviour
         gameObject.SetActive(true);
         SetControlsInteractable(false);
 
-        // Disable player movement
+        // Disable player movement and joystick input
         GameStateManager.Instance.SetPlayerMovementState(false);
+        var playerJoystick = FindObjectOfType<PlayerJoystickControl>();
+        if (playerJoystick != null)
+            playerJoystick.SetInputEnabled(false);
+
+        Debug.Log("Inventory opened. Player movement disabled.");
     }
 
-    // Method to close the inventory
     public void CloseInventory()
     {
-        // Play the close sound
         if (closeSound != null)
             closeSound.Play();
 
-        // Invoke the deactivation after a slight delay to ensure the sound plays
         Invoke("DeactivateInventory", closeSound.clip.length);
     }
 
-    // Helper method to deactivate the inventory UI
     private void DeactivateInventory()
     {
         gameObject.SetActive(false);
         SetControlsInteractable(true);
 
-        // Enable player movement
+        // Enable player movement and joystick input
         GameStateManager.Instance.SetPlayerMovementState(true);
+        var playerJoystick = FindObjectOfType<PlayerJoystickControl>();
+        if (playerJoystick != null)
+            playerJoystick.SetInputEnabled(true);
+
+        Debug.Log("Inventory closed. Player movement enabled.");
     }
 
     // Helper method to enable/disable interactivity
