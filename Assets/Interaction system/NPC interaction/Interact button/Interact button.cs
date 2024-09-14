@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class TalkandInteract : MonoBehaviour
     public Button talkButton;    // Assign in the Inspector
     public Button interactButton; // On-Screen Button for interaction
 
-    public SwitchCamera switchCamera; // Reference to SwitchCamera script
+    private SwitchCamera switchCamera; // Reference to SwitchCamera script
 
     private PlayerInput playerInput; // Reference to PlayerInput component
     private InputAction interactAction; // Action reference
@@ -23,7 +24,13 @@ public class TalkandInteract : MonoBehaviour
         playerInput = GetComponent<PlayerInput>(); // Get PlayerInput component attached to the GameObject
         if (playerInput == null)
         {
-            UnityEngine.Debug.LogError("PlayerInput component not found!!");
+            UnityEngine.Debug.LogError("PlayerInput component not found!");
+        }
+
+        switchCamera = FindObjectOfType<SwitchCamera>(); // Find the SwitchCamera script in the scene
+        if (switchCamera == null)
+        {
+            UnityEngine.Debug.LogError("SwitchCamera script not found in the scene!");
         }
     }
 
@@ -46,13 +53,14 @@ public class TalkandInteract : MonoBehaviour
             UnityEngine.Debug.LogError("Interact action not found!");
         }
 
-        StartCoroutine(CheckProximity()); // Start coroutine for proximity check
-
-        // Add event listener for on-screen button
+        // Always show the interact button
         if (interactButton != null)
         {
+            interactButton.gameObject.SetActive(true);
             interactButton.onClick.AddListener(OnInteractButtonPressed);
         }
+
+        StartCoroutine(CheckProximity()); // Start coroutine for proximity check
     }
 
     private void OnDisable()
@@ -128,8 +136,14 @@ public class TalkandInteract : MonoBehaviour
         if (currentInteractable != null)
         {
             UnityEngine.Debug.Log("Interacting with Object");
-            switchCamera.ManageCamera();
-            // Additional logic for interacting with the object can be added here
+
+            // Find the SwitchCamera component on the interactable object
+            SwitchCamera switchCam = currentInteractable.GetComponent<SwitchCamera>();
+            if (switchCam != null)
+            {
+                Camera closeUpCam = currentInteractable.GetComponentInChildren<Camera>(); // Get the close-up camera from the interactable object
+                switchCam.ManageCamera(closeUpCam); // Manage camera switch
+            }
         }
     }
 
@@ -142,6 +156,8 @@ public class TalkandInteract : MonoBehaviour
 
             bool foundNPC = false;
             bool foundInteractable = false;
+            GameObject nearestInteractable = null;
+
             foreach (Collider collider in colliderArray)
             {
                 if (collider.CompareTag("NPC"))
@@ -152,7 +168,7 @@ public class TalkandInteract : MonoBehaviour
                 else if (collider.CompareTag("Interactable"))
                 {
                     foundInteractable = true;
-                    currentInteractable = collider.gameObject; // Cache the current interactable object
+                    nearestInteractable = collider.gameObject; // Cache the nearest interactable object
                 }
             }
 
@@ -163,10 +179,19 @@ public class TalkandInteract : MonoBehaviour
                 talkButton.gameObject.SetActive(isNearNPC);
             }
 
+            // Update the state of interactButton only when needed
             if (foundInteractable != isNearInteractable)
             {
                 isNearInteractable = foundInteractable;
-                interactButton.gameObject.SetActive(isNearInteractable);
+
+                if (isNearInteractable)
+                {
+                    currentInteractable = nearestInteractable; // Update the current interactable object
+                }
+                else
+                {
+                    currentInteractable = null; // Clear reference if no longer near an interactable object
+                }
             }
 
             yield return new WaitForSeconds(0.2f); // Check every 0.2 seconds, adjust as needed
