@@ -9,10 +9,14 @@ public class TalkandInteract : MonoBehaviour
     public Button talkButton;    // Assign in the Inspector
     public Button interactButton; // On-Screen Button for interaction
 
+    public SwitchCamera switchCamera; // Reference to SwitchCamera script
+
     private PlayerInput playerInput; // Reference to PlayerInput component
     private InputAction interactAction; // Action reference
     private bool isNearNPC = false; // Track NPC proximity
+    private bool isNearInteractable = false; // Track interactable proximity
     private NPCInteractable currentNPC; // Reference to the current NPC
+    private GameObject currentInteractable; // Reference to the current interactable object
 
     private void Awake()
     {
@@ -42,7 +46,7 @@ public class TalkandInteract : MonoBehaviour
             UnityEngine.Debug.LogError("Interact action not found!");
         }
 
-        StartCoroutine(CheckNPCProximity()); // Start coroutine for NPC proximity check
+        StartCoroutine(CheckProximity()); // Start coroutine for proximity check
 
         // Add event listener for on-screen button
         if (interactButton != null)
@@ -59,7 +63,7 @@ public class TalkandInteract : MonoBehaviour
             interactAction.performed -= OnInteractPerformed;
         }
 
-        StopCoroutine(CheckNPCProximity()); // Stop coroutine when disabled
+        StopCoroutine(CheckProximity()); // Stop coroutine when disabled
 
         // Remove event listener for on-screen button
         if (interactButton != null)
@@ -72,8 +76,13 @@ public class TalkandInteract : MonoBehaviour
     {
         if (isNearNPC)
         {
-            UnityEngine.Debug.Log("Interact action performed");
-            PerformInteraction();
+            UnityEngine.Debug.Log("Interact action performed with NPC");
+            PerformNPCInteraction();
+        }
+        else if (isNearInteractable)
+        {
+            UnityEngine.Debug.Log("Interact action performed with Interactable Object");
+            PerformObjectInteraction();
         }
     }
 
@@ -81,12 +90,17 @@ public class TalkandInteract : MonoBehaviour
     {
         if (isNearNPC)
         {
-            UnityEngine.Debug.Log("Interact button pressed");
-            PerformInteraction();
+            UnityEngine.Debug.Log("Interact button pressed with NPC");
+            PerformNPCInteraction();
+        }
+        else if (isNearInteractable)
+        {
+            UnityEngine.Debug.Log("Interact button pressed with Interactable Object");
+            PerformObjectInteraction();
         }
     }
 
-    private void PerformInteraction()
+    private void PerformNPCInteraction()
     {
         if (currentNPC != null)
         {
@@ -109,7 +123,17 @@ public class TalkandInteract : MonoBehaviour
         }
     }
 
-    private IEnumerator CheckNPCProximity()
+    private void PerformObjectInteraction()
+    {
+        if (currentInteractable != null)
+        {
+            UnityEngine.Debug.Log("Interacting with Object");
+            switchCamera.ManageCamera();
+            // Additional logic for interacting with the object can be added here
+        }
+    }
+
+    private IEnumerator CheckProximity()
     {
         while (true)
         {
@@ -117,13 +141,18 @@ public class TalkandInteract : MonoBehaviour
             Collider[] colliderArray = Physics.OverlapSphere(transform.position, interactRange);
 
             bool foundNPC = false;
+            bool foundInteractable = false;
             foreach (Collider collider in colliderArray)
             {
                 if (collider.CompareTag("NPC"))
                 {
                     foundNPC = true;
                     currentNPC = collider.GetComponent<NPCInteractable>(); // Cache the current NPC
-                    break;
+                }
+                else if (collider.CompareTag("Interactable"))
+                {
+                    foundInteractable = true;
+                    currentInteractable = collider.gameObject; // Cache the current interactable object
                 }
             }
 
@@ -132,6 +161,12 @@ public class TalkandInteract : MonoBehaviour
                 isNearNPC = foundNPC;
                 defaultButton.gameObject.SetActive(!isNearNPC);
                 talkButton.gameObject.SetActive(isNearNPC);
+            }
+
+            if (foundInteractable != isNearInteractable)
+            {
+                isNearInteractable = foundInteractable;
+                interactButton.gameObject.SetActive(isNearInteractable);
             }
 
             yield return new WaitForSeconds(0.2f); // Check every 0.2 seconds, adjust as needed
