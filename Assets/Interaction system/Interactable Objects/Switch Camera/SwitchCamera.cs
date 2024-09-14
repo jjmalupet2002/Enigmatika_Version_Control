@@ -26,6 +26,7 @@ public class SwitchCamera : MonoBehaviour
 
     public void ManageCamera(Camera newCloseUpCamera = null)
     {
+        UnityEngine.Debug.Log("ManageCamera called with newCloseUpCamera: " + newCloseUpCamera);
         if (currentCameraState == CameraState.Main)
         {
             SetCamera(CameraState.CloseUp, newCloseUpCamera);
@@ -40,14 +41,26 @@ public class SwitchCamera : MonoBehaviour
     {
         if (mainCamera != null)
         {
-            mainCamera.gameObject.SetActive(state == CameraState.Main);
+            bool mainCameraActive = state == CameraState.Main;
+            mainCamera.gameObject.SetActive(mainCameraActive);
+            UnityEngine.Debug.Log("Main camera active: " + mainCameraActive);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("Main camera is null.");
         }
 
         foreach (var cam in CloseUpCameras)
         {
             if (cam != null)
             {
-                cam.gameObject.SetActive(cam == closeUpCamera && state == CameraState.CloseUp);
+                bool shouldActivate = cam == closeUpCamera && state == CameraState.CloseUp;
+                cam.gameObject.SetActive(shouldActivate);
+                UnityEngine.Debug.Log("Close-up camera " + cam.name + " active: " + shouldActivate);
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("Close-up camera in list is null.");
             }
         }
 

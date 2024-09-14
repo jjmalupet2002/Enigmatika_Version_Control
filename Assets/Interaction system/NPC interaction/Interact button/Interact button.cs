@@ -10,7 +10,7 @@ public class TalkandInteract : MonoBehaviour
     public Button talkButton;    // Assign in the Inspector
     public Button interactButton; // On-Screen Button for interaction
 
-    private SwitchCamera switchCamera; // Reference to SwitchCamera script
+    private SwitchCamera switchCamera; // Reference to SwitchCamera script (optional, not used directly)
 
     private PlayerInput playerInput; // Reference to PlayerInput component
     private InputAction interactAction; // Action reference
@@ -27,11 +27,12 @@ public class TalkandInteract : MonoBehaviour
             UnityEngine.Debug.LogError("PlayerInput component not found!");
         }
 
-        switchCamera = FindObjectOfType<SwitchCamera>(); // Find the SwitchCamera script in the scene
-        if (switchCamera == null)
-        {
-            UnityEngine.Debug.LogError("SwitchCamera script not found in the scene!");
-        }
+        // Optionally, you can keep a reference to the global SwitchCamera if you have one.
+        // switchCamera = FindObjectOfType<SwitchCamera>();
+        // if (switchCamera == null)
+        // {
+        //     Debug.LogError("SwitchCamera script not found in the scene!");
+        // }
     }
 
     private void OnEnable()
@@ -84,12 +85,12 @@ public class TalkandInteract : MonoBehaviour
     {
         if (isNearNPC)
         {
-            UnityEngine.Debug.Log("Interact action performed with NPC");
+            
             PerformNPCInteraction();
         }
         else if (isNearInteractable)
         {
-            UnityEngine.Debug.Log("Interact action performed with Interactable Object");
+            
             PerformObjectInteraction();
         }
     }
@@ -135,17 +136,21 @@ public class TalkandInteract : MonoBehaviour
     {
         if (currentInteractable != null)
         {
-            UnityEngine.Debug.Log("Interacting with Object");
-
-            // Find the SwitchCamera component on the interactable object
+            UnityEngine.Debug.Log("Interacting with Object. Current Interactable: " + currentInteractable);
             SwitchCamera switchCam = currentInteractable.GetComponent<SwitchCamera>();
             if (switchCam != null)
             {
-                Camera closeUpCam = currentInteractable.GetComponentInChildren<Camera>(); // Get the close-up camera from the interactable object
-                switchCam.ManageCamera(closeUpCam); // Manage camera switch
+                UnityEngine.Debug.Log("SwitchCamera component found.");
+                Camera closeUpCam = currentInteractable.GetComponentInChildren<Camera>();
+                switchCam.ManageCamera(closeUpCam);
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("SwitchCamera component not found on interactable object.");
             }
         }
     }
+
 
     private IEnumerator CheckProximity()
     {
