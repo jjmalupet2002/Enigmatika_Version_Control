@@ -1,52 +1,56 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
+public enum CameraState
+{
+    Main,
+    CloseUp
+}
+
 public class SwitchCamera : MonoBehaviour
 {
-    public GameObject Camera_1; // Main isometric camera
-    public GameObject Camera_2; // Close-up camera
-    private bool isCloseUp = false;
+    public List<Camera> CloseUpCameras = new List<Camera>(); // List to store close-up cameras
+    public CameraState currentCameraState = CameraState.Main; // Current camera state
 
-    // Call this method to switch cameras
-    public void ManageCamera()
-    {
-        UnityEngine.Debug.Log("ManageCamera called");
-        if (isCloseUp)
-        {
-            SetIsometricView();
-        }
-        else
-        {
-            SetCloseUpView();
-        }
-        isCloseUp = !isCloseUp;
-    }
+    private Camera mainCamera; // Reference to the universal main camera
 
-    void SetIsometricView()
+    void Start()
     {
-        UnityEngine.Debug.Log("Switching to Isometric View");
-        if (Camera_1 != null && Camera_2 != null)
+        mainCamera = Camera.main; // Find and assign the universal main camera by tag
+        if (mainCamera == null)
         {
-            Camera_1.SetActive(true);
-            Camera_2.SetActive(false);
-        }
-        else
-        {
-            UnityEngine.Debug.LogError("Camera_1 or Camera_2 is not assigned.");
+            UnityEngine.Debug.LogError("Main camera not found.");
         }
     }
 
-    void SetCloseUpView()
+    public void ManageCamera(Camera newCloseUpCamera = null)
     {
-        UnityEngine.Debug.Log("Switching to Close-Up View");
-        if (Camera_1 != null && Camera_2 != null)
+        if (currentCameraState == CameraState.Main)
         {
-            Camera_1.SetActive(false);
-            Camera_2.SetActive(true);
+            SetCamera(CameraState.CloseUp, newCloseUpCamera);
         }
         else
         {
-            UnityEngine.Debug.LogError("Camera_1 or Camera_2 is not assigned.");
+            SetCamera(CameraState.Main);
         }
+    }
+
+    private void SetCamera(CameraState state, Camera closeUpCamera = null)
+    {
+        if (mainCamera != null)
+        {
+            mainCamera.gameObject.SetActive(state == CameraState.Main);
+        }
+
+        foreach (var cam in CloseUpCameras)
+        {
+            if (cam != null)
+            {
+                cam.gameObject.SetActive(cam == closeUpCamera && state == CameraState.CloseUp);
+            }
+        }
+
+        currentCameraState = state;
     }
 }
