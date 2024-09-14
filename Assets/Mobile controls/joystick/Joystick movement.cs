@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,7 +25,7 @@ public class PlayerJoystickControl : MonoBehaviour
             cameraTransform = Camera.main?.transform; // Assuming the main camera is tagged as "MainCamera"
             if (cameraTransform == null)
             {
-                Debug.LogError("Main Camera not found in the scene!");
+                UnityEngine.Debug.LogError("Main Camera not found in the scene!");
             }
         }
     }
@@ -45,28 +46,23 @@ public class PlayerJoystickControl : MonoBehaviour
 
     private void HandleMovement(InputAction.CallbackContext context)
     {
-
         if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
         {
             movementInput = context.ReadValue<Vector2>() * -1f;
             idleTimer = 0f; // Reset idle timer on movement
-
         }
     }
 
     private void HandleMovementCanceled(InputAction.CallbackContext context)
     {
-
         if (isInputEnabled)
         {
             movementInput = Vector2.zero;
-
         }
     }
 
     private void FixedUpdate()
     {
-        Debug.Log($"FixedUpdate called. CanPlayerMove: {GameStateManager.Instance.CanPlayerMove()}");
         if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
         {
             Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y);
