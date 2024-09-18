@@ -1,83 +1,69 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+
+public enum CameraState
+{
+    Main,
+    CloseUp
+}
 
 public class SwitchCamera : MonoBehaviour
 {
-    // Dictionary to hold camera views, with unique identifiers for each
-    public Dictionary<int, Camera> cameras = new Dictionary<int, Camera>();
+    public List<Camera> CloseUpCameras = new List<Camera>(); // List to store close-up cameras
+    public CameraState currentCameraState = CameraState.Main; // Current camera state
 
-    // Public field for the close-up view camera to be set in the Unity Inspector
-    public Camera closeUpCamera; // Example for a close-up camera
-
-    private int currentCameraId;
-    private Camera defaultCamera;
+    private Camera mainCamera; // Reference to the universal main camera
 
     void Start()
     {
-        // Find and set the default camera
-        GameObject defaultCameraObject = GameObject.FindGameObjectWithTag("MainCamera");
-        if (defaultCameraObject != null)
+        mainCamera = Camera.main; // Find and assign the universal main camera by tag
+        if (mainCamera == null)
         {
-            defaultCamera = defaultCameraObject.GetComponent<Camera>();
-            if (defaultCamera != null)
-            {
-                // Register the default camera with ID 1
-                RegisterCamera(1, defaultCamera);
-                currentCameraId = 1; // Set default camera ID
-                SetCamera(currentCameraId);
-            }
-            else
-            {
-                Debug.LogError("No Camera component found on the MainCamera object.");
-            }
-        }
-        else
-        {
-            Debug.LogError("MainCamera object not found.");
-        }
-
-        // Register the close-up camera if assigned
-        if (closeUpCamera != null)
-        {
-            RegisterCamera(2, closeUpCamera); // Assign a unique ID for the close-up camera
+            UnityEngine.Debug.LogError("Main camera not found.");
         }
     }
 
-    public void SetCamera(int id)
+    public void ManageCamera(Camera newCloseUpCamera = null)
     {
-        // Deactivate all cameras
-        foreach (var cam in cameras.Values)
+        UnityEngine.Debug.Log("ManageCamera called with newCloseUpCamera: " + newCloseUpCamera);
+        if (currentCameraState == CameraState.Main)
+        {
+            SetCamera(CameraState.CloseUp, newCloseUpCamera);
+        }
+        else
+        {
+            SetCamera(CameraState.Main);
+        }
+    }
+
+    private void SetCamera(CameraState state, Camera closeUpCamera = null)
+    {
+        if (mainCamera != null)
+        {
+            bool mainCameraActive = state == CameraState.Main;
+            mainCamera.gameObject.SetActive(mainCameraActive);
+            UnityEngine.Debug.Log("Main camera active: " + mainCameraActive);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("Main camera is null.");
+        }
+
+        foreach (var cam in CloseUpCameras)
         {
             if (cam != null)
             {
-                cam.gameObject.SetActive(false);
+                bool shouldActivate = cam == closeUpCamera && state == CameraState.CloseUp;
+                cam.gameObject.SetActive(shouldActivate);
+                UnityEngine.Debug.Log("Close-up camera " + cam.name + " active: " + shouldActivate);
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("Close-up camera in list is null.");
             }
         }
 
-        // Activate the selected camera
-        if (cameras.TryGetValue(id, out Camera camera))
-        {
-            camera.gameObject.SetActive(true);
-            Debug.Log($"Camera {id} is now active.");
-        }
-        else
-        {
-            Debug.LogError($"Camera with ID {id} not found.");
-        }
-    }
-
-    public void SwitchToNextCamera()
-    {
-        // Logic to cycle through cameras
-        currentCameraId = (currentCameraId % cameras.Count) + 1;
-        SetCamera(currentCameraId);
-    }
-
-    public void RegisterCamera(int id, Camera camera)
-    {
-        if (!cameras.ContainsKey(id))
-        {
-            cameras.Add(id, camera);
-        }
+        currentCameraState = state;
     }
 }
