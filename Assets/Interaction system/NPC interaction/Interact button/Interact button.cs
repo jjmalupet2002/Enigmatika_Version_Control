@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -10,8 +9,6 @@ public class TalkandInteract : MonoBehaviour
     public Button talkButton;    // Assign in the Inspector
     public Button interactButton; // On-Screen Button for interaction
 
-    private SwitchCamera switchCamera; // Reference to SwitchCamera script (optional, not used directly)
-
     private PlayerInput playerInput; // Reference to PlayerInput component
     private InputAction interactAction; // Action reference
     private bool isNearNPC = false; // Track NPC proximity
@@ -19,27 +16,23 @@ public class TalkandInteract : MonoBehaviour
     private NPCInteractable currentNPC; // Reference to the current NPC
     private GameObject currentInteractable; // Reference to the current interactable object
 
+    public float interactCooldown = 0.5f; // 0.5 seconds cooldown
+    private float lastInteractTime = 0f;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>(); // Get PlayerInput component attached to the GameObject
         if (playerInput == null)
         {
-            UnityEngine.Debug.LogError("PlayerInput component not found!");
+            Debug.LogError("PlayerInput component not found!");
         }
-
-        // Optionally, you can keep a reference to the global SwitchCamera if you have one.
-        // switchCamera = FindObjectOfType<SwitchCamera>();
-        // if (switchCamera == null)
-        // {
-        //     Debug.LogError("SwitchCamera script not found in the scene!");
-        // }
     }
 
     private void OnEnable()
     {
         if (playerInput == null)
         {
-            UnityEngine.Debug.LogError("PlayerInput component is not assigned.");
+            Debug.LogError("PlayerInput component is not assigned.");
             return;
         }
 
@@ -51,7 +44,7 @@ public class TalkandInteract : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("Interact action not found!");
+            Debug.LogError("Interact action not found!");
         }
 
         // Always show the interact button
@@ -61,7 +54,11 @@ public class TalkandInteract : MonoBehaviour
             interactButton.onClick.AddListener(OnInteractButtonPressed);
         }
 
-        StartCoroutine(CheckProximity()); // Start coroutine for proximity check
+        // Start the coroutine only if it's not already running
+        if (!IsInvoking("CheckProximity"))
+        {
+            StartCoroutine(CheckProximity());
+        }
     }
 
     private void OnDisable()
@@ -83,28 +80,29 @@ public class TalkandInteract : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
-        if (isNearNPC)
-        {
-            
-            PerformNPCInteraction();
-        }
-        else if (isNearInteractable)
-        {
-            
-            PerformObjectInteraction();
-        }
+        HandleInteraction();
     }
 
     public void OnInteractButtonPressed()
     {
+        if (Time.time - lastInteractTime >= interactCooldown)
+        {
+            HandleInteraction();
+            lastInteractTime = Time.time; // Update the last interaction time
+        }
+    
+    }
+
+    private void HandleInteraction()
+    {
         if (isNearNPC)
         {
-            UnityEngine.Debug.Log("Interact button pressed with NPC");
+            Debug.Log("Interact button pressed with NPC");
             PerformNPCInteraction();
         }
         else if (isNearInteractable)
         {
-            UnityEngine.Debug.Log("Interact button pressed with Interactable Object");
+            Debug.Log("Interact button pressed with Interactable Object");
             PerformObjectInteraction();
         }
     }
@@ -113,7 +111,7 @@ public class TalkandInteract : MonoBehaviour
     {
         if (currentNPC != null)
         {
-            UnityEngine.Debug.Log("Interacting with NPC");
+            Debug.Log("Interacting with NPC");
 
             // Disable player movement while interacting
             GameStateManager.Instance.SetPlayerMovementState(false);
@@ -136,21 +134,19 @@ public class TalkandInteract : MonoBehaviour
     {
         if (currentInteractable != null)
         {
-            UnityEngine.Debug.Log("Interacting with Object. Current Interactable: " + currentInteractable);
+            Debug.Log("Interacting with Object. Current Interactable: " + currentInteractable);
             SwitchCamera switchCam = currentInteractable.GetComponent<SwitchCamera>();
             if (switchCam != null)
             {
-                UnityEngine.Debug.Log("SwitchCamera component found.");
-                Camera closeUpCam = currentInteractable.GetComponentInChildren<Camera>();
-                switchCam.ManageCamera(closeUpCam);
+                Debug.Log("SwitchCamera component found.");
+                switchCam.SwitchToNextCamera(); // Or whichever method is appropriate
             }
             else
             {
-                UnityEngine.Debug.LogError("SwitchCamera component not found on interactable object.");
+                Debug.LogError("SwitchCamera component not found on interactable object.");
             }
         }
     }
-
 
     private IEnumerator CheckProximity()
     {
