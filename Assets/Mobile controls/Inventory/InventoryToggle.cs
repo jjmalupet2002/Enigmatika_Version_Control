@@ -10,15 +10,29 @@ public class InventoryToggle : MonoBehaviour
     public AudioSource closeSound; // Assign the AudioSource for closing sound
     public CanvasGroup joystickCanvasGroup; // Reference to the CanvasGroup for the joystick
 
+    private bool isInventoryOpen = false; // Track the state of the inventory
+
     private void Start()
     {
-        // Set up the interact button (back button) to play the close sound
-        if (interactButton != null)
-            interactButton.onClick.AddListener(CloseInventory);
-
         // Set up the inventory button to open the inventory
         if (InventoryButton != null)
             InventoryButton.onClick.AddListener(OpenInventory);
+
+        // Set up the interact button for its primary function
+        if (interactButton != null)
+            interactButton.onClick.AddListener(OnInteract);
+    }
+
+    private void OnInteract()
+    {
+        if (isInventoryOpen)
+        {
+            CloseInventory();
+        }
+        else
+        {
+            // Implement other interact button functionality here
+        }
     }
 
     public void OpenInventory()
@@ -34,7 +48,7 @@ public class InventoryToggle : MonoBehaviour
         if (playerJoystick != null)
             playerJoystick.SetInputEnabled(false);
 
-        Debug.Log("Inventory opened. Player movement disabled.");
+        isInventoryOpen = true;
     }
 
     public void CloseInventory()
@@ -56,7 +70,7 @@ public class InventoryToggle : MonoBehaviour
         if (playerJoystick != null)
             playerJoystick.SetInputEnabled(true);
 
-        Debug.Log("Inventory closed. Player movement enabled.");
+        isInventoryOpen = false;
     }
 
     // Helper method to enable/disable interactivity
