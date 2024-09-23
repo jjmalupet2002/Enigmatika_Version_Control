@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public enum CameraState
@@ -12,6 +11,7 @@ public class SwitchCamera : MonoBehaviour
 {
     public List<Camera> CloseUpCameras = new List<Camera>(); // List to store close-up cameras
     public CameraState currentCameraState = CameraState.Main; // Current camera state
+    public GameObject backButton; // Reference to the back button UI object
 
     private Camera mainCamera; // Reference to the universal main camera
 
@@ -22,18 +22,24 @@ public class SwitchCamera : MonoBehaviour
         {
             UnityEngine.Debug.LogError("Main camera not found.");
         }
+
+        if (backButton == null)
+        {
+            UnityEngine.Debug.LogError("Back button UI object not assigned.");
+        }
     }
 
     public void ManageCamera(Camera newCloseUpCamera = null)
     {
-        UnityEngine.Debug.Log("ManageCamera called with newCloseUpCamera: " + newCloseUpCamera);
         if (currentCameraState == CameraState.Main)
         {
             SetCamera(CameraState.CloseUp, newCloseUpCamera);
+            backButton.SetActive(true); // Enable the back button when switching to close-up camera
         }
         else
         {
             SetCamera(CameraState.Main);
+            backButton.SetActive(false); // Disable the back button when switching back to the main camera
         }
     }
 
@@ -41,9 +47,7 @@ public class SwitchCamera : MonoBehaviour
     {
         if (mainCamera != null)
         {
-            bool mainCameraActive = state == CameraState.Main;
-            mainCamera.gameObject.SetActive(mainCameraActive);
-            UnityEngine.Debug.Log("Main camera active: " + mainCameraActive);
+            mainCamera.enabled = state == CameraState.Main;
         }
         else
         {
@@ -54,9 +58,7 @@ public class SwitchCamera : MonoBehaviour
         {
             if (cam != null)
             {
-                bool shouldActivate = cam == closeUpCamera && state == CameraState.CloseUp;
-                cam.gameObject.SetActive(shouldActivate);
-                UnityEngine.Debug.Log("Close-up camera " + cam.name + " active: " + shouldActivate);
+                cam.enabled = cam == closeUpCamera && state == CameraState.CloseUp;
             }
             else
             {
@@ -67,4 +69,11 @@ public class SwitchCamera : MonoBehaviour
         currentCameraState = state;
     }
 
+    public void OnBackButtonPressed()
+    {
+        if (currentCameraState == CameraState.CloseUp)
+        {
+            ManageCamera(); // Switch back to the main camera
+        }
+    }
 }
