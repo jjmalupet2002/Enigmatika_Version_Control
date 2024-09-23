@@ -6,6 +6,7 @@ public class ProximityOutline : MonoBehaviour
 
     private GameObject player;
     private Outline outline;
+    private bool isOutlineForcedOff = false; // Flag to force the outline off
 
     void Start()
     {
@@ -24,17 +25,19 @@ public class ProximityOutline : MonoBehaviour
 
     void Update()
     {
-        if (player != null)
+        if (player != null && !isOutlineForcedOff)
         {
             float distance = Vector3.Distance(transform.position, player.transform.position);
-            if (distance <= detectionRadius)
-            {
-                outline.enabled = true; // Enable the outline when the player is within the detection radius
-            }
-            else
-            {
-                outline.enabled = false; // Disable the outline when the player is outside the detection radius
-            }
+            outline.enabled = distance <= detectionRadius; // Enable/disable the outline based on the player's distance
+        }
+    }
+
+    public void ForceDisableOutline(bool forceOff)
+    {
+        isOutlineForcedOff = forceOff;
+        if (isOutlineForcedOff)
+        {
+            outline.enabled = false; // Ensure the outline is disabled if forced off
         }
     }
 

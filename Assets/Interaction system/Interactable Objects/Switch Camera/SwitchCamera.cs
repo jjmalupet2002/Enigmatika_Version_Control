@@ -14,6 +14,8 @@ public class SwitchCamera : MonoBehaviour
     public GameObject backButton; // Reference to the back button UI object
 
     private Camera mainCamera; // Reference to the universal main camera
+    private TalkandInteract talkAndInteract; // Reference to TalkandInteract script
+    private ProximityOutline[] proximityOutlines; // Array to store all ProximityOutline components
 
     void Start()
     {
@@ -27,6 +29,14 @@ public class SwitchCamera : MonoBehaviour
         {
             UnityEngine.Debug.LogError("Back button UI object not assigned.");
         }
+
+        talkAndInteract = FindObjectOfType<TalkandInteract>(); // Find and assign the TalkandInteract script
+        if (talkAndInteract == null)
+        {
+            UnityEngine.Debug.LogError("TalkandInteract script not found.");
+        }
+
+        proximityOutlines = FindObjectsOfType<ProximityOutline>(); // Find all ProximityOutline components
     }
 
     public void ManageCamera(Camera newCloseUpCamera = null)
@@ -35,11 +45,20 @@ public class SwitchCamera : MonoBehaviour
         {
             SetCamera(CameraState.CloseUp, newCloseUpCamera);
             backButton.SetActive(true); // Enable the back button when switching to close-up camera
+            ToggleOutlines(false); // Disable outlines
         }
         else
         {
-            SetCamera(CameraState.Main);
+            SetCamera(CameraState.Main, newCloseUpCamera); // Pass the newCloseUpCamera parameter when switching back to the main camera
             backButton.SetActive(false); // Disable the back button when switching back to the main camera
+            ToggleOutlines(true); // Enable outlines
+
+            // Reset interactionProcessed flag in TalkandInteract script
+            if (talkAndInteract != null)
+            {
+                talkAndInteract.OnInteractButtonPressed();
+                talkAndInteract.interactionProcessed = false; // Reset the interactionProcessed flag to false
+            }
         }
     }
 
@@ -58,7 +77,7 @@ public class SwitchCamera : MonoBehaviour
         {
             if (cam != null)
             {
-                cam.enabled = cam == closeUpCamera && state == CameraState.CloseUp;
+                cam.enabled = state == CameraState.CloseUp && cam == closeUpCamera;
             }
             else
             {
@@ -67,6 +86,21 @@ public class SwitchCamera : MonoBehaviour
         }
 
         currentCameraState = state;
+    }
+
+    private void ToggleOutlines(bool enable)
+    {
+        foreach (var proximityOutline in proximityOutlines)
+        {
+            if (proximityOutline != null)
+            {
+                proximityOutline.ForceDisableOutline(!enable); // Toggle the outline based on the camera state
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("ProximityOutline component is null.");
+            }
+        }
     }
 
     public void OnBackButtonPressed()

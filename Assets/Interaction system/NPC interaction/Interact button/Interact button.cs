@@ -19,7 +19,7 @@ public class TalkandInteract : MonoBehaviour
     private NPCInteractable currentNPC; // Reference to the current NPC
     private GameObject currentInteractable; // Reference to the current interactable object
 
-    private bool interactionProcessed = false;
+    public bool interactionProcessed = false;
 
     private void Awake()
     {
