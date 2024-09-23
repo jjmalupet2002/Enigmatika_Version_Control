@@ -12,6 +12,7 @@ public class SwitchCamera : MonoBehaviour
     public List<Camera> CloseUpCameras = new List<Camera>(); // List to store close-up cameras
     public CameraState currentCameraState = CameraState.Main; // Current camera state
     public GameObject backButton; // Reference to the back button UI object
+    public InteractableObjectHandler tableModel; // Reference to the TableModel script for handling interactions
 
     private Camera mainCamera; // Reference to the universal main camera
     private TalkandInteract talkAndInteract; // Reference to TalkandInteract script
