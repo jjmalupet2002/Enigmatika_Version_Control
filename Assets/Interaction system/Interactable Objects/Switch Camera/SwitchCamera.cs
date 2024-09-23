@@ -66,4 +66,5 @@ public class SwitchCamera : MonoBehaviour
 
         currentCameraState = state;
     }
+
 }

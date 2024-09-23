@@ -19,6 +19,8 @@ public class TalkandInteract : MonoBehaviour
     private NPCInteractable currentNPC; // Reference to the current NPC
     private GameObject currentInteractable; // Reference to the current interactable object
 
+    private bool interactionProcessed = false;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>(); // Get PlayerInput component attached to the GameObject
@@ -97,17 +99,24 @@ public class TalkandInteract : MonoBehaviour
 
     public void OnInteractButtonPressed()
     {
-        if (isNearNPC)
+        if (!interactionProcessed) // Check if interaction has already been processed
         {
-            UnityEngine.Debug.Log("Interact button pressed with NPC");
-            PerformNPCInteraction();
-        }
-        else if (isNearInteractable)
-        {
-            UnityEngine.Debug.Log("Interact button pressed with Interactable Object");
-            PerformObjectInteraction();
+            if (isNearNPC)
+            {
+                UnityEngine.Debug.Log("Interact button pressed with NPC");
+                PerformNPCInteraction();
+            }
+            else if (isNearInteractable)
+            {
+                UnityEngine.Debug.Log("Interact button pressed with Interactable Object");
+                PerformObjectInteraction();
+            }
+
+            interactionProcessed = true; // Set the flag to true after processing the interaction
         }
     }
+
+
 
     private void PerformNPCInteraction()
     {
