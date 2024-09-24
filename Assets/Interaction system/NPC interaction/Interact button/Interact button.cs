@@ -10,6 +10,10 @@ public class TalkandInteract : MonoBehaviour
     public Button talkButton;    // Assign in the Inspector
     public Button interactButton; // On-Screen Button for interaction
 
+    // Define interaction ranges as public fields to set in the Inspector
+    [SerializeField] private float npcInteractRange = 2f;       // Radius for NPC interaction
+    [SerializeField] private float objectInteractRange = 3f;    // Radius for Object interaction
+
     private SwitchCamera switchCamera; // Reference to SwitchCamera script (optional, not used directly)
 
     private PlayerInput playerInput; // Reference to PlayerInput component
@@ -87,12 +91,10 @@ public class TalkandInteract : MonoBehaviour
     {
         if (isNearNPC)
         {
-
             PerformNPCInteraction();
         }
         else if (isNearInteractable)
         {
-
             PerformObjectInteraction();
         }
     }
@@ -115,8 +117,6 @@ public class TalkandInteract : MonoBehaviour
             interactionProcessed = true; // Set the flag to true after processing the interaction
         }
     }
-
-
 
     private void PerformNPCInteraction()
     {
@@ -160,29 +160,21 @@ public class TalkandInteract : MonoBehaviour
         }
     }
 
-
     private IEnumerator CheckProximity()
     {
         while (true)
-        {
-            float interactRange = 2f;
-            Collider[] colliderArray = Physics.OverlapSphere(transform.position, interactRange);
+        {      
 
+            // Check for NPCs within their specified range
+            Collider[] npcColliders = Physics.OverlapSphere(transform.position, npcInteractRange);
             bool foundNPC = false;
-            bool foundInteractable = false;
-            GameObject nearestInteractable = null;
-
-            foreach (Collider collider in colliderArray)
+            foreach (Collider collider in npcColliders)
             {
                 if (collider.CompareTag("NPC"))
                 {
                     foundNPC = true;
                     currentNPC = collider.GetComponent<NPCInteractable>(); // Cache the current NPC
-                }
-                else if (collider.CompareTag("Interactable"))
-                {
-                    foundInteractable = true;
-                    nearestInteractable = collider.gameObject; // Cache the nearest interactable object
+                    break; // Exit the loop once we find a valid NPC
                 }
             }
 
@@ -193,7 +185,21 @@ public class TalkandInteract : MonoBehaviour
                 talkButton.gameObject.SetActive(isNearNPC);
             }
 
-            // Update the state of interactButton only when needed
+            // Check for interactable objects within their specified range
+            Collider[] objectColliders = Physics.OverlapSphere(transform.position, objectInteractRange);
+            bool foundInteractable = false;
+            GameObject nearestInteractable = null;
+
+            foreach (Collider collider in objectColliders)
+            {
+                if (collider.CompareTag("Interactable"))
+                {
+                    foundInteractable = true;
+                    nearestInteractable = collider.gameObject; // Cache the nearest interactable object
+                    break; // Exit the loop once we find a valid interactable
+                }
+            }
+
             if (foundInteractable != isNearInteractable)
             {
                 isNearInteractable = foundInteractable;

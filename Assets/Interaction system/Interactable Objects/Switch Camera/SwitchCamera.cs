@@ -17,6 +17,7 @@ public class SwitchCamera : MonoBehaviour
     private Camera mainCamera; // Reference to the universal main camera
     private TalkandInteract talkAndInteract; // Reference to TalkandInteract script
     private ProximityOutline[] proximityOutlines; // Array to store all ProximityOutline components
+    private Camera currentCloseUpCamera; // Current close-up camera
 
     void Start()
     {
@@ -45,14 +46,17 @@ public class SwitchCamera : MonoBehaviour
         if (currentCameraState == CameraState.Main)
         {
             SetCamera(CameraState.CloseUp, newCloseUpCamera);
+            currentCloseUpCamera = newCloseUpCamera; // Update current close-up camera
             backButton.SetActive(true); // Enable the back button when switching to close-up camera
             ToggleOutlines(false); // Disable outlines
+            GameStateManager.Instance.DisableUIElements(); // Disable UI elements
         }
         else
         {
-            SetCamera(CameraState.Main, newCloseUpCamera); // Pass the newCloseUpCamera parameter when switching back to the main camera
+            SetCamera(CameraState.Main); // Switch back to the main camera
             backButton.SetActive(false); // Disable the back button when switching back to the main camera
             ToggleOutlines(true); // Enable outlines
+            GameStateManager.Instance.EnableUIElements(); // Enable UI elements
 
             // Reset interactionProcessed flag in TalkandInteract script
             if (talkAndInteract != null)
@@ -60,6 +64,8 @@ public class SwitchCamera : MonoBehaviour
                 talkAndInteract.OnInteractButtonPressed();
                 talkAndInteract.interactionProcessed = false; // Reset the interactionProcessed flag to false
             }
+
+            currentCloseUpCamera = null; // Reset current close-up camera
         }
     }
 
