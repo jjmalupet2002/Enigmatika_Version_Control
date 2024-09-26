@@ -10,11 +10,8 @@ public class TalkandInteract : MonoBehaviour
     public Button talkButton;    // Assign in the Inspector
     public Button interactButton; // On-Screen Button for interaction
 
-    // Define interaction ranges as public fields to set in the Inspector
     [SerializeField] private float npcInteractRange = 2f;       // Radius for NPC interaction
     [SerializeField] private float objectInteractRange = 3f;    // Radius for Object interaction
-
-    private SwitchCamera switchCamera; // Reference to SwitchCamera script (optional, not used directly)
 
     private PlayerInput playerInput; // Reference to PlayerInput component
     private InputAction interactAction; // Action reference
@@ -32,13 +29,6 @@ public class TalkandInteract : MonoBehaviour
         {
             UnityEngine.Debug.LogError("PlayerInput component not found!");
         }
-
-        // Optionally, you can keep a reference to the global SwitchCamera if you have one.
-        // switchCamera = FindObjectOfType<SwitchCamera>();
-        // if (switchCamera == null)
-        // {
-        //     Debug.LogError("SwitchCamera script not found in the scene!");
-        // }
     }
 
     private void OnEnable()
@@ -60,7 +50,6 @@ public class TalkandInteract : MonoBehaviour
             UnityEngine.Debug.LogError("Interact action not found!");
         }
 
-        // Always show the interact button
         if (interactButton != null)
         {
             interactButton.gameObject.SetActive(true);
@@ -80,7 +69,6 @@ public class TalkandInteract : MonoBehaviour
 
         StopCoroutine(CheckProximity()); // Stop coroutine when disabled
 
-        // Remove event listener for on-screen button
         if (interactButton != null)
         {
             interactButton.onClick.RemoveListener(OnInteractButtonPressed);
@@ -89,14 +77,7 @@ public class TalkandInteract : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
-        if (isNearNPC)
-        {
-            PerformNPCInteraction();
-        }
-        else if (isNearInteractable)
-        {
-            PerformObjectInteraction();
-        }
+        OnInteractButtonPressed();
     }
 
     public void OnInteractButtonPressed()
@@ -105,16 +86,12 @@ public class TalkandInteract : MonoBehaviour
         {
             if (isNearNPC)
             {
-                UnityEngine.Debug.Log("Interact button pressed with NPC");
                 PerformNPCInteraction();
             }
             else if (isNearInteractable)
             {
-                UnityEngine.Debug.Log("Interact button pressed with Interactable Object");
                 PerformObjectInteraction();
             }
-
-            interactionProcessed = true; // Set the flag to true after processing the interaction
         }
     }
 
@@ -124,19 +101,16 @@ public class TalkandInteract : MonoBehaviour
         {
             UnityEngine.Debug.Log("Interacting with NPC");
 
-            // Disable player movement while interacting
             GameStateManager.Instance.SetPlayerMovementState(false);
 
             currentNPC.Interact();
 
-            // Start making the NPC face the player
             LookAtPlayer npcLookAtPlayer = currentNPC.GetComponent<LookAtPlayer>();
             if (npcLookAtPlayer != null)
             {
                 npcLookAtPlayer.StartFacingPlayer();
             }
 
-            // Re-enable player movement after interaction is done
             GameStateManager.Instance.SetPlayerMovementState(true);
         }
     }
@@ -157,14 +131,15 @@ public class TalkandInteract : MonoBehaviour
             {
                 UnityEngine.Debug.LogError("SwitchCamera component not found on interactable object.");
             }
+
+            interactionProcessed = true; // Set the flag to true after processing the object interaction
         }
     }
 
     private IEnumerator CheckProximity()
     {
         while (true)
-        {      
-
+        {
             // Check for NPCs within their specified range
             Collider[] npcColliders = Physics.OverlapSphere(transform.position, npcInteractRange);
             bool foundNPC = false;
