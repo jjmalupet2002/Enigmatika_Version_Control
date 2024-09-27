@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Rendering; // For ShadowCastingMode
 using System.Collections.Generic; // For List<T>
+using UnityEngine.InputSystem; // Import for the new Input System
+using UnityEngine.InputSystem.Controls; // Needed for Input Control types
 
 public class ItemInspectionManager : MonoBehaviour
 {
@@ -26,8 +28,22 @@ public class ItemInspectionManager : MonoBehaviour
     // Static variable to track if any item is currently being inspected
     private static ItemInspectionManager currentlyInspecting;
 
+    // Reference to SwitchCamera script
+    public SwitchCamera switchCamera;
+
+    // Reference to the Input Action Asset
+    public InputActionAsset inputActions; // Drag your Input Action Asset here in the inspector
+    private InputAction rotateItemAction;
+
+    public CloseUpViewUIController closeUpViewUIController; // Reference to the UI controller
+
+
     void Start()
     {
+        // Initialize the input action for rotation
+        rotateItemAction = inputActions.FindAction("RotateItem"); // Make sure "RotateItem" matches your action name
+        rotateItemAction.Enable();
+
         inspectionPoint = transform;
         targetRotation = Vector3.zero;
 
@@ -60,6 +76,38 @@ public class ItemInspectionManager : MonoBehaviour
     {
         return isInspecting;
     }
+
+    public void StopInspection()
+    {
+        if (itemsToInspect.Count > 0 && isInspecting && currentItemIndex >= 0)
+        {
+            GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to reset
+            itemToInspect.transform.SetParent(null);
+            itemToInspect.transform.position = originalPositions[currentItemIndex]; // Return to original position
+            itemToInspect.transform.rotation = originalRotations[currentItemIndex]; // Return to original rotation
+
+            isInspecting = false;
+            currentlyInspecting = null; // Reset the currently inspecting instance
+
+            // Reset shadow casting to original value
+            MeshRenderer meshRenderer = itemToInspect.GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                meshRenderer.shadowCastingMode = originalShadowCastingModes[currentItemIndex];
+            }
+
+            // Re-enable colliders for all items
+            EnableAllItemColliders();
+
+            // Disable the UI elements when exiting inspection mode
+            if (closeUpViewUIController != null)
+            {
+                closeUpViewUIController.SetUIActive(false); // Disable UI
+            }
+        }
+    }
+
+
 
     void InspectItem()
     {
@@ -99,78 +147,78 @@ public class ItemInspectionManager : MonoBehaviour
             MeshRenderer meshRenderer = itemToInspect.GetComponent<MeshRenderer>();
             if (meshRenderer != null)
             {
-                meshRenderer.shadowCastingMode = ShadowCastingMode.On;
+                meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             }
-        }
-    }
 
-
-    void StopInspection()
-    {
-        if (itemsToInspect.Count > 0 && isInspecting && currentItemIndex >= 0)
-        {
-            GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to reset
-            itemToInspect.transform.SetParent(null);
-            itemToInspect.transform.position = originalPositions[currentItemIndex]; // Return to original position
-            itemToInspect.transform.rotation = originalRotations[currentItemIndex]; // Return to original rotation
-
-            // You may want to leave the current positions and rotations unchanged here
-            // if you want the item to maintain its manipulated state until the next inspection
-
-            isInspecting = false;
-            currentlyInspecting = null; // Reset the currently inspecting instance
-
-            // Reset shadow casting to original value
-            MeshRenderer meshRenderer = itemToInspect.GetComponent<MeshRenderer>();
-            if (meshRenderer != null)
+            // Enable the UI elements when entering inspection mode
+            UnityEngine.Debug.Log("Entering inspection mode, setting UI active to true.");
+            if (closeUpViewUIController != null)
             {
-                meshRenderer.shadowCastingMode = originalShadowCastingModes[currentItemIndex];
+                closeUpViewUIController.SetUIActive(true); // Enable UI
             }
-
-            // Re-enable colliders for all items
-            EnableAllItemColliders();
         }
     }
+
+
+
+    // Add a sensitivity factor for touch controls
+    private float touchSensitivity = 0.03f; // Adjust this value to change sensitivity for touch input
 
     void Update()
     {
-        // Handle mouse click for inspection
-        if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
+        // Check if the current camera state is CloseUp before allowing inspection
+        if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            // Check if any of the items are clicked
-            for (int i = 0; i < itemsToInspect.Count; i++)
+            // Handle mouse click for inspection
+            if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
             {
-                if (Physics.Raycast(ray, out hit) && hit.transform.gameObject == itemsToInspect[i]) // Check if clicked object is one of the items
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                // Check if any of the items are clicked
+                for (int i = 0; i < itemsToInspect.Count; i++)
                 {
-                    currentItemIndex = i; // Set current item index
-                    InspectItem();
-                    break; // Exit the loop after the first hit
+                    if (Physics.Raycast(ray, out hit) && hit.transform.gameObject == itemsToInspect[i]) // Check if clicked object is one of the items
+                    {
+                        currentItemIndex = i; // Set current item index
+                        InspectItem();
+                        break; // Exit the loop after the first hit
+                    }
                 }
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            StopInspection(); // Stop inspection if it's active
-        }
-
         if (isInspecting)
         {
+            // Handle rotation with mouse
             if (Input.GetMouseButton(0))
             {
-                // Invert the mouse input for rotation
                 float rotateX = -Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime; // Inverted Y axis for dragging down
                 float rotateY = -Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime; // Inverted X axis for dragging left
 
-                // Update the target rotation using the inverted input
-                targetRotation += new Vector3(rotateX, rotateY, 0f); // Keep the order of rotation the same
+                targetRotation += new Vector3(rotateX, rotateY, 0f); // Update target rotation
 
-                // Use Slerp for smooth rotation and increase responsiveness
+                // Smoothly rotate the item
                 Quaternion targetQuaternion = Quaternion.Euler(targetRotation);
                 itemsToInspect[currentItemIndex].transform.rotation = Quaternion.Slerp(itemsToInspect[currentItemIndex].transform.rotation, targetQuaternion, rotateSmoothness);
+            }
+
+            // Handle rotation with touch input using Touchscreen
+            var touchscreen = Touchscreen.current; // Access the current touchscreen input
+            if (touchscreen != null && touchscreen.primaryTouch.press.isPressed) // Check if the primary touch is pressed
+            {
+                var touch = touchscreen.primaryTouch; // Access the primary touch
+                if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved) // Check if the touch has moved
+                {
+                    float rotateX = -touch.delta.ReadValue().y * rotationSpeed * touchSensitivity * Time.deltaTime; // Inverted Y axis
+                    float rotateY = -touch.delta.ReadValue().x * rotationSpeed * touchSensitivity * Time.deltaTime; // Inverted X axis
+
+                    targetRotation += new Vector3(rotateX, rotateY, 0f); // Update target rotation
+
+                    // Smoothly rotate the item
+                    Quaternion targetQuaternion = Quaternion.Euler(targetRotation);
+                    itemsToInspect[currentItemIndex].transform.rotation = Quaternion.Slerp(itemsToInspect[currentItemIndex].transform.rotation, targetQuaternion, rotateSmoothness);
+                }
             }
         }
     }

@@ -13,6 +13,7 @@ public class SwitchCamera : MonoBehaviour
     public CameraState currentCameraState = CameraState.Main; // Current camera state
     public GameObject backButton; // Reference to the back button UI object
     public InteractableObjectHandler interactableObject; // Reference to the TableModel script for handling interactions
+    public GameObject playerModel; // Reference to the player model
 
     private Camera mainCamera; // Reference to the universal main camera
     private TalkandInteract talkAndInteract; // Reference to TalkandInteract script
@@ -30,6 +31,11 @@ public class SwitchCamera : MonoBehaviour
         if (backButton == null)
         {
             UnityEngine.Debug.LogError("Back button UI object not assigned.");
+        }
+
+        if (playerModel == null)
+        {
+            UnityEngine.Debug.LogError("Player model not assigned.");
         }
 
         talkAndInteract = FindObjectOfType<TalkandInteract>(); // Find and assign the TalkandInteract script
@@ -50,6 +56,7 @@ public class SwitchCamera : MonoBehaviour
             backButton.SetActive(true); // Enable the back button when switching to close-up camera
             ToggleOutlines(false); // Disable outlines
             GameStateManager.Instance.DisableUIElements(); // Disable UI elements
+            playerModel.SetActive(false); // Disable player model
         }
         else
         {
@@ -57,6 +64,7 @@ public class SwitchCamera : MonoBehaviour
             backButton.SetActive(false); // Disable the back button when switching back to the main camera
             ToggleOutlines(true); // Enable outlines
             GameStateManager.Instance.EnableUIElements(); // Enable UI elements
+            playerModel.SetActive(true); // Enable player model
 
             // Reset interactionProcessed flag in TalkandInteract script
             if (talkAndInteract != null)
