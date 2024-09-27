@@ -17,6 +17,10 @@ public class ItemInspectionManager : MonoBehaviour
     private List<Quaternion> originalRotations = new List<Quaternion>();
     private List<ShadowCastingMode> originalShadowCastingModes = new List<ShadowCastingMode>();
 
+    // Store current positions and rotations for manipulation
+    private List<Vector3> currentPositions = new List<Vector3>();
+    private List<Quaternion> currentRotations = new List<Quaternion>();
+
     private int currentItemIndex = -1; // To track the current item being inspected
 
     // Static variable to track if any item is currently being inspected
@@ -34,6 +38,10 @@ public class ItemInspectionManager : MonoBehaviour
             {
                 originalPositions.Add(item.transform.position);
                 originalRotations.Add(item.transform.rotation);
+
+                // Initialize current positions and rotations
+                currentPositions.Add(item.transform.position);
+                currentRotations.Add(item.transform.rotation);
 
                 MeshRenderer meshRenderer = item.GetComponent<MeshRenderer>();
                 if (meshRenderer != null)
@@ -64,11 +72,25 @@ public class ItemInspectionManager : MonoBehaviour
             }
 
             GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to inspect
+
+            // Set the position to the inspection point without changing the rotation
             itemToInspect.transform.position = inspectionPoint.position;
-            itemToInspect.transform.rotation = inspectionPoint.rotation;
+
+            // Keep the original rotation
+            itemToInspect.transform.rotation = originalRotations[currentItemIndex];
+
+            // Set parent to the inspection point to manage its hierarchy
             itemToInspect.transform.SetParent(inspectionPoint);
+
             isInspecting = true;
             currentlyInspecting = this; // Set this instance as the currently inspecting one
+
+            // Reset target rotation to original rotation
+            targetRotation = originalRotations[currentItemIndex].eulerAngles; // Use original rotation
+
+            // Reset current positions and rotations to original values
+            currentPositions[currentItemIndex] = originalPositions[currentItemIndex];
+            currentRotations[currentItemIndex] = originalRotations[currentItemIndex];
 
             // Disable colliders for all other items
             DisableOtherItemColliders(itemToInspect);
@@ -82,6 +104,7 @@ public class ItemInspectionManager : MonoBehaviour
         }
     }
 
+
     void StopInspection()
     {
         if (itemsToInspect.Count > 0 && isInspecting && currentItemIndex >= 0)
@@ -90,6 +113,10 @@ public class ItemInspectionManager : MonoBehaviour
             itemToInspect.transform.SetParent(null);
             itemToInspect.transform.position = originalPositions[currentItemIndex]; // Return to original position
             itemToInspect.transform.rotation = originalRotations[currentItemIndex]; // Return to original rotation
+
+            // You may want to leave the current positions and rotations unchanged here
+            // if you want the item to maintain its manipulated state until the next inspection
+
             isInspecting = false;
             currentlyInspecting = null; // Reset the currently inspecting instance
 
