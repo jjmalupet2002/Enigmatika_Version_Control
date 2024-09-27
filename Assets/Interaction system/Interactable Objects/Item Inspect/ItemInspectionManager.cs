@@ -79,6 +79,12 @@ public class ItemInspectionManager : MonoBehaviour
 
     public void StopInspection()
     {
+        // Disable the UI elements when exiting inspection mode
+        if (closeUpViewUIController != null)
+        {
+            closeUpViewUIController.SetUIActive(false); // Disable UI
+        }
+
         if (itemsToInspect.Count > 0 && isInspecting && currentItemIndex >= 0)
         {
             GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to reset
@@ -98,19 +104,17 @@ public class ItemInspectionManager : MonoBehaviour
 
             // Re-enable colliders for all items
             EnableAllItemColliders();
-
-            // Disable the UI elements when exiting inspection mode
-            if (closeUpViewUIController != null)
-            {
-                closeUpViewUIController.SetUIActive(false); // Disable UI
-            }
         }
     }
 
-
-
     void InspectItem()
     {
+        // Enable the UI elements when entering inspection mode
+        if (closeUpViewUIController != null)
+        {
+            closeUpViewUIController.SetUIActive(true); // Enable UI
+        }
+
         if (itemsToInspect.Count > 0 && !isInspecting && currentItemIndex >= 0)
         {
             // If another item is currently being inspected, stop its inspection
@@ -149,15 +153,9 @@ public class ItemInspectionManager : MonoBehaviour
             {
                 meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             }
-
-            // Enable the UI elements when entering inspection mode
-            UnityEngine.Debug.Log("Entering inspection mode, setting UI active to true.");
-            if (closeUpViewUIController != null)
-            {
-                closeUpViewUIController.SetUIActive(true); // Enable UI
-            }
         }
     }
+
 
 
 
