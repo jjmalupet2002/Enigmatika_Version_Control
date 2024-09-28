@@ -12,6 +12,7 @@ public class SwitchCamera : MonoBehaviour
     public List<Camera> CloseUpCameras = new List<Camera>(); // List to store close-up cameras
     public CameraState currentCameraState = CameraState.Main; // Current camera state
     public GameObject backButton; // Reference to the back button UI object
+    public GameObject inventoryButton; // Reference to the inventory button UI object
     public InteractableObjectHandler interactableObject; // Reference to the TableModel script for handling interactions
     public GameObject playerModel; // Reference to the player model
 
@@ -31,6 +32,11 @@ public class SwitchCamera : MonoBehaviour
         if (backButton == null)
         {
             UnityEngine.Debug.LogError("Back button UI object not assigned.");
+        }
+
+        if (inventoryButton == null)
+        {
+            UnityEngine.Debug.LogError("Inventory button UI object not assigned.");
         }
 
         if (playerModel == null)
@@ -54,6 +60,7 @@ public class SwitchCamera : MonoBehaviour
             SetCamera(CameraState.CloseUp, newCloseUpCamera);
             currentCloseUpCamera = newCloseUpCamera; // Update current close-up camera
             backButton.SetActive(true); // Enable the back button when switching to close-up camera
+            inventoryButton.SetActive(false); // Disable the inventory button when switching to close-up camera
             ToggleOutlines(false); // Disable outlines
             GameStateManager.Instance.DisableUIElements(); // Disable UI elements
             playerModel.SetActive(false); // Disable player model
@@ -62,6 +69,7 @@ public class SwitchCamera : MonoBehaviour
         {
             SetCamera(CameraState.Main); // Switch back to the main camera
             backButton.SetActive(false); // Disable the back button when switching back to the main camera
+            inventoryButton.SetActive(true); // Re-enable the inventory button when switching back to main camera
             ToggleOutlines(true); // Enable outlines
             GameStateManager.Instance.EnableUIElements(); // Enable UI elements
             playerModel.SetActive(true); // Enable player model

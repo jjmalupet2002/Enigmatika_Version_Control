@@ -25,9 +25,6 @@ public class ItemInspectionManager : MonoBehaviour
 
     private int currentItemIndex = -1; // To track the current item being inspected
 
-    // Static variable to track if any item is currently being inspected
-    private static ItemInspectionManager currentlyInspecting;
-
     // Reference to SwitchCamera script
     public SwitchCamera switchCamera;
 
@@ -37,6 +34,8 @@ public class ItemInspectionManager : MonoBehaviour
 
     public CloseUpViewUIController closeUpViewUIController; // Reference to the UI controller
 
+    // Reference to the BackButtonHandler script
+    [SerializeField] private BackButtonHandler backButtonHandler; // Serialized reference
 
     void Start()
     {
@@ -93,7 +92,6 @@ public class ItemInspectionManager : MonoBehaviour
             itemToInspect.transform.rotation = originalRotations[currentItemIndex]; // Return to original rotation
 
             isInspecting = false;
-            currentlyInspecting = null; // Reset the currently inspecting instance
 
             // Reset shadow casting to original value
             MeshRenderer meshRenderer = itemToInspect.GetComponent<MeshRenderer>();
@@ -117,12 +115,6 @@ public class ItemInspectionManager : MonoBehaviour
 
         if (itemsToInspect.Count > 0 && !isInspecting && currentItemIndex >= 0)
         {
-            // If another item is currently being inspected, stop its inspection
-            if (currentlyInspecting != null && currentlyInspecting != this)
-            {
-                currentlyInspecting.StopInspection();
-            }
-
             GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to inspect
 
             // Set the position to the inspection point without changing the rotation
@@ -135,7 +127,6 @@ public class ItemInspectionManager : MonoBehaviour
             itemToInspect.transform.SetParent(inspectionPoint);
 
             isInspecting = true;
-            currentlyInspecting = this; // Set this instance as the currently inspecting one
 
             // Reset target rotation to original rotation
             targetRotation = originalRotations[currentItemIndex].eulerAngles; // Use original rotation
@@ -155,9 +146,6 @@ public class ItemInspectionManager : MonoBehaviour
             }
         }
     }
-
-
-
 
     // Add a sensitivity factor for touch controls
     private float touchSensitivity = 0.03f; // Adjust this value to change sensitivity for touch input
@@ -250,3 +238,4 @@ public class ItemInspectionManager : MonoBehaviour
         }
     }
 }
+

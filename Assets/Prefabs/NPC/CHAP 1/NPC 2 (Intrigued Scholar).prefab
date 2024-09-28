@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4872856542800582021
+--- !u!1 &4136431917338712050
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,137 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8594541959588075683}
-  - component: {fileID: 6999948894429404402}
-  m_Layer: 0
-  m_Name: ScholarConversation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8594541959588075683
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4872856542800582021}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2286709135790663454}
-  m_Father: {fileID: 3625298171034174331}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6999948894429404402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4872856542800582021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83189876d4d389f43b7dd2e925aa112e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentIDCounter: 5
-  json: '{"Options":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":2}],"EditorInfo":{"isRoot":false,"xPos":269.900635,"yPos":-267.199768},"ID":1,"ParamActions":[],"TMPFontGUID":null,"Text":"I''m
-    trying to find out how the king felt after his Gold was stolen.","parentUIDs":[0],"SpeechUID":-1},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":4}],"EditorInfo":{"isRoot":false,"xPos":248.300385,"yPos":59.2025146},"ID":3,"ParamActions":[],"TMPFontGUID":null,"Text":"Do
-    you know where I might find more information about the theft?","parentUIDs":[2],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":1}],"EditorInfo":{"isRoot":true,"xPos":158.5,"yPos":-461},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"Hello
-    there young man! I have never seen you here before.","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Intrigued
-    Scholar","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":1},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":3}],"EditorInfo":{"isRoot":false,"xPos":158.699982,"yPos":-97.59851},"ID":2,"ParamActions":[],"TMPFontGUID":null,"Text":"His
-    prized possession, stolen from right under his nose. Personally, that would make
-    me furious.","parentUIDs":[1],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Intrigued
-    Scholar","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":1},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":115.499969,"yPos":203.4032},"ID":4,"ParamActions":[],"TMPFontGUID":null,"Text":"Perhaps
-    the king''s personal chambers. He often retreated there to contemplate his thoughts.","parentUIDs":[3],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Intrigued
-    Scholar","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":1}]}'
-  saveVersion: 110
-  DefaultName: 
-  DefaultSprite: {fileID: 0}
-  DefaultFont: {fileID: 0}
-  NodeSerializedDataList:
-  - {fileID: 3935578655693074599}
-  - {fileID: 8204659170317766329}
-  - {fileID: 5542485746509658265}
-  - {fileID: 6549530937372033676}
-  - {fileID: 6766199451687960280}
-  ContinueFont: {fileID: 0}
-  EndConversationFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
-  Event:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!1 &5494238739455902200
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8510290827468667462}
-  - component: {fileID: 4442846473312666968}
-  m_Layer: 0
-  m_Name: Quest Marker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8510290827468667462
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5494238739455902200}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.9944507, z: -0, w: -0.105204314}
-  m_LocalPosition: {x: -0.1, y: 1.3, z: 0.37}
-  m_LocalScale: {x: 0.69999963, y: 0.7, z: 0.69999963}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5925957545871096699}
-  m_Father: {fileID: 3625298171034174331}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &4442846473312666968
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5494238739455902200}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 33df3de72fea12a4a838784e5c2d96e6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!1 &7728764052708603217
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3625298171034174331}
-  - component: {fileID: 7118994849090718381}
-  - component: {fileID: 3371023068707901287}
-  - component: {fileID: 7461513507624781694}
-  - component: {fileID: 8131627150665625284}
-  - component: {fileID: 8227877992500644028}
+  - component: {fileID: 8793213180186161403}
+  - component: {fileID: 167396506098389443}
+  - component: {fileID: 488461338012234868}
+  - component: {fileID: 3264993499324835562}
+  - component: {fileID: 4984356240387762642}
+  - component: {fileID: 8609860556792161980}
   m_Layer: 0
   m_Name: NPC 2 (Intrigued Scholar)
   m_TagString: NPC
@@ -146,39 +21,39 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3625298171034174331
+--- !u!4 &8793213180186161403
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7728764052708603217}
+  m_GameObject: {fileID: 4136431917338712050}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9944507, z: -0, w: -0.105204314}
   m_LocalPosition: {x: 14.17, y: 0.121, z: 14.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1441380857351231369}
-  - {fileID: 8510290827468667462}
-  - {fileID: 8594541959588075683}
+  - {fileID: 4083820783850573556}
+  - {fileID: 4147655118404142739}
+  - {fileID: 2983059288439638906}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 192.078, z: 0}
---- !u!33 &7118994849090718381
+--- !u!33 &167396506098389443
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7728764052708603217}
+  m_GameObject: {fileID: 4136431917338712050}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3371023068707901287
+--- !u!23 &488461338012234868
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7728764052708603217}
+  m_GameObject: {fileID: 4136431917338712050}
   m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -214,13 +89,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7461513507624781694
+--- !u!136 &3264993499324835562
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7728764052708603217}
+  m_GameObject: {fileID: 4136431917338712050}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -237,34 +112,34 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8131627150665625284
+--- !u!114 &4984356240387762642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7728764052708603217}
+  m_GameObject: {fileID: 4136431917338712050}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70359b68f23054a428446b731147436e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conversation: {fileID: 6999948894429404402}
+  conversation: {fileID: 3950763773833528082}
   npcName: Intrigued Scholar
---- !u!114 &8227877992500644028
+--- !u!114 &8609860556792161980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7728764052708603217}
+  m_GameObject: {fileID: 4136431917338712050}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd295573519525544bd7e10ad4fa7e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
---- !u!1 &8850818103259175186
+--- !u!1 &5996918511242819720
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -272,12 +147,137 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2286709135790663454}
-  - component: {fileID: 3935578655693074599}
-  - component: {fileID: 8204659170317766329}
-  - component: {fileID: 5542485746509658265}
-  - component: {fileID: 6549530937372033676}
-  - component: {fileID: 6766199451687960280}
+  - component: {fileID: 2983059288439638906}
+  - component: {fileID: 3950763773833528082}
+  m_Layer: 0
+  m_Name: ScholarConversation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2983059288439638906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5996918511242819720}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2038168137635269463}
+  m_Father: {fileID: 8793213180186161403}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3950763773833528082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5996918511242819720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83189876d4d389f43b7dd2e925aa112e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentIDCounter: 5
+  json: '{"Options":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":2}],"EditorInfo":{"isRoot":false,"xPos":269.900635,"yPos":-267.199768},"ID":1,"ParamActions":[],"TMPFontGUID":null,"Text":"I''m
+    trying to find out how the king felt after his Gold was stolen.","parentUIDs":[0],"SpeechUID":-1},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":4}],"EditorInfo":{"isRoot":false,"xPos":248.300385,"yPos":59.2025146},"ID":3,"ParamActions":[],"TMPFontGUID":null,"Text":"Do
+    you know where I might find more information about the theft?","parentUIDs":[2],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":1}],"EditorInfo":{"isRoot":true,"xPos":158.5,"yPos":-461},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"Hello
+    there young man! I have never seen you here before.","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Intrigued
+    Scholar","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":1},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":3}],"EditorInfo":{"isRoot":false,"xPos":158.699982,"yPos":-97.59851},"ID":2,"ParamActions":[],"TMPFontGUID":null,"Text":"His
+    prized possession, stolen from right under his nose. Personally, that would make
+    me furious.","parentUIDs":[1],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Intrigued
+    Scholar","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":1},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":115.499969,"yPos":203.4032},"ID":4,"ParamActions":[],"TMPFontGUID":null,"Text":"Perhaps
+    the king''s personal chambers. He often retreated there to contemplate his thoughts.","parentUIDs":[3],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Intrigued
+    Scholar","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":1}]}'
+  saveVersion: 110
+  DefaultName: 
+  DefaultSprite: {fileID: 0}
+  DefaultFont: {fileID: 0}
+  NodeSerializedDataList:
+  - {fileID: 2664124470103790888}
+  - {fileID: 8166116249487044024}
+  - {fileID: 7483322798900927657}
+  - {fileID: 2293886588419468893}
+  - {fileID: 7960145773619703834}
+  ContinueFont: {fileID: 0}
+  EndConversationFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  Event:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &6128465078803972076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4147655118404142739}
+  - component: {fileID: 8000551764842932515}
+  m_Layer: 0
+  m_Name: Quest Marker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4147655118404142739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128465078803972076}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.9944507, z: -0, w: -0.105204314}
+  m_LocalPosition: {x: -0.1, y: 1.3, z: 0.37}
+  m_LocalScale: {x: 0.69999963, y: 0.7, z: 0.69999963}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8995764314064208700}
+  m_Father: {fileID: 8793213180186161403}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &8000551764842932515
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128465078803972076}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 33df3de72fea12a4a838784e5c2d96e6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &7247288860810840353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2038168137635269463}
+  - component: {fileID: 2664124470103790888}
+  - component: {fileID: 8166116249487044024}
+  - component: {fileID: 7483322798900927657}
+  - component: {fileID: 2293886588419468893}
+  - component: {fileID: 7960145773619703834}
   m_Layer: 0
   m_Name: ConversationEventInfo
   m_TagString: Untagged
@@ -285,28 +285,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2286709135790663454
+--- !u!4 &2038168137635269463
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8850818103259175186}
+  m_GameObject: {fileID: 7247288860810840353}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9944507, z: -0, w: -0.105204314}
   m_LocalPosition: {x: 11.884317, y: 0.052, z: 2.006092}
   m_LocalScale: {x: 0.99999946, y: 1, z: 0.99999946}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8594541959588075683}
+  m_Father: {fileID: 2983059288439638906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3935578655693074599
+--- !u!114 &2664124470103790888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8850818103259175186}
+  m_GameObject: {fileID: 7247288860810840353}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
@@ -319,13 +319,13 @@ MonoBehaviour:
   TMPFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
   Icon: {fileID: 21300000, guid: 513ba15b180b9fc4f948313b83d9acf7, type: 3}
   Audio: {fileID: 8300000, guid: 136d37c8cd45cf84b9fe7f7945ee0e70, type: 3}
---- !u!114 &8204659170317766329
+--- !u!114 &8166116249487044024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8850818103259175186}
+  m_GameObject: {fileID: 7247288860810840353}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
@@ -338,13 +338,13 @@ MonoBehaviour:
   TMPFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
   Icon: {fileID: 0}
   Audio: {fileID: 0}
---- !u!114 &5542485746509658265
+--- !u!114 &7483322798900927657
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8850818103259175186}
+  m_GameObject: {fileID: 7247288860810840353}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
@@ -357,13 +357,13 @@ MonoBehaviour:
   TMPFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
   Icon: {fileID: 21300000, guid: 513ba15b180b9fc4f948313b83d9acf7, type: 3}
   Audio: {fileID: 8300000, guid: 92b4c0962a2f0e94486c33086ec28cd5, type: 3}
---- !u!114 &6549530937372033676
+--- !u!114 &2293886588419468893
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8850818103259175186}
+  m_GameObject: {fileID: 7247288860810840353}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
@@ -376,13 +376,13 @@ MonoBehaviour:
   TMPFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
   Icon: {fileID: 0}
   Audio: {fileID: 0}
---- !u!114 &6766199451687960280
+--- !u!114 &7960145773619703834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8850818103259175186}
+  m_GameObject: {fileID: 7247288860810840353}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
@@ -395,13 +395,13 @@ MonoBehaviour:
   TMPFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
   Icon: {fileID: 21300000, guid: 513ba15b180b9fc4f948313b83d9acf7, type: 3}
   Audio: {fileID: 8300000, guid: af66dc19633e67d43a51bdb8721d8ff6, type: 3}
---- !u!1001 &1408053547354468450
+--- !u!1001 &4550355400850417951
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3625298171034174331}
+    m_TransformParent: {fileID: 8793213180186161403}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
       propertyPath: m_LocalScale.x
@@ -469,32 +469,27 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3483077290428405199}
+      addedObject: {fileID: 7587973199810220075}
     - targetCorrespondingSourceObject: {fileID: -3029032871660112297, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1380493448917955482}
+      addedObject: {fileID: 2079643577232831900}
     - targetCorrespondingSourceObject: {fileID: -3029032871660112297, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 620603664288717396}
+      addedObject: {fileID: 3409169756214362609}
   m_SourcePrefab: {fileID: 100100000, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
---- !u!4 &1441380857351231369 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
-  m_PrefabInstance: {fileID: 1408053547354468450}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2254897053631483187 stripped
+--- !u!1 &3740087694331810894 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
-  m_PrefabInstance: {fileID: 1408053547354468450}
+  m_PrefabInstance: {fileID: 4550355400850417951}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &3483077290428405199
+--- !u!95 &7587973199810220075
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2254897053631483187}
+  m_GameObject: {fileID: 3740087694331810894}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 19682994a96e7a544baac9fff6bb38cf, type: 2}
@@ -508,18 +503,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1 &5079180338416911925 stripped
+--- !u!4 &4083820783850573556 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
+  m_PrefabInstance: {fileID: 4550355400850417951}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7696839255725678408 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3029032871660112297, guid: 353f7543077024a4594bea09d1b98ba9, type: 3}
-  m_PrefabInstance: {fileID: 1408053547354468450}
+  m_PrefabInstance: {fileID: 4550355400850417951}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1380493448917955482
+--- !u!114 &2079643577232831900
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5079180338416911925}
+  m_GameObject: {fileID: 7696839255725678408}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
@@ -528,29 +528,29 @@ MonoBehaviour:
   outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 4
-  precomputeOutline: 0
+  precomputeOutline: 1
   bakeKeys: []
   bakeValues: []
---- !u!114 &620603664288717396
+--- !u!114 &3409169756214362609
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5079180338416911925}
+  m_GameObject: {fileID: 7696839255725678408}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa5c420a1cf7b524eba13a7873c0e821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 2.65
---- !u!1001 &6176550003315334288
+--- !u!1001 &8889514703107368151
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8510290827468667462}
+    m_TransformParent: {fileID: 4147655118404142739}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2d288689607d75a4599e54a17854b703, type: 3}
       propertyPath: m_LocalScale.x
@@ -641,25 +641,20 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d288689607d75a4599e54a17854b703, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8007039075995914414}
+      addedObject: {fileID: 8331457897455411217}
   m_SourcePrefab: {fileID: 100100000, guid: 2d288689607d75a4599e54a17854b703, type: 3}
---- !u!4 &5925957545871096699 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2d288689607d75a4599e54a17854b703, type: 3}
-  m_PrefabInstance: {fileID: 6176550003315334288}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6446597551062868417 stripped
+--- !u!1 &8618921394939271558 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d288689607d75a4599e54a17854b703, type: 3}
-  m_PrefabInstance: {fileID: 6176550003315334288}
+  m_PrefabInstance: {fileID: 8889514703107368151}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &8007039075995914414
+--- !u!23 &8331457897455411217
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6446597551062868417}
+  m_GameObject: {fileID: 8618921394939271558}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -695,3 +690,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!4 &8995764314064208700 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2d288689607d75a4599e54a17854b703, type: 3}
+  m_PrefabInstance: {fileID: 8889514703107368151}
+  m_PrefabAsset: {fileID: 0}
