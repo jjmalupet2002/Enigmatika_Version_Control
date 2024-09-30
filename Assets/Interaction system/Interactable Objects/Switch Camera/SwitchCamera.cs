@@ -64,6 +64,9 @@ public class SwitchCamera : MonoBehaviour
             ToggleOutlines(false); // Disable outlines
             GameStateManager.Instance.DisableUIElements(); // Disable UI elements
             playerModel.SetActive(false); // Disable player model
+
+            // Enable note inspection when switching to close-up camera
+            NoteInspectionManager.Instance.EnableNoteInspection(true);
         }
         else
         {
@@ -82,6 +85,9 @@ public class SwitchCamera : MonoBehaviour
             }
 
             currentCloseUpCamera = null; // Reset current close-up camera
+
+            // Disable note inspection when returning to the main camera
+            NoteInspectionManager.Instance.EnableNoteInspection(false);
         }
     }
 

@@ -1,12 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class NoteInspectionManager : MonoBehaviour
 {
     public static NoteInspectionManager Instance { get; private set; }
 
     public Dictionary<NoteObjectHandler, GameObject> noteUIs = new Dictionary<NoteObjectHandler, GameObject>();
+    private SwitchCamera switchCamera; // Reference to the SwitchCamera script
+    private bool canInspectNotes; // Track if notes can be inspected
+    public bool isNoteUIActive; // Track if the note UI is currently active
 
     private void Awake()
     {
@@ -19,22 +22,33 @@ public class NoteInspectionManager : MonoBehaviour
 
         Instance = this; // Set the singleton instance
         DontDestroyOnLoad(gameObject); // Optional: Keep it between scene loads
+
+        // Find the SwitchCamera instance
+        switchCamera = FindObjectOfType<SwitchCamera>();
+        if (switchCamera == null)
+        {
+            UnityEngine.Debug.LogError("SwitchCamera script not found.");
+        }
     }
 
     private void Update()
     {
-        // Check for touch input
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        // Only allow note inspection if canInspectNotes is true and UI is not active
+        if (canInspectNotes && !isNoteUIActive)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
+            // Check for touch input
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                NoteObjectHandler noteObject = hit.collider.GetComponent<NoteObjectHandler>();
-                if (noteObject != null)
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
                 {
-                    ToggleNoteUI(noteObject);
+                    NoteObjectHandler noteObject = hit.collider.GetComponent<NoteObjectHandler>();
+                    if (noteObject != null)
+                    {
+                        ToggleNoteUI(noteObject);
+                    }
                 }
             }
         }
@@ -50,7 +64,8 @@ public class NoteInspectionManager : MonoBehaviour
         }
     }
 
-    private void ToggleNoteUI(NoteObjectHandler noteObject)
+    // Change method to public
+    public void ToggleNoteUI(NoteObjectHandler noteObject) // Make this public
     {
         if (noteUIs.TryGetValue(noteObject, out GameObject noteUI))
         {
@@ -58,7 +73,21 @@ public class NoteInspectionManager : MonoBehaviour
             bool isActive = noteUI.activeSelf;
             noteUI.SetActive(!isActive);
 
-            // No need to update the image since sprite reference is removed
+            // Update the note UI active state flag
+            if (isActive) // If we are closing the UI
+            {
+                isNoteUIActive = false; // Reset the flag when the UI is closed
+            }
+            else // If we are opening the UI
+            {
+                isNoteUIActive = true; // Set the flag when the UI is opened
+            }
         }
+    }
+
+    // Method to enable or disable note inspection
+    public void EnableNoteInspection(bool enable)
+    {
+        canInspectNotes = enable;
     }
 }

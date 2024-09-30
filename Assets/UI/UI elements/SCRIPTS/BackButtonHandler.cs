@@ -34,10 +34,13 @@ public class BackButtonHandler : MonoBehaviour
                 if (noteUI.activeSelf)
                 {
                     noteUI.SetActive(false); // Hide the note UI
+                    NoteInspectionManager.Instance.isNoteUIActive = false; // Reset the flag
                     return; // Exit early if we closed the note UI
                 }
             }
         }
+    
+
 
         // Existing logic for other inspection managers
         foreach (var itemInspectionManager in itemInspectionManagers)
@@ -78,3 +81,5 @@ public class BackButtonHandler : MonoBehaviour
         }
     }
 }
+
+      

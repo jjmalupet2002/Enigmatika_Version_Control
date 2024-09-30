@@ -4,14 +4,16 @@ using UnityEngine.UI;
 public class InventoryToggle : MonoBehaviour
 {
     public Button InventoryButton;
-    public Button interactButton;  // Reference to the Interact button
+    public Button TalkButton;  // Add TalkButton as a public variable
+    public Button InteractButton;  // Add InteractButton as a public variable
     public AudioSource openSound;  // Assign the AudioSource for opening sound
     public AudioSource closeSound; // Assign the AudioSource for closing sound
     public GameObject joystickCanvasGroup; // Reference to the GameObject for the joystick canvas group
     public GameObject inventoryUI; // Reference to the actual Inventory UI
 
     private bool isInventoryOpen = false; // Track the state of the inventory
-    private ItemInspectionManager itemInspectionManager;
+    private TalkandInteract talkandInteract; // Reference to TalkandInteract script
+    private Button activeButton; // Track the currently active button (Talk or Interact)
 
     private void Start()
     {
@@ -19,40 +21,21 @@ public class InventoryToggle : MonoBehaviour
         if (InventoryButton != null)
             InventoryButton.onClick.AddListener(OpenInventory);
 
-        // Set up the interact button for its primary function
-        if (interactButton != null)
-            interactButton.onClick.AddListener(OnInteract);
-
-        // Find the ItemInspectionManager in the scene
-        itemInspectionManager = FindObjectOfType<ItemInspectionManager>();
+        // Find the TalkandInteract script in the scene
+        talkandInteract = FindObjectOfType<TalkandInteract>();
     }
 
     private void Update()
     {
-        // Disable the inventory button if an item is being inspected
-        if (itemInspectionManager != null)
-        {
-            InventoryButton.interactable = !itemInspectionManager.IsInspecting();
-        }
-    }
-
-
-    private void OnInteract()
-    {
-        if (isInventoryOpen)
-        {
-            CloseInventory();
-        }
-        else
-        {
-            // Implement other interact button functionality here
-        }
+        // Optional: Disable the inventory button if necessary
+        // InventoryButton.interactable = true;
     }
 
     public void OpenInventory()
     {
         if (openSound != null)
             openSound.Play();
+
         inventoryUI.SetActive(true); // Show the inventory UI
         SetControlsActive(false);
 
@@ -93,15 +76,38 @@ public class InventoryToggle : MonoBehaviour
     // Helper method to enable/disable controls
     private void SetControlsActive(bool isActive)
     {
-        if (interactButton != null)
-            interactButton.gameObject.SetActive(isActive);
+        if (joystickCanvasGroup != null)
+            joystickCanvasGroup.SetActive(isActive);
+
+        if (TalkButton != null && InteractButton != null)
+        {
+            if (isActive)
+            {
+                // Enable the previously active button when exiting inventory
+                if (activeButton != null)
+                {
+                    activeButton.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                // Track which button is active before opening the inventory
+                if (TalkButton.gameObject.activeSelf)
+                {
+                    activeButton = TalkButton;
+                }
+                else if (InteractButton.gameObject.activeSelf)
+                {
+                    activeButton = InteractButton;
+                }
+
+                TalkButton.gameObject.SetActive(false);
+                InteractButton.gameObject.SetActive(false);
+            }
+        }
 
         if (InventoryButton != null)
             InventoryButton.gameObject.SetActive(isActive);
-
-        // Adjust joystick visibility
-        if (joystickCanvasGroup != null)
-            joystickCanvasGroup.SetActive(isActive);
     }
 
     // New method to enable or disable the inventory button
