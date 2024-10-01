@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI; // Include this for UI Text component
+using System.Diagnostics;
 
 public class NoteInspectionManager : MonoBehaviour
 {
@@ -64,6 +64,7 @@ public class NoteInspectionManager : MonoBehaviour
         }
     }
 
+    // Change method to public
     public void ToggleNoteUI(NoteObjectHandler noteObject) // Make this public
     {
         if (noteUIs.TryGetValue(noteObject, out GameObject noteUI))
@@ -72,25 +73,14 @@ public class NoteInspectionManager : MonoBehaviour
             bool isActive = noteUI.activeSelf;
             noteUI.SetActive(!isActive);
 
-            // Update the note UI
-            if (!isActive) // If we are opening the UI
-            {
-                isNoteUIActive = true; // Set the flag when the UI is opened
-
-                // Find the Text component in the note UI
-                Text uiTextComponent = noteUI.GetComponentInChildren<Text>();
-                if (uiTextComponent != null)
-                {
-                    uiTextComponent.text = noteObject.noteText; // Display the unique note text
-                    if (noteObject.noteFont != null)
-                    {
-                        uiTextComponent.font = noteObject.noteFont; // Set the assigned font
-                    }
-                }
-            }
-            else // If we are closing the UI
+            // Update the note UI active state flag
+            if (isActive) // If we are closing the UI
             {
                 isNoteUIActive = false; // Reset the flag when the UI is closed
+            }
+            else // If we are opening the UI
+            {
+                isNoteUIActive = true; // Set the flag when the UI is opened
             }
         }
     }
