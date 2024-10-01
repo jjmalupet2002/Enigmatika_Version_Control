@@ -148,12 +148,12 @@ public class ItemInspectionManager : MonoBehaviour
     }
 
     // Add a sensitivity factor for touch controls
-    private float touchSensitivity = 0.03f; // Adjust this value to change sensitivity for touch input
+    private float touchSensitivity = 0.02f; // Adjust this value to change sensitivity for touch input
 
     void Update()
     {
-        // Check if the current camera state is CloseUp before allowing inspection
-        if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp)
+        // Check if the current camera state is CloseUp and no note UI is active before allowing inspection
+        if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp && !NoteInspectionManager.Instance.isNoteUIActive)
         {
             // Handle mouse click for inspection
             if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
@@ -238,4 +238,3 @@ public class ItemInspectionManager : MonoBehaviour
         }
     }
 }
-

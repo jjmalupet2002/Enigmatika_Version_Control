@@ -137,20 +137,26 @@ public class Outline : MonoBehaviour {
     }
   }
 
-  void OnDisable() {
-    foreach (var renderer in renderers) {
+    void OnDisable()
+    {
+        foreach (var renderer in renderers)
+        {
+            // Check if the renderer is not null before accessing it
+            if (renderer != null)
+            {
+                // Remove outline shaders
+                var materials = renderer.sharedMaterials.ToList();
 
-      // Remove outline shaders
-      var materials = renderer.sharedMaterials.ToList();
+                materials.Remove(outlineMaskMaterial);
+                materials.Remove(outlineFillMaterial);
 
-      materials.Remove(outlineMaskMaterial);
-      materials.Remove(outlineFillMaterial);
-
-      renderer.materials = materials.ToArray();
+                renderer.materials = materials.ToArray();
+            }
+        }
     }
-  }
 
-  void OnDestroy() {
+
+    void OnDestroy() {
 
     // Destroy material instances
     Destroy(outlineMaskMaterial);
