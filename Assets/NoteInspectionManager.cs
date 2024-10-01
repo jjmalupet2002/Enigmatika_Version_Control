@@ -114,7 +114,6 @@ public class NoteInspectionManager : MonoBehaviour
                 // Hide the current page
                 notePages[currentPageIndex].SetActive(false);
                 isNoteUIActive = false;
-                canInspectNotes = true; // Allow note inspection again
                 currentNoteObject = null; // Reset the current note object
             }
             else
@@ -123,12 +122,10 @@ public class NoteInspectionManager : MonoBehaviour
                 currentPageIndex = 0;
                 notePages[currentPageIndex].SetActive(true);
                 isNoteUIActive = true;
-                canInspectNotes = false; // Disable note inspection
                 currentNoteObject = noteObject; // Set the current note object
             }
         }
     }
-
 
     // Capture the start position and time of the swipe
     private void OnSwipeStart(InputAction.CallbackContext context)
@@ -149,7 +146,6 @@ public class NoteInspectionManager : MonoBehaviour
         HandleSwipe(context, 1); // 1 indicates right swipe
     }
 
-    // Generic swipe handler
     // Generic swipe handler
     private void HandleSwipe(InputAction.CallbackContext context, int direction)
     {
@@ -195,68 +191,20 @@ public class NoteInspectionManager : MonoBehaviour
         }
     }
 
+    // New coroutine method to change pages with a delay
     private IEnumerator ChangePageWithDelay(List<GameObject> notePages, int newPageIndex)
     {
-        // Start fading out the current page
-        yield return StartCoroutine(FadeOut(notePages[currentPageIndex]));
+        // Hide the current page
+        notePages[currentPageIndex].SetActive(false);
+
+        // Wait for a slight delay (e.g., 0.5 seconds)
+        yield return new WaitForSeconds(0.5f);
 
         // Update the current page index
         currentPageIndex = newPageIndex;
 
-        // Start fading in the new page
-        yield return StartCoroutine(FadeIn(notePages[currentPageIndex]));
-    }
-
-    // New coroutine for fading out a page
-    private IEnumerator FadeOut(GameObject page)
-    {
-        CanvasGroup canvasGroup = page.GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-        {
-            canvasGroup = page.AddComponent<CanvasGroup>(); // Add a CanvasGroup if one doesn't exist
-        }
-
-        // Fade out over 0.5 seconds
-        float duration = 0.5f;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            canvasGroup.alpha = Mathf.Clamp01(1 - (elapsed / duration)); // Decrease alpha
-            yield return null; // Wait for the next frame
-        }
-
-        // Ensure it's fully transparent
-        canvasGroup.alpha = 0;
-        page.SetActive(false); // Set the page inactive after fading out
-    }
-
-    // New coroutine for fading in a page
-    private IEnumerator FadeIn(GameObject page)
-    {
-        CanvasGroup canvasGroup = page.GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-        {
-            canvasGroup = page.AddComponent<CanvasGroup>(); // Add a CanvasGroup if one doesn't exist
-        }
-
-        page.SetActive(true); // Make the page active before fading in
-        canvasGroup.alpha = 0; // Start fully transparent
-
-        // Fade in over 0.5 seconds
-        float duration = 0.5f;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            canvasGroup.alpha = Mathf.Clamp01(elapsed / duration); // Increase alpha
-            yield return null; // Wait for the next frame
-        }
-
-        // Ensure it's fully opaque
-        canvasGroup.alpha = 1;
+        // Show the new page
+        notePages[currentPageIndex].SetActive(true);
     }
 
 
