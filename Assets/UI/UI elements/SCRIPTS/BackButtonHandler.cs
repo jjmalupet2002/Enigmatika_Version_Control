@@ -26,21 +26,22 @@ public class BackButtonHandler : MonoBehaviour
     public void OnBackButtonPressed()
     {
         // Check if any note inspection mode is active and stop inspection if it is
-        if (NoteInspectionManager.Instance != null)
+        if (NoteInspectionManager.Instance != null && NoteInspectionManager.Instance.isNoteUIActive)
         {
-            // Check if any note UI is active
             foreach (var noteUI in NoteInspectionManager.Instance.noteUIs.Values)
             {
-                if (noteUI.activeSelf)
+                foreach (var ui in noteUI)
                 {
-                    noteUI.SetActive(false); // Hide the note UI
-                    NoteInspectionManager.Instance.isNoteUIActive = false; // Reset the flag
-                    return; // Exit early if we closed the note UI
+                    if (ui.activeSelf)
+                    {
+                        ui.SetActive(false); // Hide the note UI
+                    }
                 }
             }
+            NoteInspectionManager.Instance.isNoteUIActive = false; // Reset the flag
+            NoteInspectionManager.Instance.EnableNoteInspection(true); // Allow note inspection again
+            return; // Exit early if we closed the note UI
         }
-    
-
 
         // Existing logic for other inspection managers
         foreach (var itemInspectionManager in itemInspectionManagers)
@@ -54,7 +55,7 @@ public class BackButtonHandler : MonoBehaviour
             if (itemInspectionManager.IsInspecting())
             {
                 itemInspectionManager.StopInspection();
-                return; // Exit early to prevent closing the close-up view
+                return; // Exit early after stopping inspection
             }
         }
 
@@ -80,6 +81,5 @@ public class BackButtonHandler : MonoBehaviour
             interactableObject.CallOnBackButtonPressed();
         }
     }
-}
 
-      
+}

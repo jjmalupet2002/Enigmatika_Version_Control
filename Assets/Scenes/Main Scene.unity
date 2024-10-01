@@ -490,7 +490,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &60232446
 Transform:
   m_ObjectHideFlags: 0
@@ -539,7 +539,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteUI: {fileID: 332011216}
+  notePages:
+  - {fileID: 332011216}
 --- !u!23 &60232449
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1095,7 +1096,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteUI: {fileID: 1377716487}
+  notePages:
+  - {fileID: 332011216}
+  - {fileID: 1377716487}
 --- !u!23 &271790443
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1855,7 +1858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &471232513
 Transform:
   m_ObjectHideFlags: 0
@@ -1904,7 +1907,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteUI: {fileID: 943548664}
+  notePages:
+  - {fileID: 943548664}
 --- !u!23 &471232516
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2082,7 +2086,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &497750444
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2116,7 +2120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteUI: {fileID: 943548664}
+  notePages:
+  - {fileID: 1377716487}
 --- !u!23 &497750446
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2734,7 +2739,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteUI: {fileID: 1377716487}
+  notePages:
+  - {fileID: 943548664}
 --- !u!23 &787383374
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3522,6 +3528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isNoteUIActive: 0
+  inputActionAsset: {fileID: -944628639613478452, guid: 2ffb3733f12b70b4bbeac0f08de6c154, type: 3}
 --- !u!1 &987490678
 GameObject:
   m_ObjectHideFlags: 0
@@ -6411,7 +6418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteUI: {fileID: 332011216}
+  notePages:
+  - {fileID: 332011216}
+  - {fileID: 943548664}
 --- !u!65 &2073107214
 BoxCollider:
   m_ObjectHideFlags: 0
