@@ -105,7 +105,7 @@ public class NoteInspectionManager : MonoBehaviour
     }
 
     // Change method to public
-    public void ToggleNoteUI(NoteObjectHandler noteObject) // Make this public
+    public void ToggleNoteUI(NoteObjectHandler noteObject)
     {
         if (noteUIs.TryGetValue(noteObject, out List<GameObject> notePages))
         {
@@ -124,8 +124,12 @@ public class NoteInspectionManager : MonoBehaviour
                 isNoteUIActive = true;
                 currentNoteObject = noteObject; // Set the current note object
             }
+
+            // Update the read button state
+            NoteUIController.Instance.ToggleReadButton(isNoteUIActive);
         }
     }
+
 
     // Capture the start position and time of the swipe
     private void OnSwipeStart(InputAction.CallbackContext context)
