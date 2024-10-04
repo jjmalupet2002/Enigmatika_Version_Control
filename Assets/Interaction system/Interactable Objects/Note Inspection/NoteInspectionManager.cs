@@ -12,7 +12,7 @@ public class NoteInspectionManager : MonoBehaviour
     private bool canInspectNotes; // Track if notes can be inspected
     public bool isNoteUIActive; // Track if the note UI is currently active
 
-    private NoteObjectHandler currentNoteObject; // To keep track of the current note being viewed
+    public NoteObjectHandler currentNoteObject; // To keep track of the current note being viewed
     private int currentPageIndex; // To keep track of the current page being viewed
 
     private InputAction swipeLeftAction;
@@ -81,6 +81,7 @@ public class NoteInspectionManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit))
                 {
+                    // Remove the condition to only check for "Book" tag
                     NoteObjectHandler noteObject = hit.collider.GetComponent<NoteObjectHandler>();
                     if (noteObject != null)
                     {
@@ -90,6 +91,7 @@ public class NoteInspectionManager : MonoBehaviour
             }
         }
     }
+
 
     // Register a UI for a note object
     public void RegisterNoteUI(NoteObjectHandler noteObject, List<GameObject> notePages)
@@ -107,28 +109,44 @@ public class NoteInspectionManager : MonoBehaviour
     // Change method to public
     public void ToggleNoteUI(NoteObjectHandler noteObject)
     {
+        // Check if the note object exists in the dictionary
         if (noteUIs.TryGetValue(noteObject, out List<GameObject> notePages))
         {
             if (isNoteUIActive)
             {
-                // Hide the current page
+                // Hide the current page and reset the UI state
                 notePages[currentPageIndex].SetActive(false);
                 isNoteUIActive = false;
                 currentNoteObject = null; // Reset the current note object
+
+                // Disable the book UI if it was active
+                if (noteObject.CompareTag("Book"))
+                {
+                    NoteUIController.Instance.ToggleBookCanvasGroup();
+                }
             }
             else
             {
-                // Show the first page
+                // Show the first page and update the UI state
                 currentPageIndex = 0;
                 notePages[currentPageIndex].SetActive(true);
                 isNoteUIActive = true;
                 currentNoteObject = noteObject; // Set the current note object
+
+                // Check if the note object has the "Book" tag for special handling
+                if (noteObject.CompareTag("Book"))
+                {
+                    // Enable the book-related UI
+                    NoteUIController.Instance.ToggleBookCanvasGroup();
+                }
             }
 
             // Update the read button state
             NoteUIController.Instance.ToggleReadButton(isNoteUIActive);
         }
     }
+
+
 
 
     // Capture the start position and time of the swipe
@@ -210,7 +228,6 @@ public class NoteInspectionManager : MonoBehaviour
         // Show the new page
         notePages[currentPageIndex].SetActive(true);
     }
-
 
     // Method to enable or disable note inspection
     public void EnableNoteInspection(bool enable)

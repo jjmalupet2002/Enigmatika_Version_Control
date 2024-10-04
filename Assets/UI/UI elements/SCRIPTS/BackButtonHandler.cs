@@ -40,6 +40,17 @@ public class BackButtonHandler : MonoBehaviour
             }
             NoteInspectionManager.Instance.isNoteUIActive = false; // Reset the flag
             NoteInspectionManager.Instance.EnableNoteInspection(true); // Allow note inspection again
+
+            // Add the toggle for the read button
+            NoteUIController.Instance.ToggleReadButton(false);
+
+            // Check if the current note object is tagged as "Book" before closing the book UI
+            if (NoteInspectionManager.Instance.currentNoteObject != null &&
+                NoteInspectionManager.Instance.currentNoteObject.CompareTag("Book"))
+            {
+                NoteUIController.Instance.ToggleBookCanvasGroup(); // Close the book canvas group
+            }
+
             return; // Exit early if we closed the note UI
         }
 
@@ -81,5 +92,4 @@ public class BackButtonHandler : MonoBehaviour
             interactableObject.CallOnBackButtonPressed();
         }
     }
-
 }
