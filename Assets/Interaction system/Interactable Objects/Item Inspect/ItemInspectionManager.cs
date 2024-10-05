@@ -37,6 +37,9 @@ public class ItemInspectionManager : MonoBehaviour
     // Reference to the BackButtonHandler script
     [SerializeField] private BackButtonHandler backButtonHandler; // Serialized reference
 
+    // Reference to NoteInspectionManager
+    private NoteInspectionManager noteInspectionManager; // Remove serialized reference
+
     void Start()
     {
         // Initialize the input action for rotation
@@ -45,6 +48,9 @@ public class ItemInspectionManager : MonoBehaviour
 
         inspectionPoint = transform;
         targetRotation = Vector3.zero;
+
+        // Find the NoteInspectionManager instance in the scene
+        noteInspectionManager = FindObjectOfType<NoteInspectionManager>();
 
         // Store the original position, rotation, and shadow casting mode for each item
         foreach (GameObject item in itemsToInspect)
@@ -153,7 +159,7 @@ public class ItemInspectionManager : MonoBehaviour
     void Update()
     {
         // Check if the current camera state is CloseUp and no note UI is active before allowing inspection
-        if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp && !NoteInspectionManager.Instance.isNoteUIActive)
+        if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp && noteInspectionManager != null && !noteInspectionManager.isNoteUIActive)
         {
             // Handle mouse click for inspection
             if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
@@ -176,6 +182,12 @@ public class ItemInspectionManager : MonoBehaviour
 
         if (isInspecting)
         {
+            // Prevent note interaction during item inspection
+            if (noteInspectionManager != null)
+            {
+                noteInspectionManager.enabled = false; // Disable note inspection
+            }
+
             // Handle rotation with mouse
             if (Input.GetMouseButton(0))
             {
@@ -207,6 +219,14 @@ public class ItemInspectionManager : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            // Re-enable note interaction when item inspection is not active
+            if (noteInspectionManager != null)
+            {
+                noteInspectionManager.enabled = true; // Enable note inspection
+            }
+        }
     }
 
     // Function to disable colliders for all items except the currently inspected one
@@ -219,13 +239,13 @@ public class ItemInspectionManager : MonoBehaviour
                 Collider collider = item.GetComponent<Collider>();
                 if (collider != null)
                 {
-                    collider.enabled = false; // Disable the collider
+                    collider.enabled = false; // Disable collider for non-inspected items
                 }
             }
         }
     }
 
-    // Function to re-enable colliders for all items
+    // Function to enable colliders for all items
     private void EnableAllItemColliders()
     {
         foreach (GameObject item in itemsToInspect)
@@ -233,7 +253,7 @@ public class ItemInspectionManager : MonoBehaviour
             Collider collider = item.GetComponent<Collider>();
             if (collider != null)
             {
-                collider.enabled = true; // Re-enable the collider
+                collider.enabled = true; // Enable collider for all items
             }
         }
     }
