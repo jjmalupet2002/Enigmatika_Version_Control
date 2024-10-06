@@ -92,6 +92,15 @@ public class TalkandInteract : MonoBehaviour
             {
                 PerformObjectInteraction();
             }
+
+            if (currentInteractable != null)
+            {
+                Door door = currentInteractable.GetComponent<Door>();
+                if (door != null && door.IsPlayerNearby())
+                {
+                    door.Interact(); // Open or close the door
+                }
+            }
         }
     }
 
