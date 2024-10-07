@@ -7,9 +7,6 @@ public class DoorUnlockScript : MonoBehaviour
     [Tooltip("Check if this object is a button.")]
     public bool IsButton = true;
 
-    [Tooltip("Check if this object is a valve.")]
-    public bool IsValve = false;
-
     [Tooltip("Check if this object is a lever.")]
     public bool IsLever = false;
 
@@ -93,11 +90,6 @@ public class DoorUnlockScript : MonoBehaviour
         }
     }
 
-    // Placeholder methods for valve and lever interactions
-    public void ValveInteract()
-    {
-        // Placeholder for valve interaction logic
-    }
 
     private void HandleLeverInteraction()
     {

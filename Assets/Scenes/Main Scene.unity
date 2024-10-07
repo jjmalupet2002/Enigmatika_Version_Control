@@ -611,6 +611,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60232445}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &68075614 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6381796007522569471, guid: 4e75c0c524cf02541b0791f47c605833, type: 3}
+  m_PrefabInstance: {fileID: 1156223909}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &68075618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68075614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e251eaf08c63924688f518ebf5b21b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampObjectHandler: {fileID: 760964869}
+  unlockThreshold: 50
+  rotationSpeed: 5
+  inputActionAsset: {fileID: -944628639613478452, guid: 2ffb3733f12b70b4bbeac0f08de6c154, type: 3}
 --- !u!1 &82771363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5423568578692435371, guid: ac4bf23be814be543840c4634b4c7fbc, type: 3}
@@ -3338,7 +3359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &690474229
 Transform:
   m_ObjectHideFlags: 0
@@ -3355,8 +3376,8 @@ Transform:
   - {fileID: 760970290}
   - {fileID: 760964863}
   - {fileID: 1819425659}
-  - {fileID: 411317159}
   - {fileID: 2079308915}
+  - {fileID: 411317159}
   m_Father: {fileID: 777340340}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &712162008 stripped
@@ -3700,6 +3721,7 @@ GameObject:
   - component: {fileID: 760964866}
   - component: {fileID: 760964865}
   - component: {fileID: 760964864}
+  - component: {fileID: 760964869}
   m_Layer: 0
   m_Name: Ramp
   m_TagString: Untagged
@@ -3715,13 +3737,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760964862}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7132505, z: 0.70090926, w: 0}
+  m_LocalRotation: {x: 0, y: 0.7132505, z: 0.70090926, w: 0}
   m_LocalPosition: {x: -2.876423, y: -1.7939501, z: 0.9802036}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 690474229}
-  m_LocalEulerAnglesHint: {x: -89, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89, y: 180, z: 0}
 --- !u!59 &760964864
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -3863,6 +3885,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760964862}
   m_Mesh: {fileID: 8676587557541893166, guid: 344c22d9d460de048acc720929dcb5a5, type: 3}
+--- !u!114 &760964869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760964862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a40d04935c5131458f24a8a698e74e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampHinge: {fileID: 760964864}
 --- !u!1 &760970289
 GameObject:
   m_ObjectHideFlags: 0
@@ -5398,7 +5433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsButton: 0
-  IsValve: 0
   IsLever: 1
   buttonAnimator: {fileID: 0}
   leverAnimator: {fileID: 1139939126}
@@ -5460,6 +5494,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Interactable
       objectReference: {fileID: 0}
+    - target: {fileID: 6381796007522569471, guid: 4e75c0c524cf02541b0791f47c605833, type: 3}
+      propertyPath: m_Name
+      value: Valve_Object
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5482,6 +5520,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: 4e75c0c524cf02541b0791f47c605833, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2079308916}
+    - targetCorrespondingSourceObject: {fileID: 6381796007522569471, guid: 4e75c0c524cf02541b0791f47c605833, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 68075618}
   m_SourcePrefab: {fileID: 100100000, guid: 4e75c0c524cf02541b0791f47c605833, type: 3}
 --- !u!1 &1170023795
 GameObject:
@@ -8905,7 +8946,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsButton: 1
-  IsValve: 0
   IsLever: 0
   buttonAnimator: {fileID: 425779407608762938}
   leverAnimator: {fileID: 0}
