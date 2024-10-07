@@ -49,6 +49,15 @@
                     "processors": "InvertVector2(invertY=false)",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwipeUp",
+                    "type": "PassThrough",
+                    "id": "d301a915-3a3f-4ca3-987c-3683f0f3b1cf",
+                    "expectedControlType": "Vector2",
+                    "processors": "NormalizeVector2",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -104,6 +113,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SwipeLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b4b4ec8-aaaa-479e-a709-b4248eb9c586",
+                    "path": "<Touchscreen>/primaryTouch/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwipeUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
