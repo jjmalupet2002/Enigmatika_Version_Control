@@ -1,8 +1,9 @@
+using System.Diagnostics;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class DoorObjectHandler : MonoBehaviour
 {
-    [Tooltip("Without this boolean check, a door cannot be interacted with.")]
+    [Tooltip("Check to lock a door")]
     public bool Locked = false;
 
     [Tooltip("Check this if the door can open.")]
@@ -31,18 +32,13 @@ public class Door : MonoBehaviour
 
         if (hinge == null)
         {
-            Debug.LogError("No HingeJoint component found on the door.");
+            UnityEngine.Debug.LogError("No HingeJoint component found on the door.");
         }
     }
 
     void Update()
     {
         CheckPlayerProximity();
-
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
-        {
-            Interact();
-        }
     }
 
     private void CheckPlayerProximity()
@@ -61,16 +57,19 @@ public class Door : MonoBehaviour
 
     public void Interact()
     {
-        if (!Locked)
+        if (Locked)
         {
-            if (IsOpened)
-            {
-                CloseDoor();
-            }
-            else
-            {
-                OpenDoor();
-            }
+            UnityEngine.Debug.Log("Door is locked.");
+            return; // Early exit if the door is locked
+        }
+
+        if (IsOpened)
+        {
+            CloseDoor();
+        }
+        else
+        {
+            OpenDoor();
         }
     }
 
@@ -80,7 +79,7 @@ public class Door : MonoBehaviour
         {
             IsOpened = true;
             rbDoor.AddRelativeTorque(new Vector3(0, 0, 20f)); // Apply torque to open the door
-            Debug.Log("Door is now open.");
+            UnityEngine.Debug.Log("Door is now open.");
         }
     }
 
@@ -89,7 +88,7 @@ public class Door : MonoBehaviour
         if (!Locked && CanClose && IsOpened)
         {
             IsOpened = false;
-            Debug.Log("Door is now closed.");
+            UnityEngine.Debug.Log("Door is now closed.");
         }
     }
 
