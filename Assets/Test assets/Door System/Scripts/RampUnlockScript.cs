@@ -21,6 +21,9 @@ public class RampUnlockScript : MonoBehaviour
     private bool isUnlocked = false; // New flag to track if the valve is unlocked
     private Vector2 previousTouchPosition;
 
+    // Reference to the SwitchCamera script
+    public SwitchCamera switchCamera; // Ensure this is assigned in the Inspector
+
     private void OnEnable()
     {
         // Enable the spin gesture input action
@@ -50,17 +53,13 @@ public class RampUnlockScript : MonoBehaviour
 
     private void HandleValveInteraction()
     {
-        // Always check if the close-up camera is active, even if it's already unlocked
-        if (IsCloseUpCameraActive())
+        if (switchCamera.currentCameraState != CameraState.CloseUp) // Check if current camera state is CloseUp
         {
-            // If close-up camera is active, allow spinning the valve
-            HandleSpinGesture();
+            return; // Exit early if not in close-up view
         }
-    }
 
-    private void HandleSpinGesture()
-    {
         var spinGestureAction = inputActionAsset.FindAction("SpinGesture");
+
         if (spinGestureAction == null)
         {
             UnityEngine.Debug.LogError("SpinGesture action not found in Input Action Asset.");
@@ -69,28 +68,20 @@ public class RampUnlockScript : MonoBehaviour
 
         Vector2 touchPosition = spinGestureAction.ReadValue<Vector2>();
 
-        // Handle input phases for valve spinning
-        switch (spinGestureAction.phase)
+        if (spinGestureAction.phase == InputActionPhase.Started)
         {
-            case InputActionPhase.Started:
-                isTouchingValve = true;
-                previousTouchPosition = touchPosition;
-                UnityEngine.Debug.Log("Started touching valve.");
-                break;
-
-            case InputActionPhase.Performed:
-                if (isTouchingValve)
-                {
-                    RotateValve(touchPosition);
-                    previousTouchPosition = touchPosition;
-                }
-                break;
-
-            case InputActionPhase.Canceled:
-                isTouchingValve = false;
-                StartCoroutine(ResetValveRotation());
-                UnityEngine.Debug.Log("Stopped touching valve.");
-                break;
+            isTouchingValve = true;
+            previousTouchPosition = touchPosition;
+        }
+        else if (spinGestureAction.phase == InputActionPhase.Performed && isTouchingValve && !isUnlocked) // Prevent rotation if unlocked
+        {
+            RotateValve(touchPosition);
+            previousTouchPosition = touchPosition;
+        }
+        else if (spinGestureAction.phase == InputActionPhase.Canceled)
+        {
+            isTouchingValve = false;
+            StartCoroutine(ResetValveRotation());
         }
     }
 
@@ -110,22 +101,26 @@ public class RampUnlockScript : MonoBehaviour
         }
 
         // Limit the rotation to a specific range
-        currentRotation = Mathf.Clamp(currentRotation, 0, unlockThreshold);
+        if (currentRotation > unlockThreshold)
+        {
+            currentRotation = unlockThreshold; // Clamp to unlock threshold
+        }
+        else if (currentRotation < 0)
+        {
+            currentRotation = 0; // Clamp to 0
+        }
+
         transform.Rotate(Vector3.forward, rotationAmount);
         UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
 
         // Check if the current rotation is enough to unlock the ramp
         if (currentRotation >= unlockThreshold)
         {
-            if (rampObjectHandler != null && !isUnlocked) // Use isUnlocked to prevent re-unlocking
+            if (rampObjectHandler != null && !rampObjectHandler.IsUnlocked())
             {
+                // Pass both the current rotation and the unlock threshold
                 rampObjectHandler.UnlockRamp(currentRotation, unlockThreshold);
                 isUnlocked = true; // Set the unlocked flag to true
-                UnityEngine.Debug.Log("Ramp unlocked!");
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Ramp is already unlocked!");
             }
         }
     }
@@ -141,20 +136,5 @@ public class RampUnlockScript : MonoBehaviour
         }
 
         currentRotation = 0;
-    }
-
-    private bool IsCloseUpCameraActive()
-    {
-        // Get all instances of SwitchCamera
-        var switchCameras = FindObjectsOfType<SwitchCamera>();
-        // Check if any instance has the CloseUp camera active
-        foreach (var switchCamera in switchCameras)
-        {
-            if (switchCamera.currentCameraState == CameraState.CloseUp)
-            {
-                return true; // Return true if any close-up camera is active
-            }
-        }
-        return false; // No close-up camera is active
     }
 }
