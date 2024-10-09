@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -51,8 +50,17 @@ public class RampUnlockScript : MonoBehaviour
 
     private void HandleValveInteraction()
     {
-        var spinGestureAction = inputActionAsset.FindAction("SpinGesture");
+        // Always check if the close-up camera is active, even if it's already unlocked
+        if (IsCloseUpCameraActive())
+        {
+            // If close-up camera is active, allow spinning the valve
+            HandleSpinGesture();
+        }
+    }
 
+    private void HandleSpinGesture()
+    {
+        var spinGestureAction = inputActionAsset.FindAction("SpinGesture");
         if (spinGestureAction == null)
         {
             UnityEngine.Debug.LogError("SpinGesture action not found in Input Action Asset.");
@@ -61,20 +69,28 @@ public class RampUnlockScript : MonoBehaviour
 
         Vector2 touchPosition = spinGestureAction.ReadValue<Vector2>();
 
-        if (spinGestureAction.phase == InputActionPhase.Started)
+        // Handle input phases for valve spinning
+        switch (spinGestureAction.phase)
         {
-            isTouchingValve = true;
-            previousTouchPosition = touchPosition;
-        }
-        else if (spinGestureAction.phase == InputActionPhase.Performed && isTouchingValve && !isUnlocked) // Prevent rotation if unlocked
-        {
-            RotateValve(touchPosition);
-            previousTouchPosition = touchPosition;
-        }
-        else if (spinGestureAction.phase == InputActionPhase.Canceled)
-        {
-            isTouchingValve = false;
-            StartCoroutine(ResetValveRotation());
+            case InputActionPhase.Started:
+                isTouchingValve = true;
+                previousTouchPosition = touchPosition;
+                UnityEngine.Debug.Log("Started touching valve.");
+                break;
+
+            case InputActionPhase.Performed:
+                if (isTouchingValve)
+                {
+                    RotateValve(touchPosition);
+                    previousTouchPosition = touchPosition;
+                }
+                break;
+
+            case InputActionPhase.Canceled:
+                isTouchingValve = false;
+                StartCoroutine(ResetValveRotation());
+                UnityEngine.Debug.Log("Stopped touching valve.");
+                break;
         }
     }
 
@@ -93,15 +109,23 @@ public class RampUnlockScript : MonoBehaviour
             currentRotation -= rotationAmount;
         }
 
+        // Limit the rotation to a specific range
+        currentRotation = Mathf.Clamp(currentRotation, 0, unlockThreshold);
         transform.Rotate(Vector3.forward, rotationAmount);
         UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
 
+        // Check if the current rotation is enough to unlock the ramp
         if (currentRotation >= unlockThreshold)
         {
-            if (rampObjectHandler != null && !rampObjectHandler.IsUnlocked())
+            if (rampObjectHandler != null && !isUnlocked) // Use isUnlocked to prevent re-unlocking
             {
-                rampObjectHandler.UnlockRamp();
+                rampObjectHandler.UnlockRamp(currentRotation, unlockThreshold);
                 isUnlocked = true; // Set the unlocked flag to true
+                UnityEngine.Debug.Log("Ramp unlocked!");
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Ramp is already unlocked!");
             }
         }
     }
@@ -117,5 +141,20 @@ public class RampUnlockScript : MonoBehaviour
         }
 
         currentRotation = 0;
+    }
+
+    private bool IsCloseUpCameraActive()
+    {
+        // Get all instances of SwitchCamera
+        var switchCameras = FindObjectsOfType<SwitchCamera>();
+        // Check if any instance has the CloseUp camera active
+        foreach (var switchCamera in switchCameras)
+        {
+            if (switchCamera.currentCameraState == CameraState.CloseUp)
+            {
+                return true; // Return true if any close-up camera is active
+            }
+        }
+        return false; // No close-up camera is active
     }
 }
