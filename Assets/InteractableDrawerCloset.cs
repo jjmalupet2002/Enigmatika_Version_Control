@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Collections.Generic; // For using List<T>
 using UnityEngine;
 
 public class InteractableDrawerCloset : MonoBehaviour
@@ -11,8 +11,7 @@ public class InteractableDrawerCloset : MonoBehaviour
 
     // Header for Drawer Settings
     [Header("Drawer Settings")]
-    public float closedZValue = 0f; // Z position when closed
-    public float openZValue = 0.5f;  // Z position when open
+    public float openDistance = 0.5f; // Distance the drawer should move forward when opened
     public float openCloseSpeedDrawer = 2f; // Speed of the drawer opening/closing
 
     // Header for Closet Settings
@@ -24,6 +23,9 @@ public class InteractableDrawerCloset : MonoBehaviour
     // Used to track if the drawer or closet is currently moving
     private bool isMoving = false;
 
+    // Used to store the initial position of the drawer
+    private Vector3 closedPosition; // To store the initial position of the drawer
+
     void Start()
     {
         // Set the initial position or rotation based on the type
@@ -33,7 +35,7 @@ public class InteractableDrawerCloset : MonoBehaviour
         }
         else if (isDrawer)
         {
-            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, closedZValue); // Set initial position for drawer
+            closedPosition = transform.localPosition; // Store initial position for drawer
         }
     }
 
@@ -71,9 +73,8 @@ public class InteractableDrawerCloset : MonoBehaviour
             }
             else if (isDrawer)
             {
-                // Move for drawer
-                float targetZ = isOpen ? openZValue : closedZValue;
-                Vector3 targetPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, targetZ);
+                // Move for drawer based on its local forward direction
+                Vector3 targetPosition = closedPosition + transform.localRotation * Vector3.forward * (isOpen ? openDistance : 0);
                 transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, Time.deltaTime * openCloseSpeedDrawer);
 
                 // Check if the drawer has reached the target position
@@ -89,6 +90,23 @@ public class InteractableDrawerCloset : MonoBehaviour
 
     void HandleInput(Vector2 inputPosition)
     {
+        // Check if the note UI is active
+        NoteInspectionManager noteManager = FindObjectOfType<NoteInspectionManager>();
+        if (noteManager != null && noteManager.isNoteUIActive)
+        {
+            return; // Skip interaction if the note UI is active
+        }
+
+        // Check if any instance of ItemInspectionManager has item inspection active
+        ItemInspectionManager[] itemInspectionManagers = FindObjectsOfType<ItemInspectionManager>();
+        foreach (var itemInspectionManager in itemInspectionManagers)
+        {
+            if (itemInspectionManager.IsInspecting())
+            {
+                return; // Skip interaction if any item inspection is active
+            }
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
         RaycastHit hit;
 

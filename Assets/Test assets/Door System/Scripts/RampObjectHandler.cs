@@ -1,71 +1,65 @@
-using System.Collections; // Add this line
-using System.Diagnostics;
+using System.Collections;
 using UnityEngine;
 
 public class RampObjectHandler : MonoBehaviour
 {
-    [Tooltip("Reference to the ramp's hinge joint.")]
-    public HingeJoint rampHinge;
+    [Tooltip("Starting rotation angle on the X axis.")]
+    public float startXRotation = 0f; // Starting angle (lowest position)
+
+    [Tooltip("Ending rotation angle on the X axis.")]
+    public float endXRotation = 90f;   // Ending angle (maximum position)
+
+    [Tooltip("Speed at which the ramp goes down.")]
+    public float rampDownSpeed = 2f;   // Speed at which the ramp returns to the starting position
 
     private bool isUnlocked = false;
+    private float targetRampRotation;
 
     private void Start()
     {
         LockRamp();
     }
 
-    // Method to lock the ramp
     public void LockRamp()
     {
         isUnlocked = false;
-
-        if (rampHinge != null)
-        {
-            rampHinge.useMotor = false; // Stop any motor movement
-        }
-
+        transform.rotation = Quaternion.Euler(startXRotation, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
         UnityEngine.Debug.Log("Ramp is now locked.");
     }
 
-    // Method to unlock the ramp
-    public void UnlockRamp()
+    public void UnlockRamp(float valveRotation, float unlockThreshold)
     {
         isUnlocked = true;
-
-        if (rampHinge != null)
-        {
-            JointMotor motor = rampHinge.motor;
-            motor.targetVelocity = 100f; // Adjust the direction based on your setup
-            motor.force = 100f;
-            rampHinge.motor = motor;
-            rampHinge.useMotor = true;
-
-            // Ensure the ramp rotates to 90 degrees
-            StartCoroutine(RotateRampToLimit());
-        }
-
+        targetRampRotation = Mathf.Lerp(startXRotation, endXRotation, valveRotation / unlockThreshold);
+        StartCoroutine(RotateRampToLimit(valveRotation));
         UnityEngine.Debug.Log("Ramp is now unlocked.");
     }
 
-    // Coroutine to smoothly rotate the ramp to its limit
-    private IEnumerator RotateRampToLimit()
+    private IEnumerator RotateRampToLimit(float valveRotation)
     {
-        while (true)
+        float elapsedTime = 0f;
+        float duration = 2f; // Duration of the ramp rotation
+
+        // Ramp down based on the valve rotation
+        while (elapsedTime < duration)
         {
-            // Check if the ramp is not already at 90 degrees
-            if (Mathf.Abs(rampHinge.angle) >= 90f)
-            {
-                // Stop the motor if the ramp has reached the limit
-                rampHinge.useMotor = false;
-                break; // Exit the loop
-            }
+            // Lerp the angle between the current angle and the target angle
+            float newAngle = Mathf.Lerp(startXRotation, targetRampRotation, elapsedTime / duration);
+
+            // Apply the new angle to the ramp's rotation
+            transform.rotation = Quaternion.Euler(newAngle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
+            elapsedTime += Time.deltaTime;
             yield return null; // Wait for the next frame
         }
 
+        // Ensure the ramp is set to the final ending angle
+        transform.rotation = Quaternion.Euler(targetRampRotation, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
         UnityEngine.Debug.Log("Ramp has reached the limit.");
+        yield return new WaitForSeconds(1f); // Optional delay
     }
 
-    // Check if the ramp is unlocked
     public bool IsUnlocked()
     {
         return isUnlocked;

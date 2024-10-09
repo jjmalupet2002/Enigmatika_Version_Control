@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -93,14 +92,26 @@ public class RampUnlockScript : MonoBehaviour
             currentRotation -= rotationAmount;
         }
 
+        // Limit the rotation to a specific range
+        if (currentRotation > unlockThreshold)
+        {
+            currentRotation = unlockThreshold; // Clamp to unlock threshold
+        }
+        else if (currentRotation < 0)
+        {
+            currentRotation = 0; // Clamp to 0
+        }
+
         transform.Rotate(Vector3.forward, rotationAmount);
         UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
 
+        // Check if the current rotation is enough to unlock the ramp
         if (currentRotation >= unlockThreshold)
         {
             if (rampObjectHandler != null && !rampObjectHandler.IsUnlocked())
             {
-                rampObjectHandler.UnlockRamp();
+                // Pass both the current rotation and the unlock threshold
+                rampObjectHandler.UnlockRamp(currentRotation, unlockThreshold);
                 isUnlocked = true; // Set the unlocked flag to true
             }
         }
