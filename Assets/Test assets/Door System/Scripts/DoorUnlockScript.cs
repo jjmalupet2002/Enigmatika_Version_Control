@@ -60,57 +60,75 @@ public class DoorUnlockScript : MonoBehaviour
 
     public void ButtonInteract()
     {
-        if (doorObjectHandler != null)
+        // Check if any SwitchCamera instance has the CloseUp camera active
+        if (IsCloseUpCameraActive())
         {
-            if (doorObjectHandler.Locked)
+            if (doorObjectHandler != null)
             {
-                doorObjectHandler.Locked = false; // Unlock the door
-                UnityEngine.Debug.Log("Door is now unlocked.");
-                // Trigger the button press animation
-                buttonAnimator.SetTrigger("ButtonPress");
-                // Optionally trigger idle animation after a short delay
-                Invoke("OnIdle", 0.2f);
+                if (doorObjectHandler.Locked)
+                {
+                    doorObjectHandler.Locked = false; // Unlock the door
+                    UnityEngine.Debug.Log("Door is now unlocked.");
+                    // Trigger the button press animation
+                    buttonAnimator.SetTrigger("ButtonPress");
+                    // Optionally trigger idle animation after a short delay
+                    Invoke("OnIdle", 0.2f);
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("Door is already unlocked.");
+                }
             }
             else
             {
-                UnityEngine.Debug.Log("Door is already unlocked.");
+                UnityEngine.Debug.LogError("No DoorObjectHandler assigned.");
             }
         }
         else
         {
-            UnityEngine.Debug.LogError("No DoorObjectHandler assigned.");
+            UnityEngine.Debug.Log("Cannot interact with the door; close-up camera is not active.");
         }
     }
-
-    private void OnIdle()
-    {
-        if (buttonAnimator != null)
-        {
-            buttonAnimator.SetTrigger("ButtonIdle");
-        }
-    }
-
 
     private void HandleLeverInteraction()
     {
-        // Get the swipe input vector
-        Vector2 swipeInput = inputActionAsset.FindAction("SwipeUp").ReadValue<Vector2>();
-
-        // Check if the swipe input is significant (you can adjust the threshold)
-        if (swipeInput.y > 0.5f) // Threshold for swiping up
+        // Check if any SwitchCamera instance has the CloseUp camera active
+        if (IsCloseUpCameraActive())
         {
-            // Check for lever interaction through raycasting
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // Get the swipe input vector
+            Vector2 swipeInput = inputActionAsset.FindAction("SwipeUp").ReadValue<Vector2>();
 
-            if (Physics.Raycast(ray, out hit))
+            // Check if the swipe input is significant (you can adjust the threshold)
+            if (swipeInput.y > 0.5f) // Threshold for swiping up
             {
-                if (hit.collider.gameObject == gameObject)
+                // Check for lever interaction through raycasting
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
                 {
-                    LeverInteract();
+                    if (hit.collider.gameObject == gameObject)
+                    {
+                        LeverInteract();
+                    }
                 }
             }
         }
+    }
+
+    private bool IsCloseUpCameraActive()
+    {
+        // Get all instances of SwitchCamera
+        var switchCameras = FindObjectsOfType<SwitchCamera>();
+        // Check if any instance has the CloseUp camera active
+        foreach (var switchCamera in switchCameras)
+        {
+            if (switchCamera.currentCameraState == CameraState.CloseUp)
+            {
+                return true; // Return true if any close-up camera is active
+            }
+        }
+        return false; // No close-up camera is active
     }
 
     public void LeverInteract()
@@ -126,6 +144,14 @@ public class DoorUnlockScript : MonoBehaviour
         {
             doorObjectHandler.Locked = false; // Unlock the door
             UnityEngine.Debug.Log("Door is now unlocked.");
+        }
+    }
+
+    private void OnIdle()
+    {
+        if (buttonAnimator != null)
+        {
+            buttonAnimator.SetTrigger("ButtonIdle");
         }
     }
 

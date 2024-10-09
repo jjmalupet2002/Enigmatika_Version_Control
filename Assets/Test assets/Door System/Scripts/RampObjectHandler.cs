@@ -24,7 +24,7 @@ public class RampObjectHandler : MonoBehaviour
     {
         isUnlocked = false;
         transform.rotation = Quaternion.Euler(startXRotation, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-        UnityEngine.Debug.Log("Ramp is now locked.");
+       
     }
 
     public void UnlockRamp(float valveRotation, float unlockThreshold)
@@ -32,7 +32,7 @@ public class RampObjectHandler : MonoBehaviour
         isUnlocked = true;
         targetRampRotation = Mathf.Lerp(startXRotation, endXRotation, valveRotation / unlockThreshold);
         StartCoroutine(RotateRampToLimit(valveRotation));
-        UnityEngine.Debug.Log("Ramp is now unlocked.");
+   
     }
 
     private IEnumerator RotateRampToLimit(float valveRotation)
