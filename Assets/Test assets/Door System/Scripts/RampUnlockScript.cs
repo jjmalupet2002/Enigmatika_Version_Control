@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,9 @@ public class RampUnlockScript : MonoBehaviour
     [Tooltip("Rotation speed of the valve.")]
     public float rotationSpeed = 5f; // Rotation speed of the valve
 
+    [Tooltip("Reference to the SwitchCamera script.")]
+    public SwitchCamera switchCamera; // Reference to the SwitchCamera
+
     // Reference to the input action asset
     public InputActionAsset inputActionAsset; // Ensure this variable is defined
 
@@ -20,9 +24,6 @@ public class RampUnlockScript : MonoBehaviour
     private bool isTouchingValve = false;
     private bool isUnlocked = false; // New flag to track if the valve is unlocked
     private Vector2 previousTouchPosition;
-
-    // Reference to the SwitchCamera script
-    public SwitchCamera switchCamera; // Ensure this is assigned in the Inspector
 
     private void OnEnable()
     {
@@ -48,16 +49,20 @@ public class RampUnlockScript : MonoBehaviour
 
     void Update()
     {
-        HandleValveInteraction();
+        // Continuously check if in close-up camera view
+        if (switchCamera.currentCameraState == CameraState.CloseUp)
+        {
+            HandleValveInteraction();
+        }
+        else
+        {
+            // Reset interaction state when not in close-up
+            isTouchingValve = false;
+        }
     }
 
     private void HandleValveInteraction()
     {
-        if (switchCamera.currentCameraState != CameraState.CloseUp) // Check if current camera state is CloseUp
-        {
-            return; // Exit early if not in close-up view
-        }
-
         var spinGestureAction = inputActionAsset.FindAction("SpinGesture");
 
         if (spinGestureAction == null)
