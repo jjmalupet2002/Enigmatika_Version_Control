@@ -5,9 +5,10 @@ public class InteractableDrawerCloset : MonoBehaviour
 {
     private bool isOpen = false;
 
-    // Boolean to check if it's a closet or a drawer
+    // Booleans to check the type of interactable object
     public bool isCloset = false; // Set to true if this object is a closet
     public bool isDrawer = false; // Set to true if this object is a drawer
+    public bool isChest = false;  // Set to true if this object is a chest
 
     // Header for Drawer Settings
     [Header("Drawer Settings")]
@@ -20,7 +21,13 @@ public class InteractableDrawerCloset : MonoBehaviour
     public float openYRotation = 90f;  // Y rotation when open
     public float openCloseSpeedCloset = 2f; // Speed of the closet opening/closing
 
-    // Used to track if the drawer or closet is currently moving
+    // Header for Chest Settings
+    [Header("Chest Settings")]
+    public float closedXRotation = 0f; // X rotation when closed
+    public float openXRotation = -90f; // X rotation when open
+    public float openCloseSpeedChest = 2f; // Speed of the chest opening/closing
+
+    // Used to track if the drawer, closet, or chest is currently moving
     private bool isMoving = false;
 
     // Used to store the initial position of the drawer
@@ -36,6 +43,10 @@ public class InteractableDrawerCloset : MonoBehaviour
         else if (isDrawer)
         {
             closedPosition = transform.localPosition; // Store initial position for drawer
+        }
+        else if (isChest)
+        {
+            transform.localRotation = Quaternion.Euler(closedXRotation, 0f, 0f); // Set initial rotation for chest
         }
     }
 
@@ -53,7 +64,7 @@ public class InteractableDrawerCloset : MonoBehaviour
             HandleInput(Input.GetTouch(0).position);
         }
 
-        // Move the drawer or closet based on its open state if not currently moving
+        // Move the drawer, closet, or chest based on its open state if not currently moving
         if (isMoving)
         {
             if (isCloset)
@@ -85,6 +96,21 @@ public class InteractableDrawerCloset : MonoBehaviour
                     UnityEngine.Debug.Log("Drawer has finished moving to: " + (isOpen ? "Open" : "Closed")); // Debug log
                 }
             }
+            else if (isChest)
+            {
+                // Rotate for chest
+                float targetX = isOpen ? openXRotation : closedXRotation;
+                Quaternion targetRotation = Quaternion.Euler(targetX, 0f, 0f);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, Time.deltaTime * openCloseSpeedChest);
+
+                // Check if the chest has reached the target rotation
+                if (Quaternion.Angle(transform.localRotation, targetRotation) < 0.1f)
+                {
+                    transform.localRotation = targetRotation; // Snap to target rotation
+                    isMoving = false; // Stop moving
+                    UnityEngine.Debug.Log("Chest has finished moving to: " + (isOpen ? "Open" : "Closed")); // Debug log
+                }
+            }
         }
     }
 
@@ -114,12 +140,12 @@ public class InteractableDrawerCloset : MonoBehaviour
         {
             if (hit.collider.gameObject == gameObject && !isMoving) // Ensure it's not moving
             {
-                ToggleDrawerOrCloset();
+                ToggleDrawerClosetOrChest();
             }
         }
     }
 
-    public void ToggleDrawerOrCloset()
+    public void ToggleDrawerClosetOrChest()
     {
         // Only toggle if not currently moving
         if (!isMoving)
@@ -139,13 +165,13 @@ public class InteractableDrawerCloset : MonoBehaviour
     {
         isOpen = true; // Set the state to open
         isMoving = true; // Set moving to true
-        UnityEngine.Debug.Log((isCloset ? "Closet" : "Drawer") + " is now: Open"); // Debug log
+        UnityEngine.Debug.Log((isCloset ? "Closet" : isDrawer ? "Drawer" : "Chest") + " is now: Open"); // Debug log
     }
 
     private void Close()
     {
         isOpen = false; // Set the state to closed
         isMoving = true; // Set moving to true
-        UnityEngine.Debug.Log((isCloset ? "Closet" : "Drawer") + " is now: Closed"); // Debug log
+        UnityEngine.Debug.Log((isCloset ? "Closet" : isDrawer ? "Drawer" : "Chest") + " is now: Closed"); // Debug log
     }
 }
