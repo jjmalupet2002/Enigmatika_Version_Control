@@ -58,6 +58,8 @@ public class DoorUnlockScript : MonoBehaviour
         }
     }
 
+    private bool isLockedTextVisible = false; // Track the visibility of the locked text
+
     public void ButtonInteract()
     {
         // Check if any SwitchCamera instance has the CloseUp camera active
@@ -65,16 +67,14 @@ public class DoorUnlockScript : MonoBehaviour
         {
             if (doorObjectHandler != null)
             {
-                if (doorObjectHandler.Locked)
+                // Only call the UnlockDoor method if the door is locked and locked text is not visible
+                if (doorObjectHandler.Locked && !isLockedTextVisible)
                 {
-                    doorObjectHandler.Locked = false; // Unlock the door
-                    UnityEngine.Debug.Log("Door is now unlocked.");
-                    // Trigger the button press animation
+                    doorObjectHandler.UnlockDoor(); // Unlocks the door and handles text display
                     buttonAnimator.SetTrigger("ButtonPress");
-                    // Optionally trigger idle animation after a short delay
                     Invoke("OnIdle", 0.2f);
                 }
-                else
+                else if (!doorObjectHandler.Locked)
                 {
                     UnityEngine.Debug.Log("Door is already unlocked.");
                 }
@@ -89,6 +89,22 @@ public class DoorUnlockScript : MonoBehaviour
             UnityEngine.Debug.Log("Cannot interact with the door; close-up camera is not active.");
         }
     }
+
+    // Ensure to set the locked text visibility to true when displaying it
+    public void ShowLockedText()
+    {
+        isLockedTextVisible = true;
+        // Your logic to display the locked text here
+    }
+
+    // Call this method when the locked text fade-out animation finishes
+    public void HideLockedText()
+    {
+        isLockedTextVisible = false;
+        // Your logic to hide the locked text here
+    }
+
+
 
     private void HandleLeverInteraction()
     {
@@ -135,15 +151,18 @@ public class DoorUnlockScript : MonoBehaviour
     {
         // Trigger the LeverUp animation
         leverAnimator.SetTrigger("LeverUp");
-        // Call the LeverInteract method from the animation event
-        // Ensure this method exists and is called in the animation event
-        // You can also invoke OnLeverIdle after a delay if needed
+
+        // Invoke the OnLeverIdle method after a short delay
         Invoke("OnLeverIdle", 0.2f); // Adjust the timing as necessary
 
+        // Check if the doorObjectHandler is not null and if the door is locked
         if (doorObjectHandler != null && doorObjectHandler.Locked)
         {
-            doorObjectHandler.Locked = false; // Unlock the door
-            UnityEngine.Debug.Log("Door is now unlocked.");
+            doorObjectHandler.UnlockDoor(); // Call the UnlockDoor method
+        }
+        else if (doorObjectHandler != null)
+        {
+            UnityEngine.Debug.Log("Door is already unlocked.");
         }
     }
 
@@ -163,3 +182,4 @@ public class DoorUnlockScript : MonoBehaviour
         }
     }
 }
+
