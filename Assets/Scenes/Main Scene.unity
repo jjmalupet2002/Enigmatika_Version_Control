@@ -295,6 +295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 21176736}
+  - component: {fileID: 21176737}
   m_Layer: 5
   m_Name: SafePuzzleUI
   m_TagString: Untagged
@@ -323,6 +324,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &21176737
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21176735}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!4 &26425931 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3950456801651131873, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
@@ -599,7 +612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rampObjectHandler: {fileID: 760964869}
-  rotationSpeed: 8
+  rotationSpeed: 3
   inputActionAsset: {fileID: -944628639613478452, guid: 2ffb3733f12b70b4bbeac0f08de6c154, type: 3}
 --- !u!65 &68075622
 BoxCollider:
@@ -620,7 +633,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.7, y: 0.7, z: 0.16709663}
+  m_Size: {x: 1, y: 1, z: 0.4}
   m_Center: {x: -0.0077768266, y: -0.00000009685755, z: 0}
 --- !u!4 &74471785 stripped
 Transform:
@@ -871,7 +884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6580924965129486688, guid: 6b8f4289dadd1ae4fa6083b27c7d0ad9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.14
+      value: 35.41
       objectReference: {fileID: 0}
     - target: {fileID: 6580924965129486688, guid: 6b8f4289dadd1ae4fa6083b27c7d0ad9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -879,7 +892,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6580924965129486688, guid: 6b8f4289dadd1ae4fa6083b27c7d0ad9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.26
+      value: 19.03
       objectReference: {fileID: 0}
     - target: {fileID: 6580924965129486688, guid: 6b8f4289dadd1ae4fa6083b27c7d0ad9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3636,7 +3649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &690474229
 Transform:
   m_ObjectHideFlags: 0
@@ -4109,7 +4122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startXRotation: -89
   endXRotation: 0
-  rampDownSpeed: 15
+  rampDownSpeed: 17
   currentRampRotation: 0
 --- !u!1 &760970289
 GameObject:
@@ -5457,8 +5470,8 @@ MonoBehaviour:
   safeNumberConfirmationUI: {fileID: 1705622402}
   wrongCombinationUI: {fileID: 406845753}
   safeExitButton: {fileID: 966041002}
-  safeSolutionNum1: 5
-  safeSolutionNum2: 5
+  safeSolutionNum1: 10
+  safeSolutionNum2: 2
   safeSolutionNum3: 3
   firstNumberUI: {fileID: 105177144}
   secondNumberUI: {fileID: 1191724105}
@@ -11989,7 +12002,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1363595949780111146, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.14
+      value: 35.41
       objectReference: {fileID: 0}
     - target: {fileID: 1363595949780111146, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -11997,7 +12010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1363595949780111146, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.26
+      value: 19.03
       objectReference: {fileID: 0}
     - target: {fileID: 1363595949780111146, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: m_LocalRotation.w

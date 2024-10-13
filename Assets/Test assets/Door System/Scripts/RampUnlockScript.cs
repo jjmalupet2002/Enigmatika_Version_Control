@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,7 +29,7 @@ public class RampUnlockScript : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("Input Action Asset is not assigned!");
+            Debug.LogError("Input Action Asset is not assigned!");
         }
     }
 
@@ -54,15 +53,31 @@ public class RampUnlockScript : MonoBehaviour
 
         if (spinGestureAction == null)
         {
-            UnityEngine.Debug.LogError("SpinGesture action not found in Input Action Asset.");
+            Debug.LogError("SpinGesture action not found in Input Action Asset.");
             return; // Early exit if the action is not found
         }
 
         Vector2 touchPosition = spinGestureAction.ReadValue<Vector2>();
 
-        if (spinGestureAction.phase == InputActionPhase.Started)
+        // Check if the touch is hitting the valve collider on every update
+        Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            isTouchingValve = true;
+            if (hit.collider != null && hit.collider.gameObject == gameObject)
+            {
+                isTouchingValve = true; // Set to true if touching the valve
+            }
+            else
+            {
+                isTouchingValve = false; // Reset if not touching the valve
+            }
+        }
+
+        // Now check the input phases
+        if (spinGestureAction.phase == InputActionPhase.Started && isTouchingValve)
+        {
             previousTouchPosition = touchPosition; // Store the initial touch position
         }
         else if (spinGestureAction.phase == InputActionPhase.Performed && isTouchingValve && canSpin)
@@ -89,6 +104,7 @@ public class RampUnlockScript : MonoBehaviour
         }
     }
 
+
     private void RotateValve(Vector2 touchPosition)
     {
         Vector2 deltaPosition = touchPosition - previousTouchPosition;
@@ -106,7 +122,7 @@ public class RampUnlockScript : MonoBehaviour
 
         // Set the valve's rotation
         transform.Rotate(Vector3.forward, rotationAmount);
-        UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
+        Debug.Log("Valve current rotation: " + currentRotation);
 
         // Update ramp rotation based on valve rotation
         rampObjectHandler.UpdateRampRotation();
