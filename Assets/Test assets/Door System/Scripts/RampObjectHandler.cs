@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 
 public class RampObjectHandler : MonoBehaviour
@@ -9,11 +10,11 @@ public class RampObjectHandler : MonoBehaviour
     [Tooltip("Ending rotation angle on the X axis.")]
     public float endXRotation = 90f;   // Ending angle (maximum position)
 
-    [Tooltip("Speed at which the ramp goes down.")]
-    public float rampDownSpeed = 2f;   // Speed at which the ramp returns to the starting position
+    [Tooltip("Speed at which the ramp moves down.")]
+    public float rampDownSpeed = 2f;   // Speed at which the ramp moves down
 
-    private bool isUnlocked = false;
-    private float targetRampRotation;
+    private bool isValveSpinning = false; // Track if the valve is spinning
+    public float currentRampRotation;
 
     private void Start()
     {
@@ -22,46 +23,45 @@ public class RampObjectHandler : MonoBehaviour
 
     public void LockRamp()
     {
-        isUnlocked = false;
+        currentRampRotation = startXRotation;
         transform.rotation = Quaternion.Euler(startXRotation, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-       
     }
 
-    public void UnlockRamp(float valveRotation, float unlockThreshold)
+    public void StartRampMovement()
     {
-        isUnlocked = true;
-        targetRampRotation = Mathf.Lerp(startXRotation, endXRotation, valveRotation / unlockThreshold);
-        StartCoroutine(RotateRampToLimit(valveRotation));
-   
+        isValveSpinning = true;
     }
 
-    private IEnumerator RotateRampToLimit(float valveRotation)
+    public void StopRampMovement()
     {
-        float elapsedTime = 0f;
-        float duration = 2f; // Duration of the ramp rotation
+        isValveSpinning = false;
+    }
 
-        // Ramp down based on the valve rotation
-        while (elapsedTime < duration)
+    public void UpdateRampRotation()
+    {
+        if (isValveSpinning)
         {
-            // Lerp the angle between the current angle and the target angle
-            float newAngle = Mathf.Lerp(startXRotation, targetRampRotation, elapsedTime / duration);
+            // Calculate the difference between the current rotation and the end rotation
+            float angleDifference = endXRotation - currentRampRotation;
 
-            // Apply the new angle to the ramp's rotation
-            transform.rotation = Quaternion.Euler(newAngle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+            // If the angle difference is less than a small threshold, stop the ramp
+            if (Mathf.Abs(angleDifference) < 0.01f)
+            {
+                currentRampRotation = endXRotation; // Snap to the end rotation
+                StopRampMovement(); // Stop the ramp movement
+                UnityEngine.Debug.Log("Ramp has reached the limit.");
+                return; // Exit the method to avoid further rotation updates
+            }
 
-            elapsedTime += Time.deltaTime;
-            yield return null; // Wait for the next frame
+            // Move towards the end rotation at a consistent speed
+            float step = rampDownSpeed * Time.deltaTime; // Fixed speed
+
+            // Smoothly move the current ramp rotation towards the target with a small lerp effect
+            currentRampRotation += Mathf.Sign(angleDifference) * Mathf.Min(step, Mathf.Abs(angleDifference)); // Move towards the target
+
+            // Set the ramp's rotation to the updated rotation
+            transform.rotation = Quaternion.Euler(currentRampRotation, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
         }
-
-        // Ensure the ramp is set to the final ending angle
-        transform.rotation = Quaternion.Euler(targetRampRotation, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-        UnityEngine.Debug.Log("Ramp has reached the limit.");
-        yield return new WaitForSeconds(1f); // Optional delay
     }
 
-    public bool IsUnlocked()
-    {
-        return isUnlocked;
-    }
 }

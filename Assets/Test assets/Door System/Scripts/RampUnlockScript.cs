@@ -8,22 +8,18 @@ public class RampUnlockScript : MonoBehaviour
     [Tooltip("Reference to the ramp object handler.")]
     public RampObjectHandler rampObjectHandler;
 
-    [Tooltip("Rotation threshold to unlock the ramp.")]
-    public float unlockThreshold = 50f; // Rotation threshold to unlock the ramp
-
     [Tooltip("Rotation speed of the valve.")]
     public float rotationSpeed = 5f; // Rotation speed of the valve
-
-    [Tooltip("Reference to the SwitchCamera script.")]
-    public SwitchCamera switchCamera; // Reference to the SwitchCamera
 
     // Reference to the input action asset
     public InputActionAsset inputActionAsset; // Ensure this variable is defined
 
     private float currentRotation = 0f;
     private bool isTouchingValve = false;
-    private bool isUnlocked = false; // New flag to track if the valve is unlocked
     private Vector2 previousTouchPosition;
+
+    // New variable to track if the valve can still spin
+    private bool canSpin = true;
 
     private void OnEnable()
     {
@@ -49,16 +45,7 @@ public class RampUnlockScript : MonoBehaviour
 
     void Update()
     {
-        // Continuously check if in close-up camera view
-        if (switchCamera.currentCameraState == CameraState.CloseUp)
-        {
-            HandleValveInteraction();
-        }
-        else
-        {
-            // Reset interaction state when not in close-up
-            isTouchingValve = false;
-        }
+        HandleValveInteraction();
     }
 
     private void HandleValveInteraction()
@@ -76,17 +63,29 @@ public class RampUnlockScript : MonoBehaviour
         if (spinGestureAction.phase == InputActionPhase.Started)
         {
             isTouchingValve = true;
-            previousTouchPosition = touchPosition;
+            previousTouchPosition = touchPosition; // Store the initial touch position
         }
-        else if (spinGestureAction.phase == InputActionPhase.Performed && isTouchingValve && !isUnlocked) // Prevent rotation if unlocked
+        else if (spinGestureAction.phase == InputActionPhase.Performed && isTouchingValve && canSpin)
         {
-            RotateValve(touchPosition);
-            previousTouchPosition = touchPosition;
+            // Start ramp movement only if there is significant spin gesture movement
+            if (Vector2.Distance(touchPosition, previousTouchPosition) > 0.1f) // Adjust this threshold as needed
+            {
+                rampObjectHandler.StartRampMovement(); // Start ramp movement when the valve is being spun
+                RotateValve(touchPosition);
+                previousTouchPosition = touchPosition; // Update the previous touch position
+            }
         }
         else if (spinGestureAction.phase == InputActionPhase.Canceled)
         {
             isTouchingValve = false;
+            rampObjectHandler.StopRampMovement(); // Stop ramp movement when the valve stops spinning
             StartCoroutine(ResetValveRotation());
+        }
+
+        // Check if the ramp has reached the target rotation and update canSpin
+        if (rampObjectHandler.currentRampRotation >= rampObjectHandler.endXRotation)
+        {
+            canSpin = false; // Disable valve spinning
         }
     }
 
@@ -105,29 +104,12 @@ public class RampUnlockScript : MonoBehaviour
             currentRotation -= rotationAmount;
         }
 
-        // Limit the rotation to a specific range
-        if (currentRotation > unlockThreshold)
-        {
-            currentRotation = unlockThreshold; // Clamp to unlock threshold
-        }
-        else if (currentRotation < 0)
-        {
-            currentRotation = 0; // Clamp to 0
-        }
-
+        // Set the valve's rotation
         transform.Rotate(Vector3.forward, rotationAmount);
         UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
 
-        // Check if the current rotation is enough to unlock the ramp
-        if (currentRotation >= unlockThreshold)
-        {
-            if (rampObjectHandler != null && !rampObjectHandler.IsUnlocked())
-            {
-                // Pass both the current rotation and the unlock threshold
-                rampObjectHandler.UnlockRamp(currentRotation, unlockThreshold);
-                isUnlocked = true; // Set the unlocked flag to true
-            }
-        }
+        // Update ramp rotation based on valve rotation
+        rampObjectHandler.UpdateRampRotation();
     }
 
     private IEnumerator ResetValveRotation()
