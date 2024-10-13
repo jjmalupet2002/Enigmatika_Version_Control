@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum CameraState
 {
@@ -15,6 +16,7 @@ public class SwitchCamera : MonoBehaviour
     public GameObject inventoryButton; // Reference to the inventory button UI object
     public InteractableObjectHandler interactableObject; // Reference to the TableModel script for handling interactions
     public GameObject playerModel; // Reference to the player model
+    public UnityEvent<CameraState> onCameraStateChange; // Event to notify when camera state changes
 
     private Camera mainCamera; // Reference to the universal main camera
     private TalkandInteract talkAndInteract; // Reference to TalkandInteract script
@@ -88,6 +90,12 @@ public class SwitchCamera : MonoBehaviour
 
             // Disable note inspection when returning to the main camera
             NoteInspectionManager.Instance.EnableNoteInspection(false);
+        }
+
+        // Notify listeners about the camera state change
+        if (onCameraStateChange != null)
+        {
+            onCameraStateChange.Invoke(currentCameraState);
         }
     }
 
