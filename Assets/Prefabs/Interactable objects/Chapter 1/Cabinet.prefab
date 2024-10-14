@@ -174,6 +174,9 @@ MonoBehaviour:
   inventoryButton: {fileID: 0}
   interactableObject: {fileID: 2293775034047108627}
   playerModel: {fileID: 0}
+  onCameraStateChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1390781136949193063
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,9 +665,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72c30ece46a6b5345977d30399dbfa28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closedZValue: 0.2339997
-  openZValue: 0.585
-  openCloseSpeed: 2
+  isCloset: 0
+  isDrawer: 0
+  isChest: 0
+  openDistance: 0.5
+  openCloseSpeedDrawer: 2
+  closedYRotation: 0
+  openYRotation: 90
+  openCloseSpeedCloset: 2
+  closedXRotation: 0
+  openXRotation: -90
+  openCloseSpeedChest: 2
 --- !u!65 &8571844862130941240
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -731,7 +742,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5533170965400783313}
   - component: {fileID: 3593999128460465861}
-  - component: {fileID: 6671330899276183769}
   m_Layer: 0
   m_Name: cabinet_door_02
   m_TagString: Untagged
@@ -762,49 +772,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6926663183923052492}
   m_Mesh: {fileID: 8584298255820822023, guid: 57f7da9926d23b545bfa1970b4283dd6, type: 3}
---- !u!23 &6671330899276183769
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6926663183923052492}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: d6ad4ee7a53f3574e92290191a15f557, type: 2}
-  - {fileID: 2100000, guid: d6ad4ee7a53f3574e92290191a15f557, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7882586984859381780
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,7 +907,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1470163036948092455}
   - component: {fileID: 7764204457974216193}
-  - component: {fileID: 4994129970209833567}
   m_Layer: 0
   m_Name: cabinet_door_01
   m_TagString: Untagged
@@ -971,49 +937,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8865170328394231489}
   m_Mesh: {fileID: 3127774892102817671, guid: 57f7da9926d23b545bfa1970b4283dd6, type: 3}
---- !u!23 &4994129970209833567
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8865170328394231489}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: d6ad4ee7a53f3574e92290191a15f557, type: 2}
-  - {fileID: 2100000, guid: d6ad4ee7a53f3574e92290191a15f557, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8951725726566555490
 GameObject:
   m_ObjectHideFlags: 0
