@@ -133,6 +133,13 @@ public class InteractableDrawerCloset : MonoBehaviour
             }
         }
 
+        // Check if the close-up camera is active
+        if (!IsCloseUpCameraActive())
+        {
+            
+            return; // Skip interaction if close-up camera is not active
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
         RaycastHit hit;
 
@@ -144,6 +151,7 @@ public class InteractableDrawerCloset : MonoBehaviour
             }
         }
     }
+
 
     public void ToggleDrawerClosetOrChest()
     {
@@ -160,6 +168,22 @@ public class InteractableDrawerCloset : MonoBehaviour
             }
         }
     }
+
+    private bool IsCloseUpCameraActive()
+    {
+        // Get all instances of SwitchCamera
+        var switchCameras = FindObjectsOfType<SwitchCamera>();
+        // Check if any instance has the CloseUp camera active
+        foreach (var switchCamera in switchCameras)
+        {
+            if (switchCamera.currentCameraState == CameraState.CloseUp)
+            {
+                return true; // Return true if any close-up camera is active
+            }
+        }
+        return false; // No close-up camera is active
+    }
+
 
     private void Open()
     {

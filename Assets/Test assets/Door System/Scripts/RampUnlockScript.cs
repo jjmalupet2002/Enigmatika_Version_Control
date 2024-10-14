@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,7 +30,7 @@ public class RampUnlockScript : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Input Action Asset is not assigned!");
+            UnityEngine.Debug.LogError("Input Action Asset is not assigned!");
         }
     }
 
@@ -49,11 +50,18 @@ public class RampUnlockScript : MonoBehaviour
 
     private void HandleValveInteraction()
     {
+        // Check if the close-up camera is active
+        if (!IsCloseUpCameraActive())
+        {
+           
+            return; // Skip interaction if close-up camera is not active
+        }
+
         var spinGestureAction = inputActionAsset.FindAction("SpinGesture");
 
         if (spinGestureAction == null)
         {
-            Debug.LogError("SpinGesture action not found in Input Action Asset.");
+            UnityEngine.Debug.LogError("SpinGesture action not found in Input Action Asset.");
             return; // Early exit if the action is not found
         }
 
@@ -104,7 +112,6 @@ public class RampUnlockScript : MonoBehaviour
         }
     }
 
-
     private void RotateValve(Vector2 touchPosition)
     {
         Vector2 deltaPosition = touchPosition - previousTouchPosition;
@@ -122,7 +129,7 @@ public class RampUnlockScript : MonoBehaviour
 
         // Set the valve's rotation
         transform.Rotate(Vector3.forward, rotationAmount);
-        Debug.Log("Valve current rotation: " + currentRotation);
+        UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
 
         // Update ramp rotation based on valve rotation
         rampObjectHandler.UpdateRampRotation();
@@ -139,5 +146,20 @@ public class RampUnlockScript : MonoBehaviour
         }
 
         currentRotation = 0;
+    }
+
+    private bool IsCloseUpCameraActive()
+    {
+        // Get all instances of SwitchCamera
+        var switchCameras = FindObjectsOfType<SwitchCamera>();
+        // Check if any instance has the CloseUp camera active
+        foreach (var switchCamera in switchCameras)
+        {
+            if (switchCamera.currentCameraState == CameraState.CloseUp)
+            {
+                return true; // Return true if any close-up camera is active
+            }
+        }
+        return false; // No close-up camera is active
     }
 }
