@@ -1,7 +1,9 @@
 using System.Collections.Generic; // For using List<T>
 using UnityEngine;
+using UnityEngine.Events; // For UnityEvent
+using System.Collections; // For IEnumerator
 
-public class InteractableDrawerCloset : MonoBehaviour
+public class InteractableDrawerClosetChest : MonoBehaviour
 {
     private bool isOpen = false;
 
@@ -14,6 +16,9 @@ public class InteractableDrawerCloset : MonoBehaviour
     [Header("Drawer Settings")]
     public float openDistance = 0.5f; // Distance the drawer should move forward when opened
     public float openCloseSpeedDrawer = 2f; // Speed of the drawer opening/closing
+    public bool isDrawerLocked = false; // If true, the drawer cannot be opened
+    public GameObject drawerLockedUI; // Reference to the Drawer Locked UI
+    public UnityEvent onUnlockDrawer; // Event to unlock the drawer
 
     // Header for Closet Settings
     [Header("Closet Settings")]
@@ -26,6 +31,9 @@ public class InteractableDrawerCloset : MonoBehaviour
     public float closedXRotation = 0f; // X rotation when closed
     public float openXRotation = -90f; // X rotation when open
     public float openCloseSpeedChest = 2f; // Speed of the chest opening/closing
+    public bool isChestLocked = false; // If true, the chest cannot be opened
+    public GameObject chestLockedUI; // Reference to the Chest Locked UI
+    public UnityEvent onUnlockChest; // Event to unlock the chest
 
     // Used to track if the drawer, closet, or chest is currently moving
     private bool isMoving = false;
@@ -136,7 +144,6 @@ public class InteractableDrawerCloset : MonoBehaviour
         // Check if the close-up camera is active
         if (!IsCloseUpCameraActive())
         {
-            
             return; // Skip interaction if close-up camera is not active
         }
 
@@ -152,7 +159,6 @@ public class InteractableDrawerCloset : MonoBehaviour
         }
     }
 
-
     public void ToggleDrawerClosetOrChest()
     {
         // Only toggle if not currently moving
@@ -164,9 +170,29 @@ public class InteractableDrawerCloset : MonoBehaviour
             }
             else // If currently closed, prepare to open
             {
+                if (isDrawer && isDrawerLocked)
+                {
+                    drawerLockedUI.SetActive(true); // Show drawer locked UI
+                    StartCoroutine(HideLockedUIAfterDelay(drawerLockedUI)); // Hide UI after delay
+                    return;
+                }
+
+                if (isChest && isChestLocked)
+                {
+                    chestLockedUI.SetActive(true); // Show chest locked UI
+                    StartCoroutine(HideLockedUIAfterDelay(chestLockedUI)); // Hide UI after delay
+                    return;
+                }
+
                 Open();
             }
         }
+    }
+
+    private IEnumerator HideLockedUIAfterDelay(GameObject lockedUI)
+    {
+        yield return new WaitForSeconds(1.5f);
+        lockedUI.SetActive(false);
     }
 
     private bool IsCloseUpCameraActive()
@@ -183,7 +209,6 @@ public class InteractableDrawerCloset : MonoBehaviour
         }
         return false; // No close-up camera is active
     }
-
 
     private void Open()
     {
