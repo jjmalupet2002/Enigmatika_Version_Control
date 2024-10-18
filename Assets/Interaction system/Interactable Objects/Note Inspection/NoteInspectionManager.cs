@@ -106,6 +106,7 @@ public class NoteInspectionManager : MonoBehaviour
         }
     }
 
+
     // Change method to public
     public void ToggleNoteUI(NoteObjectHandler noteObject)
     {
