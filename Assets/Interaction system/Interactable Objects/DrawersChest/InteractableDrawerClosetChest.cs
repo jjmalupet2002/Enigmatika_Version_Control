@@ -2,6 +2,7 @@ using System.Collections.Generic; // For using List<T>
 using UnityEngine;
 using UnityEngine.Events; // For UnityEvent
 using System.Collections; // For IEnumerator
+using UnityEngine.UI; // Add this for the Text component
 
 public class InteractableDrawerClosetChest : MonoBehaviour
 {
@@ -17,14 +18,11 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     public float openDistance = 0.5f; // Distance the drawer should move forward when opened
     public float openCloseSpeedDrawer = 2f; // Speed of the drawer opening/closing
     public bool isDrawerLocked = false; // If true, the drawer cannot be opened
-    public GameObject drawerLockedUI; // Reference to the Drawer Locked UI
+    public Text drawerLockedText; // Reference to the Text component for drawer locked message
+
+    [Header("Event for Unlocking a drawer")]
     public UnityEvent onUnlockDrawer; // Event to unlock the drawer
 
-    // Header for Closet Settings
-    [Header("Closet Settings")]
-    public float closedYRotation = 0f; // Y rotation when closed
-    public float openYRotation = 90f;  // Y rotation when open
-    public float openCloseSpeedCloset = 2f; // Speed of the closet opening/closing
 
     // Header for Chest Settings
     [Header("Chest Settings")]
@@ -32,8 +30,16 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     public float openXRotation = -90f; // X rotation when open
     public float openCloseSpeedChest = 2f; // Speed of the chest opening/closing
     public bool isChestLocked = false; // If true, the chest cannot be opened
-    public GameObject chestLockedUI; // Reference to the Chest Locked UI
+    public Text chestLockedText; // Reference to the Text component for chest locked message
+
+    [Header("Event for Unlocking a chest")]
     public UnityEvent onUnlockChest; // Event to unlock the chest
+
+    // Header for Closet Settings
+    [Header("Closet Settings")]
+    public float closedYRotation = 0f; // Y rotation when closed
+    public float openYRotation = 90f;  // Y rotation when open
+    public float openCloseSpeedCloset = 2f; // Speed of the closet opening/closing
 
     // Used to track if the drawer, closet, or chest is currently moving
     private bool isMoving = false;
@@ -172,15 +178,13 @@ public class InteractableDrawerClosetChest : MonoBehaviour
             {
                 if (isDrawer && isDrawerLocked)
                 {
-                    drawerLockedUI.SetActive(true); // Show drawer locked UI
-                    StartCoroutine(HideLockedUIAfterDelay(drawerLockedUI)); // Hide UI after delay
+                    StartCoroutine(FadeInText(drawerLockedText)); // Call FadeInText coroutine for drawer locked message
                     return;
                 }
 
                 if (isChest && isChestLocked)
                 {
-                    chestLockedUI.SetActive(true); // Show chest locked UI
-                    StartCoroutine(HideLockedUIAfterDelay(chestLockedUI)); // Hide UI after delay
+                    StartCoroutine(FadeInText(chestLockedText)); // Call FadeInText coroutine for chest locked message
                     return;
                 }
 
@@ -189,10 +193,37 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         }
     }
 
-    private IEnumerator HideLockedUIAfterDelay(GameObject lockedUI)
+    private IEnumerator FadeInText(Text text)
     {
-        yield return new WaitForSeconds(1.5f);
-        lockedUI.SetActive(false);
+        text.gameObject.SetActive(true);
+        Color textColor = text.color;
+        textColor.a = 0;
+        text.color = textColor;
+
+        while (textColor.a < 1)
+        {
+            textColor.a += Time.deltaTime;
+            text.color = textColor;
+            yield return null; // Wait for the next frame
+        }
+
+        // Call FadeOutText after fade-in
+        StartCoroutine(FadeOutText(text, 2f)); // Adjust duration as needed
+    }
+
+    private IEnumerator FadeOutText(Text text, float duration)
+    {
+        Color textColor = text.color;
+
+        // Fade out
+        while (textColor.a > 0)
+        {
+            textColor.a -= Time.deltaTime / duration; // Decrease alpha over the duration
+            text.color = textColor;
+            yield return null; // Wait for the next frame
+        }
+
+        text.gameObject.SetActive(false); // Disable text after fading out
     }
 
     private bool IsCloseUpCameraActive()
@@ -207,20 +238,29 @@ public class InteractableDrawerClosetChest : MonoBehaviour
                 return true; // Return true if any close-up camera is active
             }
         }
-        return false; // No close-up camera is active
+        return false; // Return false if none are active
     }
 
     private void Open()
     {
-        isOpen = true; // Set the state to open
-        isMoving = true; // Set moving to true
-        UnityEngine.Debug.Log((isCloset ? "Closet" : isDrawer ? "Drawer" : "Chest") + " is now: Open"); // Debug log
+        isOpen = true; // Set the open state
+        isMoving = true; // Start moving
+        UnityEngine.Debug.Log("Opening " + (isDrawer ? "Drawer" : isChest ? "Chest" : "Closet")); // Debug log
+        // Invoke the appropriate event for unlocking if necessary
+        if (isDrawer && !isDrawerLocked)
+        {
+            onUnlockDrawer.Invoke();
+        }
+        else if (isChest && !isChestLocked)
+        {
+            onUnlockChest.Invoke();
+        }
     }
 
     private void Close()
     {
-        isOpen = false; // Set the state to closed
-        isMoving = true; // Set moving to true
-        UnityEngine.Debug.Log((isCloset ? "Closet" : isDrawer ? "Drawer" : "Chest") + " is now: Closed"); // Debug log
+        isOpen = false; // Set the open state to false
+        isMoving = true; // Start moving
+        UnityEngine.Debug.Log("Closing " + (isDrawer ? "Drawer" : isChest ? "Chest" : "Closet")); // Debug log
     }
 }
