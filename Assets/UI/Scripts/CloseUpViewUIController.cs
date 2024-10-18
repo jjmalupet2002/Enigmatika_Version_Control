@@ -4,7 +4,7 @@ using UnityEngine;
 public class CloseUpViewUIController : MonoBehaviour
 {
     // Reference to the UI GameObjects
-    public GameObject takeItemButton;
+    
     public GameObject newItemDiscoveredPanel;
     public GameObject hintIcon;
 
@@ -14,7 +14,7 @@ public class CloseUpViewUIController : MonoBehaviour
         UnityEngine.Debug.Log("SetUIActive called with isActive: " + isActive);
 
         // Enable or disable the GameObjects based on the isActive parameter
-        takeItemButton.SetActive(isActive);
+       
         newItemDiscoveredPanel.SetActive(isActive);
         hintIcon.SetActive(isActive);
     }

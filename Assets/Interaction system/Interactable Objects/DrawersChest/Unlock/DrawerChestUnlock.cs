@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using System.Collections;
 
 public class DrawerChestUnlock : MonoBehaviour
 {
@@ -28,8 +30,9 @@ public class DrawerChestUnlock : MonoBehaviour
     public InputActionAsset inputActionAsset;
 
     private bool isInteracting = false; // Prevents multiple interactions
+    private NoteInspectionManager noteInspectionManager;
 
-    private void OnEnable()
+    private void Start()
     {
         // Enable the swipe input action
         inputActionAsset.FindAction("SwipeUp").Enable();
@@ -39,13 +42,30 @@ public class DrawerChestUnlock : MonoBehaviour
         {
             buttonAnimator.SetTrigger("BookIdle"); // Start idle animation
         }
+
+        // Get reference to NoteInspectionManager
+        noteInspectionManager = NoteInspectionManager.Instance;
+
+        // Log the assignment of noteInspectionManager
+        if (noteInspectionManager != null)
+        {
+            Debug.Log("NoteInspectionManager successfully assigned.");
+        }
+        else
+        {
+            Debug.LogError("NoteInspectionManager is not assigned. Please check if NoteInspectionManager.Instance is properly initialized.");
+        }
     }
+
 
     private void OnDisable()
     {
         // Disable the swipe input action
         inputActionAsset.FindAction("SwipeUp").Disable();
     }
+
+
+
 
     void Update()
     {
@@ -64,6 +84,18 @@ public class DrawerChestUnlock : MonoBehaviour
 
     private void HandleButtonInteraction()
     {
+        if (noteInspectionManager == null)
+        {
+            Debug.LogError("noteInspectionManager is null in HandleButtonInteraction.");
+            return;
+        }
+
+        if (noteInspectionManager.isNoteUIActive)
+        {
+            Debug.Log("Cannot interact; note inspection mode is active.");
+            return;
+        }
+
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -82,6 +114,17 @@ public class DrawerChestUnlock : MonoBehaviour
 
     private void HandleLeverInteraction()
     {
+        if (noteInspectionManager == null)
+        {
+            Debug.LogError("noteInspectionManager is null in HandleLeverInteraction.");
+            return;
+        }
+
+        if (noteInspectionManager.isNoteUIActive)
+        {
+            return;
+        }
+
         if (IsCloseUpCameraActive())
         {
             Vector2 swipeInput = inputActionAsset.FindAction("SwipeUp").ReadValue<Vector2>();
@@ -198,19 +241,38 @@ public class DrawerChestUnlock : MonoBehaviour
         if (isDrawer)
         {
             unlockedDrawerUI.SetActive(true);
-            Invoke("HideUnlockUI", 1.5f);
+            Text drawerText = unlockedDrawerUI.GetComponent<Text>();
+            if (drawerText != null)
+            {
+                StartCoroutine(FadeInText(drawerText, 1f)); // Fade in the text over 1 second
+            }
+            Invoke("HideUnlockUI", 1.5f); // Adjust the delay as necessary
         }
         else
         {
             unlockedChestUI.SetActive(true);
-            Invoke("HideUnlockUI", 1.5f);
+            Text chestText = unlockedChestUI.GetComponent<Text>();
+            if (chestText != null)
+            {
+                StartCoroutine(FadeInText(chestText, 1f)); // Fade in the text over 1 second
+            }
+            Invoke("HideUnlockUI", 1.5f); // Adjust the delay as necessary
         }
     }
 
     private void HideUnlockUI()
     {
-        unlockedChestUI.SetActive(false);
-        unlockedDrawerUI.SetActive(false);
+        Text drawerText = unlockedDrawerUI.GetComponent<Text>();
+        if (drawerText != null)
+        {
+            StartCoroutine(HideTextAfterDelay(drawerText, 0.5f)); // Delay before fading out
+        }
+
+        Text chestText = unlockedChestUI.GetComponent<Text>();
+        if (chestText != null)
+        {
+            StartCoroutine(HideTextAfterDelay(chestText, 0.5f)); // Delay before fading out
+        }
     }
 
     public void LeverInteract()
@@ -237,7 +299,49 @@ public class DrawerChestUnlock : MonoBehaviour
 
     private void ResetInteraction()
     {
-        isInteracting = false; // Allow interaction again
+        isInteracting = false; // Reset interaction state
+    }
+
+    private IEnumerator FadeInText(Text text, float duration)
+    {
+        Color originalColor = text.color;
+        Color targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 1f); // Fully opaque
+
+        for (float t = 0; t < duration; t += Time.deltaTime)
+        {
+            float normalizedTime = t / duration;
+            text.color = Color.Lerp(originalColor, targetColor, normalizedTime);
+            yield return null;
+        }
+
+        text.color = targetColor; // Ensure the target color is fully set
+    }
+
+    private IEnumerator HideTextAfterDelay(Text text, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Color originalColor = text.color;
+        Color targetColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0f); // Fully transparent
+
+        for (float t = 0; t < 0.5f; t += Time.deltaTime)
+        {
+            float normalizedTime = t / 0.5f; // Fade out over 0.5 seconds
+            text.color = Color.Lerp(originalColor, targetColor, normalizedTime);
+            yield return null;
+        }
+
+        text.color = targetColor; // Ensure the target color is fully set
+        unlockedDrawerUI.SetActive(false);
+        unlockedChestUI.SetActive(false);
+    }
+
+    private void BookButtonUp()
+    {
+        if (buttonAnimator != null)
+        {
+            buttonAnimator.SetTrigger("BookButtonUp");
+        }
     }
 
     private void OnLeverIdle()
@@ -245,14 +349,6 @@ public class DrawerChestUnlock : MonoBehaviour
         if (leverAnimator != null)
         {
             leverAnimator.SetTrigger("LeverIdle");
-        }
-    }
-
-    private void BookButtonUp()
-    {
-        if (buttonAnimator != null)
-        {
-            buttonAnimator.SetTrigger("BookButtonUp"); // Trigger button up animation
         }
     }
 }
