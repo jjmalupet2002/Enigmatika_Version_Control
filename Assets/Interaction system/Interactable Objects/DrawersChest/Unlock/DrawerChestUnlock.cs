@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System.Collections;
+using System.Diagnostics;
 
 public class DrawerChestUnlock : MonoBehaviour
 {
@@ -32,6 +33,12 @@ public class DrawerChestUnlock : MonoBehaviour
     private bool isInteracting = false; // Prevents multiple interactions
     private NoteInspectionManager noteInspectionManager;
 
+    [Tooltip("Audio source for button sound.")]
+    public AudioSource buttonSound;
+
+    [Tooltip("Audio source for lever sound.")]
+    public AudioSource leverSound;
+
     private void Start()
     {
         // Enable the swipe input action
@@ -49,23 +56,19 @@ public class DrawerChestUnlock : MonoBehaviour
         // Log the assignment of noteInspectionManager
         if (noteInspectionManager != null)
         {
-            Debug.Log("NoteInspectionManager successfully assigned.");
+            UnityEngine.Debug.Log("NoteInspectionManager successfully assigned.");
         }
         else
         {
-            Debug.LogError("NoteInspectionManager is not assigned. Please check if NoteInspectionManager.Instance is properly initialized.");
+            UnityEngine.Debug.LogError("NoteInspectionManager is not assigned. Please check if NoteInspectionManager.Instance is properly initialized.");
         }
     }
-
 
     private void OnDisable()
     {
         // Disable the swipe input action
         inputActionAsset.FindAction("SwipeUp").Disable();
     }
-
-
-
 
     void Update()
     {
@@ -86,13 +89,13 @@ public class DrawerChestUnlock : MonoBehaviour
     {
         if (noteInspectionManager == null)
         {
-            Debug.LogError("noteInspectionManager is null in HandleButtonInteraction.");
+            UnityEngine.Debug.LogError("noteInspectionManager is null in HandleButtonInteraction.");
             return;
         }
 
         if (noteInspectionManager.isNoteUIActive)
         {
-            Debug.Log("Cannot interact; note inspection mode is active.");
+            UnityEngine.Debug.Log("Cannot interact; note inspection mode is active.");
             return;
         }
 
@@ -103,11 +106,15 @@ public class DrawerChestUnlock : MonoBehaviour
         {
             if (IsCloseUpCameraActive())
             {
+                if (buttonSound != null)
+                {
+                    buttonSound.Play(); // Play button sound
+                }
                 UnlockIfApplicable();
             }
             else
             {
-                Debug.Log("Cannot interact; close-up camera is not active.");
+                UnityEngine.Debug.Log("Cannot interact; close-up camera is not active.");
             }
         }
     }
@@ -116,7 +123,7 @@ public class DrawerChestUnlock : MonoBehaviour
     {
         if (noteInspectionManager == null)
         {
-            Debug.LogError("noteInspectionManager is null in HandleLeverInteraction.");
+            UnityEngine.Debug.LogError("noteInspectionManager is null in HandleLeverInteraction.");
             return;
         }
 
@@ -136,13 +143,18 @@ public class DrawerChestUnlock : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == gameObject)
                 {
+                    if (leverSound != null)
+                    {
+                        leverSound.Play(); // Play lever sound
+                    }
                     LeverInteract();
                 }
             }
         }
     }
 
-    private void UnlockIfApplicable()
+  
+private void UnlockIfApplicable()
     {
         if (drawerChestHandler != null)
         {
@@ -157,12 +169,12 @@ public class DrawerChestUnlock : MonoBehaviour
             }
             else
             {
-                Debug.Log("The selected object is already unlocked.");
+                UnityEngine.Debug.Log("The selected object is already unlocked.");
             }
         }
         else
         {
-            Debug.LogError("No InteractableDrawerChest assigned.");
+            UnityEngine.Debug.LogError("No InteractableDrawerChest assigned.");
         }
     }
 
@@ -182,7 +194,7 @@ public class DrawerChestUnlock : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("buttonAnimator is not assigned. Cannot play button press animation.");
+                UnityEngine.Debug.LogWarning("buttonAnimator is not assigned. Cannot play button press animation.");
             }
         }
 
@@ -196,7 +208,7 @@ public class DrawerChestUnlock : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("leverAnimator is not assigned. Cannot play lever up animation.");
+                UnityEngine.Debug.LogWarning("leverAnimator is not assigned. Cannot play lever up animation.");
             }
         }
     }
@@ -217,7 +229,7 @@ public class DrawerChestUnlock : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("buttonAnimator is not assigned. Cannot play button press animation.");
+                UnityEngine.Debug.LogWarning("buttonAnimator is not assigned. Cannot play button press animation.");
             }
         }
 
@@ -231,7 +243,7 @@ public class DrawerChestUnlock : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("leverAnimator is not assigned. Cannot play lever up animation.");
+                UnityEngine.Debug.LogWarning("leverAnimator is not assigned. Cannot play lever up animation.");
             }
         }
     }
