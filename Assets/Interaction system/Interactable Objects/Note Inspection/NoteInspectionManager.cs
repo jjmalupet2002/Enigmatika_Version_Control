@@ -26,6 +26,12 @@ public class NoteInspectionManager : MonoBehaviour
     private float swipeDuration = 0.3f; // Minimum duration for a valid swipe
     private float minSwipeDistance = 100f; // Minimum distance for a valid swipe
 
+    // New variables for sound
+    [Header("Sound Settings")]
+    public AudioClip noteInteractSound; // Sound to play when interacting with a note
+    public AudioClip bookInteractSound; // Sound to play when interacting with a book
+    private AudioSource audioSource; // Reference to the AudioSource component
+
     private void Awake()
     {
         // Check if an instance already exists
@@ -42,7 +48,7 @@ public class NoteInspectionManager : MonoBehaviour
         switchCamera = FindObjectOfType<SwitchCamera>();
         if (switchCamera == null)
         {
-            Debug.LogError("SwitchCamera script not found.");
+            UnityEngine.Debug.LogError("SwitchCamera script not found.");
         }
 
         // Initialize swipe actions
@@ -54,6 +60,10 @@ public class NoteInspectionManager : MonoBehaviour
         swipeLeftAction.performed += OnSwipeLeft; // Directly pass the method
         swipeRightAction.started += OnSwipeStart; // Capture swipe start
         swipeRightAction.performed += OnSwipeRight; // Directly pass the method
+
+        // Initialize AudioSource
+        audioSource = gameObject.AddComponent<AudioSource>(); // Add AudioSource component if not present
+        audioSource.clip = noteInteractSound; // Assign the default AudioClip to the AudioSource
     }
 
     private void OnEnable()
@@ -81,7 +91,6 @@ public class NoteInspectionManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    // Remove the condition to only check for "Book" tag
                     NoteObjectHandler noteObject = hit.collider.GetComponent<NoteObjectHandler>();
                     if (noteObject != null)
                     {
@@ -91,7 +100,6 @@ public class NoteInspectionManager : MonoBehaviour
             }
         }
     }
-
 
     // Register a UI for a note object
     public void RegisterNoteUI(NoteObjectHandler noteObject, List<GameObject> notePages)
@@ -106,10 +114,22 @@ public class NoteInspectionManager : MonoBehaviour
         }
     }
 
-
     // Change method to public
     public void ToggleNoteUI(NoteObjectHandler noteObject)
     {
+        // Check if the note object is tagged as "Book" for specific audio
+        if (noteObject.CompareTag("Book"))
+        {
+            audioSource.clip = bookInteractSound; // Assign book interaction sound
+        }
+        else
+        {
+            audioSource.clip = noteInteractSound; // Default note interaction sound
+        }
+
+        // Play the interaction sound
+        audioSource.Play(); // Play the sound when interacting with a note
+
         // Check if the note object exists in the dictionary
         if (noteUIs.TryGetValue(noteObject, out List<GameObject> notePages))
         {
@@ -146,9 +166,6 @@ public class NoteInspectionManager : MonoBehaviour
             NoteUIController.Instance.ToggleReadButton(isNoteUIActive);
         }
     }
-
-
-
 
     // Capture the start position and time of the swipe
     private void OnSwipeStart(InputAction.CallbackContext context)
@@ -193,22 +210,22 @@ public class NoteInspectionManager : MonoBehaviour
                 {
                     if (horizontalSwipe < 0 && currentPageIndex > 0) // Swipe left
                     {
-                        Debug.Log("Swipe Left Detected");
+                        UnityEngine.Debug.Log("Swipe Left Detected");
                         StartCoroutine(ChangePageWithDelay(notePages, currentPageIndex - 1));
                     }
                     else if (horizontalSwipe > 0 && currentPageIndex < notePages.Count - 1) // Swipe right
                     {
-                        Debug.Log("Swipe Right Detected");
+                        UnityEngine.Debug.Log("Swipe Right Detected");
                         StartCoroutine(ChangePageWithDelay(notePages, currentPageIndex + 1));
                     }
                     else
                     {
-                        Debug.Log($"Swipe {(horizontalSwipe < 0 ? "left" : "right")} has no effect.");
+                        UnityEngine.Debug.Log($"Swipe {(horizontalSwipe < 0 ? "left" : "right")} has no effect.");
                     }
                 }
                 else
                 {
-                    Debug.Log("Cannot swipe, this note has only one page.");
+                    UnityEngine.Debug.Log("Cannot swipe, this note has only one page.");
                 }
             }
         }
