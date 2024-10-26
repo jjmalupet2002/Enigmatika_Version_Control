@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class DoorObjectHandler : MonoBehaviour
 {
@@ -25,6 +27,15 @@ public class DoorObjectHandler : MonoBehaviour
     [Tooltip("Reference to the Unlocked Text.")]
     public Text unlockedText;
 
+    [Tooltip("Audio source for opening sound.")]
+    public AudioSource openSound;
+
+    [Tooltip("Audio source for closing sound.")]
+    public AudioSource closeSound;
+
+    [Tooltip("Audio source for locked sound.")]
+    public AudioSource lockedSound;
+
     private HingeJoint hinge;
     private Rigidbody rbDoor;
     private bool isPlayerNearby = false;
@@ -39,7 +50,7 @@ public class DoorObjectHandler : MonoBehaviour
 
         if (hinge == null)
         {
-            Debug.LogError("No HingeJoint component found on the door.");
+            UnityEngine.Debug.LogError("No HingeJoint component found on the door.");
         }
 
         // Initially disable the text components
@@ -68,22 +79,23 @@ public class DoorObjectHandler : MonoBehaviour
 
     public void Interact()
     {
-        Debug.Log("Interact method called."); // Debug log to check if the method is called
+        UnityEngine.Debug.Log("Interact method called."); // Debug log to check if the method is called
 
         // Check if player is nearby and interacting with the door
         if (!isPlayerNearby)
         {
-            Debug.Log("Player is not nearby to interact.");
+            UnityEngine.Debug.Log("Player is not nearby to interact.");
             return; // Early exit if player is not nearby
         }
 
         if (Locked)
         {
-            Debug.Log("Door is locked.");
+            UnityEngine.Debug.Log("Door is locked.");
+            lockedSound?.Play(); // Play locked sound if door is locked
             if (lockedText != null && !IsOpened) // Only show locked text if the door is not opened
             {
                 ShowText(lockedText); // Show locked text
-                Debug.Log("Locked text displayed."); // Debug log
+                UnityEngine.Debug.Log("Locked text displayed."); // Debug log
             }
             return; // Early exit if the door is locked
         }
@@ -105,7 +117,8 @@ public class DoorObjectHandler : MonoBehaviour
         {
             IsOpened = true;
             rbDoor.AddRelativeTorque(new Vector3(0, 0, 20f)); // Apply torque to open the door
-            Debug.Log("Door is now open.");
+            openSound?.Play(); // Play opening sound
+            UnityEngine.Debug.Log("Door is now open.");
         }
     }
 
@@ -114,7 +127,8 @@ public class DoorObjectHandler : MonoBehaviour
         if (!Locked && CanClose && IsOpened)
         {
             IsOpened = false;
-            Debug.Log("Door is now closed.");
+            closeSound?.Play(); // Play closing sound
+            UnityEngine.Debug.Log("Door is now closed.");
         }
     }
 
@@ -124,11 +138,11 @@ public class DoorObjectHandler : MonoBehaviour
         if (Locked) // Only proceed if the door is currently locked
         {
             Locked = false; // Set the door to unlocked
-            Debug.Log("Door is now unlocked.");
+            UnityEngine.Debug.Log("Door is now unlocked.");
             if (unlockedText != null)
             {
                 ShowText(unlockedText); // Show unlocked text
-                Debug.Log("Unlocked text displayed."); // Debug log
+                UnityEngine.Debug.Log("Unlocked text displayed."); // Debug log
             }
         }
     }
@@ -194,13 +208,13 @@ public class DoorObjectHandler : MonoBehaviour
         }
 
         textComponent.enabled = false; // Disable the text component after fading out
-        Debug.Log($"{textComponent.name} hidden."); // Debug log
+        UnityEngine.Debug.Log($"{textComponent.name} hidden."); // Debug log
     }
 
     private IEnumerator HideTextAfterDelay(Text textComponent, float delay)
     {
         yield return new WaitForSeconds(delay); // Wait for the specified delay
         textComponent.enabled = false; // Disable the text component
-        Debug.Log($"{textComponent.name} hidden."); // Debug log
+        UnityEngine.Debug.Log($"{textComponent.name} hidden."); // Debug log
     }
 }
