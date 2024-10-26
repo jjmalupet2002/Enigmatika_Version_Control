@@ -1,8 +1,9 @@
 using UnityEngine;
-using UnityEngine.Rendering; // For ShadowCastingMode
-using System.Collections.Generic; // For List<T>
-using UnityEngine.InputSystem; // Import for the new Input System
-using UnityEngine.InputSystem.Controls; // Needed for Input Control types
+using UnityEngine.Rendering;
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using System.Diagnostics;
 
 public class ItemInspectionManager : MonoBehaviour
 {
@@ -29,21 +30,22 @@ public class ItemInspectionManager : MonoBehaviour
     public SwitchCamera switchCamera;
 
     // Reference to the Input Action Asset
-    public InputActionAsset inputActions; // Drag your Input Action Asset here in the inspector
+    public InputActionAsset inputActions;
     private InputAction rotateItemAction;
 
-    public CloseUpViewUIController closeUpViewUIController; // Reference to the UI controller
+    public CloseUpViewUIController closeUpViewUIController;
 
-    // Reference to the BackButtonHandler script
-    [SerializeField] private BackButtonHandler backButtonHandler; // Serialized reference
+    [SerializeField] private BackButtonHandler backButtonHandler;
 
-    // Reference to NoteInspectionManager
-    private NoteInspectionManager noteInspectionManager; // Remove serialized reference
+    private NoteInspectionManager noteInspectionManager;
+
+    // List of AudioSources for each item
+    private List<AudioSource> itemAudioSources = new List<AudioSource>();
 
     void Start()
     {
         // Initialize the input action for rotation
-        rotateItemAction = inputActions.FindAction("RotateItem"); // Make sure "RotateItem" matches your action name
+        rotateItemAction = inputActions.FindAction("RotateItem");
         rotateItemAction.Enable();
 
         inspectionPoint = transform;
@@ -52,7 +54,7 @@ public class ItemInspectionManager : MonoBehaviour
         // Find the NoteInspectionManager instance in the scene
         noteInspectionManager = FindObjectOfType<NoteInspectionManager>();
 
-        // Store the original position, rotation, and shadow casting mode for each item
+        // Store the original position, rotation, and shadow casting mode for each item, and set up audio sources
         foreach (GameObject item in itemsToInspect)
         {
             if (item != null)
@@ -60,7 +62,6 @@ public class ItemInspectionManager : MonoBehaviour
                 originalPositions.Add(item.transform.position);
                 originalRotations.Add(item.transform.rotation);
 
-                // Initialize current positions and rotations
                 currentPositions.Add(item.transform.position);
                 currentRotations.Add(item.transform.rotation);
 
@@ -71,7 +72,19 @@ public class ItemInspectionManager : MonoBehaviour
                 }
                 else
                 {
-                    originalShadowCastingModes.Add(ShadowCastingMode.Off); // Default value if no MeshRenderer
+                    originalShadowCastingModes.Add(ShadowCastingMode.Off);
+                }
+
+                // Get the AudioSource from each item and add to the list
+                AudioSource audioSource = item.GetComponent<AudioSource>();
+                if (audioSource != null)
+                {
+                    itemAudioSources.Add(audioSource);
+                }
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"No AudioSource found on {item.name}, make sure each item has an AudioSource component.");
+                    itemAudioSources.Add(null); // Add null if no AudioSource is found
                 }
             }
         }
@@ -84,97 +97,88 @@ public class ItemInspectionManager : MonoBehaviour
 
     public void StopInspection()
     {
-        // Disable the UI elements when exiting inspection mode
         if (closeUpViewUIController != null)
         {
-            closeUpViewUIController.SetUIActive(false); // Disable UI
+            closeUpViewUIController.SetUIActive(false);
         }
 
         if (itemsToInspect.Count > 0 && isInspecting && currentItemIndex >= 0)
         {
-            GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to reset
+            GameObject itemToInspect = itemsToInspect[currentItemIndex];
             itemToInspect.transform.SetParent(null);
-            itemToInspect.transform.position = originalPositions[currentItemIndex]; // Return to original position
-            itemToInspect.transform.rotation = originalRotations[currentItemIndex]; // Return to original rotation
+            itemToInspect.transform.position = originalPositions[currentItemIndex];
+            itemToInspect.transform.rotation = originalRotations[currentItemIndex];
+
+            // Stop playing the specific audio for the inspected item
+            if (itemAudioSources[currentItemIndex] != null)
+            {
+                itemAudioSources[currentItemIndex].Stop();
+            }
 
             isInspecting = false;
 
-            // Reset shadow casting to original value
             MeshRenderer meshRenderer = itemToInspect.GetComponent<MeshRenderer>();
             if (meshRenderer != null)
             {
                 meshRenderer.shadowCastingMode = originalShadowCastingModes[currentItemIndex];
             }
 
-            // Re-enable colliders for all items
             EnableAllItemColliders();
         }
     }
 
     void InspectItem()
     {
-        // Enable the UI elements when entering inspection mode
         if (closeUpViewUIController != null)
         {
-            closeUpViewUIController.SetUIActive(true); // Enable UI
+            closeUpViewUIController.SetUIActive(true);
         }
 
         if (itemsToInspect.Count > 0 && !isInspecting && currentItemIndex >= 0)
         {
-            GameObject itemToInspect = itemsToInspect[currentItemIndex]; // Get the current item to inspect
-
-            // Set the position to the inspection point without changing the rotation
+            GameObject itemToInspect = itemsToInspect[currentItemIndex];
             itemToInspect.transform.position = inspectionPoint.position;
-
-            // Keep the original rotation
             itemToInspect.transform.rotation = originalRotations[currentItemIndex];
-
-            // Set parent to the inspection point to manage its hierarchy
             itemToInspect.transform.SetParent(inspectionPoint);
 
             isInspecting = true;
+            targetRotation = originalRotations[currentItemIndex].eulerAngles;
 
-            // Reset target rotation to original rotation
-            targetRotation = originalRotations[currentItemIndex].eulerAngles; // Use original rotation
-
-            // Reset current positions and rotations to original values
             currentPositions[currentItemIndex] = originalPositions[currentItemIndex];
             currentRotations[currentItemIndex] = originalRotations[currentItemIndex];
 
-            // Disable colliders for all other items
             DisableOtherItemColliders(itemToInspect);
 
-            // Enable shadow casting while inspecting
             MeshRenderer meshRenderer = itemToInspect.GetComponent<MeshRenderer>();
             if (meshRenderer != null)
             {
                 meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             }
+
+            // Play the specific audio for the inspected item
+            if (itemAudioSources[currentItemIndex] != null)
+            {
+                itemAudioSources[currentItemIndex].Play();
+            }
         }
     }
 
-    // Add a sensitivity factor for touch controls
-    private float touchSensitivity = 0.02f; // Adjust this value to change sensitivity for touch input
-
     void Update()
     {
-        // Check if the current camera state is CloseUp and no note UI is active before allowing inspection
         if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp && noteInspectionManager != null && !noteInspectionManager.isNoteUIActive)
         {
-            // Handle mouse click for inspection
-            if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
+            if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                // Check if any of the items are clicked
                 for (int i = 0; i < itemsToInspect.Count; i++)
                 {
-                    if (Physics.Raycast(ray, out hit) && hit.transform.gameObject == itemsToInspect[i]) // Check if clicked object is one of the items
+                    if (Physics.Raycast(ray, out hit) && hit.transform.gameObject == itemsToInspect[i])
                     {
-                        currentItemIndex = i; // Set current item index
+                        currentItemIndex = i;
                         InspectItem();
-                        break; // Exit the loop after the first hit
+                        break;
                     }
                 }
             }
@@ -182,38 +186,33 @@ public class ItemInspectionManager : MonoBehaviour
 
         if (isInspecting)
         {
-            // Prevent note interaction during item inspection
             if (noteInspectionManager != null)
             {
-                noteInspectionManager.enabled = false; // Disable note inspection
+                noteInspectionManager.enabled = false;
             }
 
-            // Handle rotation with mouse
             if (Input.GetMouseButton(0))
             {
-                float rotateX = -Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime; // Inverted Y axis for dragging down
-                float rotateY = -Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime; // Inverted X axis for dragging left
+                float rotateX = -Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+                float rotateY = -Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
 
-                targetRotation += new Vector3(rotateX, rotateY, 0f); // Update target rotation
+                targetRotation += new Vector3(rotateX, rotateY, 0f);
 
-                // Smoothly rotate the item
                 Quaternion targetQuaternion = Quaternion.Euler(targetRotation);
                 itemsToInspect[currentItemIndex].transform.rotation = Quaternion.Slerp(itemsToInspect[currentItemIndex].transform.rotation, targetQuaternion, rotateSmoothness);
             }
 
-            // Handle rotation with touch input using Touchscreen
-            var touchscreen = Touchscreen.current; // Access the current touchscreen input
-            if (touchscreen != null && touchscreen.primaryTouch.press.isPressed) // Check if the primary touch is pressed
+            var touchscreen = Touchscreen.current;
+            if (touchscreen != null && touchscreen.primaryTouch.press.isPressed)
             {
-                var touch = touchscreen.primaryTouch; // Access the primary touch
-                if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved) // Check if the touch has moved
+                var touch = touchscreen.primaryTouch;
+                if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved)
                 {
-                    float rotateX = -touch.delta.ReadValue().y * rotationSpeed * touchSensitivity * Time.deltaTime; // Inverted Y axis
-                    float rotateY = -touch.delta.ReadValue().x * rotationSpeed * touchSensitivity * Time.deltaTime; // Inverted X axis
+                    float rotateX = -touch.delta.ReadValue().y * rotationSpeed * 0.02f * Time.deltaTime;
+                    float rotateY = -touch.delta.ReadValue().x * rotationSpeed * 0.02f * Time.deltaTime;
 
-                    targetRotation += new Vector3(rotateX, rotateY, 0f); // Update target rotation
+                    targetRotation += new Vector3(rotateX, rotateY, 0f);
 
-                    // Smoothly rotate the item
                     Quaternion targetQuaternion = Quaternion.Euler(targetRotation);
                     itemsToInspect[currentItemIndex].transform.rotation = Quaternion.Slerp(itemsToInspect[currentItemIndex].transform.rotation, targetQuaternion, rotateSmoothness);
                 }
@@ -221,15 +220,13 @@ public class ItemInspectionManager : MonoBehaviour
         }
         else
         {
-            // Re-enable note interaction when item inspection is not active
             if (noteInspectionManager != null)
             {
-                noteInspectionManager.enabled = true; // Enable note inspection
+                noteInspectionManager.enabled = true;
             }
         }
     }
 
-    // Function to disable colliders for all items except the currently inspected one
     private void DisableOtherItemColliders(GameObject inspectedItem)
     {
         foreach (GameObject item in itemsToInspect)
@@ -239,13 +236,12 @@ public class ItemInspectionManager : MonoBehaviour
                 Collider collider = item.GetComponent<Collider>();
                 if (collider != null)
                 {
-                    collider.enabled = false; // Disable collider for non-inspected items
+                    collider.enabled = false;
                 }
             }
         }
     }
 
-    // Function to enable colliders for all items
     private void EnableAllItemColliders()
     {
         foreach (GameObject item in itemsToInspect)
@@ -253,7 +249,7 @@ public class ItemInspectionManager : MonoBehaviour
             Collider collider = item.GetComponent<Collider>();
             if (collider != null)
             {
-                collider.enabled = true; // Enable collider for all items
+                collider.enabled = true;
             }
         }
     }
