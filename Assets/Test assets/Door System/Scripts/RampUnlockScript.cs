@@ -9,21 +9,23 @@ public class RampUnlockScript : MonoBehaviour
     public RampObjectHandler rampObjectHandler;
 
     [Tooltip("Rotation speed of the valve.")]
-    public float rotationSpeed = 5f; // Rotation speed of the valve
+    public float rotationSpeed = 5f;
 
-    // Reference to the input action asset
-    public InputActionAsset inputActionAsset; // Ensure this variable is defined
+    public InputActionAsset inputActionAsset;
+    public AudioSource rampAudioSource;
 
     private float currentRotation = 0f;
     private bool isTouchingValve = false;
     private Vector2 previousTouchPosition;
-
-    // New variable to track if the valve can still spin
+    private bool isValveSpinning = false;
     private bool canSpin = true;
+
+    private float spinStopTimer = 0f;
+    private float spinCooldown = 0.2f;
+    private float audioPlaybackPosition = 0f;
 
     private void OnEnable()
     {
-        // Enable the spin gesture input action
         if (inputActionAsset != null)
         {
             inputActionAsset.FindAction("SpinGesture").Enable();
@@ -36,7 +38,6 @@ public class RampUnlockScript : MonoBehaviour
 
     private void OnDisable()
     {
-        // Disable the spin gesture input action
         if (inputActionAsset != null)
         {
             inputActionAsset.FindAction("SpinGesture").Disable();
@@ -45,70 +46,80 @@ public class RampUnlockScript : MonoBehaviour
 
     void Update()
     {
-        HandleValveInteraction();
+        if (IsCloseUpCameraActive())
+        {
+            HandleValveInteraction();
+        }
+        else
+        {
+            ResetValveState(); // Reset values if not in close-up view
+        }
+
+        // Real-time audio control based on valve spinning status with delay
+        if (isValveSpinning)
+        {
+            if (!rampAudioSource.isPlaying)
+            {
+                rampAudioSource.time = audioPlaybackPosition; // Resume from saved position
+                rampAudioSource.Play();
+            }
+            spinStopTimer = 0f; // Reset timer while spinning
+        }
+        else
+        {
+            spinStopTimer += Time.deltaTime;
+            if (spinStopTimer > spinCooldown && rampAudioSource.isPlaying)
+            {
+                audioPlaybackPosition = rampAudioSource.time; // Save current playback position
+                rampAudioSource.Stop();
+            }
+        }
     }
 
     private void HandleValveInteraction()
     {
-        // Check if the close-up camera is active
-        if (!IsCloseUpCameraActive())
-        {
-           
-            return; // Skip interaction if close-up camera is not active
-        }
-
         var spinGestureAction = inputActionAsset.FindAction("SpinGesture");
-
         if (spinGestureAction == null)
         {
             UnityEngine.Debug.LogError("SpinGesture action not found in Input Action Asset.");
-            return; // Early exit if the action is not found
+            return;
         }
 
         Vector2 touchPosition = spinGestureAction.ReadValue<Vector2>();
 
-        // Check if the touch is hitting the valve collider on every update
+        // Check if touch hits the valve collider
         Ray ray = Camera.main.ScreenPointToRay(touchPosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.collider != null && hit.collider.gameObject == gameObject)
-            {
-                isTouchingValve = true; // Set to true if touching the valve
-            }
-            else
-            {
-                isTouchingValve = false; // Reset if not touching the valve
-            }
+            isTouchingValve = hit.collider != null && hit.collider.gameObject == gameObject;
         }
 
-        // Now check the input phases
+        isValveSpinning = false; // Reset each frame
+
         if (spinGestureAction.phase == InputActionPhase.Started && isTouchingValve)
         {
-            previousTouchPosition = touchPosition; // Store the initial touch position
+            previousTouchPosition = touchPosition;
         }
         else if (spinGestureAction.phase == InputActionPhase.Performed && isTouchingValve && canSpin)
         {
-            // Start ramp movement only if there is significant spin gesture movement
-            if (Vector2.Distance(touchPosition, previousTouchPosition) > 0.1f) // Adjust this threshold as needed
+            if (Vector2.Distance(touchPosition, previousTouchPosition) > 0.1f)
             {
-                rampObjectHandler.StartRampMovement(); // Start ramp movement when the valve is being spun
+                rampObjectHandler.StartRampMovement();
                 RotateValve(touchPosition);
-                previousTouchPosition = touchPosition; // Update the previous touch position
+                isValveSpinning = true;
+                previousTouchPosition = touchPosition;
             }
         }
         else if (spinGestureAction.phase == InputActionPhase.Canceled)
         {
             isTouchingValve = false;
-            rampObjectHandler.StopRampMovement(); // Stop ramp movement when the valve stops spinning
+            rampObjectHandler.StopRampMovement();
             StartCoroutine(ResetValveRotation());
         }
 
-        // Check if the ramp has reached the target rotation and update canSpin
         if (rampObjectHandler.currentRampRotation >= rampObjectHandler.endXRotation)
         {
-            canSpin = false; // Disable valve spinning
+            canSpin = false;
         }
     }
 
@@ -117,7 +128,7 @@ public class RampUnlockScript : MonoBehaviour
         Vector2 deltaPosition = touchPosition - previousTouchPosition;
         float rotationAmount = deltaPosition.magnitude * rotationSpeed * Time.deltaTime;
 
-        // Determine the rotation direction based on the touch movement
+        // Check rotation direction
         if (Vector2.Dot(deltaPosition, Vector2.right) > 0)
         {
             currentRotation += rotationAmount;
@@ -127,11 +138,8 @@ public class RampUnlockScript : MonoBehaviour
             currentRotation -= rotationAmount;
         }
 
-        // Set the valve's rotation
+        // Apply rotation
         transform.Rotate(Vector3.forward, rotationAmount);
-        UnityEngine.Debug.Log("Valve current rotation: " + currentRotation);
-
-        // Update ramp rotation based on valve rotation
         rampObjectHandler.UpdateRampRotation();
     }
 
@@ -150,16 +158,24 @@ public class RampUnlockScript : MonoBehaviour
 
     private bool IsCloseUpCameraActive()
     {
-        // Get all instances of SwitchCamera
         var switchCameras = FindObjectsOfType<SwitchCamera>();
-        // Check if any instance has the CloseUp camera active
         foreach (var switchCamera in switchCameras)
         {
             if (switchCamera.currentCameraState == CameraState.CloseUp)
             {
-                return true; // Return true if any close-up camera is active
+                return true;
             }
         }
-        return false; // No close-up camera is active
+        return false;
+    }
+
+    private void ResetValveState()
+    {
+        isTouchingValve = false;
+        isValveSpinning = false;
+        previousTouchPosition = Vector2.zero;
+        rampObjectHandler.StopRampMovement();
+        currentRotation = 0;
+        spinStopTimer = 0f; // Reset timer when exiting close-up
     }
 }

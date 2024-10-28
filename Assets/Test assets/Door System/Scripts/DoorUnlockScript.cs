@@ -19,6 +19,12 @@ public class DoorUnlockScript : MonoBehaviour
     [Tooltip("Reference to the door object handler.")]
     public DoorObjectHandler doorObjectHandler;
 
+    [Tooltip("Audio source for button interaction sound.")]
+    public AudioSource buttonAudioSource;
+
+    [Tooltip("Audio source for lever interaction sound.")]
+    public AudioSource leverAudioSource;
+
     // Reference to the input action asset
     public InputActionAsset inputActionAsset; // Add this line
 
@@ -62,6 +68,12 @@ public class DoorUnlockScript : MonoBehaviour
 
     public void ButtonInteract()
     {
+        // Play button audio if it exists
+        if (buttonAudioSource != null)
+        {
+            buttonAudioSource.Play();
+        }
+
         // Check if any SwitchCamera instance has the CloseUp camera active
         if (IsCloseUpCameraActive())
         {
@@ -103,8 +115,6 @@ public class DoorUnlockScript : MonoBehaviour
         isLockedTextVisible = false;
         // Your logic to hide the locked text here
     }
-
-
 
     private void HandleLeverInteraction()
     {
@@ -149,6 +159,12 @@ public class DoorUnlockScript : MonoBehaviour
 
     public void LeverInteract()
     {
+        // Play lever audio if it exists
+        if (leverAudioSource != null)
+        {
+            leverAudioSource.Play();
+        }
+
         // Trigger the LeverUp animation
         leverAnimator.SetTrigger("LeverUp");
 
