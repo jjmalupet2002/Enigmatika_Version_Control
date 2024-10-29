@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Diagnostics;
 
 public class SafeController : MonoBehaviour
 {
@@ -29,16 +30,23 @@ public class SafeController : MonoBehaviour
     public Text secondNumberUI;
     public Text thirdNumberUI;
 
-    [Header("Unity Event - What happens when you open the safe?")]
-    public UnityEvent onSafeOpened;
-
     [Header("Switch Camera Reference")]
     public SwitchCamera switchCamera; // Reference to the SwitchCamera script
+
+    [Header("Audio Clips")]
+    public AudioClip safeInspectAudioClip; // Use AudioClip for button sounds
+    public AudioClip numberChangeAudioClip; // Use AudioClip for button sounds
+    public AudioClip wrongCombinationAudioClip; // Use AudioClip for UI alert sounds
+    public AudioSource safeAlreadyOpenAudioSource; // Use AudioSource for 3D object sounds
+
+    [Header("Unity Event - What happens when you open the safe?")]
+    public UnityEvent onSafeOpened;
 
     private int currentNum1;
     private int currentNum2;
     private int currentNum3;
     private bool isSafeOpened = false;
+    private AudioSource audioSource; // Add an AudioSource field
 
     private void Start()
     {
@@ -65,7 +73,14 @@ public class SafeController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("SwitchCamera reference is not assigned in SafeController.");
+            UnityEngine.Debug.LogError("SwitchCamera reference is not assigned in SafeController.");
+        }
+
+        // Initialize the AudioSource
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
@@ -73,12 +88,14 @@ public class SafeController : MonoBehaviour
     {
         number = (number + 1) % 11;
         numberText.text = number.ToString();
+        PlayNumberChangeSound(); // Play sound
     }
 
     public void DecreaseNumber(Text numberText, ref int number)
     {
         number = (number + 10) % 11; // Handles decrementing, ensuring it wraps around
         numberText.text = number.ToString();
+        PlayNumberChangeSound(); // Play sound
     }
 
     // UI Button Methods
@@ -95,10 +112,13 @@ public class SafeController : MonoBehaviour
         {
             safeUI.SetActive(true);
             safeInspectButton.gameObject.SetActive(false);
-
+            PlaySafeInspectSound(); // Play sound
+        }
+        else
+        {
+            
         }
     }
-
 
     public void CloseSafeUI()
     {
@@ -115,22 +135,22 @@ public class SafeController : MonoBehaviour
             // Ensure the inspect button is shown only if we are in close-up view
             if (switchCamera.currentCameraState != CameraState.CloseUp)
             {
-                safeInspectButton.gameObject.SetActive(false); // deactivate the inspect button when we exit close up-view
+                safeInspectButton.gameObject.SetActive(false); // deactivate the inspect button when we exit close-up view
             }
         }
     }
-
-
 
     public void CheckCombination()
     {
         if (currentNum1 == safeSolutionNum1 && currentNum2 == safeSolutionNum2 && currentNum3 == safeSolutionNum3)
         {
             StartCoroutine(OpenSafe());
+
         }
         else
         {
             wrongCombinationUI.SetActive(true);
+            PlayWrongCombinationSound(); // Play sound
             Invoke("HideWrongCombinationUI", 2f); // Hide after 2 seconds
         }
     }
@@ -142,10 +162,12 @@ public class SafeController : MonoBehaviour
 
     private IEnumerator OpenSafe()
     {
+
         yield return new WaitForSeconds(animationDelay);
         safeAnimator.SetTrigger("Open");
         onSafeOpened.Invoke();
         isSafeOpened = true; // Mark the safe as opened
+        PlaySafeAlreadyOpenSound(); // Play sound
         CloseSafeUI();
     }
 
@@ -159,6 +181,38 @@ public class SafeController : MonoBehaviour
         else
         {
             safeInspectButton.gameObject.SetActive(false);
+        }
+    }
+
+    private void PlaySafeInspectSound()
+    {
+        if (audioSource != null && safeInspectAudioClip != null)
+        {
+            audioSource.PlayOneShot(safeInspectAudioClip);
+        }
+    }
+
+    private void PlayNumberChangeSound()
+    {
+        if (audioSource != null && numberChangeAudioClip != null)
+        {
+            audioSource.PlayOneShot(numberChangeAudioClip);
+        }
+    }
+
+    private void PlayWrongCombinationSound()
+    {
+        if (audioSource != null && wrongCombinationAudioClip != null)
+        {
+            audioSource.PlayOneShot(wrongCombinationAudioClip);
+        }
+    }
+
+    private void PlaySafeAlreadyOpenSound()
+    {
+        if (safeAlreadyOpenAudioSource != null)
+        {
+            safeAlreadyOpenAudioSource.Play();
         }
     }
 }
