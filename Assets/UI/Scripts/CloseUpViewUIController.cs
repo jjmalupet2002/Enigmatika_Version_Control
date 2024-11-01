@@ -11,7 +11,7 @@ public class CloseUpViewUIController : MonoBehaviour
     // Method to enable or disable the UI elements
     public void SetUIActive(bool isActive)
     {
-        UnityEngine.Debug.Log("SetUIActive called with isActive: " + isActive);
+      
 
         // Enable or disable the GameObjects based on the isActive parameter
        

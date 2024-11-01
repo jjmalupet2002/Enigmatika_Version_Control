@@ -127,7 +127,7 @@ public class ItemInspectionManager : MonoBehaviour
         }
     }
 
-    void InspectItem()
+    public void InspectItem()
     {
         if (closeUpViewUIController != null)
         {

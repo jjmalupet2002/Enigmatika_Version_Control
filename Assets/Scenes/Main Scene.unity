@@ -2014,6 +2014,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388233503}
   m_CullTransparentMesh: 1
+--- !u!1 &405629652 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1826596622282527926, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
+  m_PrefabInstance: {fileID: 2910808930004684150}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &405629658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405629652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Rusty old key
+  itemIcon: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
+  itemDescription: 'This key please gumana ka
+
+'
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  notificationText: {fileID: 1877896759}
 --- !u!1 &406845753
 GameObject:
   m_ObjectHideFlags: 0
@@ -7390,7 +7416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -850, y: 355.58}
+  m_AnchoredPosition: {x: -850, y: 334}
   m_SizeDelta: {x: 180, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1521521633
@@ -7406,7 +7432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8288,6 +8314,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1799206896 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3637665887056247796, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+  m_PrefabInstance: {fileID: 8704841504877250998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1799206902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799206896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Battery
+  itemIcon: {fileID: 21300000, guid: ff4e2a40a0a91494a873149252b1aaaf, type: 3}
+  itemDescription: This is a motherfuckin battery
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  notificationText: {fileID: 1877896759}
 --- !u!1 &1808187836
 GameObject:
   m_ObjectHideFlags: 0
@@ -8857,6 +8907,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1c725ed85a5d02c4aa17774f451fc377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1877896759 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7425173621715350542, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
+  m_PrefabInstance: {fileID: 5099765875977381061}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1892116439 stripped
@@ -10862,7 +10923,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1826596622282527926, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 405629658}
   m_SourcePrefab: {fileID: 100100000, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
 --- !u!114 &3410456745303834361 stripped
 MonoBehaviour:
@@ -10980,13 +11044,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: OnScreenControls
       objectReference: {fileID: 0}
-    - target: {fileID: 3681548792455221327, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4847869943924407216, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5296628037159056531, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
+      propertyPath: m_Name
+      value: InventoryButton
       objectReference: {fileID: 0}
     - target: {fileID: 6797605736271670538, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -10996,6 +11060,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 891332808}
+    - target: {fileID: 6907545280093300815, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7101683278209514392, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -11434,7 +11502,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3637665887056247796, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1799206902}
   m_SourcePrefab: {fileID: 100100000, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
 --- !u!1001 &9011434517728436881
 PrefabInstance:
