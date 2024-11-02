@@ -7,6 +7,7 @@ public class CloseUpViewUIController : MonoBehaviour
     
     public GameObject newItemDiscoveredPanel;
     public GameObject hintIcon;
+   
 
     // Method to enable or disable the UI elements
     public void SetUIActive(bool isActive)
@@ -17,6 +18,7 @@ public class CloseUpViewUIController : MonoBehaviour
        
         newItemDiscoveredPanel.SetActive(isActive);
         hintIcon.SetActive(isActive);
+       
     }
 
     // Optional: Call this method to disable the UI on exit

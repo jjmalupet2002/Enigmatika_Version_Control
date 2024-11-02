@@ -119,11 +119,11 @@ public class TalkandInteract : MonoBehaviour
     {
         if (currentInteractable != null)
         {
-            UnityEngine.Debug.Log("Interacting with Object. Current Interactable: " + currentInteractable);
+          
             SwitchCamera switchCam = currentInteractable.GetComponent<SwitchCamera>();
             if (switchCam != null)
             {
-                UnityEngine.Debug.Log("SwitchCamera component found.");
+         
                 Camera closeUpCam = currentInteractable.GetComponentInChildren<Camera>();
                 switchCam.ManageCamera(closeUpCam);
             }

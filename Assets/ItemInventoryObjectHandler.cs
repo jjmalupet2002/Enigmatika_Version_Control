@@ -1,6 +1,6 @@
-using System.Collections; // Needed for using IEnumerator
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; // Needed for UI elements
+using UnityEngine.UI;
 
 public class ItemInventoryObjectHandler : MonoBehaviour
 {
@@ -9,24 +9,31 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     public Sprite itemIcon;
     [TextArea] public string itemDescription;
 
-    [Header("Other Settings")]
+    [Header("Inventory Settings")]
     public bool isClueItem;
     public bool isGeneralItem;
     public bool isUsable;
 
-    [Header("UI Notification")]
-    public Text notificationText; // Reference to the Text UI object
+    [Header("Item Settings")]
+    public bool isNote; // Flag for notes
+    public bool is3dObject; // Flag for 3D objects
 
-    private Vector3 originalPosition; // Store the original position of the object
-    private bool isInspecting = false; // Track whether the item is being inspected
-    private bool hasLoggedAlreadyInspecting = false; // Flag to track if the log has been printed
+    [Header("UI Notification")]
+    public GameObject notificationText; // Reference to Text UI
+    public GameObject noteUI; // Reference to Note UI
+
+    private Vector3 originalPosition; // Original position of the object
+    private bool isInspecting = false; // Inspection state
+    private bool hasLoggedAlreadyInspecting = false; // Log flag for 3D items
+
 
     void Start()
     {
-        // Store the original position of the 3D object
-        originalPosition = transform.position;
+        if (is3dObject)
+        {
+            originalPosition = transform.position;
+        }
 
-        // Ensure the notification text is hidden at the start
         if (notificationText != null)
         {
             notificationText.gameObject.SetActive(false);
@@ -35,86 +42,156 @@ public class ItemInventoryObjectHandler : MonoBehaviour
 
     void Update()
     {
-        // Check if the object has moved from its original position
-        if (Vector3.Distance(transform.position, originalPosition) > 0.1f) // Adjust the threshold as needed
+        // Check for 3D object inspection
+        if (is3dObject)
         {
-            InspectItem(); // Call the InspectItem method if the object has moved
+            if (Vector3.Distance(transform.position, originalPosition) > 0.1f)
+            {
+                Inspect3DItem(); // Call InspectItem if moved
+            }
+            else if (isInspecting)
+            {
+                Stop3DInspect(); // Stop inspection if back at original position
+            }
         }
-        else if (isInspecting) // If the object returns to its original position while inspecting
+
+        // Check the active state of the note UI
+        if (noteUI != null)
         {
-            StopInspection(); // Call StopInspection method
+            if (noteUI.activeSelf)
+            {
+                NoteInspect(); // Call NoteInspect if active
+            }
+            else if (isInspecting)
+            {
+                StopNoteInspection(); // Stop inspection if inactive
+
+            }
         }
     }
 
-    public void InspectItem() // Call this method when an item is inspected
+    public void Inspect3DItem()
     {
-        // Check if an item is already being inspected
+        if (isNote)
+        {
+            UnityEngine.Debug.Log("Cannot inspect a note as a 3D object.");
+            return; // Prevent inspecting a note
+        }
+
         if (isInspecting)
         {
-            if (!hasLoggedAlreadyInspecting) // Check if we have already logged this message
+            if (!hasLoggedAlreadyInspecting)
             {
-                UnityEngine.Debug.Log("Item is already being inspected.");
-                hasLoggedAlreadyInspecting = true; // Set the flag to true after logging
+              
+                hasLoggedAlreadyInspecting = true; // Log flag
             }
-            return; // Prevent re-inspection if already active
+            return; // Prevent re-inspection
         }
 
-        // Logic for inspecting the item (show UI, etc.)
-        UnityEngine.Debug.Log($"Inspecting item: {itemName}");
-
-        isInspecting = true; // Set inspecting state to true
-        StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify pickup after a delay
+        UnityEngine.Debug.Log($"Inspecting 3D item: {itemName}");
+        isInspecting = true; // Set inspecting state
+        StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify after a delay
     }
 
-    public void StopInspection()
+    public void Stop3DInspect()
     {
-        if (!isInspecting) // Only stop inspection if it is active
+        if (!isInspecting)
         {
             UnityEngine.Debug.Log("No inspection to stop.");
             return;
         }
 
-        // Disable the item's mesh renderer or hide it in the scene
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         if (meshRenderer != null)
         {
-            meshRenderer.enabled = false; // Disable the mesh renderer
-            // Log that the inspection has stopped for this item
-            UnityEngine.Debug.Log($"Inspection stopped for item: {itemName}");
+            meshRenderer.enabled = false; // Disable mesh renderer
+            UnityEngine.Debug.Log($"Stopped inspecting 3D item: {itemName}");
         }
 
-        // Disable the game object after a short delay
-        StartCoroutine(DisableGameObjectAfterDelay(2f)); // Adjust the delay as needed
+        // Disable colliders (box or sphere)
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false; // Disable collider
+          
+        }
 
-        isInspecting = false; // Reset inspecting state
+        StartCoroutine(DisableGameObjectAfterDelay(2f)); // Disable game object after a delay
+        isInspecting = false; // Reset state
+        hasLoggedAlreadyInspecting = false; // Reset log flag
     }
+
+    public void NoteInspect()
+    {
+        if (noteUI != null && noteUI.activeSelf)
+        {
+            if (isInspecting)
+            {
+               
+                return; // Prevent re-inspection
+            }
+
+            UnityEngine.Debug.Log($"Inspecting note: {itemName}");
+            isInspecting = true; // Set inspecting state
+            StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify after a delay
+        }
+    }
+
+    public void StopNoteInspection()
+    {
+        if (!isInspecting)
+        {
+            UnityEngine.Debug.Log("No inspection to stop for the note."); // Log if there was no inspection to stop
+            return;
+        }
+
+        UnityEngine.Debug.Log($"Stopped inspecting note: {itemName}");
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
+        {
+            meshRenderer.enabled = false; // Disable mesh renderer
+        }
+
+        // Disable colliders (box or sphere)
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false; // Disable collider
+           
+        }
+
+        isInspecting = false; // Reset state
+        hasLoggedAlreadyInspecting = false; // Reset log flag for note inspection
+    }
+
 
     private IEnumerator DisableGameObjectAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // Wait for the specified delay
-        gameObject.SetActive(false); // Disable the item in the scene
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(false); // Disable the item
+      
     }
 
     private IEnumerator NotifyPickupAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        NotifyPickup(); // Notify after the delay
+        NotifyPickup(); // Notify after delay
+       
     }
 
     public void NotifyPickup()
     {
-        // Logic for notifying the inventory manager to add this item
-        UnityEngine.Debug.Log($"New item added: {itemName}");
-
-        // Display the notification
+       
         if (notificationText != null)
         {
-            notificationText.text = "A new item has been added, check your inventory!";
-            notificationText.gameObject.SetActive(true); // Show the notification
-            StartCoroutine(HideNotificationAfterDelay(2f)); // Hide the notification after 1 second
+            notificationText.SetActive(true); // Show notification
+            StartCoroutine(HideNotificationAfterDelay(2f)); // Hide after 2 seconds
+          
         }
-
-        // Any additional logic for notifying pickup can be added here
+        else
+        {
+            UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned."); // Warn if null
+        }
     }
 
     private IEnumerator HideNotificationAfterDelay(float delay)
@@ -122,7 +199,8 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         yield return new WaitForSeconds(delay);
         if (notificationText != null)
         {
-            notificationText.gameObject.SetActive(false); // Hide the notification
+            notificationText.SetActive(false); // Hide notification
+           
         }
     }
 }

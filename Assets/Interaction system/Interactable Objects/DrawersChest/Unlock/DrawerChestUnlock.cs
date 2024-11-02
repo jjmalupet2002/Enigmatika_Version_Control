@@ -56,7 +56,7 @@ public class DrawerChestUnlock : MonoBehaviour
         // Log the assignment of noteInspectionManager
         if (noteInspectionManager != null)
         {
-            UnityEngine.Debug.Log("NoteInspectionManager successfully assigned.");
+           
         }
         else
         {
@@ -95,7 +95,7 @@ public class DrawerChestUnlock : MonoBehaviour
 
         if (noteInspectionManager.isNoteUIActive)
         {
-            UnityEngine.Debug.Log("Cannot interact; note inspection mode is active.");
+          
             return;
         }
 
