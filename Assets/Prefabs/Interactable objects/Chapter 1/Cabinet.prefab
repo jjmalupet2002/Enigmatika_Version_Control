@@ -1817,6 +1817,7 @@ GameObject:
   - component: {fileID: 5617692419318370344}
   - component: {fileID: 2096340385080551780}
   - component: {fileID: 5830002478260498296}
+  - component: {fileID: 5642993813817013236}
   m_Layer: 0
   m_Name: Example Note Object 2
   m_TagString: Untagged
@@ -1924,6 +1925,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5642993813817013236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372098077158309295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Random Note
+  itemIcon: {fileID: 21300000, guid: 745c230e29c9393469cb614114618353, type: 3}
+  itemDescription: A new random Note. What does it say?
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 0
+  isNote: 1
+  is3dObject: 0
+  notificationText: {fileID: 0}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &5815947643810751122
 GameObject:
   m_ObjectHideFlags: 0

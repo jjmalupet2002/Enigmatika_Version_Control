@@ -22,6 +22,10 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     public GameObject notificationText; // Reference to Text UI
     public GameObject noteUI; // Reference to Note UI
 
+    [Header("Inventory Manager reference")]
+    public InventoryManager inventoryManager; // Reference to your InventoryManager
+
+
     private Vector3 originalPosition; // Original position of the object
     private bool isInspecting = false; // Inspection state
     private bool hasLoggedAlreadyInspecting = false; // Log flag for 3D items
@@ -88,7 +92,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
             return; // Prevent re-inspection
         }
 
-        UnityEngine.Debug.Log($"Inspecting 3D item: {itemName}");
         isInspecting = true; // Set inspecting state
         StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify after a delay
     }
@@ -105,7 +108,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         if (meshRenderer != null)
         {
             meshRenderer.enabled = false; // Disable mesh renderer
-            UnityEngine.Debug.Log($"Stopped inspecting 3D item: {itemName}");
         }
 
         // Disable colliders (box or sphere)
@@ -131,7 +133,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
                 return; // Prevent re-inspection
             }
 
-            UnityEngine.Debug.Log($"Inspecting note: {itemName}");
             isInspecting = true; // Set inspecting state
             StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify after a delay
         }
@@ -145,7 +146,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
             return;
         }
 
-        UnityEngine.Debug.Log($"Stopped inspecting note: {itemName}");
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         if (meshRenderer != null)
         {
@@ -181,18 +181,24 @@ public class ItemInventoryObjectHandler : MonoBehaviour
 
     public void NotifyPickup()
     {
-       
+        // Create an instance of ItemData
+        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable);
+
+        // Notify the Inventory Manager to add this item
+        InventoryManager.Instance.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
+
+        // Show notification
         if (notificationText != null)
         {
             notificationText.SetActive(true); // Show notification
             StartCoroutine(HideNotificationAfterDelay(2f)); // Hide after 2 seconds
-          
         }
         else
         {
             UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned."); // Warn if null
         }
     }
+
 
     private IEnumerator HideNotificationAfterDelay(float delay)
     {
