@@ -8,6 +8,10 @@ public class InventoryManager : ScriptableObject
 
     public List<ItemData> inventory = new List<ItemData>(); // List to store item data
 
+    // Define an event to notify when the inventory changes
+    public delegate void InventoryChanged();
+    public event InventoryChanged OnInventoryChanged;
+
     private void OnEnable()
     {
         // Ensure only one instance of the InventoryManager exists
@@ -21,12 +25,14 @@ public class InventoryManager : ScriptableObject
         }
     }
 
-   
     // Method to add an item to the inventory
     public void AddItem(ItemData item)
     {
         inventory.Add(item);
         UnityEngine.Debug.Log($"Added item to inventory: {item.itemName}");
+
+        // Trigger the inventory changed event
+        OnInventoryChanged?.Invoke();
     }
 
     // Method to display current inventory items in the console
