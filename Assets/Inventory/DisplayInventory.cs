@@ -77,8 +77,21 @@ public class DisplayInventory : MonoBehaviour
             {
                 // Place the item in the corresponding clue slot
                 clueSlots[clueIndex].SetActive(true);
-                clueSlots[clueIndex].GetComponentInChildren<Image>().sprite = item.itemIcon; // Assign the item icon
-                clueSlots[clueIndex].GetComponentInChildren<Button>().onClick.AddListener(() => SelectItem(item));
+                var button = clueSlots[clueIndex].GetComponentInChildren<Button>();
+                var image = clueSlots[clueIndex].GetComponentInChildren<Image>();
+                image.sprite = item.itemIcon; // Assign the item icon
+
+                if (item.isUsingItem)
+                {
+                    button.interactable = false; // Disable the button if the item is in use
+                    image.color = Color.grey; // Grey out the icon
+                }
+                else
+                {
+                    button.interactable = true; // Enable the button if the item is not in use
+                    image.color = Color.white; // Set the icon to white
+                    button.onClick.AddListener(() => SelectItem(item));
+                }
 
                 // Increment the clue index for the next clue item
                 clueIndex++;
@@ -87,8 +100,21 @@ public class DisplayInventory : MonoBehaviour
             {
                 // Place the item in the corresponding general slot
                 generalSlots[generalIndex].SetActive(true);
-                generalSlots[generalIndex].GetComponentInChildren<Image>().sprite = item.itemIcon; // Assign the item icon
-                generalSlots[generalIndex].GetComponentInChildren<Button>().onClick.AddListener(() => SelectItem(item));
+                var button = generalSlots[generalIndex].GetComponentInChildren<Button>();
+                var image = generalSlots[generalIndex].GetComponentInChildren<Image>();
+                image.sprite = item.itemIcon; // Assign the item icon
+
+                if (item.isUsingItem)
+                {
+                    button.interactable = false; // Disable the button if the item is in use
+                    image.color = Color.grey; // Grey out the icon
+                }
+                else
+                {
+                    button.interactable = true; // Enable the button if the item is not in use
+                    image.color = Color.white; // Set the icon to white
+                    button.onClick.AddListener(() => SelectItem(item));
+                }
 
                 // Increment the general index for the next general item
                 generalIndex++;
@@ -126,11 +152,11 @@ public class DisplayInventory : MonoBehaviour
 
 
         // Update button states based on item usability
-        useItemButton.interactable = item.isUsable; // Enable or disable the use button
+        useItemButton.interactable = item.isUsable && !item.isUsingItem; // Enable or disable the use button
         inspectItemButton.interactable = true; // Enable inspect button
 
-        // If the item is usable, update the used item UI
-        if (item.isUsable)
+        // If the item is usable and not already in use, update the used item UI
+        if (item.isUsable && !item.isUsingItem)
         {
             useItemButton.onClick.AddListener(() => UseItem(item));
         }
@@ -166,6 +192,9 @@ public class DisplayInventory : MonoBehaviour
             useItemButton.interactable = false; // Disable the use button for the current item
             useItemBackground.SetActive(true); // Show the UseItem background
 
+            // Grey out the item slot for the used item
+            GreyOutItemSlot(item);
+
             // Close the inventory
             InventoryToggle inventoryToggle = FindObjectOfType<InventoryToggle>(); // Find the InventoryToggle script instance
             if (inventoryToggle != null)
@@ -183,37 +212,60 @@ public class DisplayInventory : MonoBehaviour
         inspectItemButton.interactable = true; // Enable inspect button
     }
 
-
-
-    public void RestoreItem()
+    private void GreyOutItemSlot(ItemData item)
     {
-        // Assuming the inventory manager handles restoring the item
-        if (useItemText.text != "") // Check if there's an item being used
+        // Find the corresponding slot and grey it out
+        foreach (GameObject slot in clueSlots)
         {
-            ItemData usedItem = inventoryManager.inventory.Find(item => item.itemName == useItemText.text);
-            if (usedItem != null)
+            if (slot.activeSelf && slot.GetComponentInChildren<Image>().sprite == item.itemIcon)
             {
-                inventoryManager.RestoreItem(usedItem); // Restore the item in the inventory
-                useItemIcon.gameObject.SetActive(false); // Hide the used item icon
-                restoreItemButton.gameObject.SetActive(false); // Hide the restore button
-                useItemButton.interactable = true; // Re-enable the use button
-                useItemBackground.SetActive(false); // Hide the UseItem background after restoring                                   
-                useItemText.text = ""; // Set the used item text to an empty string
+                var button = slot.GetComponentInChildren<Button>();
+                var image = slot.GetComponentInChildren<Image>();
+                button.interactable = false; // Disable the button
+                image.color = Color.grey; // Grey out the icon
+                return; // Exit the method once the item is found
+            }
+        }
+
+        foreach (GameObject slot in generalSlots)
+        {
+            if (slot.activeSelf && slot.GetComponentInChildren<Image>().sprite == item.itemIcon)
+            {
+                var button = slot.GetComponentInChildren<Button>();
+                var image = slot.GetComponentInChildren<Image>();
+                button.interactable = false; // Disable the button
+                image.color = Color.grey; // Grey out the icon
+                return; // Exit the method once the item is found
             }
         }
     }
 
-
-    // Optional Debug Method: Call to display the inventory via InventoryManager
-    public void ShowInventory()
+    private void RestoreItem()
     {
-        if (inventoryManager != null)
+        // Logic to restore the used item
+        ItemData currentItem = null;
+        foreach (ItemData item in inventoryManager.inventory)
         {
-            inventoryManager.DisplayInventory(); // Call the DisplayInventory method from InventoryManager
+            if (item.isUsingItem)
+            {
+                currentItem = item; // Found the currently used item
+                break; // Exit the loop once we find it
+            }
         }
-        else
+
+        if (currentItem != null)
         {
-            UnityEngine.Debug.LogWarning("InventoryManager reference is not assigned in DisplayInventory.");
+            inventoryManager.RestoreItem(currentItem); // Restore the item via the inventory manager
+            useItemButton.interactable = true; // Enable the use button if the item is restored
+
+            // Hide the used item UI
+            useItemIcon.gameObject.SetActive(false); // Hide the used item icon
+            useItemText.text = ""; // Clear the used item name
+            restoreItemButton.gameObject.SetActive(false); // Hide the restore button
+            useItemBackground.SetActive(false); // Hide the UseItem background
+
+            // Refresh the inventory display
+            DisplayInventoryItems();
         }
     }
 }
