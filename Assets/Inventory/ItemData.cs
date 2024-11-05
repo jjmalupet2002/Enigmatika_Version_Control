@@ -13,9 +13,10 @@ public class ItemData
     public readonly bool isClueItem;         // Is this item a clue?
     public readonly bool isGeneralItem;      // Is this item a general item?
     public readonly bool isUsable;           // Is this item usable?
+    public bool isUsingItem;                 // Indicates if the item is currently in use
 
     // Constructor for easy instantiation
-    public ItemData(string name, Sprite icon, string description, bool clueItem, bool generalItem, bool usable)
+    public ItemData(string name, Sprite icon, string description, bool clueItem, bool generalItem, bool usable, bool usingItem)
     {
         itemName = name;
         itemIcon = icon;
@@ -23,5 +24,6 @@ public class ItemData
         isClueItem = clueItem;
         isGeneralItem = generalItem;
         isUsable = usable;
+        isUsingItem = usingItem; // Initialize with passed value
     }
 }

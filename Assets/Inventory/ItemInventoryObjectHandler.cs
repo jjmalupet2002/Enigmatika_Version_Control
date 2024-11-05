@@ -182,7 +182,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     public void NotifyPickup()
     {
         // Create an instance of ItemData
-        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable);
+        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, false); // Pass false for isUsingItem
 
         // Notify the Inventory Manager to add this item
         InventoryManager.Instance.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
