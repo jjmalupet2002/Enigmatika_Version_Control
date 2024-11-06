@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "NewInventoryManager", menuName = "Inventory/Manager")]
 public class InventoryManager : ScriptableObject
@@ -10,13 +10,18 @@ public class InventoryManager : ScriptableObject
 
     public List<ItemData> inventory = new List<ItemData>(); // List to store item data
 
-    // Define an event to notify when the inventory changes
+    // Event to notify when the inventory changes
     public delegate void InventoryChanged();
     public event InventoryChanged OnInventoryChanged;
 
+    // Event to notify when an item is equipped/used
+    public event Action<ItemData> OnItemUsed;
+
+    // Event to notify when an item is deleted
+    public event Action<ItemData> OnItemDeleted;
+
     private void OnEnable()
     {
-        // Ensure only one instance of the InventoryManager exists
         if (Instance != null && Instance != this)
         {
             DestroyImmediate(this);
@@ -27,36 +32,37 @@ public class InventoryManager : ScriptableObject
         }
     }
 
-    // Method to add an item to the inventory
+    // Add an item to the inventory
     public void AddItem(ItemData item)
     {
         inventory.Add(item);
-
-        // Trigger the inventory changed event
-        OnInventoryChanged?.Invoke();
+        OnInventoryChanged?.Invoke(); // Notify that the inventory changed
     }
 
-    // Method to use an item from the inventory
+    // Equip/Use an item from the inventory (but not delete it)
     public void UseItem(ItemData item)
     {
         if (item.isUsable && !item.isUsingItem) // Check if the item is usable and not currently in use
         {
-            // Find the currently used item, if any
+            // If another item is already being used, restore it first
             ItemData currentItem = inventory.FirstOrDefault(i => i.isUsingItem);
             if (currentItem != null)
             {
-                RestoreItem(currentItem); // Restore the currently used item before using the new one
+                RestoreItem(currentItem); // Restore the previously equipped item
             }
 
-            item.isUsingItem = true; // Set the new item as currently being used
-            UnityEngine.Debug.Log($"Using item: {item.itemName}");
+            item.isUsingItem = true; // Mark the item as in use (equipped)
+            UnityEngine.Debug.Log($"Equipped item: {item.itemName}");
 
-            // Trigger the inventory changed event
+            // Trigger inventory update
             OnInventoryChanged?.Invoke();
+
+            // Trigger the OnItemUsed event
+            OnItemUsed?.Invoke(item);
         }
         else if (item.isUsingItem)
         {
-            UnityEngine.Debug.LogWarning($"Item {item.itemName} is already in use and cannot be used again.");
+            UnityEngine.Debug.LogWarning($"Item {item.itemName} is already in use.");
         }
         else
         {
@@ -64,16 +70,14 @@ public class InventoryManager : ScriptableObject
         }
     }
 
-    // Method to restore an item back to inventory
+    // Restore an item back to inventory (remove it from being used)
     public void RestoreItem(ItemData item)
     {
-        if (item.isUsingItem) // Check if the item is currently in use
+        if (item.isUsingItem)
         {
-            item.isUsingItem = false; // Set the item as not being used
-            UnityEngine.Debug.Log($"Restored item: {item.itemName}");
-
-            // Trigger the inventory changed event
-            OnInventoryChanged?.Invoke();
+            item.isUsingItem = false; // Mark the item as no longer in use
+            UnityEngine.Debug.Log($"Unequipped: {item.itemName}");
+            OnInventoryChanged?.Invoke(); // Notify that the inventory changed
         }
         else
         {
@@ -81,11 +85,26 @@ public class InventoryManager : ScriptableObject
         }
     }
 
+    // Delete an item from the inventory (after it is used up or consumed)
+    public void DeleteItem(ItemData item)
+    {
+        if (item.isUsingItem) // Prevent deletion if the item is currently in use
+        {
+            UnityEngine.Debug.LogWarning($"Item {item.itemName} cannot be deleted because it is in use.");
+            return; // Don't delete if it's in use
+        }
 
+        inventory.Remove(item); // Remove the item from the inventory
+        UnityEngine.Debug.Log($"Deleted item: {item.itemName}");
 
+        // Notify that the inventory changed
+        OnInventoryChanged?.Invoke();
 
+        // Trigger the OnItemDeleted event to notify other systems
+        OnItemDeleted?.Invoke(item);
+    }
 
-    // Method to display current inventory items in the console
+    // Display the current inventory
     public void DisplayInventory()
     {
         UnityEngine.Debug.Log("Current Inventory Items:");
