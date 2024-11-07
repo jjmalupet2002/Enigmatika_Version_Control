@@ -295,7 +295,7 @@ public class DisplayInventory : MonoBehaviour
         itemDescription.text = ""; // Clear the item description
 
         // Disable buttons
-        useItemButton.interactable = true; // Disable the use button
+        useItemButton.interactable = false; // Disable the use button
         inspectItemButton.interactable = true; // Disable the inspect button
     }
 
