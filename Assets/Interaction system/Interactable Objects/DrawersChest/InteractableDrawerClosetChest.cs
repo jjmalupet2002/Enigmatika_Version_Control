@@ -49,8 +49,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     public string requiredKeyId;
     public InventoryManager inventoryManager;
     public Button backButton; // Reference to the back button
-
-
+    private bool isUnlockButtonClicked = false; // Flag to track button click
 
     // New UI element to show when a key is required and the player is close up
     public GameObject unlockUI; // Reference to your unlock UI (e.g., a button to unlock)
@@ -65,16 +64,23 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         else if (isChest)
             transform.localRotation = Quaternion.Euler(closedXRotation, 0f, 0f);
 
+        // Subscribe to OnItemUsed event
         InventoryManager.Instance.OnItemUsed += OnItemUsed;
 
         // Ensure that the back button is properly set up
         if (backButton != null)
         {
-            // Attach the HideUnlockUI method to the button click event
+            // Attach the HideUnlockUI method to the back button click event
             backButton.onClick.AddListener(HideUnlockUI);
         }
 
+        // If unlockUI is a button, set up listener for showing the unlock UI
+        if (unlockUI != null && unlockUI.GetComponent<Button>() != null)
+        {
+            unlockUI.GetComponent<Button>().onClick.AddListener(OnUnlockButtonClick); // Listen for button click
+        }
     }
+
 
     void Update()
     {
@@ -137,12 +143,10 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         // Check if unlockUI is assigned, requiredKeyId is filled, and close-up camera is active for this instance
         if (unlockUI != null && !string.IsNullOrEmpty(requiredKeyId) && IsCloseUpCameraActive())
         {
-            UnityEngine.Debug.Log("Showing Unlock UI");
             unlockUI.SetActive(true); // Show the UI if all conditions are met
         }
         else if (unlockUI != null)
         {
-            UnityEngine.Debug.Log("Hiding Unlock UI");
             unlockUI.SetActive(false); // Hide the UI if conditions are not met
         }
     }
@@ -152,7 +156,6 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         // Check if the unlockUI is currently active
         if (unlockUI != null && unlockUI.activeSelf)
         {
-            UnityEngine.Debug.Log("Back button pressed, hiding unlock UI.");
             unlockUI.SetActive(false); // Hide the UI if it's currently active
         }
         else
@@ -210,7 +213,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         else if (isChest && !isChestLocked)
             onUnlockChest.Invoke();
 
-        
+
     }
 
     private void Close()
@@ -260,36 +263,88 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         }
     }
 
+    // Add a class-level variable to store the item used
+    private ItemData currentItem;
+
+    // Method to handle button click
+    private void OnUnlockButtonClick()
+    {
+        isUnlockButtonClicked = true; // Set the flag to true when the button is clicked
+        TryUnlock(); // Check if both conditions are met: key used and button clicked
+    }
+
+    // Modified OnItemUsed method to check for both conditions: required key and button click
     public void OnItemUsed(ItemData item)
     {
-        if (string.IsNullOrEmpty(requiredKeyId)) return; // Do nothing if no key is required
-
-        if (item.keyId == requiredKeyId && IsCloseUpCameraActive())
+        // Check if the requiredKeyId is filled and if the key matches
+        if (string.IsNullOrEmpty(requiredKeyId) || item.keyId != requiredKeyId)
         {
+            UnityEngine.Debug.Log("Key is incorrect or no key required.");
+            return; // Exit if key is incorrect or not required
+        }
+
+        // Mark that the key has been used and store the item
+        hasUsedKey = true;
+        currentItem = item; // Store the used item
+
+        // Log to show that the key has been used
+        UnityEngine.Debug.Log("Key used. Please click the unlock button to unlock.");
+    }
+
+    // Flag to track if the key has been used
+    private bool hasUsedKey = false;
+
+    // Method to check both conditions (key used and button clicked) and unlock
+    public void TryUnlock()
+    {
+        // Ensure both conditions are met
+        if (hasUsedKey && isUnlockButtonClicked)
+        {
+            // Proceed with unlocking the drawer or chest
             if (isDrawer)
             {
                 isDrawerLocked = false;
                 PlaySound(drawerOpenCloseAudio);
-                onUnlockDrawer.Invoke();
+                onUnlockDrawer.Invoke(); // Trigger unlock action for drawer
             }
             else if (isChest)
             {
                 isChestLocked = false;
                 PlaySound(chestOpenCloseAudio);
-                onUnlockChest.Invoke();
+                onUnlockChest.Invoke(); // Trigger unlock action for chest
             }
 
-            StartCoroutine(DeleteItemAfterDelay(item, 1f));
+            // Remove the key after unlocking
+            if (currentItem != null)
+            {
+                StartCoroutine(DeleteItemAfterDelay(currentItem, 1.5f)); // Pass the stored item
+            }
+
+            // Reset the flags after unlocking
+            isUnlockButtonClicked = false; // Reset the button click flag
+            hasUsedKey = false; // Reset the key use flag
         }
         else
         {
-            UnityEngine.Debug.Log("Key is incorrect or player is too far.");
+            UnityEngine.Debug.Log("Cannot unlock: Key not used or button not clicked.");
         }
     }
 
+    // Coroutine to delete item after a delay
     private IEnumerator DeleteItemAfterDelay(ItemData item, float delay)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(delay); // Wait for the delay before deleting the item
+
+        // Delete the item from inventory
         inventoryManager.DeleteItem(item);
+
+        // After the item is deleted, disable the unlock UI button permanently
+        if (unlockUI != null)
+        {
+            unlockUI.SetActive(false); // Hide the unlock button UI
+        }
+
+        // Optionally, log to confirm item deletion and UI change
+        UnityEngine.Debug.Log("Item deleted and unlock UI hidden.");
     }
 }

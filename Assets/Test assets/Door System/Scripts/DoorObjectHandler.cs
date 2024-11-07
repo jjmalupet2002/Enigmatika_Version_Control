@@ -233,7 +233,7 @@ public class DoorObjectHandler : MonoBehaviour
                 UnlockDoor(); // Unlock the door if the player is nearby and the key matches
 
                 // Start a coroutine to delete the item after a delay
-                StartCoroutine(DeleteItemAfterDelay(item, 1f)); // 1 second delay
+                StartCoroutine(DeleteItemAfterDelay(item, 1.5f)); // 1 second delay
             }
             else
             {
