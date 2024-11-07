@@ -52,6 +52,9 @@ public class DisplayInventory : MonoBehaviour
 
         // Ensure the UseItem background is disabled at start
         useItemBackground.SetActive(false);
+
+        // Subscribe to the OnItemDeleted event
+        InventoryManager.Instance.OnItemDeleted += OnItemDeleted;
     }
 
     // Method to display current inventory items in the UI
@@ -267,5 +270,41 @@ public class DisplayInventory : MonoBehaviour
             // Refresh the inventory display
             DisplayInventoryItems();
         }
+    }
+
+    // Method to handle item deletion
+    private void OnItemDeleted(ItemData item)
+    {
+        // Hide the UI for the item that was deleted
+        if (item.isUsingItem)
+        {
+            HideUseItemUI(); // A method to hide the UI when the item is deleted
+        }
+
+        // Reset the view panel UI after the item is deleted
+        ResetItemViewPanel();
+    }
+
+    // Method to reset the item view panel
+    private void ResetItemViewPanel()
+    {
+        // Clear the item icon, name, and description
+        itemIcon.sprite = null; // Clear the item icon
+        itemIcon.gameObject.SetActive(false); // Disable the item icon GameObject
+        itemName.text = ""; // Clear the item name
+        itemDescription.text = ""; // Clear the item description
+
+        // Disable buttons
+        useItemButton.interactable = false; // Disable the use button
+        inspectItemButton.interactable = true; // Disable the inspect button
+    }
+
+    // Method to hide the used item UI
+    private void HideUseItemUI()
+    {
+        useItemIcon.gameObject.SetActive(false); // Hide the used item icon
+        useItemText.text = ""; // Clear the used item name
+        restoreItemButton.gameObject.SetActive(false); // Hide the restore button
+        useItemBackground.SetActive(false); // Hide the UseItem background
     }
 }
