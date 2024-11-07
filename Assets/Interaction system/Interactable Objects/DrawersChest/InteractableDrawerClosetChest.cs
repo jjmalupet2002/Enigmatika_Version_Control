@@ -1,26 +1,26 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-
 public class InteractableDrawerClosetChest : MonoBehaviour
 {
     private bool isOpen = false;
+    private bool isMoving = false;
+    private Vector3 closedPosition;
 
-    // Booleans to check the type of interactable object
     public bool isCloset = false;
     public bool isDrawer = false;
     public bool isChest = false;
 
     [Header("Audio Settings")]
-    public AudioSource drawerOpenCloseAudio; // Separate AudioSource for Drawer
-    public AudioSource cabinetOpenCloseAudio; // Separate AudioSource for Cabinet
-    public AudioSource chestOpenCloseAudio; // Separate AudioSource for Chest
+    public AudioSource drawerOpenCloseAudio;
+    public AudioSource cabinetOpenCloseAudio;
+    public AudioSource chestOpenCloseAudio;
     public AudioSource drawerLockedAudioSource;
     public AudioSource chestLockedAudioSource;
 
-    // Drawer settings
     [Header("Drawer Settings")]
     public float openDistance = 0.5f;
     public float openCloseSpeedDrawer = 2f;
@@ -30,7 +30,6 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     [Header("Event for Unlocking a drawer")]
     public UnityEvent onUnlockDrawer;
 
-    // Chest settings
     [Header("Chest Settings")]
     public float closedXRotation = 0f;
     public float openXRotation = -90f;
@@ -41,23 +40,40 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     [Header("Event for Unlocking a chest")]
     public UnityEvent onUnlockChest;
 
-    // Closet settings
     [Header("Closet Settings")]
     public float closedYRotation = 0f;
     public float openYRotation = 90f;
     public float openCloseSpeedCloset = 2f;
 
-    private bool isMoving = false;
-    private Vector3 closedPosition;
+    [Header("Key Settings")]
+    public string requiredKeyId;
+    public InventoryManager inventoryManager;
+    public Button backButton; // Reference to the back button
+
+
+
+    // New UI element to show when a key is required and the player is close up
+    public GameObject unlockUI; // Reference to your unlock UI (e.g., a button to unlock)
 
     void Start()
     {
+        // Set initial positions and rotations based on the type of object (closet, drawer, chest)
         if (isCloset)
             transform.localRotation = Quaternion.Euler(0f, closedYRotation, 0f);
         else if (isDrawer)
             closedPosition = transform.localPosition;
         else if (isChest)
             transform.localRotation = Quaternion.Euler(closedXRotation, 0f, 0f);
+
+        InventoryManager.Instance.OnItemUsed += OnItemUsed;
+
+        // Ensure that the back button is properly set up
+        if (backButton != null)
+        {
+            // Attach the HideUnlockUI method to the button click event
+            backButton.onClick.AddListener(HideUnlockUI);
+        }
+
     }
 
     void Update()
@@ -69,6 +85,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
 
         if (isMoving)
             MoveInteractable();
+
     }
 
     void HandleInput(Vector2 inputPosition)
@@ -85,6 +102,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(inputPosition);
         if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject && !isMoving)
             ToggleDrawerClosetOrChest();
+
     }
 
     public void ToggleDrawerClosetOrChest()
@@ -99,16 +117,47 @@ public class InteractableDrawerClosetChest : MonoBehaviour
                 {
                     PlaySound(drawerLockedAudioSource);
                     StartCoroutine(FadeInText(drawerLockedText));
+                    ShowUnlockUIIfNeeded(); // Call here
                     return;
                 }
                 if (isChest && isChestLocked)
                 {
                     PlaySound(chestLockedAudioSource);
                     StartCoroutine(FadeInText(chestLockedText));
+                    ShowUnlockUIIfNeeded(); // Call here
                     return;
                 }
                 Open();
             }
+        }
+    }
+
+    private void ShowUnlockUIIfNeeded()
+    {
+        // Check if unlockUI is assigned, requiredKeyId is filled, and close-up camera is active for this instance
+        if (unlockUI != null && !string.IsNullOrEmpty(requiredKeyId) && IsCloseUpCameraActive())
+        {
+            UnityEngine.Debug.Log("Showing Unlock UI");
+            unlockUI.SetActive(true); // Show the UI if all conditions are met
+        }
+        else if (unlockUI != null)
+        {
+            UnityEngine.Debug.Log("Hiding Unlock UI");
+            unlockUI.SetActive(false); // Hide the UI if conditions are not met
+        }
+    }
+
+    public void HideUnlockUI()
+    {
+        // Check if the unlockUI is currently active
+        if (unlockUI != null && unlockUI.activeSelf)
+        {
+            UnityEngine.Debug.Log("Back button pressed, hiding unlock UI.");
+            unlockUI.SetActive(false); // Hide the UI if it's currently active
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Unlock UI is not active, no action taken.");
         }
     }
 
@@ -160,6 +209,8 @@ public class InteractableDrawerClosetChest : MonoBehaviour
             onUnlockDrawer.Invoke();
         else if (isChest && !isChestLocked)
             onUnlockChest.Invoke();
+
+        
     }
 
     private void Close()
@@ -207,5 +258,38 @@ public class InteractableDrawerClosetChest : MonoBehaviour
             transform.localRotation = targetRotation;
             isMoving = false;
         }
+    }
+
+    public void OnItemUsed(ItemData item)
+    {
+        if (string.IsNullOrEmpty(requiredKeyId)) return; // Do nothing if no key is required
+
+        if (item.keyId == requiredKeyId && IsCloseUpCameraActive())
+        {
+            if (isDrawer)
+            {
+                isDrawerLocked = false;
+                PlaySound(drawerOpenCloseAudio);
+                onUnlockDrawer.Invoke();
+            }
+            else if (isChest)
+            {
+                isChestLocked = false;
+                PlaySound(chestOpenCloseAudio);
+                onUnlockChest.Invoke();
+            }
+
+            StartCoroutine(DeleteItemAfterDelay(item, 1f));
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Key is incorrect or player is too far.");
+        }
+    }
+
+    private IEnumerator DeleteItemAfterDelay(ItemData item, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        inventoryManager.DeleteItem(item);
     }
 }

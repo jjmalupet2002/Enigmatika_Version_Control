@@ -154,7 +154,7 @@ public class DrawerChestUnlock : MonoBehaviour
     }
 
   
-private void UnlockIfApplicable()
+public void UnlockIfApplicable()
     {
         if (drawerChestHandler != null)
         {
@@ -248,7 +248,7 @@ private void UnlockIfApplicable()
         }
     }
 
-    private void ShowUnlockUI(bool isDrawer)
+    public void ShowUnlockUI(bool isDrawer)
     {
         if (isDrawer)
         {
@@ -272,7 +272,7 @@ private void UnlockIfApplicable()
         }
     }
 
-    private void HideUnlockUI()
+    public void HideUnlockUI()
     {
         Text drawerText = unlockedDrawerUI.GetComponent<Text>();
         if (drawerText != null)

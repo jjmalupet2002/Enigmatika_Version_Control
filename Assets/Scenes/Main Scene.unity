@@ -599,7 +599,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 2}
   m_AnchorMin: {x: 0.5, y: 0.2786012}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 718.6555, y: 117.97044}
+  m_AnchoredPosition: {x: 717, y: 93}
   m_SizeDelta: {x: 496.2354, y: 166.3674}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &95152012
@@ -1869,6 +1869,33 @@ RectTransform:
   m_AnchoredPosition: {x: -20, y: 13}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &308089544 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3881422193290767807, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+  m_PrefabInstance: {fileID: 6992927273996721674}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &308089552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308089544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f83d5d88aa822e47b98b905418745c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsButton: 0
+  IsLever: 0
+  buttonAnimator: {fileID: 0}
+  leverAnimator: {fileID: 0}
+  drawerChestHandler: {fileID: 0}
+  unlockedChestUI: {fileID: 0}
+  unlockedDrawerUI: {fileID: 0}
+  inputActionAsset: {fileID: -944628639613478452, guid: 2ffb3733f12b70b4bbeac0f08de6c154, type: 3}
+  buttonSound: {fileID: 0}
+  leverSound: {fileID: 0}
 --- !u!1 &310015896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1899,6 +1926,7 @@ RectTransform:
   m_Children:
   - {fileID: 1221373689}
   - {fileID: 785286230}
+  - {fileID: 447337830}
   m_Father: {fileID: 1491696816}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2365,6 +2393,81 @@ Transform:
   - {fileID: 425779409088584124}
   m_Father: {fileID: 777340340}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &447337829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 447337830}
+  - component: {fileID: 447337832}
+  - component: {fileID: 447337831}
+  m_Layer: 5
+  m_Name: UnlockUsingKeyButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &447337830
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447337829}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 310015897}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 793, y: -283}
+  m_SizeDelta: {x: 230, y: 170}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &447337831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447337829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: de85f2bf130a38b459b193776367d850, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &447337832
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447337829}
+  m_CullTransparentMesh: 1
 --- !u!1 &448835495
 GameObject:
   m_ObjectHideFlags: 0
@@ -2701,6 +2804,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72c30ece46a6b5345977d30399dbfa28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &563711703 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8025093704132158785, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+  m_PrefabInstance: {fileID: 6992927273996721674}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &566723783
 GameObject:
   m_ObjectHideFlags: 0
@@ -2738,36 +2846,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &582924014 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2821214777693670082, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
-  m_PrefabInstance: {fileID: 6992927273996721674}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &582924020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582924014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: Garett's Diary
-  itemIcon: {fileID: 21300000, guid: 4b61215c56174cb489119b1357a5b77c, type: 3}
-  itemDescription: This is the King's Assistant's personal diary. Who knows? He might
-    be hiding something sinister.
-  keyId: 
-  isClueItem: 0
-  isGeneralItem: 1
-  isUsable: 0
-  isNote: 1
-  is3dObject: 0
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 1377716487}
-  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &585726903
 GameObject:
   m_ObjectHideFlags: 0
@@ -10170,36 +10248,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8061221302611791836, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
   m_PrefabInstance: {fileID: 5099765875977381061}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1907122801 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 988960404672015127, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
-  m_PrefabInstance: {fileID: 6992927273996721674}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1907122807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1907122801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: Access Card
-  itemIcon: {fileID: 21300000, guid: 87a7c4321fd50514c8e41d6779a071da, type: 3}
-  itemDescription: What gate can this card unlock? Try it and let's see if you can
-    get out.
-  keyId: 
-  isClueItem: 0
-  isGeneralItem: 1
-  isUsable: 1
-  isNote: 0
-  is3dObject: 1
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 0}
-  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &1924885709
 GameObject:
   m_ObjectHideFlags: 0
@@ -12128,6 +12176,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7042149129544564227, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7334121171768497773, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: talkButton
       value: 
@@ -12773,6 +12825,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cabinet
       objectReference: {fileID: 0}
+    - target: {fileID: 1021982177553089725, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2096340385080551780, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
       propertyPath: notePages.Array.data[0]
       value: 
@@ -12805,6 +12861,10 @@ PrefabInstance:
       propertyPath: notePages.Array.data[0]
       value: 
       objectReference: {fileID: 1377716487}
+    - target: {fileID: 3881422193290767807, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4151945603398422879, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
       propertyPath: backButtonHandler
       value: 
@@ -12813,6 +12873,18 @@ PrefabInstance:
       propertyPath: closeUpViewUIController
       value: 
       objectReference: {fileID: 2064750899}
+    - target: {fileID: 4722004758216455123, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4722004758216455123, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_Size.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4722004758216455123, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5642993813817013236, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
       propertyPath: noteUI
       value: 
@@ -12821,20 +12893,74 @@ PrefabInstance:
       propertyPath: notificationText
       value: 
       objectReference: {fileID: 95152010}
+    - target: {fileID: 6301049769963409210, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.247
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762580858857302464, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: unlockUI
+      value: 
+      objectReference: {fileID: 447337829}
+    - target: {fileID: 6762580858857302464, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: backButton
+      value: 
+      objectReference: {fileID: 56221607}
+    - target: {fileID: 6762580858857302464, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: interactRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762580858857302464, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: drawerLockedText
+      value: 
+      objectReference: {fileID: 1403000946}
+    - target: {fileID: 6762580858857302464, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: drawerProximityCollider
+      value: 
+      objectReference: {fileID: 563711703}
+    - target: {fileID: 7530304789359220346, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: notificationText
+      value: 
+      objectReference: {fileID: 95152010}
+    - target: {fileID: 7734542808056105320, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025093704132158785, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_Size.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025093704132158785, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_Size.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025093704132158785, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_Size.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025093704132158785, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837950497243184394, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: noteUI
+      value: 
+      objectReference: {fileID: 1377716487}
+    - target: {fileID: 8837950497243184394, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+      propertyPath: notificationText
+      value: 
+      objectReference: {fileID: 95152010}
     - target: {fileID: 9153830051992275103, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
       propertyPath: drawerLockedText
       value: 
       objectReference: {fileID: 1403000946}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4475373834446368956, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 988960404672015127, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3881422193290767807, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1907122807}
-    - targetCorrespondingSourceObject: {fileID: 2821214777693670082, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 582924020}
+      addedObject: {fileID: 308089552}
   m_SourcePrefab: {fileID: 100100000, guid: 95bd576ed741f2c4ab6283dab83eb2f7, type: 3}
 --- !u!1001 &7256088030221557852
 PrefabInstance:
@@ -12951,6 +13077,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1322926909631767277, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1322926909631767277, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2130998110252140494, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
       propertyPath: m_Name
       value: Small Table
@@ -13024,9 +13158,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 332011216}
     - target: {fileID: 8148906085170944492, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      propertyPath: isChestLocked
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148906085170944492, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      propertyPath: requiredKeyId
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148906085170944492, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
       propertyPath: chestLockedText
       value: 
       objectReference: {fileID: 263623621}
+    - target: {fileID: 8148906085170944492, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      propertyPath: inventoryManager
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148906085170944492, guid: 00e08881d97526940835b79c6d478ee3, type: 3}
+      propertyPath: drawerProximityCollider
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
