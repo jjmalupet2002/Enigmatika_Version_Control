@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 public class DoorObjectHandler : MonoBehaviour
 {
@@ -43,6 +41,11 @@ public class DoorObjectHandler : MonoBehaviour
     private float currentLimit;
     public float OpenSpeed = 3f;
 
+    [Tooltip("Add if the required unlock is a key.")]
+    // The key ID required to unlock this door
+    public InventoryManager inventoryManager;
+    public string requiredKeyId = "";
+
     void Start()
     {
         hinge = GetComponent<HingeJoint>();
@@ -56,6 +59,9 @@ public class DoorObjectHandler : MonoBehaviour
         // Initially disable the text components
         if (lockedText != null) lockedText.enabled = false;
         if (unlockedText != null) unlockedText.enabled = false;
+
+        // Subscribe to the OnItemUsed event
+        InventoryManager.Instance.OnItemUsed += OnItemUsed;
     }
 
     void Update()
@@ -79,25 +85,24 @@ public class DoorObjectHandler : MonoBehaviour
 
     public void Interact()
     {
-        UnityEngine.Debug.Log("Interact method called."); // Debug log to check if the method is called
+        UnityEngine.Debug.Log("Interact method called.");
 
-        // Check if player is nearby and interacting with the door
         if (!isPlayerNearby)
         {
             UnityEngine.Debug.Log("Player is not nearby to interact.");
-            return; // Early exit if player is not nearby
+            return;
         }
 
         if (Locked)
         {
             UnityEngine.Debug.Log("Door is locked.");
-            lockedSound?.Play(); // Play locked sound if door is locked
-            if (lockedText != null && !IsOpened) // Only show locked text if the door is not opened
+            lockedSound?.Play();
+            if (lockedText != null && !IsOpened)
             {
-                ShowText(lockedText); // Show locked text
-                UnityEngine.Debug.Log("Locked text displayed."); // Debug log
+                ShowText(lockedText);
+                UnityEngine.Debug.Log("Locked text displayed.");
             }
-            return; // Early exit if the door is locked
+            return;
         }
 
         if (IsOpened)
@@ -110,14 +115,13 @@ public class DoorObjectHandler : MonoBehaviour
         }
     }
 
-
     public void OpenDoor()
     {
         if (!Locked && CanOpen && !IsOpened)
         {
             IsOpened = true;
-            rbDoor.AddRelativeTorque(new Vector3(0, 0, 20f)); // Apply torque to open the door
-            openSound?.Play(); // Play opening sound
+            rbDoor.AddRelativeTorque(new Vector3(0, 0, 20f));
+            openSound?.Play();
             UnityEngine.Debug.Log("Door is now open.");
         }
     }
@@ -127,22 +131,22 @@ public class DoorObjectHandler : MonoBehaviour
         if (!Locked && CanClose && IsOpened)
         {
             IsOpened = false;
-            closeSound?.Play(); // Play closing sound
+            closeSound?.Play();
             UnityEngine.Debug.Log("Door is now closed.");
         }
     }
 
-    // New method to unlock the door and display unlocked text
+    // Method to unlock the door
     public void UnlockDoor()
     {
-        if (Locked) // Only proceed if the door is currently locked
+        if (Locked)
         {
-            Locked = false; // Set the door to unlocked
+            Locked = false;
             UnityEngine.Debug.Log("Door is now unlocked.");
             if (unlockedText != null)
             {
-                ShowText(unlockedText); // Show unlocked text
-                UnityEngine.Debug.Log("Unlocked text displayed."); // Debug log
+                ShowText(unlockedText);
+                UnityEngine.Debug.Log("Unlocked text displayed.");
             }
         }
     }
@@ -171,14 +175,14 @@ public class DoorObjectHandler : MonoBehaviour
 
     private void ShowText(Text textComponent)
     {
-        textComponent.enabled = true; // Enable the text component
-        StartCoroutine(FadeInText(textComponent, 1f)); // Fade in over 1 second
+        textComponent.enabled = true;
+        StartCoroutine(FadeInText(textComponent, 1f));
     }
 
     private IEnumerator FadeInText(Text textComponent, float duration)
     {
         Color textColor = textComponent.color;
-        textColor.a = 0; // Start fully transparent
+        textColor.a = 0;
         textComponent.color = textColor;
 
         float elapsedTime = 0f;
@@ -186,12 +190,12 @@ public class DoorObjectHandler : MonoBehaviour
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            textColor.a = Mathf.Clamp01(elapsedTime / duration); // Gradually increase alpha
+            textColor.a = Mathf.Clamp01(elapsedTime / duration);
             textComponent.color = textColor;
-            yield return null; // Wait for the next frame
+            yield return null;
         }
 
-        StartCoroutine(FadeOutText(textComponent, 1f)); // Fade out after fading in
+        StartCoroutine(FadeOutText(textComponent, 1f));
     }
 
     private IEnumerator FadeOutText(Text textComponent, float duration)
@@ -202,13 +206,12 @@ public class DoorObjectHandler : MonoBehaviour
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            textColor.a = Mathf.Clamp01(1 - (elapsedTime / duration)); // Gradually decrease alpha
+            textColor.a = Mathf.Clamp01(1 - (elapsedTime / duration));
             textComponent.color = textColor;
-            yield return null; // Wait for the next frame
+            yield return null;
         }
 
-        textComponent.enabled = false; // Disable the text component after fading out
-        UnityEngine.Debug.Log($"{textComponent.name} hidden."); // Debug log
+        textComponent.enabled = false;
     }
 
     private IEnumerator HideTextAfterDelay(Text textComponent, float delay)
@@ -217,4 +220,38 @@ public class DoorObjectHandler : MonoBehaviour
         textComponent.enabled = false; // Disable the text component
         UnityEngine.Debug.Log($"{textComponent.name} hidden."); // Debug log
     }
+
+
+    private void OnItemUsed(ItemData item)
+    {
+        // Check if the item used is a key and matches the required key ID
+        if (!string.IsNullOrEmpty(item.keyId) && item.keyId == requiredKeyId)
+        {
+            // Call the Interact method to check if the player is nearby before unlocking the door
+            if (isPlayerNearby)
+            {
+                UnlockDoor(); // Unlock the door if the player is nearby and the key matches
+
+                // Start a coroutine to delete the item after a delay
+                StartCoroutine(DeleteItemAfterDelay(item, 1f)); // 1 second delay
+            }
+            else
+            {
+                // Optionally, you could show a message saying the player is too far from the door
+                UnityEngine.Debug.Log("Player is too far to unlock the door.");
+            }
+        }
+    }
+
+    // Coroutine to handle the delay before deleting the item
+    private IEnumerator DeleteItemAfterDelay(ItemData item, float delay)
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(delay);
+
+        // Delete the item from the inventory
+        inventoryManager.DeleteItem(item); // Delete item after delay
+    }
 }
+
+

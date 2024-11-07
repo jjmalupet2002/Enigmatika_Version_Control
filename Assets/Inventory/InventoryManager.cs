@@ -57,8 +57,18 @@ public class InventoryManager : ScriptableObject
             // Trigger inventory update
             OnInventoryChanged?.Invoke();
 
-            // Trigger the OnItemUsed event
-            OnItemUsed?.Invoke(item);
+            // If the item is a key (has a keyID), notify the listeners
+            if (!string.IsNullOrEmpty(item.keyId)) // Check if the item has a keyID
+            {
+                UnityEngine.Debug.Log($"Item {item.itemName} is a key with ID: {item.keyId}");
+                // Trigger the OnItemUsed event and pass the keyID to listeners (e.g., DoorObjectHandler)
+                OnItemUsed?.Invoke(item);
+            }
+            else
+            {
+                // Handle non-key items as usual
+                OnItemUsed?.Invoke(item);
+            }
         }
         else if (item.isUsingItem)
         {
@@ -69,6 +79,7 @@ public class InventoryManager : ScriptableObject
             UnityEngine.Debug.LogWarning($"Item {item.itemName} cannot be used.");
         }
     }
+
 
     // Restore an item back to inventory (remove it from being used)
     public void RestoreItem(ItemData item)
@@ -88,21 +99,17 @@ public class InventoryManager : ScriptableObject
     // Delete an item from the inventory (after it is used up or consumed)
     public void DeleteItem(ItemData item)
     {
-        if (item.isUsingItem) // Prevent deletion if the item is currently in use
-        {
-            UnityEngine.Debug.LogWarning($"Item {item.itemName} cannot be deleted because it is in use.");
-            return; // Don't delete if it's in use
-        }
-
+        // You can either delete used items or handle it differently
         inventory.Remove(item); // Remove the item from the inventory
         UnityEngine.Debug.Log($"Deleted item: {item.itemName}");
 
-        // Notify that the inventory changed
+        // Trigger the inventory update after item deletion
         OnInventoryChanged?.Invoke();
 
         // Trigger the OnItemDeleted event to notify other systems
         OnItemDeleted?.Invoke(item);
     }
+
 
     // Display the current inventory
     public void DisplayInventory()

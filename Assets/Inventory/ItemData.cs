@@ -14,9 +14,10 @@ public class ItemData
     public readonly bool isGeneralItem;      // Is this item a general item?
     public readonly bool isUsable;           // Is this item usable?
     public bool isUsingItem;                 // Indicates if the item is currently in use
+    public readonly string keyId;            // The ID of the key (if this is a key item)
 
     // Constructor for easy instantiation
-    public ItemData(string name, Sprite icon, string description, bool clueItem, bool generalItem, bool usable, bool usingItem)
+    public ItemData(string name, Sprite icon, string description, bool clueItem, bool generalItem, bool usable, bool usingItem, string keyId = "")
     {
         itemName = name;
         itemIcon = icon;
@@ -25,5 +26,6 @@ public class ItemData
         isGeneralItem = generalItem;
         isUsable = usable;
         isUsingItem = usingItem; // Initialize with passed value
+        this.keyId = keyId;      // Initialize keyId (empty string for non-key items)
     }
 }

@@ -369,6 +369,7 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 615ecf391b0ba0b40a9c3882ac5e6afc, type: 3}
   itemDescription: This is a crazy note. Crazy? I was crazy once. They locked me
     in a room. Full of rats. I hate rats, that crazy.
+  keyId: 
   isClueItem: 1
   isGeneralItem: 0
   isUsable: 0
@@ -2758,6 +2759,7 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 4b61215c56174cb489119b1357a5b77c, type: 3}
   itemDescription: This is the King's Assistant's personal diary. Who knows? He might
     be hiding something sinister.
+  keyId: 
   isClueItem: 0
   isGeneralItem: 1
   isUsable: 0
@@ -2850,6 +2852,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 585726903}
   m_Mesh: {fileID: 5133378042767878019, guid: 01102a114103e314d9426fb5357b454a, type: 3}
+--- !u!1 &591592531 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4028356301171881597, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
+  m_PrefabInstance: {fileID: 2910808930004684150}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &591592537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591592531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Golden Key
+  itemIcon: {fileID: 21300000, guid: a6c10312421cb5e438d8b9edaad2db28, type: 3}
+  itemDescription: 'This is the Golden Key bitch? Who do you think you are?
+
+'
+  keyId: golden
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &610389308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3137,6 +3170,8 @@ MonoBehaviour:
   closeSound: {fileID: 618155306}
   lockedSound: {fileID: 618155305}
   OpenSpeed: 3
+  inventoryManager: {fileID: 0}
+  requiredKeyId: 
 --- !u!82 &618155305
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3987,6 +4022,8 @@ MonoBehaviour:
   closeSound: {fileID: 727549439}
   lockedSound: {fileID: 727549438}
   OpenSpeed: 3
+  inventoryManager: {fileID: 0}
+  requiredKeyId: 
 --- !u!59 &727549437
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -6411,6 +6448,7 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 1fe19ffae1abab0479d7d9716bcbbb9c, type: 3}
   itemDescription: This is an Emerald Gem from Adrian. You can try to trade it with
     other villagers.
+  keyId: 
   isClueItem: 1
   isGeneralItem: 0
   isUsable: 1
@@ -7644,6 +7682,8 @@ MonoBehaviour:
   closeSound: {fileID: 1425251146}
   lockedSound: {fileID: 1425251145}
   OpenSpeed: 3
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  requiredKeyId: rusty
 --- !u!59 &1425251140
 HingeJoint:
   m_ObjectHideFlags: 0
@@ -10149,6 +10189,7 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 87a7c4321fd50514c8e41d6779a071da, type: 3}
   itemDescription: What gate can this card unlock? Try it and let's see if you can
     get out.
+  keyId: 
   isClueItem: 0
   isGeneralItem: 1
   isUsable: 1
@@ -12211,6 +12252,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7285510980455457289}
     - target: {fileID: 7461811265382277263, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
+      propertyPath: keyId
+      value: rusty
+      objectReference: {fileID: 0}
+    - target: {fileID: 7461811265382277263, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
       propertyPath: notificationText
       value: 
       objectReference: {fileID: 95152010}
@@ -12226,6 +12271,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4028356301171881597, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 591592537}
     - targetCorrespondingSourceObject: {fileID: 1826596622282527926, guid: 458ce6ce15e042b4fa05d5ff9be66237, type: 3}
       insertIndex: -1
       addedObject: {fileID: 738066429}

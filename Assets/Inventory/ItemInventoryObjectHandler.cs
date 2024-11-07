@@ -9,6 +9,9 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     public Sprite itemIcon;
     [TextArea] public string itemDescription;
 
+    [Header("If Item is a key")]
+    public string keyId = ""; // KeyID for key items (empty if not a key)
+
     [Header("Inventory Settings")]
     public bool isClueItem;
     public bool isGeneralItem;
@@ -86,7 +89,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         {
             if (!hasLoggedAlreadyInspecting)
             {
-              
+
                 hasLoggedAlreadyInspecting = true; // Log flag
             }
             return; // Prevent re-inspection
@@ -115,7 +118,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         if (collider != null)
         {
             collider.enabled = false; // Disable collider
-          
+
         }
 
         StartCoroutine(DisableGameObjectAfterDelay(2f)); // Disable game object after a delay
@@ -129,7 +132,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         {
             if (isInspecting)
             {
-               
+
                 return; // Prevent re-inspection
             }
 
@@ -157,7 +160,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         if (collider != null)
         {
             collider.enabled = false; // Disable collider
-           
+
         }
 
         isInspecting = false; // Reset state
@@ -169,20 +172,20 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         gameObject.SetActive(false); // Disable the item
-      
+
     }
 
     private IEnumerator NotifyPickupAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         NotifyPickup(); // Notify after delay
-       
+
     }
 
     public void NotifyPickup()
     {
-        // Create an instance of ItemData
-        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, false); // Pass false for isUsingItem
+        // Create an instance of ItemData and pass the keyId (if available)
+        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, false, keyId); // Pass false for isUsingItem
 
         // Notify the Inventory Manager to add this item
         InventoryManager.Instance.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
@@ -206,7 +209,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         if (notificationText != null)
         {
             notificationText.SetActive(false); // Hide notification
-           
+
         }
     }
 }
