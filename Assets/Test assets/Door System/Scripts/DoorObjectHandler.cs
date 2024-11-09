@@ -34,6 +34,9 @@ public class DoorObjectHandler : MonoBehaviour
     [Tooltip("Audio source for locked sound.")]
     public AudioSource lockedSound;
 
+    [Tooltip("Audio source for Opening using key sound.")]
+    public AudioSource OpeningUsingKey;
+
     private HingeJoint hinge;
     private Rigidbody rbDoor;
     private bool isPlayerNearby = false;
@@ -85,7 +88,6 @@ public class DoorObjectHandler : MonoBehaviour
 
     public void Interact()
     {
-        UnityEngine.Debug.Log("Interact method called.");
 
         if (!isPlayerNearby)
         {
@@ -100,7 +102,6 @@ public class DoorObjectHandler : MonoBehaviour
             if (lockedText != null && !IsOpened)
             {
                 ShowText(lockedText);
-                UnityEngine.Debug.Log("Locked text displayed.");
             }
             return;
         }
@@ -146,7 +147,6 @@ public class DoorObjectHandler : MonoBehaviour
             if (unlockedText != null)
             {
                 ShowText(unlockedText);
-                UnityEngine.Debug.Log("Unlocked text displayed.");
             }
         }
     }
@@ -221,6 +221,11 @@ public class DoorObjectHandler : MonoBehaviour
         UnityEngine.Debug.Log($"{textComponent.name} hidden."); // Debug log
     }
 
+    private void PlaySound(AudioSource audioSource)
+    {
+        if (audioSource != null)
+            audioSource.Play();
+    }
 
     private void OnItemUsed(ItemData item)
     {
@@ -230,7 +235,10 @@ public class DoorObjectHandler : MonoBehaviour
             // Call the Interact method to check if the player is nearby before unlocking the door
             if (isPlayerNearby)
             {
+                PlaySound(OpeningUsingKey);
                 UnlockDoor(); // Unlock the door if the player is nearby and the key matches
+              
+
 
                 // Start a coroutine to delete the item after a delay
                 StartCoroutine(DeleteItemAfterDelay(item, 1.5f)); // 1 second delay

@@ -20,6 +20,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     public AudioSource chestOpenCloseAudio;
     public AudioSource drawerLockedAudioSource;
     public AudioSource chestLockedAudioSource;
+    public AudioSource OpenUsingKeyAudio;
 
     [Header("Drawer Settings")]
     public float openDistance = 0.5f;
@@ -160,7 +161,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.Log("Unlock UI is not active, no action taken.");
+
         }
     }
 
@@ -304,13 +305,13 @@ public class InteractableDrawerClosetChest : MonoBehaviour
             if (isDrawer)
             {
                 isDrawerLocked = false;
-                PlaySound(drawerOpenCloseAudio);
+                PlaySound(OpenUsingKeyAudio);
                 onUnlockDrawer.Invoke(); // Trigger unlock action for drawer
             }
             else if (isChest)
             {
                 isChestLocked = false;
-                PlaySound(chestOpenCloseAudio);
+                PlaySound(OpenUsingKeyAudio);
                 onUnlockChest.Invoke(); // Trigger unlock action for chest
             }
 
