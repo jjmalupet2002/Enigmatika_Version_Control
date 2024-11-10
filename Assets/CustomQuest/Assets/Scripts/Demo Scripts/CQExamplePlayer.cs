@@ -27,10 +27,6 @@ public class CQExamplePlayer : MonoBehaviour
     /// </summary>
     public int Damage { get { return damage; } set { damage = value; } }
 
-    public float movementSpeed;
-
-    public float rotationSpeed;
-
     /// <summary>
     /// Float for resources, use your own resources here.
     /// </summary>
@@ -99,36 +95,10 @@ public class CQExamplePlayer : MonoBehaviour
             //GetComponent<Animator>().SetTrigger("Attack");
         }
 
-        Movement();
+        
     }
 
-    public void Movement()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            if (GetComponent<Rigidbody>().velocity.magnitude < movementSpeed)
-            {
-                GetComponent<Rigidbody>().AddForce(transform.forward * movementSpeed);
-            }
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            if (GetComponent<Rigidbody>().velocity.magnitude < movementSpeed)
-            {
-                GetComponent<Rigidbody>().AddForce(-transform.forward * movementSpeed);
-            }
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            var newDir = Vector3.RotateTowards(transform.forward, -transform.right, rotationSpeed, 0.0f);
-            transform.rotation = Quaternion.LookRotation(newDir);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            var newDir = Vector3.RotateTowards(transform.forward, transform.right, rotationSpeed, 0.0f);
-            transform.rotation = Quaternion.LookRotation(newDir);
-        }
-    }
+   
 
     /// <summary>
     /// Logic for picking up and item

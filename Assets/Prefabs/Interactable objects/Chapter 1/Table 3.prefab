@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5505633894902050315}
   - component: {fileID: 7546480854360848956}
   - component: {fileID: 6333230137373706048}
+  - component: {fileID: 5605860759577019621}
   m_Layer: 0
   m_Name: Example Note Object 7
   m_TagString: Untagged
@@ -120,6 +121,31 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5605860759577019621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118883160382277264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: A Crazy Note
+  itemIcon: {fileID: 21300000, guid: 615ecf391b0ba0b40a9c3882ac5e6afc, type: 3}
+  itemDescription: This is a crazy note. Crazy? I was crazy once. They locked me
+    in a room. Full of rats. I hate rats, that crazy.
+  keyId: 
+  isClueItem: 1
+  isGeneralItem: 0
+  isUsable: 0
+  isNote: 1
+  is3dObject: 0
+  notificationText: {fileID: 0}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &1276879743697297534
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,7 +287,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7455825137708643836
 MonoBehaviour:
@@ -691,7 +717,8 @@ MonoBehaviour:
   cabinetOpenCloseAudio: {fileID: 0}
   chestOpenCloseAudio: {fileID: 3467872620156770647}
   drawerLockedAudioSource: {fileID: 0}
-  chestLockedAudioSource: {fileID: 0}
+  chestLockedAudioSource: {fileID: 130667692152066198}
+  OpenUsingKeyAudio: {fileID: 0}
   openDistance: 0.5
   openCloseSpeedDrawer: 2
   isDrawerLocked: 0
@@ -710,6 +737,10 @@ MonoBehaviour:
   closedYRotation: 0
   openYRotation: 90
   openCloseSpeedCloset: 2
+  requiredKeyId: 
+  inventoryManager: {fileID: 0}
+  backButton: {fileID: 0}
+  unlockUI: {fileID: 0}
 --- !u!65 &1480264631609294400
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1186,6 +1217,7 @@ MonoBehaviour:
   itemName: Battery
   itemIcon: {fileID: 21300000, guid: ff4e2a40a0a91494a873149252b1aaaf, type: 3}
   itemDescription: This is a motherfuckin battery
+  keyId: 
   isClueItem: 0
   isGeneralItem: 1
   isUsable: 1

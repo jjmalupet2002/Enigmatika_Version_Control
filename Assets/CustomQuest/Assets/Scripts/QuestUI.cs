@@ -228,16 +228,6 @@ public class QuestUI : MonoBehaviour
             c.renderMode = RenderMode.ScreenSpaceOverlay;
         }
 
-        if (GetComponent<StandaloneInputModule>() == null)
-        {
-            gameObject.AddComponent<StandaloneInputModule>();
-        }
-
-        if (GetComponent<EventSystem>() == null)
-        {
-            gameObject.AddComponent<EventSystem>();
-        }
-
         if (messagePrefab == null)
         {
             messagePrefab = (GameObject)Resources.Load("OnScreenMsgPrefab", typeof(GameObject));

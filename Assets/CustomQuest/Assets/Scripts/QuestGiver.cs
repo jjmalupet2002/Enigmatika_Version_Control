@@ -53,7 +53,7 @@ public class QuestGiver : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("A quest object is missing its canvas. Quest symbol logic will no work.");
+
         }
         if (quests.Count == 0)
         {
