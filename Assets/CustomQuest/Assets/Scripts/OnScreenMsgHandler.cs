@@ -52,7 +52,7 @@ public class OnScreenMsgHandler : MonoBehaviour
                 GetComponentInChildren<QuestUI>();
                 if (questUI == null)
                 {
-                    Debug.LogWarning("OnScreenMsgHandler cannot find a QuestUI. Therefor it is unable to funktion. Make sure this component is the child or parent of a questList");
+                    UnityEngine.Debug.LogWarning("OnScreenMsgHandler cannot find a QuestUI. Therefore, it is unable to function. Make sure this component is the child or parent of a questList");
                 }
             }
         }
@@ -82,11 +82,12 @@ public class OnScreenMsgHandler : MonoBehaviour
             {
                 onScreenMsg.LifeTime = lifeTime;
                 onScreenMsg.Msg = msg;
-                onScreenMsg.Size = size;
+                onScreenMsg.Size = 60; // Set the initial size to 50
                 onScreenMsg.Color = color;
-                onScreenMsg.MsgPosition = new Vector2(Screen.width / 2 - 50, 100);
+                onScreenMsg.MsgPosition = new Vector2(1300, 850); // Set the initial position to (1042, 68)
+                onScreenMsg.Font = "Hangyaboly"; // Set the initial font to Hangyaboly
 
-                Vector2 newPos = new Vector2(Screen.width / 2 - 50, 100);
+                Vector2 newPos = new Vector2(1042, 68); // Ensure new messages are placed correctly
                 if (Msgs.Count >= 1)
                 {
                     foreach (OnScreenMsg g in Msgs)
@@ -105,7 +106,7 @@ public class OnScreenMsgHandler : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("The onScreenPrefab does not contain a OnScreenMsg component. On Screen Messages will not funktion");
+                UnityEngine.Debug.LogWarning("The onScreenPrefab does not contain an OnScreenMsg component. On Screen Messages will not function.");
             }
         }
     }

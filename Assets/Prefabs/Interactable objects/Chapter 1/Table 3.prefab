@@ -311,6 +311,10 @@ MonoBehaviour:
   onCameraStateChange:
     m_PersistentCalls:
       m_Calls: []
+  QuestHolder: {fileID: 0}
+  QuestPopUpPrefab: {fileID: 0}
+  CriteriaUITemplatePrefab: {fileID: 0}
+  QuestUITemplatePrefab: {fileID: 0}
 --- !u!114 &379230412961835266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,7 +520,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9206088267493659133, guid: 192a79fde5afd7640b6884a45bdc28f3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

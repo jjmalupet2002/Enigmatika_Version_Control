@@ -4,31 +4,33 @@ using UnityEngine.UI;
 public class InventoryToggle : MonoBehaviour
 {
     public Button InventoryButton;
-    public Button TalkButton;  // Add TalkButton as a public variable
-    public Button InteractButton;  // Add InteractButton as a public variable
-    public AudioSource openSound;  // Assign the AudioSource for opening sound
-    public AudioSource closeSound; // Assign the AudioSource for closing sound
-    public GameObject joystickCanvasGroup; // Reference to the GameObject for the joystick canvas group
-    public GameObject inventoryUI; // Reference to the actual Inventory UI
+    public Button TalkButton;
+    public Button InteractButton;
+    public GameObject joystickCanvasGroup;
+    public GameObject inventoryUI;
+   
+    public AudioSource openSound;
+    public AudioSource closeSound;
 
-    private bool isInventoryOpen = false; // Track the state of the inventory
-    private TalkandInteract talkandInteract; // Reference to TalkandInteract script
-    private Button activeButton; // Track the currently active button (Talk or Interact)
+    public GameObject QuestHolder;
+    public GameObject QuestPopUpPrefab; // Reference to the QuestPopUp prefab
+    public GameObject CriteriaUITemplatePrefab; // Reference to the CriteriaUITemplate prefab
+    public GameObject QuestUITemplatePrefab; // Reference to the QuestUITemplate prefab
+
+    private bool isInventoryOpen = false;
+    private TalkandInteract talkandInteract;
+    private Button activeButton;
+
+    private GameObject questPopUpInstance; // Reference to the instantiated QuestPopUp
+    private GameObject criteriaUITemplateInstance; // Reference to the instantiated CriteriaUITemplate
+    private GameObject questUITemplateInstance; // Reference to the instantiated QuestUITemplate
 
     private void Start()
     {
-        // Set up the inventory button to open the inventory
         if (InventoryButton != null)
             InventoryButton.onClick.AddListener(OpenInventory);
 
-        // Find the TalkandInteract script in the scene
         talkandInteract = FindObjectOfType<TalkandInteract>();
-    }
-
-    private void Update()
-    {
-        // Optional: Disable the inventory button if necessary
-        // InventoryButton.interactable = true;
     }
 
     public void OpenInventory()
@@ -36,10 +38,9 @@ public class InventoryToggle : MonoBehaviour
         if (openSound != null)
             openSound.Play();
 
-        inventoryUI.SetActive(true); // Show the inventory UI
+        inventoryUI.SetActive(true);
         SetControlsActive(false);
 
-        // Disable player movement and joystick input
         GameStateManager.Instance.SetPlayerMovementState(false);
         var playerJoystick = FindObjectOfType<PlayerJoystickControl>();
         if (playerJoystick != null)
@@ -58,10 +59,9 @@ public class InventoryToggle : MonoBehaviour
 
     private void DeactivateInventory()
     {
-        inventoryUI.SetActive(false); // Hide the inventory UI
+        inventoryUI.SetActive(false);
         SetControlsActive(true);
 
-        // Enable player movement and joystick input only if we're not in close-up view
         if (Camera.main != null && Camera.main.enabled)
         {
             GameStateManager.Instance.SetPlayerMovementState(true);
@@ -73,7 +73,6 @@ public class InventoryToggle : MonoBehaviour
         isInventoryOpen = false;
     }
 
-    // Helper method to enable/disable controls
     private void SetControlsActive(bool isActive)
     {
         if (joystickCanvasGroup != null)
@@ -83,7 +82,6 @@ public class InventoryToggle : MonoBehaviour
         {
             if (isActive)
             {
-                // Enable the previously active button when exiting inventory
                 if (activeButton != null)
                 {
                     activeButton.gameObject.SetActive(true);
@@ -91,7 +89,6 @@ public class InventoryToggle : MonoBehaviour
             }
             else
             {
-                // Track which button is active before opening the inventory
                 if (TalkButton.gameObject.activeSelf)
                 {
                     activeButton = TalkButton;
@@ -108,9 +105,22 @@ public class InventoryToggle : MonoBehaviour
 
         if (InventoryButton != null)
             InventoryButton.gameObject.SetActive(isActive);
+
+        // Toggle the instantiated UI prefab elements from quest system
+
+        if (QuestHolder != null)
+            QuestHolder.gameObject.SetActive(isActive);
+
+        if (questPopUpInstance != null)
+            questPopUpInstance.SetActive(isActive);
+
+        if (criteriaUITemplateInstance != null)
+            criteriaUITemplateInstance.SetActive(isActive);
+
+        if (questUITemplateInstance != null)
+            questUITemplateInstance.SetActive(isActive);
     }
 
-    // New method to enable or disable the inventory button
     public void SetInventoryButtonActive(bool isActive)
     {
         if (InventoryButton != null)
@@ -119,9 +129,33 @@ public class InventoryToggle : MonoBehaviour
         }
     }
 
-    // New method to check if the inventory is open
     public bool IsInventoryOpen()
     {
-        return isInventoryOpen;
+        return isInventoryOpen; 
+    }
+
+    // Methods to instantiate the UI prefabs when needed
+    public void InstantiateQuestPopUp()
+    {
+        if (QuestPopUpPrefab != null && questPopUpInstance == null)
+        {
+            questPopUpInstance = Instantiate(QuestPopUpPrefab);
+        }
+    }
+
+    public void InstantiateCriteriaUITemplate()
+    {
+        if (CriteriaUITemplatePrefab != null && criteriaUITemplateInstance == null)
+        {
+            criteriaUITemplateInstance = Instantiate(CriteriaUITemplatePrefab);
+        }
+    }
+
+    public void InstantiateQuestUITemplate()
+    {
+        if (QuestUITemplatePrefab != null && questUITemplateInstance == null)
+        {
+            questUITemplateInstance = Instantiate(QuestUITemplatePrefab);
+        }
     }
 }

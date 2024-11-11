@@ -20,6 +20,12 @@ public class OnScreenMsg : MonoBehaviour
     [SerializeField]
     private Vector2 msgPosition;
 
+    [SerializeField]
+    private string font;
+
+    [SerializeField, Header("Font")]
+    private Font hangyabolyFont;
+
     private GUIStyle myGuiStyle = new GUIStyle();
 
     #endregion Field
@@ -36,6 +42,10 @@ public class OnScreenMsg : MonoBehaviour
 
     public Vector2 MsgPosition { get { return msgPosition; } set { msgPosition = value; } }
 
+    public string Font { get { return font; } set { font = value; } }
+
+    public Font HangyabolyFont { get { return hangyabolyFont; } set { hangyabolyFont = value; } }
+
     #endregion Properties
 
     /// <summary>
@@ -43,6 +53,23 @@ public class OnScreenMsg : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        // Set the font style if the font is available in the resources
+        if (HangyabolyFont != null)
+        {
+            myGuiStyle.font = HangyabolyFont;
+        }
+        else if (!string.IsNullOrEmpty(Font))
+        {
+            Font loadedFont = Resources.Load<Font>(Font);
+            if (loadedFont != null)
+            {
+                myGuiStyle.font = loadedFont;
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("Font not found: " + Font);
+            }
+        }
     }
 
     /// <summary>
@@ -57,11 +84,16 @@ public class OnScreenMsg : MonoBehaviour
     /// The OnGui logic
     /// </summary>
     private void OnGUI()
-    {//TODO: Remake it to canvas logic (So its behind the top bar)
+    {
         myGuiStyle.fontSize = size;
         myGuiStyle.normal.textColor = color;
+        myGuiStyle.alignment = TextAnchor.MiddleCenter;  // Ensure justification
         GUI.depth = 20;
-        GUI.Label(new Rect(MsgPosition.x, MsgPosition.y, 200f, 200f), msg, myGuiStyle);
+
+        // Combine Quest Complete message and msg
+        string fullMessage = "Quest Complete\n" + msg;
+
+        GUI.Label(new Rect(MsgPosition.x, MsgPosition.y, 200f, 200f), fullMessage, myGuiStyle);
     }
 
     /*** Private Methods ***/

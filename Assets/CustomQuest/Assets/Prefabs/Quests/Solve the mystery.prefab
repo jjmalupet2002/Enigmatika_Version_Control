@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8204548080020326954}
   - component: {fileID: 1983567716617235671}
+  - component: {fileID: 2272003679939865615}
+  - component: {fileID: -2042135112373159355}
+  - component: {fileID: 1655184663363338879}
   m_Layer: 0
   m_Name: Solve the mystery
   m_TagString: Untagged
@@ -79,11 +82,14 @@ MonoBehaviour:
   matchOptionalLevels: 0
   pickUpAble: 0
   time: 0
-  criterias: []
+  criterias:
+  - {fileID: 2272003679939865615}
+  - {fileID: -2042135112373159355}
   rewards: []
-  thresholds: 
+  thresholds: 0000000000000000
   optionalThresholds: 
-  optionalCriterias: []
+  optionalCriterias:
+  - {fileID: 1655184663363338879}
   optionalRewards: []
   completedOptionalThreshold: 0
   unCompletedQuests: []
@@ -92,3 +98,84 @@ MonoBehaviour:
   questGivers: []
   playersUnCompleted: []
   playersCompleted: []
+--- !u!114 &2272003679939865615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394901087479640219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af022c4ba58d249b5d8b1fafcfede5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCustomScript: 0
+  toolbarInt: 1
+  editorType: 0
+  amount: 1
+  criteriaName: Gather Gems
+  type: 1
+  criteriaObject: {fileID: 1159802807427632, guid: 28a20a84abeb0a54891b536f54cd75dc, type: 3}
+  spawnZones: []
+  level: 0
+  rewards: []
+  giveRewardsOnCompletion: 0
+  quest: {fileID: 0}
+  timed: 0
+  dontDespawnObjectsWhenComplete: 0
+  time: 0
+--- !u!114 &-2042135112373159355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394901087479640219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af022c4ba58d249b5d8b1fafcfede5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCustomScript: 0
+  toolbarInt: 1
+  editorType: 0
+  amount: 1
+  criteriaName: Gather Gems
+  type: 1
+  criteriaObject: {fileID: 1159802807427632, guid: 28a20a84abeb0a54891b536f54cd75dc, type: 3}
+  spawnZones: []
+  level: 1
+  rewards: []
+  giveRewardsOnCompletion: 0
+  quest: {fileID: 0}
+  timed: 0
+  dontDespawnObjectsWhenComplete: 0
+  time: 0
+--- !u!114 &1655184663363338879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394901087479640219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4af022c4ba58d249b5d8b1fafcfede5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCustomScript: 0
+  toolbarInt: 1
+  editorType: 2
+  amount: 5
+  criteriaName: Gather Gems
+  type: 1
+  criteriaObject: {fileID: 1159802807427632, guid: 28a20a84abeb0a54891b536f54cd75dc, type: 3}
+  spawnZones: []
+  level: 0
+  rewards: []
+  giveRewardsOnCompletion: 0
+  quest: {fileID: 0}
+  timed: 0
+  dontDespawnObjectsWhenComplete: 0
+  time: 0

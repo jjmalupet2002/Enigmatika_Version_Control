@@ -10,6 +10,8 @@ public enum CameraState
 
 public class SwitchCamera : MonoBehaviour
 {
+
+    [Header("Camera Settings")]
     public List<Camera> CloseUpCameras = new List<Camera>(); // List to store close-up cameras
     public CameraState currentCameraState = CameraState.Main; // Current camera state
     public GameObject backButton; // Reference to the back button UI object
@@ -17,6 +19,16 @@ public class SwitchCamera : MonoBehaviour
     public InteractableObjectHandler interactableObject; // Reference to the TableModel script for handling interactions
     public GameObject playerModel; // Reference to the player model
     public UnityEvent<CameraState> onCameraStateChange; // Event to notify when camera state changes
+
+    [Header("Quest UI references")]
+    public GameObject QuestHolder;
+    public GameObject QuestPopUpPrefab; // Reference to the QuestPopUp prefab
+    public GameObject CriteriaUITemplatePrefab; // Reference to the CriteriaUITemplate prefab
+    public GameObject QuestUITemplatePrefab; // Reference to the QuestUITemplate prefab
+
+    private GameObject questPopUpInstance; // Reference to the instantiated QuestPopUp
+    private GameObject criteriaUITemplateInstance; // Reference to the instantiated CriteriaUITemplate
+    private GameObject questUITemplateInstance; // Reference to the instantiated QuestUITemplate
 
     private Camera mainCamera; // Reference to the universal main camera
     private TalkandInteract talkAndInteract; // Reference to TalkandInteract script
@@ -69,6 +81,20 @@ public class SwitchCamera : MonoBehaviour
 
             // Enable note inspection when switching to close-up camera
             NoteInspectionManager.Instance.EnableNoteInspection(true);
+
+
+            // Disable Quest system UI when going to close-up camera
+            if (QuestHolder != null)
+                QuestHolder.SetActive(false);
+
+            if (questPopUpInstance != null)
+                questPopUpInstance.SetActive(false);
+
+            if (criteriaUITemplateInstance != null)
+                criteriaUITemplateInstance.SetActive(false);
+
+            if (questUITemplateInstance != null)
+                questUITemplateInstance.SetActive(false);
         }
         else
         {
@@ -90,10 +116,23 @@ public class SwitchCamera : MonoBehaviour
 
             // Disable note inspection when returning to the main camera
             NoteInspectionManager.Instance.EnableNoteInspection(false);
-        }
 
-        // Notify listeners about the camera state change
-        if (onCameraStateChange != null)
+            // Enable Quest system UI when returning to the main camera
+            if (QuestHolder != null)
+                QuestHolder.SetActive(true);
+
+            if (questPopUpInstance != null)
+                questPopUpInstance.SetActive(true);
+
+            if (criteriaUITemplateInstance != null)
+                criteriaUITemplateInstance.SetActive(true);
+
+            if (questUITemplateInstance != null)
+                questUITemplateInstance.SetActive(true);
+        } 
+
+            // Notify listeners about the camera state change
+            if (onCameraStateChange != null)
         {
             onCameraStateChange.Invoke(currentCameraState);
         }
