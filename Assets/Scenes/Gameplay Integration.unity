@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 33316723}
   - component: {fileID: 33316722}
   m_Layer: 0
-  m_Name: QuestCompleteManager
+  m_Name: ClueItemTurnInUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4404,7 +4404,7 @@ GameObject:
   - component: {fileID: 329946372}
   - component: {fileID: 329946371}
   m_Layer: 5
-  m_Name: text
+  m_Name: questBTNtext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17790,7 +17790,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: -266.17}
+  m_AnchoredPosition: {x: 0.000015258789, y: -305}
   m_SizeDelta: {x: 230.5104, y: 35.6608}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1170023795
@@ -32328,6 +32328,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConversationManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4926441143659314436, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -46
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926441143659314437, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5132314331709599685, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -124.620026
+      objectReference: {fileID: 0}
     - target: {fileID: 8586863076529496851, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
       propertyPath: talkButton
       value: 
@@ -32344,6 +32356,10 @@ PrefabInstance:
       propertyPath: inventoryPanel
       value: 
       objectReference: {fileID: 5585990381722239473}
+    - target: {fileID: 8586863076529496851, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
+      propertyPath: QuestButtonText
+      value: 
+      objectReference: {fileID: 329946369}
     - target: {fileID: 8586863076529496851, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
       propertyPath: inventoryButton
       value: 
@@ -32670,7 +32686,7 @@ PrefabInstance:
       objectReference: {fileID: 3410456745303834361}
     - target: {fileID: 7334121171768497773, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: npcInteractRange
-      value: 0.7
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 7860591907774209922, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: cameraTransform
@@ -39187,6 +39203,7 @@ SceneRoots:
   - {fileID: 2077216875}
   - {fileID: 2023244080}
   - {fileID: 522598689}
+  - {fileID: 33316723}
   - {fileID: 939410170}
   - {fileID: 2001078141}
   - {fileID: 777340340}
@@ -39206,4 +39223,3 @@ SceneRoots:
   - {fileID: 5270204959848608147}
   - {fileID: 1594256591}
   - {fileID: 1252360924}
-  - {fileID: 33316723}

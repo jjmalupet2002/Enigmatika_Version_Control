@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class InputManagerDuringNPC : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class InputManagerDuringNPC : MonoBehaviour
     public Button interactButton;  // Reference to the Interact button
     public Button inventoryButton; // Reference to the Inventory button
     public Button QuestButton;
+    public GameObject QuestButtonText; // Reference to the text GameObject of the Quest button
 
     private PlayerJoystickControl playerJoystickControl;
 
@@ -73,8 +75,16 @@ public class InputManagerDuringNPC : MonoBehaviour
         {
             QuestButton.interactable = isInteractable;
             SetButtonAlpha(QuestButton, isInteractable ? 1f : 0f);
+
+            // Enable or disable the text GameObject
+            if (QuestButtonText != null)
+            {
+                QuestButtonText.SetActive(isInteractable);
+            }
         }
     }
+
+
 
     private void SetButtonAlpha(Button button, float alpha)
     {
@@ -83,4 +93,6 @@ public class InputManagerDuringNPC : MonoBehaviour
         color.a = alpha;
         button.GetComponent<UnityEngine.UI.Image>().color = color;
     }
+
 }
+
