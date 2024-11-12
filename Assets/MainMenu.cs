@@ -7,8 +7,8 @@ public class Play : MonoBehaviour
 {
     public void PlayGame()
     {
-        // Load MainScene upon click
-        // Ensure MainScene's index in the Scene Manager is 1, else change the value below
+        // Go to Chapter Select
+        // Ensure index of the said scene in the Scene Manager is 1, else change the value below
         SceneManager.LoadSceneAsync(1);
     }
 
