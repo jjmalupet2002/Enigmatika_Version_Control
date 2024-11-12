@@ -6,7 +6,7 @@ public class LookAtPlayer : MonoBehaviour
     private Quaternion originalRotation; // Store the original rotation
     private Vector3 originalPosition; // Store the original position
     private bool isFacingPlayer = false; // Whether the NPC should face the player
-    private float resetDistance = 5f; // Distance threshold to reset NPC
+    private float resetDistance = 1f; // Distance threshold to reset NPC
 
     private void Start()
     {
@@ -36,21 +36,13 @@ public class LookAtPlayer : MonoBehaviour
     private void FacePlayer()
     {
         Vector3 direction = player.position - transform.position;
-        direction = -direction; // Reverse direction if needed
+        direction.y = 0; // Keep direction on the horizontal plane
 
         // Create a rotation to look at the player
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        // Extract the y rotation from the target rotation
-        Vector3 eulerAngles = targetRotation.eulerAngles;
-        eulerAngles.x = transform.eulerAngles.x; // Preserve the original x rotation
-
-        // Create the final rotation to apply
-        Quaternion finalRotation = Quaternion.Euler(eulerAngles);
-
-     
         // Smoothly rotate the NPC towards the player
-        transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
     }
 
     // Call this method to make the NPC face the player
@@ -67,7 +59,6 @@ public class LookAtPlayer : MonoBehaviour
         // Immediately reset to the original rotation
         transform.rotation = originalRotation;
 
-        // Immediately reset to the original position
-        transform.position = originalPosition;
+        
     }
 }

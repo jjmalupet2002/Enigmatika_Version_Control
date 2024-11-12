@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DialogueEditor;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class NPCInteractable : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"{npcName} conversation is not assigned.");
+            UnityEngine.Debug.LogError($"{npcName} conversation is not assigned.");
         }
     }
 }

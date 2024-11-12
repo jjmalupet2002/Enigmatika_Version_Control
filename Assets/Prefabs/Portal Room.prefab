@@ -280,7 +280,13 @@ MonoBehaviour:
   interactRange: 3
   lockedText: {fileID: 0}
   unlockedText: {fileID: 0}
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  lockedSound: {fileID: 0}
+  OpeningUsingKey: {fileID: 0}
   OpenSpeed: 3
+  inventoryManager: {fileID: 0}
+  requiredKeyId: 
 --- !u!1 &4612280496235169074
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,8 +660,8 @@ Transform:
   - {fileID: 1540962216245474411}
   - {fileID: 5352094061510662421}
   - {fileID: 8570982674253378142}
-  - {fileID: 8675066491453325987}
   - {fileID: 9215086947767493529}
+  - {fileID: 8675066491453325987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8960793083503459687
@@ -18520,6 +18526,10 @@ MonoBehaviour:
   onCameraStateChange:
     m_PersistentCalls:
       m_Calls: []
+  QuestHolder: {fileID: 0}
+  QuestPopUpPrefab: {fileID: 0}
+  CriteriaUITemplatePrefab: {fileID: 0}
+  QuestUITemplatePrefab: {fileID: 0}
 --- !u!114 &2359931604477568488
 MonoBehaviour:
   m_ObjectHideFlags: 0

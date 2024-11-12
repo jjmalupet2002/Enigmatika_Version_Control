@@ -1123,8 +1123,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5506081198043180766}
   - component: {fileID: 8843334876894508319}
+  - component: {fileID: 1513270572039724065}
+  - component: {fileID: 4201443467847857181}
   m_Layer: 0
-  m_Name: Model
+  m_Name: HoodedModel (Quest Giver)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1168,6 +1170,39 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1513270572039724065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4365108888669247137}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c74c207a09ff24caf739f5ee542b8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests: []
+  radius: 2
+  declineDistance: 3
+  walkIntoStartQuest: 1
+  questSymbol: {fileID: 4835419433392391688}
+--- !u!114 &4201443467847857181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4365108888669247137}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5e3f19dd6f1dd4bb3a69c896c2d155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 3
+  sphere: {fileID: 0}
+  quests: []
+  handInByCollision: 1
 --- !u!1 &4472422347458641097
 GameObject:
   m_ObjectHideFlags: 0
