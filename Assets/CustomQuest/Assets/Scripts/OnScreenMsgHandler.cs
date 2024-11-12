@@ -82,12 +82,12 @@ public class OnScreenMsgHandler : MonoBehaviour
             {
                 onScreenMsg.LifeTime = lifeTime;
                 onScreenMsg.Msg = msg;
-                onScreenMsg.Size = 45; // Set the initial size to 50
+                onScreenMsg.Size = 55; // Set the initial size to 50
                 onScreenMsg.Color = color;
-                onScreenMsg.MsgPosition = new Vector2(1042, 850); // Set the initial position to (1042, 68)
+                onScreenMsg.MsgPosition = new Vector2(1240, 850); // Set the initial position to (1042, 68)
                 onScreenMsg.Font = "Hangyaboly"; // Set the initial font to Hangyaboly
 
-                Vector2 newPos = new Vector2(1060, 68); // Ensure new messages are placed correctly
+                Vector2 newPos = new Vector2(1, 0); // Ensure new messages are placed correctly
                 if (Msgs.Count >= 1)
                 {
                     foreach (OnScreenMsg g in Msgs)

@@ -10,6 +10,7 @@ public class InputManagerDuringNPC : MonoBehaviour
     public Button talkButton;      // Reference to the Talk button
     public Button interactButton;  // Reference to the Interact button
     public Button inventoryButton; // Reference to the Inventory button
+    public Button QuestButton;
 
     private PlayerJoystickControl playerJoystickControl;
 
@@ -66,6 +67,12 @@ public class InputManagerDuringNPC : MonoBehaviour
         {
             inventoryButton.interactable = isInteractable;
             SetButtonAlpha(inventoryButton, isInteractable ? 1f : 0f);
+        }
+
+        if (QuestButton != null)
+        {
+            QuestButton.interactable = isInteractable;
+            SetButtonAlpha(QuestButton, isInteractable ? 1f : 0f);
         }
     }
 

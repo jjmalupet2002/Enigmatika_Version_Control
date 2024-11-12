@@ -6,6 +6,7 @@ public class InventoryToggle : MonoBehaviour
     public Button InventoryButton;
     public Button TalkButton;
     public Button InteractButton;
+    public Button QuestButton;
     public GameObject joystickCanvasGroup;
     public GameObject inventoryUI;
    
@@ -105,6 +106,9 @@ public class InventoryToggle : MonoBehaviour
 
         if (InventoryButton != null)
             InventoryButton.gameObject.SetActive(isActive);
+
+        if (QuestButton != null)
+            QuestButton.gameObject.SetActive(isActive);
 
         // Toggle the instantiated UI prefab elements from quest system
 

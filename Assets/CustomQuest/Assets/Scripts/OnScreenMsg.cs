@@ -91,7 +91,7 @@ public class OnScreenMsg : MonoBehaviour
         GUI.depth = 20;
 
         // Combine Quest Complete message and msg
-        string fullMessage = "Quest Complete\n" + msg;
+        string fullMessage = "Quest Complete\n\n" + msg;
 
         GUI.Label(new Rect(MsgPosition.x, MsgPosition.y, 200f, 200f), fullMessage, myGuiStyle);
     }
