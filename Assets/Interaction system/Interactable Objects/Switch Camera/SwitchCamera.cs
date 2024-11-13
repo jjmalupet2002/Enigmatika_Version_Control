@@ -35,6 +35,11 @@ public class SwitchCamera : MonoBehaviour
     private Camera currentCloseUpCamera; // Current close-up camera
     private ProximityOutline[] proximityOutlines; // Array to store all ProximityOutline components
 
+    private bool wasQuestHolderActive;
+    private bool wasQuestPopUpInstanceActive;
+    private bool wasCriteriaUITemplateInstanceActive;
+    private bool wasQuestUITemplateInstanceActive;
+
 
     void Start()
     {
@@ -87,19 +92,30 @@ public class SwitchCamera : MonoBehaviour
             // Enable note inspection when switching to close-up camera
             NoteInspectionManager.Instance.EnableNoteInspection(true);
 
-
-            // Disable Quest system UI when going to close-up camera
+            // Track and disable Quest system UI when going to close-up camera
             if (QuestHolder != null)
+            {
+                wasQuestHolderActive = QuestHolder.activeSelf;
                 QuestHolder.SetActive(false);
+            }
 
             if (questPopUpInstance != null)
+            {
+                wasQuestPopUpInstanceActive = questPopUpInstance.activeSelf;
                 questPopUpInstance.SetActive(false);
+            }
 
             if (criteriaUITemplateInstance != null)
+            {
+                wasCriteriaUITemplateInstanceActive = criteriaUITemplateInstance.activeSelf;
                 criteriaUITemplateInstance.SetActive(false);
+            }
 
             if (questUITemplateInstance != null)
+            {
+                wasQuestUITemplateInstanceActive = questUITemplateInstance.activeSelf;
                 questUITemplateInstance.SetActive(false);
+            }
         }
         else
         {
@@ -124,28 +140,29 @@ public class SwitchCamera : MonoBehaviour
             // Disable note inspection when returning to the main camera
             NoteInspectionManager.Instance.EnableNoteInspection(false);
 
-            // Enable Quest system UI when returning to the main camera
-            if (QuestHolder != null)
+            // Re-enable Quest system UI when returning to the main camera
+            if (QuestHolder != null && wasQuestHolderActive)
                 QuestHolder.SetActive(true);
 
-            if (questPopUpInstance != null)
+            if (questPopUpInstance != null && wasQuestPopUpInstanceActive)
                 questPopUpInstance.SetActive(true);
 
-            if (criteriaUITemplateInstance != null)
+            if (criteriaUITemplateInstance != null && wasCriteriaUITemplateInstanceActive)
                 criteriaUITemplateInstance.SetActive(true);
 
-            if (questUITemplateInstance != null)
+            if (questUITemplateInstance != null && wasQuestUITemplateInstanceActive)
                 questUITemplateInstance.SetActive(true);
-        } 
+        }
 
-            // Notify listeners about the camera state change
-            if (onCameraStateChange != null)
+        // Notify listeners about the camera state change
+        if (onCameraStateChange != null)
         {
             onCameraStateChange.Invoke(currentCameraState);
         }
     }
 
-    private void SetCamera(CameraState state, Camera closeUpCamera = null)
+
+private void SetCamera(CameraState state, Camera closeUpCamera = null)
     {
         if (mainCamera != null)
         {

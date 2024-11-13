@@ -61,7 +61,9 @@ public class InventoryToggle : MonoBehaviour
     private void DeactivateInventory()
     {
         inventoryUI.SetActive(false);
-        SetControlsActive(true);
+
+        // Do not affect the QuestButton
+        SetControlsActive(true, false);
 
         if (Camera.main != null && Camera.main.enabled)
         {
@@ -74,10 +76,11 @@ public class InventoryToggle : MonoBehaviour
         isInventoryOpen = false;
     }
 
-    private void SetControlsActive(bool isActive)
+
+    private void SetControlsActive(bool isActive, bool affectQuestButton = true)
     {
         if (joystickCanvasGroup != null)
-            joystickCanvasGroup.SetActive(isActive);
+            joystickCanvasGroup.gameObject.SetActive(isActive);
 
         if (TalkButton != null && InteractButton != null)
         {
@@ -107,11 +110,20 @@ public class InventoryToggle : MonoBehaviour
         if (InventoryButton != null)
             InventoryButton.gameObject.SetActive(isActive);
 
-        if (QuestButton != null)
-            QuestButton.gameObject.SetActive(isActive);
+        if (QuestButton != null && affectQuestButton)
+        {
+            // Only disable the Quest button if it is active
+            if (!isActive && QuestButton.gameObject.activeSelf)
+            {
+                QuestButton.gameObject.SetActive(false);
+            }
+            else if (isActive)
+            {
+                QuestButton.gameObject.SetActive(true);
+            }
+        }
 
         // Toggle the instantiated UI prefab elements from quest system
-
         if (QuestHolder != null)
             QuestHolder.gameObject.SetActive(isActive);
 
@@ -124,6 +136,7 @@ public class InventoryToggle : MonoBehaviour
         if (questUITemplateInstance != null)
             questUITemplateInstance.SetActive(isActive);
     }
+
 
     public void SetInventoryButtonActive(bool isActive)
     {

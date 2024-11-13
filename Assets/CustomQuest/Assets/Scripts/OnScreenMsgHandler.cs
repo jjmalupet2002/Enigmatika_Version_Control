@@ -87,7 +87,7 @@ public class OnScreenMsgHandler : MonoBehaviour
                 onScreenMsg.MsgPosition = new Vector2(1240, 850); // Set the initial position to (1042, 68)
                 onScreenMsg.Font = "Hangyaboly"; // Set the initial font to Hangyaboly
 
-                Vector2 newPos = new Vector2(1, 0); // Ensure new messages are placed correctly
+                Vector2 newPos = new Vector2(0, 2000); // Ensure new messages are placed correctly
                 if (Msgs.Count >= 1)
                 {
                     foreach (OnScreenMsg g in Msgs)
