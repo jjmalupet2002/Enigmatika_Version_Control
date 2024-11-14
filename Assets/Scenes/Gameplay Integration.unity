@@ -12117,9 +12117,10 @@ MonoBehaviour:
     teleporterB: {fileID: 1316481227}
   - teleporterA: {fileID: 2088261827}
     teleporterB: {fileID: 2100449066}
-  player: {fileID: 455208185}
+  playerTransform: {fileID: 455208185}
+  playerRigidbody: {fileID: 969814368}
   mainCamera: {fileID: 588229721}
-  teleportDelay: 0.5
+  teleportDelay: 2
   fadeCanvasGroup: {fileID: 338230185}
 --- !u!4 &522598689
 Transform:
@@ -19725,6 +19726,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 769694050}
   m_SourcePrefab: {fileID: 100100000, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
+--- !u!54 &969814368 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8124186390089490030, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
+  m_PrefabInstance: {fileID: 2684875993483645260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &971525959 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2991054517347823184, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
@@ -38957,12 +38963,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7860591907774209922, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: moveSpeed
-      value: 0.3
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7860591907774209922, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 1626347192}
+    - target: {fileID: 8124186390089490030, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8124186390089490030, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: m_Interpolate
       value: 2

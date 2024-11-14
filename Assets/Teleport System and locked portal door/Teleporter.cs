@@ -12,7 +12,8 @@ public class TeleporterManager : MonoBehaviour
     }
 
     public List<TeleporterPair> teleporterPairs;
-    public Transform player;
+    public Transform playerTransform;        // Player's Transform reference
+    public Rigidbody playerRigidbody;        // Player's Rigidbody reference (to modify interpolation)
     public Transform mainCamera;
     public float teleportDelay = 0.5f;
     public CanvasGroup fadeCanvasGroup;
@@ -29,6 +30,12 @@ public class TeleporterManager : MonoBehaviour
             teleporterDict[pair.teleporterA] = pair.teleporterB;
             teleporterDict[pair.teleporterB] = pair.teleporterA;
         }
+
+        // Check if Rigidbody is assigned
+        if (playerRigidbody == null)
+        {
+            UnityEngine.Debug.LogError("No Rigidbody found on the player object. Please assign it.");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,7 +45,6 @@ public class TeleporterManager : MonoBehaviour
             Teleport(other.transform);
         }
     }
-
 
     public void Teleport(Transform teleporter)
     {
@@ -52,23 +58,57 @@ public class TeleporterManager : MonoBehaviour
     {
         isTeleporting = true;
 
+        // Disable interpolation before teleport to prevent physics-based jumps or movements
+        playerRigidbody.interpolation = RigidbodyInterpolation.None;
+
         // Fade out
         yield return StartCoroutine(FadeOut());
 
-        // Calculate the offset between the player and the camera
-        Vector3 cameraOffset = mainCamera.position - player.position;
+        // Store the current interpolation setting to restore later
+        RigidbodyInterpolation originalInterpolation = playerRigidbody.interpolation;
 
-        // Teleport the player
-        player.position = destination.position;
+        // Store the player's position before teleporting for comparison
+        Vector3 initialPosition = playerTransform.position;
 
-        // Maintain camera's offset relative to the player, keeping the y-axis constant
-        mainCamera.position = new Vector3(player.position.x + cameraOffset.x, mainCamera.position.y, player.position.z + cameraOffset.z);
+        // Teleport the player now that interpolation is disabled
+        Vector3 destinationPosition = destination.position;
+
+        // If the destination has a collider, make sure the player lands on top of it
+        Collider destinationCollider = destination.GetComponent<Collider>();
+        if (destinationCollider != null)
+        {
+            destinationPosition.y += destinationCollider.bounds.extents.y;  // Ensure the player is on top
+        }
+
+        // Set the player's position to the destination
+        playerTransform.position = destinationPosition;
+
+        // Adjust the camera position relative to the player, keeping y-axis constant
+        Vector3 cameraOffset = mainCamera.position - playerTransform.position;
+        mainCamera.position = new Vector3(playerTransform.position.x + cameraOffset.x, mainCamera.position.y, playerTransform.position.z + cameraOffset.z);
+
+        // Store the player's position after teleporting to compare later
+        Vector3 postTeleportPosition = playerTransform.position;
 
         // Fade in
         yield return StartCoroutine(FadeIn());
 
+        // Check if the player has moved (i.e., if the Rigidbody's position has changed)
+        if (postTeleportPosition != initialPosition)
+        {
+            // If the position has changed, set interpolation to Extrapolate for smoother movement
+            playerRigidbody.interpolation = RigidbodyInterpolation.Extrapolate;
+        }
+        else
+        {
+            // If no movement occurred, restore the original interpolation setting
+            playerRigidbody.interpolation = originalInterpolation;
+        }
+
         isTeleporting = false;
     }
+
+
 
     private IEnumerator FadeOut()
     {
@@ -92,5 +132,3 @@ public class TeleporterManager : MonoBehaviour
         }
     }
 }
-
-
