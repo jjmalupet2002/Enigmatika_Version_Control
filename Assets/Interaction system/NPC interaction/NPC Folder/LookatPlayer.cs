@@ -8,35 +8,38 @@ public class LookAtPlayer : MonoBehaviour
     private Quaternion originalRotation; // Store the original rotation
     private Vector3 originalPosition; // Store the original position
     private bool isFacingPlayer = false; // Whether the NPC should face the player
-    private float resetDistance = 1f; // Distance threshold to reset NPC
+    private float resetDistance = 3f; // Distance at which the NPC resets its position
+    private NPCInteractable npcInteractable; // Reference to the NPCInteractable component
 
     private void Start()
     {
         // Store the original rotation and position of the NPC
         originalRotation = transform.rotation;
         originalPosition = transform.position;
+        npcInteractable = GetComponent<NPCInteractable>(); // Get the NPCInteractable component
     }
 
     private void Update()
     {
+        // Only update rotation if the NPC is facing the player
         if (isFacingPlayer && player != null)
         {
             FacePlayer();
-
-            // Calculate the distance between the player and the NPC
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            // Check if the player is beyond the reset distance
-            if (distanceToPlayer > resetDistance)
-            {
-                // Reset NPC position and rotation
-                StopFacingPlayer();
-            }
         }
+
+        // Example: Trigger the Interact method when the player presses the 'E' key (or any other interaction button)
+        if (Input.GetKeyDown(KeyCode.E) && npcInteractable != null)
+        {
+            Interact();
+        }
+
+        // Check the player's distance from the NPC and reset if necessary
+        CheckPlayerDistance();
     }
 
     private void FacePlayer()
     {
+        // If the NPC should face the player, calculate the direction and update rotation
         Vector3 direction = player.position - transform.position;
         direction.y = 0; // Keep direction on the horizontal plane
 
@@ -58,9 +61,36 @@ public class LookAtPlayer : MonoBehaviour
     {
         isFacingPlayer = false;
 
-        // Immediately reset to the original rotation
+        // Immediately reset to the original rotation and position
         transform.rotation = originalRotation;
+      
+    }
 
-        
+    // Method to interact with NPC
+    public void Interact()
+    {
+        // Trigger the NPCInteractable's Interact method
+        if (npcInteractable != null)
+        {
+            npcInteractable.Interact();
+        }
+
+        // After interaction, make the NPC face the player
+        StartFacingPlayer();
+    }
+
+    // Method to check if the player has moved past the reset distance
+    private void CheckPlayerDistance()
+    {
+        if (player != null)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+            // If the player moves past the reset distance, reset NPC's position and rotation
+            if (distanceToPlayer > resetDistance && isFacingPlayer)
+            {
+                StopFacingPlayer(); // Reset the NPC when the player is out of range
+            }
+        }
     }
 }
