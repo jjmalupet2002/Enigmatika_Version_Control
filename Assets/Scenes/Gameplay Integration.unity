@@ -578,6 +578,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8715255077149815298, guid: 617751f3af792a84f822d00e250fab07, type: 3}
       insertIndex: -1
       addedObject: {fileID: 84117155}
+    - targetCorrespondingSourceObject: {fileID: 8715255077149815298, guid: 617751f3af792a84f822d00e250fab07, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 84117158}
   m_SourcePrefab: {fileID: 100100000, guid: 617751f3af792a84f822d00e250fab07, type: 3}
 --- !u!1001 &28311332
 PrefabInstance:
@@ -643,7 +646,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stone_01 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7269326415265582628, guid: 89a32941865132c4ba1c2782790ed46b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1322,6 +1326,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.08348993
   m_Center: {x: 0, y: 0.004767309, z: -0.055945657}
+--- !u!114 &84117158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84117150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: key 2
+  itemIcon: {fileID: 21300000, guid: a6c10312421cb5e438d8b9edaad2db28, type: 3}
+  itemDescription: A key used to unlock the portal room.
+  keyId: key2
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!4 &88317547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
@@ -7265,7 +7293,7 @@ Transform:
   m_GameObject: {fileID: 125823920}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000048793004, y: 0.9965755, z: -0.082688, w: -1.1368684e-12}
-  m_LocalPosition: {x: 0.298, y: 2.21, z: 1.97}
+  m_LocalPosition: {x: 0.254, y: 2.21, z: 2.204}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7304,7 +7332,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -9891,6 +9919,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2457273537969178838, guid: fbac80f280a03844bbdc56acff09ba24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1352788315}
+    - targetCorrespondingSourceObject: {fileID: 2457273537969178838, guid: fbac80f280a03844bbdc56acff09ba24, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1352788318}
   m_SourcePrefab: {fileID: 100100000, guid: fbac80f280a03844bbdc56acff09ba24, type: 3}
 --- !u!1 &348562796 stripped
 GameObject:
@@ -10172,13 +10203,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f0bda316aa554bc4689c47511a88e8f7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1487123679}
   m_SourcePrefab: {fileID: 100100000, guid: f0bda316aa554bc4689c47511a88e8f7, type: 3}
 --- !u!4 &364575356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5376073837650197851, guid: dce278a18cc98aa41a4185c95e564f6f, type: 3}
   m_PrefabInstance: {fileID: 1417701644}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &370224589 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 787ed85365e3e244ba89e0871b07551d, type: 3}
+  m_PrefabInstance: {fileID: 748267046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &370224592
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370224589}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.009
+  m_Center: {x: 0.00000023841858, y: 0.0006685499, z: 0.00009929808}
 --- !u!1001 &371314201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14835,6 +14895,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
+--- !u!1 &716666510 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9ab530eea9c7b0e4083f3a931103ec7c, type: 3}
+  m_PrefabInstance: {fileID: 846897311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &717552107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
@@ -15486,7 +15551,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 787ed85365e3e244ba89e0871b07551d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 370224592}
   m_SourcePrefab: {fileID: 100100000, guid: 787ed85365e3e244ba89e0871b07551d, type: 3}
 --- !u!1001 &754322899
 PrefabInstance:
@@ -17635,7 +17703,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9ab530eea9c7b0e4083f3a931103ec7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1086547696}
   m_SourcePrefab: {fileID: 100100000, guid: 9ab530eea9c7b0e4083f3a931103ec7c, type: 3}
 --- !u!1001 &848878718
 PrefabInstance:
@@ -21519,12 +21590,36 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 322969909244090201, guid: 1a4ce7ed7389af14cbc47a4b3ba8a164, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1373781548}
+    - targetCorrespondingSourceObject: {fileID: 322969909244090201, guid: 1a4ce7ed7389af14cbc47a4b3ba8a164, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1373781551}
   m_SourcePrefab: {fileID: 100100000, guid: 1a4ce7ed7389af14cbc47a4b3ba8a164, type: 3}
 --- !u!4 &1086547693 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9ab530eea9c7b0e4083f3a931103ec7c, type: 3}
   m_PrefabInstance: {fileID: 846897311}
   m_PrefabAsset: {fileID: 0}
+--- !u!135 &1086547696
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716666510}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.009
+  m_Center: {x: 0, y: 0.0004881206, z: 0.00011513999}
 --- !u!1 &1086571305 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8729647684577362846, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
@@ -25815,6 +25910,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.12851676
   m_Center: {x: 0, y: -0.00000022212042, z: 0.076537095}
+--- !u!114 &1352788318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352788310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: key 4
+  itemIcon: {fileID: 21300000, guid: 17c2d0550f9d2f9418f458279eb57c65, type: 3}
+  itemDescription: A key used to unlock the portal room.
+  keyId: key4
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!4 &1356669040 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5177179249125788810, guid: 4778fb0ebd4d7554887f2bd7e6fa39c1, type: 3}
@@ -26037,6 +26156,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.12330852
   m_Center: {x: 0, y: -0.00000016391276, z: 0.08174535}
+--- !u!114 &1373781551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373781543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: key 3
+  itemIcon: {fileID: 21300000, guid: 13c925c9c6716194f9fe832914b37154, type: 3}
+  itemDescription: A key used to unlock the portal room.
+  keyId: key3
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!4 &1374171263 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
@@ -27471,7 +27614,7 @@ GameObject:
   - component: {fileID: 1475859093}
   - component: {fileID: 1475859092}
   m_Layer: 0
-  m_Name: PortalRoomLockedDoorController
+  m_Name: PortalRoomTrapGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27549,6 +27692,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
   m_PrefabInstance: {fileID: 3891292704792320339}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1487123676 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f0bda316aa554bc4689c47511a88e8f7, type: 3}
+  m_PrefabInstance: {fileID: 364497462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &1487123679
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487123676}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.009
+  m_Center: {x: -0.00000023841858, y: 0.0022476, z: -0.00020768144}
 --- !u!4 &1487140599 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
@@ -27918,6 +28087,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 864d95ed120b30b4ebddebca05407c21, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1748083857}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 864d95ed120b30b4ebddebca05407c21, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1748083860}
   m_SourcePrefab: {fileID: 100100000, guid: 864d95ed120b30b4ebddebca05407c21, type: 3}
 --- !u!4 &1521339135 stripped
 Transform:
@@ -29103,6 +29275,69 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72237771460e9f347b46a2a749498754, type: 3}
+--- !u!1 &1629875896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1629875898}
+  - component: {fileID: 1629875897}
+  m_Layer: 0
+  m_Name: PortalRoomUnlock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1629875897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629875896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce8d243e06af64542a9261ff0091790c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockObject1: {fileID: 1363210223}
+  lockObject2: {fileID: 370224589}
+  lockObject3: {fileID: 716666510}
+  lockObject4: {fileID: 1487123676}
+  unlockingAnim1: {fileID: 1435082600}
+  unlockingAnim2: {fileID: 613948737}
+  unlockingAnim3: {fileID: 1903682768}
+  unlockingAnim4: {fileID: 1619297368}
+  lock1KeyID: key1
+  lock2KeyID: key2
+  lock3KeyID: key3
+  lock4KeyID: key4
+  lock1UnlockAudio: {fileID: 0}
+  lock2UnlockAudio: {fileID: 0}
+  lock3UnlockAudio: {fileID: 0}
+  lock4UnlockAudio: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  trapGateScript: {fileID: 1475859092}
+  detectionRadius: 2
+--- !u!4 &1629875898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629875896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -89.17758, y: 0.9536393, z: -115.085945}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1630427271
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30227,7 +30462,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stone_01
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7269326415265582628, guid: 89a32941865132c4ba1c2782790ed46b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -30512,6 +30748,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!135 &1748083860
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363210223}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.009
+  m_Center: {x: 0.00000023841858, y: -0.00025750976, z: -0.000110291876}
 --- !u!4 &1756601631 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 25642299711308654, guid: c96ad4a3c81fd184abddb8f04ad0288a, type: 3}
@@ -33451,6 +33708,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.14089379
   m_Center: {x: 0, y: -0.00000020267906, z: 0.06416008}
+--- !u!114 &1951310174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951310166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Key 1
+  itemIcon: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
+  itemDescription: A key used to unlock the portal room.
+  keyId: key1
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!4 &1952777444 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8126234637730377396, guid: 41a2edecaedc0bb4e8c1ad3055928721, type: 3}
@@ -34138,6 +34419,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7447022692855013307, guid: 6b07ab31d47036645833e234477aa56f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1951310171}
+    - targetCorrespondingSourceObject: {fileID: 7447022692855013307, guid: 6b07ab31d47036645833e234477aa56f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1951310174}
   m_SourcePrefab: {fileID: 100100000, guid: 6b07ab31d47036645833e234477aa56f, type: 3}
 --- !u!1001 &2023782594
 PrefabInstance:
@@ -41609,7 +41893,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7334121171768497773, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: objectInteractRange
-      value: 1.1
+      value: 1.15
       objectReference: {fileID: 0}
     - target: {fileID: 7860591907774209922, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
       propertyPath: moveSpeed
@@ -56805,4 +57089,5 @@ SceneRoots:
   - {fileID: 5270204959848608147}
   - {fileID: 1425260493}
   - {fileID: 1475859093}
+  - {fileID: 1629875898}
   - {fileID: 1352403877}
