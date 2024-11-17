@@ -1,171 +1,230 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 public class GateUnlockScript : MonoBehaviour
 {
-    [Header("Lock references")]
+    // Lock Object References
+    [Header("Lock Object References")]
+    public GameObject[] lockObjects; // Array of lock objects
 
-    public GameObject lockObject1;
-    public GameObject lockObject2;
-    public GameObject lockObject3;
-    public GameObject lockObject4;
+    // Key Unlock Animation References (animator controllers)
+    [Header("Key Unlock Animation References")]
+    public GameObject[] keyObjects; // Array of key objects
+    private Animator[] keyAnimators; // Animators for the key objects
+    public string unlockTrigger = "Unlock"; // Trigger to activate unlock animation
 
-    [Header("Key unlock animation references")]
+    // Required Key IDs
+    [Header("Required Key IDs")]
+    public string[] requiredKeyIds; // Array of required key IDs for each lock
 
-    public Animator unlockingAnim1;
-    public Animator unlockingAnim2;
-    public Animator unlockingAnim3;
-    public Animator unlockingAnim4;
+    // Lock Unlock Sounds (can be null)
+    [Header("Lock Unlock Sounds")]
+    public AudioSource unlockAudioSource; // Audio to play when unlocking the lock
 
-    [Header("Required Key ID")]
-
-    public string lock1KeyID;
-    public string lock2KeyID;
-    public string lock3KeyID;
-    public string lock4KeyID;
-
-    [Header("Locks unlock sounds (can be null)")]
-
-    public AudioSource lock1UnlockAudio;
-    public AudioSource lock2UnlockAudio;
-    public AudioSource lock3UnlockAudio;
-    public AudioSource lock4UnlockAudio;
-
-    [Header("Inventory Manager asset")]
+    // Inventory Manager asset
     public InventoryManager inventoryManager;
 
-    [Header("TrapGate script reference")]
+    // TrapGate script reference
+    [Header("TrapGate Script Reference")]
     public TrapGate trapGateScript;
 
-    public float detectionRadius = 2.0f; // Radius to detect the player
+    // Unlock Button References
+    [Header("Unlock Button References")]
+    public Button[] unlockButtons; // Array of unlock buttons
 
-    private bool lock1Unlocked = false;
-    private bool lock2Unlocked = false;
-    private bool lock3Unlocked = false;
-    private bool lock4Unlocked = false;
+    // Camera Reference
+    [Header("Camera Reference")]
+    public Camera portalRoomCamera; // Reference to the camera component (PortalRoomCamera)
 
-    private bool isPlayerNearby = false;
+    // Variables for item usage and button click
+    private bool[] isUnlockButtonClicked; // Array to track button click states
+    private bool[] hasUsedKey; // Array to track if the correct key has been used
+    private ItemData[] currentItems; // Array to store the current items
+
+    // Track each lock object's unlock state
+    private bool[] lockStates;
 
     private void OnEnable()
     {
-        // Subscribe to the inventory item's event
         InventoryManager.Instance.OnItemUsed += OnItemUsed;
+
+        // Initialize arrays
+        isUnlockButtonClicked = new bool[unlockButtons.Length];
+        hasUsedKey = new bool[unlockButtons.Length];
+        currentItems = new ItemData[unlockButtons.Length];
+        lockStates = new bool[unlockButtons.Length];
+        keyAnimators = new Animator[keyObjects.Length];
+
+        // Subscribe to the button click events
+        for (int i = 0; i < unlockButtons.Length; i++)
+        {
+            int index = i; // Local copy of loop variable
+            if (unlockButtons[i] != null)
+            {
+                unlockButtons[i].onClick.AddListener(() => OnUnlockButtonClick(index));
+            }
+
+            if (keyObjects[i] != null)
+            {
+                keyAnimators[i] = keyObjects[i].GetComponent<Animator>();
+            }
+        }
     }
 
     private void OnDisable()
     {
-        // Unsubscribe when this object is disabled
         InventoryManager.Instance.OnItemUsed -= OnItemUsed;
+
+        // Unsubscribe from the button click events
+        for (int i = 0; i < unlockButtons.Length; i++)
+        {
+            if (unlockButtons[i] != null)
+            {
+                unlockButtons[i].onClick.RemoveListener(() => OnUnlockButtonClick(i));
+            }
+        }
     }
+
+
+    // When the item is used, update the hasUsedKey flags accordingly
+    private void OnItemUsed(ItemData item)
+    {
+        // Reset the used key flags to avoid showing multiple buttons
+        for (int i = 0; i < hasUsedKey.Length; i++)
+        {
+            hasUsedKey[i] = false;  // Clear all flags when a new key is equipped
+        }
+
+        // Check each required key ID and update the corresponding flag
+        for (int i = 0; i < requiredKeyIds.Length; i++)
+        {
+            if (string.IsNullOrEmpty(requiredKeyIds[i]) || item.keyId != requiredKeyIds[i])
+            {
+                continue; // Skip if the key doesn't match or is not required
+            }
+
+            // Mark that the key has been used and store the item
+            hasUsedKey[i] = true;
+            currentItems[i] = item;
+        }
+    }
+
+    private void OnUnlockButtonClick(int index)
+    {
+        UnityEngine.Debug.Log($"Unlock Button {index} Clicked!");
+        isUnlockButtonClicked[index] = true;
+        TryUnlock(index);
+    }
+
+    // Method to check both conditions and perform unlock action for a specific lock
+    public void TryUnlock(int index)
+    {
+        if (hasUsedKey[index] && isUnlockButtonClicked[index])
+        {
+            UnityEngine.Debug.Log($"Attempting to unlock lock {index}...");
+
+            // Trigger unlock animation on the key object
+            if (keyAnimators[index] != null)
+            {
+                keyAnimators[index].SetTrigger(unlockTrigger);
+                UnityEngine.Debug.Log($"Unlock animation triggered on key {index}!");
+            }
+
+            // Play unlock sound
+            if (unlockAudioSource != null)
+            {
+                unlockAudioSource.Play();
+            }
+
+            // Set the lock state to unlocked
+            lockStates[index] = true;
+
+            // Remove used key from inventory
+            if (currentItems[index] != null)
+            {
+                StartCoroutine(DeleteItemAfterDelay(currentItems[index], 1.5f));
+            }
+
+            // Disable the unlock button
+            DisableUnlockButton(index);
+
+            // Check if all locks are unlocked
+            CheckAllLocks();
+
+            // Reset flags after unlocking
+            isUnlockButtonClicked[index] = false;
+            hasUsedKey[index] = false;
+        }
+    }
+
+    private void CheckAllLocks()
+    {
+        foreach (bool state in lockStates)
+        {
+            if (!state)
+            {
+                return; // Exit if any lock is still locked
+            }
+        }
+
+        // All locks are unlocked, unlock the gate
+        trapGateScript.UnlockGate();
+    }
+
+    // Coroutine to delete item from inventory after a delay
+    private IEnumerator DeleteItemAfterDelay(ItemData item, float delay)
+    {
+        yield return new WaitForSeconds(delay); // Wait before deleting the item
+        inventoryManager.DeleteItem(item);
+    }
+
+    private void DisableUnlockButton(int index)
+    {
+        if (unlockButtons[index] != null)
+        {
+            UnityEngine.Debug.Log($"Button {index} disabled.");
+            unlockButtons[index].gameObject.SetActive(false); // Disable the button
+            unlockButtons[index].interactable = false; // Disable button interaction
+        }
+    }
+
 
     private void Update()
     {
-        CheckIfPlayerIsNearby();
-    }
+        // Check if the PortalRoomCamera is active
+        bool isPortalRoomCameraActive = portalRoomCamera != null && portalRoomCamera.GetComponent<Camera>().enabled;
 
-    private void OnItemUsed(ItemData item)
-    {
-        // Check if the item used is a key and matches the required key ID
-        if (!string.IsNullOrEmpty(item.keyId))
+        // Loop through each unlock button and update its active state based on key usage and camera activation
+        for (int i = 0; i < unlockButtons.Length; i++)
         {
-            if (item.keyId == lock1KeyID && !lock1Unlocked && isPlayerNearby && IsTouchingLock(lockObject1))
+            // Reset button visibility each frame to handle key switching properly
+            if (hasUsedKey[i] && isPortalRoomCameraActive)
             {
-                UnlockLock(1, lockObject1, unlockingAnim1, lock1UnlockAudio);
-                lock1Unlocked = true;
+                unlockButtons[i].gameObject.SetActive(true);  // Activate the unlock button
+                unlockButtons[i].interactable = true;         // Enable interaction
             }
-            else if (item.keyId == lock2KeyID && !lock2Unlocked && isPlayerNearby && IsTouchingLock(lockObject2))
+            else
             {
-                UnlockLock(2, lockObject2, unlockingAnim2, lock2UnlockAudio);
-                lock2Unlocked = true;
-            }
-            else if (item.keyId == lock3KeyID && !lock3Unlocked && isPlayerNearby && IsTouchingLock(lockObject3))
-            {
-                UnlockLock(3, lockObject3, unlockingAnim3, lock3UnlockAudio);
-                lock3Unlocked = true;
-            }
-            else if (item.keyId == lock4KeyID && !lock4Unlocked && isPlayerNearby && IsTouchingLock(lockObject4))
-            {
-                UnlockLock(4, lockObject4, unlockingAnim4, lock4UnlockAudio);
-                lock4Unlocked = true;
-            }
-
-            // Check if all locks are unlocked
-            if (lock1Unlocked && lock2Unlocked && lock3Unlocked && lock4Unlocked)
-            {
-                trapGateScript.UnlockGate(); // Unlock the trap gate
-            }
-        }
-    }
-
-    private void UnlockLock(int lockIndex, GameObject lockObject, Animator unlockingAnim, AudioSource unlockSound)
-    {
-        Debug.Log($"Unlocking lock {lockIndex}");
-
-        // Play the unlock animation
-        unlockingAnim.SetTrigger("Unlock");
-
-        // Play the unlock sound if available
-        if (unlockSound != null)
-        {
-            unlockSound.Play();
-        }
-
-        // Disable the collider of the lock object after unlocking
-        Collider lockCollider = lockObject.GetComponent<Collider>();
-        if (lockCollider != null)
-        {
-            lockCollider.enabled = false;
-        }
-    }
-
-    private bool IsTouchingLock(GameObject lockObject)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            if (hit.collider.gameObject == lockObject)
-            {
-                Debug.Log($"Lock object {lockObject.name} is being touched by the mouse.");
-                return true;
+                unlockButtons[i].gameObject.SetActive(false); // Deactivate the unlock button
+                unlockButtons[i].interactable = false;        // Disable interaction
             }
         }
 
-        UnityEngine.Debug.Log("Raycast did not hit any object.");
-        return false;
-    }
-
-    private void CheckIfPlayerIsNearby()
-    {
-        // Check for the player in the detection radius around each lock object
-        isPlayerNearby = IsPlayerNearLock(lockObject1) || IsPlayerNearLock(lockObject2) ||
-                         IsPlayerNearLock(lockObject3) || IsPlayerNearLock(lockObject4);
-    }
-
-    private bool IsPlayerNearLock(GameObject lockObject)
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(lockObject.transform.position, detectionRadius);
-        foreach (var hitCollider in hitColliders)
+        // Toggle key objects' mesh renderers based purely on the PortalRoomCamera active state
+        foreach (GameObject keyObject in keyObjects)
         {
-            if (hitCollider.CompareTag("Player"))
+            if (keyObject != null)
             {
-                return true;
+                MeshRenderer meshRenderer = keyObject.GetComponent<MeshRenderer>();
+                if (meshRenderer != null)
+                {
+                    // The key object is visible only when the PortalRoomCamera is active
+                    meshRenderer.enabled = isPortalRoomCameraActive;
+                }
             }
         }
-        return false;
-    }
-
-    private bool IsCloseUpCameraActive()
-    {
-        var switchCameras = FindObjectsOfType<SwitchCamera>();
-        foreach (var switchCamera in switchCameras)
-        {
-            if (switchCamera.currentCameraState == CameraState.CloseUp)
-            {
-                return true; // Return true if any close-up camera is active
-            }
-        }
-        return false; // No close-up camera is active
     }
 }

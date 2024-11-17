@@ -13,13 +13,15 @@ public class TrapGate : MonoBehaviour
     public AudioSource trapGateSound;
     public AudioSource unlockGateSound;
 
-    // Reference to the text that will be shown
-    public Text displayText; // Drag your Text component here
+    // Reference to the texts that will be shown
+    public Text displayText; // Drag your "Portal Room is locked" Text component here
+    public Text unlockedText; // Drag your "Portal room has been unlocked" Text component here
 
     private Vector3 initialPosition;
     private Vector3 targetPosition;
 
     private bool isPlayerNearby = false;
+    private bool isGateUnlocked = false; // Flag to track if the gate has been unlocked
 
     // Enum to track the gate's state
     private enum GateState { Closed, Open }
@@ -37,10 +39,15 @@ public class TrapGate : MonoBehaviour
         // Set the gate to the starting position
         gateObject.transform.position = initialPosition;
 
-        // Make sure the text starts hidden (disabled)
+        // Make sure the texts start hidden (disabled)
         if (displayText != null)
         {
             displayText.gameObject.SetActive(false);
+        }
+
+        if (unlockedText != null)
+        {
+            unlockedText.gameObject.SetActive(false);
         }
     }
 
@@ -49,18 +56,18 @@ public class TrapGate : MonoBehaviour
         // Continuously check for player proximity
         CheckPlayerProximity();
 
-        // If player is nearby and the gate is not already open, start moving the gate
-        if (isPlayerNearby && currentGateState == GateState.Closed)
-        {
-            StartCoroutine(MoveGate());
-            isPlayerNearby = false;  // Prevent multiple triggers
-        }
-
-        // If unlockGate is true, reset the gate to its starting position
-        if (unlockGate)
+        // If unlockGate is true and the gate hasn't been unlocked yet, reset the gate to its starting position
+        if (unlockGate && !isGateUnlocked)
         {
             UnlockGate();
             unlockGate = false;  // Reset the unlockGate flag to prevent multiple unlocks until checked again
+        }
+
+        // If player is nearby and the gate is not already open and not unlocked, start moving the gate
+        if (isPlayerNearby && currentGateState == GateState.Closed && !isGateUnlocked)
+        {
+            StartCoroutine(MoveGate());
+            isPlayerNearby = false;  // Prevent multiple triggers
         }
     }
 
@@ -84,7 +91,7 @@ public class TrapGate : MonoBehaviour
         yield return new WaitForSeconds(gateMovementDelay);
 
         // Play the sound if available
-        if (trapGateSound != null)
+        if (trapGateSound != null && !trapGateSound.isPlaying)
         {
             trapGateSound.Play();
         }
@@ -117,6 +124,23 @@ public class TrapGate : MonoBehaviour
     // Method to unlock the gate and move it back to the starting position
     public void UnlockGate()
     {
+        if (isGateUnlocked) return;  // Prevent unlocking again if already unlocked
+
+        isGateUnlocked = true; // Mark the gate as unlocked
+
+        // Play the unlock sound if available
+        if (unlockGateSound != null)
+        {
+            unlockGateSound.Play();
+        }
+
+        // Show the unlocked text
+        if (unlockedText != null)
+        {
+            unlockedText.gameObject.SetActive(true); // Enable the text GameObject
+            StartCoroutine(HideTextAfterDelay(unlockedText, 2f)); // Display the text for 2 seconds
+        }
+
         // Use Lerp to smoothly move the gate back to its starting position
         StartCoroutine(MoveGateBackToStart());
     }
@@ -124,7 +148,7 @@ public class TrapGate : MonoBehaviour
     private IEnumerator MoveGateBackToStart()
     {
         // Play sound if available (optional)
-        if (trapGateSound != null)
+        if (trapGateSound != null && !trapGateSound.isPlaying)
         {
             trapGateSound.Play();
         }

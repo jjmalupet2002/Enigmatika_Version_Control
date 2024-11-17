@@ -280,7 +280,6 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         // Check if the requiredKeyId is filled and if the key matches
         if (string.IsNullOrEmpty(requiredKeyId) || item.keyId != requiredKeyId)
         {
-            UnityEngine.Debug.Log("Key is incorrect or no key required.");
             return; // Exit if key is incorrect or not required
         }
 
@@ -289,7 +288,6 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         currentItem = item; // Store the used item
 
         // Log to show that the key has been used
-        UnityEngine.Debug.Log("Key used. Please click the unlock button to unlock.");
     }
 
     // Flag to track if the key has been used
@@ -327,7 +325,6 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.Log("Cannot unlock: Key not used or button not clicked.");
         }
     }
 
@@ -346,6 +343,5 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         }
 
         // Optionally, log to confirm item deletion and UI change
-        UnityEngine.Debug.Log("Item deleted and unlock UI hidden.");
     }
 }
