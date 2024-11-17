@@ -32,6 +32,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     private Vector3 originalPosition; // Original position of the object
     private bool isInspecting = false; // Inspection state
     private bool hasLoggedAlreadyInspecting = false; // Log flag for 3D items
+    private bool hasBeenStored = false; // Flag to ensure the note is only stored once
 
 
     void Start()
@@ -130,10 +131,10 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     {
         if (noteUI != null && noteUI.activeSelf)
         {
-            if (isInspecting)
+            // Ensure NotifyPickup is only called once
+            if (isInspecting || hasBeenStored)
             {
-
-                return; // Prevent re-inspection
+                return; // Prevent re-inspection or double storing
             }
 
             isInspecting = true; // Set inspecting state
@@ -184,11 +185,20 @@ public class ItemInventoryObjectHandler : MonoBehaviour
 
     public void NotifyPickup()
     {
+        // If the item has already been stored, don't store it again
+        if (hasBeenStored)
+        {
+            return; // Prevent adding the item again
+        }
+
         // Create an instance of ItemData and pass the keyId (if available)
-        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, false, keyId); // Pass false for isUsingItem
+        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, false, isNote, noteUI, keyId);
 
         // Notify the Inventory Manager to add this item
         InventoryManager.Instance.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
+
+        // Mark this note as stored
+        hasBeenStored = true;
 
         // Show notification
         if (notificationText != null)
@@ -201,6 +211,7 @@ public class ItemInventoryObjectHandler : MonoBehaviour
             UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned."); // Warn if null
         }
     }
+
 
 
     private IEnumerator HideNotificationAfterDelay(float delay)

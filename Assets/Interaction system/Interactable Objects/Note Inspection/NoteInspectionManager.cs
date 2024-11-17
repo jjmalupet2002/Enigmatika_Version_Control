@@ -225,7 +225,6 @@ public class NoteInspectionManager : MonoBehaviour
                 }
                 else
                 {
-                    UnityEngine.Debug.Log("Cannot swipe, this note has only one page.");
                 }
             }
         }

@@ -28,6 +28,14 @@ public class DisplayInventory : MonoBehaviour
     public Button restoreItemButton; // Reference to the Restore Item button
     public GameObject useItemBackground; // Reference to the UseItem background
 
+    [Header("Inspect Item UI References")]
+    public GameObject InspectItemUI; // Reference to the black background UI for inspections
+    public Button ExitInspectButton; // Reference to the UseItem button
+
+
+
+    private ItemData currentSelectedItem; // To store the currently selected item
+
     private void OnEnable()
     {
         if (inventoryManager != null)
@@ -49,6 +57,8 @@ public class DisplayInventory : MonoBehaviour
         // Initialize the inventory display on start
         DisplayInventoryItems(); // Automatically show the inventory items
         restoreItemButton.onClick.AddListener(RestoreItem);
+        inspectItemButton.onClick.AddListener(InspectItem);
+        ExitInspectButton.onClick.AddListener(ExitInspectItem);
 
         // Ensure the UseItem background is disabled at start
         useItemBackground.SetActive(false);
@@ -147,12 +157,14 @@ public class DisplayInventory : MonoBehaviour
 
     private void SelectItem(ItemData item)
     {
+        // Store the selected item in the currentSelectedItem field
+        currentSelectedItem = item;
+
         // Display the item's details in the view panel
         itemIcon.sprite = item.itemIcon; // Set the item icon
         itemIcon.gameObject.SetActive(true); // Enable the item icon GameObject
         itemName.text = item.itemName; // Set the item name
         itemDescription.text = item.itemDescription; // Set the item description
-
 
         // Update button states based on item usability
         useItemButton.interactable = item.isUsable && !item.isUsingItem; // Enable or disable the use button
@@ -307,4 +319,34 @@ public class DisplayInventory : MonoBehaviour
         restoreItemButton.gameObject.SetActive(false); // Hide the restore button
         useItemBackground.SetActive(false); // Hide the UseItem background
     }
-}
+
+
+    // Display the black background UI and the note UI for the selected item
+    public void InspectItem()
+    {
+        if (currentSelectedItem != null && currentSelectedItem.noteUI != null)
+        {
+            // Hide any previously shown note UI first (if needed)
+            foreach (var item in inventoryManager.inventory)
+            {
+                if (item.noteUI != null)
+                    item.noteUI.SetActive(false); // Hide other noteUIs if necessary
+            }
+
+            // Show the specific note UI for the selected item
+            currentSelectedItem.noteUI.SetActive(true);
+            InspectItemUI.SetActive(true); // Show the black background
+
+        }
+    }
+
+        // Method to exit the note UI when the Back button is pressed
+        public void ExitInspectItem()
+        {
+            if (currentSelectedItem != null && currentSelectedItem.noteUI != null)
+            {
+                currentSelectedItem.noteUI.SetActive(false); // Hide the note UI
+                InspectItemUI.SetActive(false); // Hide the black background
+            }
+        }
+    }

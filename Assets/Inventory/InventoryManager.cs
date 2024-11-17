@@ -80,7 +80,6 @@ public class InventoryManager : ScriptableObject
         }
     }
 
-
     // Restore an item back to inventory (remove it from being used)
     public void RestoreItem(ItemData item)
     {
@@ -110,14 +109,22 @@ public class InventoryManager : ScriptableObject
         OnItemDeleted?.Invoke(item);
     }
 
-
     // Display the current inventory
     public void DisplayInventory()
     {
         UnityEngine.Debug.Log("Current Inventory Items:");
         foreach (var item in inventory)
         {
-            UnityEngine.Debug.Log($"Name: {item.itemName}, Description: {item.itemDescription}, Icon: {item.itemIcon}\nClue Item: {item.isClueItem}, General Item: {item.isGeneralItem}, Usable: {item.isUsable}, Using: {item.isUsingItem}");
+
+            // Check if the NoteUI is stored in the inventory
+            if (item.isNote && item.noteUI != null)
+            {
+                UnityEngine.Debug.Log($"Item {item.itemName} has a NoteUI stored.");
+            }
+            else if (item.isNote && item.noteUI == null)
+            {
+                UnityEngine.Debug.Log($"Item {item.itemName} is a note but has no NoteUI stored.");
+            }
         }
     }
 }
