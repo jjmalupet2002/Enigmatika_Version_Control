@@ -9,7 +9,7 @@ public class PlayerJoystickControl : MonoBehaviour
     [Header("Player Controller Settings:")]
     public Animator playerAnim; // Reference to Animator
     public Rigidbody playerRigid; // Reference to Rigidbody
-    public float moveSpeed = 3f; // Speed of movement
+    public float moveSpeed = 10f; // Speed of movement
     public Transform cameraTransform; // Reference to the camera transform
 
     // Stair Climb Settings
@@ -192,7 +192,7 @@ public class PlayerJoystickControl : MonoBehaviour
         }
         else
         {
-            moveSpeed = 5f; // Normal speed when not climbing down
+            moveSpeed = 10f; // Normal speed when not climbing down
         }
     }
 
