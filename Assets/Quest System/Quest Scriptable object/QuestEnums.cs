@@ -15,7 +15,8 @@ public class QuestEnums : MonoBehaviour
         Find,
         Explore,
         Escape,
-        UnlockSolve
+        UnlockSolve,
+        Talk
     }
 
     public enum QuestStatus

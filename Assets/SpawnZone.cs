@@ -5,7 +5,6 @@ using UnityEngine.Events;
 public class SpawnZone : MonoBehaviour
 {
     public QuestManager questManager;
-
     public List<QuestObject> findItemList;
     public Collider exploreAreaCollider;
     public Collider escapeExitCollider;
@@ -39,6 +38,9 @@ public class SpawnZone : MonoBehaviour
                 break;
             case QuestEnums.QuestCriteriaType.UnlockSolve:
                 HandleUnlockSolveCriteria(criteria);
+                break;
+            case QuestEnums.QuestCriteriaType.Talk:
+                HandleTalkCriteria(criteria);
                 break;
             default:
                 UnityEngine.Debug.LogWarning("Unknown criteria type: " + criteria.criteriaType);
@@ -92,6 +94,59 @@ public class SpawnZone : MonoBehaviour
     {
         // Implement unlock criteria logic
     }
+
+
+    private void HandleTalkCriteria(QuestCriteria criteria)
+    {
+        // Log the current status to ensure we're comparing correctly
+        UnityEngine.Debug.Log($"QuestCriteria status: {criteria.status}");
+
+        if (criteria.status == QuestEnums.QuestStatus.InProgress)
+        {
+            UnityEngine.Debug.Log($"Talk criteria is in progress for: {criteria.criteriaName}");
+
+            var npcInteractableObject = criteria.associatedQuestObject;
+
+            // Ensure the quest object is not null
+            if (npcInteractableObject != null)
+            {
+                // Log if quest object is valid
+                UnityEngine.Debug.Log($"Associated quest object found for criteria: {criteria.criteriaName}");
+
+                var npcInteractable = npcInteractableObject.GetComponent<NPCInteractable>();
+
+                // Ensure the NPCInteractable component exists on the quest object
+                if (npcInteractable != null)
+                {
+                    // Log the conversation being set
+                    UnityEngine.Debug.Log($"Setting active conversation: {criteria.conversationName} for NPC: {npcInteractable.gameObject.name}");
+
+                    // Set the active conversation using the conversation name from the quest criteria
+                    npcInteractable.SetActiveConversation(criteria.conversationName);
+
+                    // Log successful action
+                    UnityEngine.Debug.Log($"Talk criteria met, setting active conversation: {criteria.conversationName} for NPC: {npcInteractable.gameObject.name}");
+                }
+                else
+                {
+                    // Error log if NPCInteractable is not found on the object
+                    UnityEngine.Debug.LogError($"NPCInteractable not found on {npcInteractableObject.name}.");
+                }
+            }
+            else
+            {
+                // Error log if associated quest object is null
+                UnityEngine.Debug.LogError($"Associated quest object for criteria {criteria.criteriaName} is null.");
+            }
+        }
+        else
+        {
+            // Log if the status is not InProgress (helps verify why it's not running)
+            UnityEngine.Debug.Log($"Talk criteria not in progress for: {criteria.criteriaName}. Current status: {criteria.status}");
+        }
+    }
+
+
 
     public void NotifyCriteriaComplete(QuestCriteria criteria)
     {
@@ -182,12 +237,15 @@ public class SpawnZone : MonoBehaviour
                 {
                     criteria.status = QuestEnums.QuestStatus.Completed;
                     questManager.CheckQuestCompletion(quest);
+                    return;  // Exit the loop after finding the matching criteria
                 }
             }
         }
     }
 
-    public void NotifyEscapeCriteriaComplete(QuestObject questObject)
+
+
+public void NotifyEscapeCriteriaComplete(QuestObject questObject)
     {
         foreach (var entry in questManager.GetActiveQuests())
         {

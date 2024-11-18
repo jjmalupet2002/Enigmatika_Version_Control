@@ -13,4 +13,7 @@ public class QuestCriteria
 
     // Add any criteria-specific data, such as spawn zones, NPC references, etc.
     public GameObject spawnZone;  // Example for Find/Explore criteria
+
+    public string conversationName;  // The name of the conversation
+    public NPCInteractable npcConversationStarter;  // Reference to the NPCConversationStarter component
 }

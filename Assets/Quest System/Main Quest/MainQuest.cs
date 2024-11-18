@@ -5,15 +5,13 @@ public class MainQuest : MonoBehaviour
 {
     public string questName;
     public string questDescription;
-
     public List<QuestCriteria> questCriteriaList = new List<QuestCriteria>();
-
     public GameObject questReward;
     public GameObject questGiver;
     public QuestEnums.QuestStatus status;
 
     // Add a criteria with priority handling
-    public void AddCriteria(string name, QuestEnums.QuestCriteriaType type, GameObject spawnZone, int priority)
+    public void AddCriteria(string name, QuestEnums.QuestCriteriaType type, GameObject spawnZone, int priority, string conversationName = null)
     {
         QuestCriteria newCriteria = new QuestCriteria
         {
@@ -21,7 +19,8 @@ public class MainQuest : MonoBehaviour
             criteriaType = type,
             spawnZone = spawnZone,
             priority = priority,
-            status = QuestEnums.QuestStatus.NotStarted
+            status = QuestEnums.QuestStatus.NotStarted,
+            conversationName = conversationName // Add this line
         };
 
         questCriteriaList.Add(newCriteria);
@@ -56,3 +55,4 @@ public class MainQuest : MonoBehaviour
         }
     }
 }
+

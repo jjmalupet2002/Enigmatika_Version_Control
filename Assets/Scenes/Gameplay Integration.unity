@@ -1793,6 +1793,57 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
   m_PrefabInstance: {fileID: 1073622352390563733}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &112133467
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 112133468}
+  - component: {fileID: 112133469}
+  m_Layer: 0
+  m_Name: ConversationEventInfo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &112133468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112133467}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.94251084, z: -0, w: 0.33417565}
+  m_LocalPosition: {x: -35.260246, y: -0.57649994, z: -2.9209518}
+  m_LocalScale: {x: 0.50000006, y: 0.5, z: 0.50000006}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1857054077}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &112133469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112133467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event:
+    m_PersistentCalls:
+      m_Calls: []
+  NodeID: 0
+  TMPFont: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  Icon: {fileID: 21300000, guid: ce6a43eed5555fb4a82ad7b012249fcb, type: 3}
+  Audio: {fileID: 0}
 --- !u!1001 &114036706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10045,8 +10096,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70359b68f23054a428446b731147436e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conversation: {fileID: 25090603}
+  Activeconversation: {fileID: 0}
   npcName: Sir Thomas
+  conversationEntries: []
 --- !u!136 &338530159
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27818,6 +27870,16 @@ MonoBehaviour:
     priority: 0
     associatedQuestObject: {fileID: 1352788324}
     spawnZone: {fileID: 1290358202}
+    conversationName: 
+    npcConversationStarter: {fileID: 0}
+  - criteriaName: Talk to the Hooded Figure
+    criteriaType: 4
+    status: 0
+    priority: 1
+    associatedQuestObject: {fileID: 1352788324}
+    spawnZone: {fileID: 1290358202}
+    conversationName: Hood1
+    npcConversationStarter: {fileID: 1466124388}
   questReward: {fileID: 0}
   questGiver: {fileID: 0}
   status: 0
@@ -28870,6 +28932,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
   m_PrefabInstance: {fileID: 476000328206202839}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1466124388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+  m_PrefabInstance: {fileID: 2487741856148469994}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70359b68f23054a428446b731147436e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1468207036 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1865948603492791689, guid: eeea2201d68467f489dabe4e26024fbe, type: 3}
@@ -33902,6 +33975,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1857054076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1857054077}
+  - component: {fileID: 1857054078}
+  m_Layer: 0
+  m_Name: Talk to the Hooded again
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1857054077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857054076}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 112133468}
+  m_Father: {fileID: 291817888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1857054078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857054076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83189876d4d389f43b7dd2e925aa112e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentIDCounter: 1
+  json: '{"Options":[],"Parameters":[],"SpeechNodes":[{"Connections":[],"EditorInfo":{"isRoot":true,"xPos":353,"yPos":170},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"Testing
+    lang to idol","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Hooded
+    Fibgure","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
+  saveVersion: 110
+  DefaultName: 
+  DefaultSprite: {fileID: 0}
+  DefaultFont: {fileID: 0}
+  NodeSerializedDataList:
+  - {fileID: 112133469}
+  ContinueFont: {fileID: 0}
+  EndConversationFont: {fileID: 0}
+  Event:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1860487598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34042,6 +34175,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfb04594231799d4092ee0064447ce94, type: 3}
+--- !u!114 &1863316651 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5871509774035600537, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+  m_PrefabInstance: {fileID: 2487741856148469994}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83189876d4d389f43b7dd2e925aa112e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1867112169 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3080796420732528946, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
@@ -37002,30 +37146,48 @@ MonoBehaviour:
     priority: 0
     associatedQuestObject: {fileID: 1373781557}
     spawnZone: {fileID: 1628354443}
+    conversationName: 
+    npcConversationStarter: {fileID: 0}
   - criteriaName: Another key you need to find
     criteriaType: 0
     status: 0
     priority: 1
     associatedQuestObject: {fileID: 84117164}
     spawnZone: {fileID: 1628354443}
+    conversationName: 
+    npcConversationStarter: {fileID: 0}
   - criteriaName: Explore the Library
     criteriaType: 1
     status: 0
     priority: 2
     associatedQuestObject: {fileID: 1490519241}
     spawnZone: {fileID: 1789944445}
+    conversationName: 
+    npcConversationStarter: {fileID: 0}
   - criteriaName: Escape to the Castle Halls
     criteriaType: 2
     status: 0
     priority: 3
     associatedQuestObject: {fileID: 487304641}
     spawnZone: {fileID: 609420941}
+    conversationName: 
+    npcConversationStarter: {fileID: 0}
   - criteriaName: 'Castle Halls: Find a blue key'
     criteriaType: 0
     status: 0
     priority: 4
     associatedQuestObject: {fileID: 599417049}
     spawnZone: {fileID: 760393375}
+    conversationName: 
+    npcConversationStarter: {fileID: 0}
+  - criteriaName: Talk to the Hooded Figure Again
+    criteriaType: 4
+    status: 0
+    priority: 5
+    associatedQuestObject: {fileID: 599417049}
+    spawnZone: {fileID: 760393375}
+    conversationName: Hood2
+    npcConversationStarter: {fileID: 1466124388}
   questReward: {fileID: 0}
   questGiver: {fileID: 0}
   status: 0
@@ -43462,6 +43624,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal Room Hooded Figure
       objectReference: {fileID: 0}
+    - target: {fileID: 4125744677693179846, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: m_Name
+      value: Who is that Hooded
+      objectReference: {fileID: 0}
     - target: {fileID: 4365108888669247137, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
       propertyPath: m_Name
       value: model
@@ -43530,11 +43696,42 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 455208185}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversation
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: Activeconversation
+      value: 
+      objectReference: {fileID: 1857054078}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[0].conversation
+      value: 
+      objectReference: {fileID: 1863316651}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[1].conversation
+      value: 
+      objectReference: {fileID: 1857054078}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[0].conversationName
+      value: Hood2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[1].conversationName
+      value: Hood1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1513270572039724065, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
     - {fileID: 4201443467847857181, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5022840152087271477, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1857054077}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
 --- !u!1 &2567834452158016657
