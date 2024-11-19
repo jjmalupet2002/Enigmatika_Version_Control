@@ -26,6 +26,7 @@ namespace DialogueEditor
         /// <summary> Version 1.10 </summary>
         public const int CurrentVersion = (int)eSaveVersion.V1_10;
         private readonly string CHILD_NAME = "ConversationEventInfo";
+       
 
         // Getters
         public int Version { get { return saveVersion; } }
@@ -45,6 +46,7 @@ namespace DialogueEditor
         // Runtime vars
         public UnityEngine.Events.UnityEvent Event;
         public List<EditableParameter> ParameterList; // Serialized into the json string
+
 
         
 

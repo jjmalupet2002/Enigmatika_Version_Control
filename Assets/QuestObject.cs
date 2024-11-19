@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 
 public class QuestObject : MonoBehaviour
@@ -19,13 +18,17 @@ public class QuestObject : MonoBehaviour
     private Vector3 initialPosition;   // Store the initial position of the 3D object for movement detection
 
     [Header("Explore Quest settings")]
-
     public Collider exploreAreaCollider; // Collider for the explore area
     public bool isExplorationCompleted = false; // Flag to track if exploration is completed
 
     [Header("Escape Quest settings")]
     public Collider escapeCollider;    // Collider for the escape area
     public bool isEscapeCompleted = false; // Flag to track if escape is completed
+
+    [Header("Talk Quest settings")]
+    private Quaternion initialNpcRotation;  // Store the initial rotation of the NPC
+    public bool isTalkCompleted = false;
+    private bool rotationDetected = false; // To track if rotation exceeds threshold
 
     [Header("Spawn Zone reference:")]
     public SpawnZone spawnZone;        // Reference to the associated SpawnZone
@@ -37,6 +40,15 @@ public class QuestObject : MonoBehaviour
         {
             initialPosition = referenced3DObject.transform.position;
         }
+
+        // Subscribe to the rotation event from TestNpcRotation
+        TestNpcRotation.OnNpcRotationExceeded += HandleNpcRotationExceeded;
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from the event when the object is destroyed to avoid memory leaks
+        TestNpcRotation.OnNpcRotationExceeded -= HandleNpcRotationExceeded;
     }
 
     void Update()
@@ -85,12 +97,23 @@ public class QuestObject : MonoBehaviour
             {
                 if (col.CompareTag("Player"))
                 {
-
                     isEscapeCompleted = true;
                     NotifySpawnZoneEscapeComplete();
                     break; // Exit the loop as the player has escaped
                 }
             }
+        }
+    }
+
+    // This method will be called when NPC rotation exceeds the threshold
+    private void HandleNpcRotationExceeded(QuestObject questObject)
+    {
+        // Ensure that the completion is specific to the QuestObject passed
+        if (questObject == this)
+        {
+            // Here, you can update the state of the QuestObject
+            isTalkCompleted = true;
+            NotifySpawnZoneTalkComplete();
         }
     }
 
@@ -128,6 +151,14 @@ public class QuestObject : MonoBehaviour
         {
             // Notify the spawn zone that escape is complete
             spawnZone.NotifyEscapeCriteriaComplete(this);
+        }
+    }
+
+    private void NotifySpawnZoneTalkComplete()
+    {
+        if (associatedQuest != null && spawnZone != null)
+        {
+            spawnZone.NotifyTalkCriteriaComplete(this);
         }
     }
 }

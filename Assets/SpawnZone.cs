@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
+using DialogueEditor; // Or the correct namespace where NPCConversation is located
 
 public class SpawnZone : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class SpawnZone : MonoBehaviour
     public GameObject unlockableObject;
     public GameObject unlockableObjectPrefab;
     public UnityEvent onUnlockEvent;
+    public NPCConversation conversation;
 
     void Start()
     {
@@ -23,8 +26,15 @@ public class SpawnZone : MonoBehaviour
         }
     }
 
+
     private void HandleCriteria(QuestCriteria criteria)
     {
+
+        if (criteria.status != QuestEnums.QuestStatus.InProgress)
+        {
+            return; // Skip if not InProgress
+        }
+
         switch (criteria.criteriaType)
         {
             case QuestEnums.QuestCriteriaType.Find:
@@ -90,71 +100,42 @@ public class SpawnZone : MonoBehaviour
         }
     }
 
+
+    private void HandleTalkCriteria(QuestCriteria criteria)
+    {
+        if (criteria.status == QuestEnums.QuestStatus.InProgress)
+        {
+            // Ensure that we check the individual completion condition for this criteria
+            var questObject = criteria.associatedQuestObject;
+
+            if (questObject.isTalkCompleted)  // Replace with specific condition for talk completion
+            {
+                criteria.status = QuestEnums.QuestStatus.Completed;
+                UnityEngine.Debug.Log("Talk criteria met, marking as complete: " + criteria.criteriaName);
+                NotifyCriteriaComplete(criteria);
+            }
+        }
+    }
+
+
     private void HandleUnlockSolveCriteria(QuestCriteria criteria)
     {
         // Implement unlock criteria logic
     }
 
-
-    private void HandleTalkCriteria(QuestCriteria criteria)
-    {
-        // Log the current status to ensure we're comparing correctly
-        UnityEngine.Debug.Log($"QuestCriteria status: {criteria.status}");
-
-        if (criteria.status == QuestEnums.QuestStatus.InProgress)
-        {
-            UnityEngine.Debug.Log($"Talk criteria is in progress for: {criteria.criteriaName}");
-
-            var npcInteractableObject = criteria.associatedQuestObject;
-
-            // Ensure the quest object is not null
-            if (npcInteractableObject != null)
-            {
-                // Log if quest object is valid
-                UnityEngine.Debug.Log($"Associated quest object found for criteria: {criteria.criteriaName}");
-
-                var npcInteractable = npcInteractableObject.GetComponent<NPCInteractable>();
-
-                // Ensure the NPCInteractable component exists on the quest object
-                if (npcInteractable != null)
-                {
-                    // Log the conversation being set
-                    UnityEngine.Debug.Log($"Setting active conversation: {criteria.conversationName} for NPC: {npcInteractable.gameObject.name}");
-
-                    // Set the active conversation using the conversation name from the quest criteria
-                    npcInteractable.SetActiveConversation(criteria.conversationName);
-
-                    // Log successful action
-                    UnityEngine.Debug.Log($"Talk criteria met, setting active conversation: {criteria.conversationName} for NPC: {npcInteractable.gameObject.name}");
-                }
-                else
-                {
-                    // Error log if NPCInteractable is not found on the object
-                    UnityEngine.Debug.LogError($"NPCInteractable not found on {npcInteractableObject.name}.");
-                }
-            }
-            else
-            {
-                // Error log if associated quest object is null
-                UnityEngine.Debug.LogError($"Associated quest object for criteria {criteria.criteriaName} is null.");
-            }
-        }
-        else
-        {
-            // Log if the status is not InProgress (helps verify why it's not running)
-            UnityEngine.Debug.Log($"Talk criteria not in progress for: {criteria.criteriaName}. Current status: {criteria.status}");
-        }
-    }
-
-
-
     public void NotifyCriteriaComplete(QuestCriteria criteria)
     {
+        // Log before updating the criteria status
+        UnityEngine.Debug.Log("Completing criteria: " + criteria.criteriaName);
+
+        // Mark the criteria as completed
         criteria.status = QuestEnums.QuestStatus.Completed;
-        questManager.CheckQuestCompletion(criteria.associatedQuestObject.associatedQuest);
         UnityEngine.Debug.Log("Criteria completed: " + criteria.criteriaName);
 
-        // Automatically update next criteria
+        // Now check if the quest is fully completed
+        questManager.CheckQuestCompletion(criteria.associatedQuestObject.associatedQuest);
+
+        // Handle the next criteria
         foreach (var nextCriteria in criteria.associatedQuestObject.associatedQuest.questCriteriaList)
         {
             if (nextCriteria.status == QuestEnums.QuestStatus.NotStarted)
@@ -165,9 +146,11 @@ public class SpawnZone : MonoBehaviour
             }
         }
 
+
         // Handle enabling/disabling MeshRenderer and Colliders based on criteria priority
         HandleQuestObjectVisibility(criteria);
     }
+
 
     private void HandleQuestObjectVisibility(QuestCriteria criteria)
     {
@@ -177,14 +160,14 @@ public class SpawnZone : MonoBehaviour
 
         bool foundInProgress = false;
 
-        // Enable MeshRenderer and Collider for the first QuestObject that is InProgress
-        foreach (var questObject in sortedCriteria)
+        // Enable MeshRenderer and Collider for the highest-priority, InProgress criteria
+        foreach (var questCriteria in sortedCriteria)
         {
-            if (questObject.status != QuestEnums.QuestStatus.Completed)
+            if (questCriteria.status == QuestEnums.QuestStatus.InProgress)
             {
-                var associatedQuestObject = questObject.associatedQuestObject;
+                var associatedQuestObject = questCriteria.associatedQuestObject;
 
-                // Enable the components for the first in-progress object
+                // Enable components only for the highest-priority in-progress criteria
                 if (!foundInProgress)
                 {
                     if (associatedQuestObject.meshRenderer != null) associatedQuestObject.meshRenderer.enabled = true;
@@ -194,20 +177,21 @@ public class SpawnZone : MonoBehaviour
                 }
                 else
                 {
-                    // Disable the components for any lower-priority in-progress objects
+                    // Disable components for any lower-priority in-progress objects
                     if (associatedQuestObject.meshRenderer != null) associatedQuestObject.meshRenderer.enabled = false;
                     if (associatedQuestObject.colliderComponent != null) associatedQuestObject.colliderComponent.enabled = false;
                 }
             }
             else
             {
-                // If the criteria is completed, ensure the components are disabled
-                var associatedQuestObject = questObject.associatedQuestObject;
+                // If the criteria is completed, ensure components are disabled
+                var associatedQuestObject = questCriteria.associatedQuestObject;
                 if (associatedQuestObject.meshRenderer != null) associatedQuestObject.meshRenderer.enabled = false;
                 if (associatedQuestObject.colliderComponent != null) associatedQuestObject.colliderComponent.enabled = false;
             }
         }
     }
+
 
     public void NotifyQuestObjectFound(QuestObject questObject)
     {
@@ -244,8 +228,25 @@ public class SpawnZone : MonoBehaviour
     }
 
 
+    // Existing method for handling talk criteria
+    public void NotifyTalkCriteriaComplete(QuestObject questObject)
+    {
+        foreach (var entry in questManager.GetActiveQuests())
+        {
+            MainQuest quest = entry.Value;
+            foreach (var criteria in quest.questCriteriaList)
+            {
+                if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Talk && criteria.associatedQuestObject == questObject)
+                {
+                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    questManager.CheckQuestCompletion(quest);
+                    return;  // Exit the loop after finding the matching criteria
+                }
+            }
+        }
+    }
 
-public void NotifyEscapeCriteriaComplete(QuestObject questObject)
+    public void NotifyEscapeCriteriaComplete(QuestObject questObject)
     {
         foreach (var entry in questManager.GetActiveQuests())
         {

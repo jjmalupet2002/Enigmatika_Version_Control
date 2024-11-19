@@ -1603,6 +1603,7 @@ MonoBehaviour:
   isExplorationCompleted: 0
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
+  isTalkCompleted: 0
   spawnZone: {fileID: 1628354445}
 --- !u!4 &88317547 stripped
 Transform:
@@ -10096,9 +10097,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70359b68f23054a428446b731147436e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Activeconversation: {fileID: 0}
+  conversation: {fileID: 0}
   npcName: Sir Thomas
-  conversationEntries: []
 --- !u!136 &338530159
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11911,6 +11911,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1827092811103533115, guid: 72237771460e9f347b46a2a749498754, type: 3}
   m_PrefabInstance: {fileID: 1020730506}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &464668398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4136431917338712050, guid: 07cfa80971e32fd4dbc9b35709bda415, type: 3}
+  m_PrefabInstance: {fileID: 1137564245761625713}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &478964857 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
@@ -11931,6 +11936,60 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3057673451538185879, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
   m_PrefabInstance: {fileID: 5099765875977381061}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &483192907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 483192908}
+  - component: {fileID: 483192909}
+  m_Layer: 0
+  m_Name: 'Criteria 2: Talk to the Hooded baliw'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &483192908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483192907}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1411415476}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &483192909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483192907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991b6b8ea299ffe43b475798ac446db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questManager: {fileID: 954717465}
+  findItemList: []
+  exploreAreaCollider: {fileID: 0}
+  escapeExitCollider: {fileID: 0}
+  unlockableObject: {fileID: 0}
+  unlockableObjectPrefab: {fileID: 0}
+  onUnlockEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  conversation: {fileID: 2050241035}
 --- !u!4 &486920594 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 544677825409491509, guid: 645bb802a52d37342acd891643812fe3, type: 3}
@@ -11972,6 +12031,7 @@ MonoBehaviour:
   isExplorationCompleted: 0
   escapeCollider: {fileID: 487304638}
   isEscapeCompleted: 0
+  isTalkCompleted: 0
   spawnZone: {fileID: 609420943}
 --- !u!1 &487388058
 GameObject:
@@ -12815,6 +12875,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
   m_PrefabInstance: {fileID: 1008560711}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &576112669 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3950763773833528082, guid: 07cfa80971e32fd4dbc9b35709bda415, type: 3}
+  m_PrefabInstance: {fileID: 1137564245761625713}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83189876d4d389f43b7dd2e925aa112e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &577082134
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13186,6 +13257,7 @@ MonoBehaviour:
   isExplorationCompleted: 0
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
+  isTalkCompleted: 0
   spawnZone: {fileID: 760393377}
 --- !u!1001 &600567246
 PrefabInstance:
@@ -13348,6 +13420,7 @@ MonoBehaviour:
   onUnlockEvent:
     m_PersistentCalls:
       m_Calls: []
+  conversation: {fileID: 0}
 --- !u!1001 &613948735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16474,6 +16547,7 @@ MonoBehaviour:
   onUnlockEvent:
     m_PersistentCalls:
       m_Calls: []
+  conversation: {fileID: 0}
 --- !u!1 &760964862
 GameObject:
   m_ObjectHideFlags: 0
@@ -20413,6 +20487,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &911664530
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 911664532}
+  - component: {fileID: 911664531}
+  m_Layer: 0
+  m_Name: 'Criteria 3: Talk to the Scholar'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &911664531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911664530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991b6b8ea299ffe43b475798ac446db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questManager: {fileID: 954717465}
+  findItemList: []
+  exploreAreaCollider: {fileID: 0}
+  escapeExitCollider: {fileID: 0}
+  unlockableObject: {fileID: 0}
+  unlockableObjectPrefab: {fileID: 0}
+  onUnlockEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  conversation: {fileID: 576112669}
+--- !u!4 &911664532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911664530}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1411415476}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &912972011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
@@ -24316,6 +24444,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openQuestButton: {fileID: 1167145045}
   interactRange: 20
+--- !u!114 &1188203727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188203716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 1411415475}
+  meshRenderer: {fileID: 0}
+  colliderComponent: {fileID: 0}
+  isInteractable: 0
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 0
+  is3DObject: 0
+  noteUI: {fileID: 0}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 0}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  spawnZone: {fileID: 483192909}
+--- !u!114 &1188203728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188203716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c8c35947c2a78c49a30b7ead61ebb55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcGameObject: {fileID: 1188203716}
 --- !u!4 &1189041218 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
@@ -25789,7 +25958,7 @@ GameObject:
   - component: {fileID: 1290358204}
   - component: {fileID: 1290358203}
   m_Layer: 0
-  m_Name: 'Criteria 1 and 2: Find keys'
+  m_Name: 'Criteria 1: Find keys'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25817,6 +25986,7 @@ MonoBehaviour:
   onUnlockEvent:
     m_PersistentCalls:
       m_Calls: []
+  conversation: {fileID: 0}
 --- !u!4 &1290358204
 Transform:
   m_ObjectHideFlags: 0
@@ -27081,6 +27251,7 @@ MonoBehaviour:
   isExplorationCompleted: 0
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
+  isTalkCompleted: 0
   spawnZone: {fileID: 1290358203}
 --- !u!4 &1356669040 stripped
 Transform:
@@ -27455,6 +27626,7 @@ MonoBehaviour:
   isExplorationCompleted: 0
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
+  isTalkCompleted: 0
   spawnZone: {fileID: 1628354445}
 --- !u!4 &1374171263 stripped
 Transform:
@@ -27864,22 +28036,30 @@ MonoBehaviour:
   questName: 'Quest 2: The Thief'
   questDescription: Find out who is the thief that stole
   questCriteriaList:
-  - criteriaName: hahaha ULUL
+  - criteriaName: Find the 1000th key haha
     criteriaType: 0
     status: 0
     priority: 0
     associatedQuestObject: {fileID: 1352788324}
     spawnZone: {fileID: 1290358202}
-    conversationName: 
-    npcConversationStarter: {fileID: 0}
+    talkId: 0
+    isTalkCompleted: 0
   - criteriaName: Talk to the Hooded Figure
     criteriaType: 4
     status: 0
     priority: 1
-    associatedQuestObject: {fileID: 1352788324}
-    spawnZone: {fileID: 1290358202}
-    conversationName: Hood1
-    npcConversationStarter: {fileID: 1466124388}
+    associatedQuestObject: {fileID: 1188203727}
+    spawnZone: {fileID: 483192907}
+    talkId: 1
+    isTalkCompleted: 0
+  - criteriaName: Go to the Library and find the Intrigued Scholar
+    criteriaType: 4
+    status: 0
+    priority: 2
+    associatedQuestObject: {fileID: 1690007141}
+    spawnZone: {fileID: 911664530}
+    talkId: 2
+    isTalkCompleted: 0
   questReward: {fileID: 0}
   questGiver: {fileID: 0}
   status: 0
@@ -27897,6 +28077,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1290358204}
+  - {fileID: 483192908}
+  - {fileID: 911664532}
   m_Father: {fileID: 372283929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1411719471
@@ -28932,17 +29114,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
   m_PrefabInstance: {fileID: 476000328206202839}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1466124388 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
-  m_PrefabInstance: {fileID: 2487741856148469994}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70359b68f23054a428446b731147436e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1468207036 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1865948603492791689, guid: eeea2201d68467f489dabe4e26024fbe, type: 3}
@@ -29120,6 +29291,7 @@ MonoBehaviour:
   isExplorationCompleted: 0
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
+  isTalkCompleted: 0
   spawnZone: {fileID: 1789944447}
 --- !u!4 &1490825343 stripped
 Transform:
@@ -30666,6 +30838,7 @@ MonoBehaviour:
   onUnlockEvent:
     m_PersistentCalls:
       m_Calls: []
+  conversation: {fileID: 0}
 --- !u!1001 &1628614561
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31319,6 +31492,26 @@ PrefabInstance:
       propertyPath: conversation
       value: 
       objectReference: {fileID: 2050241035}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: activeConversation
+      value: 
+      objectReference: {fileID: 2050241035}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[0].conversation
+      value: 
+      objectReference: {fileID: 2050241035}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[0].conversationEnum
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      propertyPath: conversationEntries.Array.data[0].conversationName
+      value: HoodedHallway
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7645793533818300097, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
     - {fileID: 5916675108262838534, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
@@ -31342,6 +31535,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4102421663004601908, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1188203723}
+    - targetCorrespondingSourceObject: {fileID: 4102421663004601908, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1188203727}
+    - targetCorrespondingSourceObject: {fileID: 4102421663004601908, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1188203728}
     - targetCorrespondingSourceObject: {fileID: 4125744677693179846, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2050241035}
@@ -31625,6 +31824,47 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8793213180186161403, guid: 07cfa80971e32fd4dbc9b35709bda415, type: 3}
   m_PrefabInstance: {fileID: 1137564245761625713}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1690007141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464668398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 1411415475}
+  meshRenderer: {fileID: 0}
+  colliderComponent: {fileID: 0}
+  isInteractable: 0
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 0
+  is3DObject: 0
+  noteUI: {fileID: 0}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 0}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  spawnZone: {fileID: 911664531}
+--- !u!114 &1690007142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464668398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c8c35947c2a78c49a30b7ead61ebb55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcGameObject: {fileID: 464668398}
 --- !u!1 &1690973652
 GameObject:
   m_ObjectHideFlags: 0
@@ -32893,6 +33133,7 @@ MonoBehaviour:
   onUnlockEvent:
     m_PersistentCalls:
       m_Calls: []
+  conversation: {fileID: 0}
 --- !u!4 &1790117354 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3772308635453134780, guid: c96ad4a3c81fd184abddb8f04ad0288a, type: 3}
@@ -36593,12 +36834,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 8
-  json: '{"Options":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":4}],"EditorInfo":{"isRoot":false,"xPos":342,"yPos":152},"ID":3,"ParamActions":[],"TMPFontGUID":null,"Text":"How?","parentUIDs":[0],"SpeechUID":-1},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":359,"yPos":605},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"Okay","parentUIDs":[6],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":3}],"EditorInfo":{"isRoot":true,"xPos":328,"yPos":21},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"I
+  json: '{"Options":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":4}],"EditorInfo":{"isRoot":false,"xPos":205,"yPos":124},"ID":3,"ParamActions":[],"TMPFontGUID":null,"Text":"How?","parentUIDs":[0],"SpeechUID":-1},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":222,"yPos":577},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"Okay","parentUIDs":[6],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":3}],"EditorInfo":{"isRoot":true,"xPos":191,"yPos":-7},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"I
     will let you escape if you solve the mystery of the Royal Expansion.","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Hooded
-    Figure","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":6}],"EditorInfo":{"isRoot":false,"xPos":402,"yPos":299},"ID":4,"ParamActions":[],"TMPFontGUID":null,"Text":"Read
+    Figure","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":6}],"EditorInfo":{"isRoot":false,"xPos":266,"yPos":271},"ID":4,"ParamActions":[],"TMPFontGUID":null,"Text":"Read
     the Sign posts. Each of them are quests meant to unravel the mysteries of the
     story.","parentUIDs":[3],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Hooded
-    Figure","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":false,"xPos":378,"yPos":461},"ID":6,"ParamActions":[],"TMPFontGUID":null,"Text":"Comeback
+    Figure","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":false,"xPos":241,"yPos":433},"ID":6,"ParamActions":[],"TMPFontGUID":null,"Text":"Comeback
     to me each time you complete a quests and I will give you a reward you deserve.","parentUIDs":[4],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Hooded
     Figure","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
@@ -37146,48 +37387,40 @@ MonoBehaviour:
     priority: 0
     associatedQuestObject: {fileID: 1373781557}
     spawnZone: {fileID: 1628354443}
-    conversationName: 
-    npcConversationStarter: {fileID: 0}
+    talkId: 0
+    isTalkCompleted: 0
   - criteriaName: Another key you need to find
     criteriaType: 0
     status: 0
     priority: 1
     associatedQuestObject: {fileID: 84117164}
     spawnZone: {fileID: 1628354443}
-    conversationName: 
-    npcConversationStarter: {fileID: 0}
+    talkId: 0
+    isTalkCompleted: 0
   - criteriaName: Explore the Library
     criteriaType: 1
     status: 0
     priority: 2
     associatedQuestObject: {fileID: 1490519241}
     spawnZone: {fileID: 1789944445}
-    conversationName: 
-    npcConversationStarter: {fileID: 0}
+    talkId: 0
+    isTalkCompleted: 0
   - criteriaName: Escape to the Castle Halls
     criteriaType: 2
     status: 0
     priority: 3
     associatedQuestObject: {fileID: 487304641}
     spawnZone: {fileID: 609420941}
-    conversationName: 
-    npcConversationStarter: {fileID: 0}
+    talkId: 0
+    isTalkCompleted: 0
   - criteriaName: 'Castle Halls: Find a blue key'
     criteriaType: 0
     status: 0
     priority: 4
     associatedQuestObject: {fileID: 599417049}
     spawnZone: {fileID: 760393375}
-    conversationName: 
-    npcConversationStarter: {fileID: 0}
-  - criteriaName: Talk to the Hooded Figure Again
-    criteriaType: 4
-    status: 0
-    priority: 5
-    associatedQuestObject: {fileID: 599417049}
-    spawnZone: {fileID: 760393375}
-    conversationName: Hood2
-    npcConversationStarter: {fileID: 1466124388}
+    talkId: 0
+    isTalkCompleted: 0
   questReward: {fileID: 0}
   questGiver: {fileID: 0}
   status: 0
@@ -41558,6 +41791,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4136431917338712050, guid: 07cfa80971e32fd4dbc9b35709bda415, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1690007141}
+    - targetCorrespondingSourceObject: {fileID: 4136431917338712050, guid: 07cfa80971e32fd4dbc9b35709bda415, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1690007142}
     - targetCorrespondingSourceObject: {fileID: 7247288860810840353, guid: 07cfa80971e32fd4dbc9b35709bda415, type: 3}
       insertIndex: -1
       addedObject: {fileID: 149661039}
@@ -43703,7 +43942,7 @@ PrefabInstance:
     - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
       propertyPath: Activeconversation
       value: 
-      objectReference: {fileID: 1857054078}
+      objectReference: {fileID: 0}
     - target: {fileID: 7467058216879794530, guid: 8e27d1d774202274fa372bc37242622b, type: 3}
       propertyPath: conversationEntries.Array.size
       value: 2

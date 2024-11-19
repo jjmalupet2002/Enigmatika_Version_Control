@@ -6,10 +6,8 @@ public class QuestManager : MonoBehaviour
     public List<MainQuest> mainQuestObjects;
     public Dictionary<string, MainQuest> activeQuests = new Dictionary<string, MainQuest>();
 
-
     public void AcceptQuest(MainQuest quest)
     {
-
         // Only initialize if the quest has not been initialized already
         if (quest.status == QuestEnums.QuestStatus.NotStarted)
         {
@@ -24,8 +22,6 @@ public class QuestManager : MonoBehaviour
             UnityEngine.Debug.Log($"Quest {quest.questName} is already in progress or completed.");
         }
     }
-
-
 
     // Initialize the quest and its criteria
     void InitializeQuest(MainQuest quest)
@@ -44,14 +40,14 @@ public class QuestManager : MonoBehaviour
                 criteria.status = QuestEnums.QuestStatus.NotStarted;
             }
 
-           
+            // Ensure highest priority is set to InProgress
+            quest.SetHighestPriorityCriteriaInProgress();
         }
         else
         {
             UnityEngine.Debug.Log($"Quest {quest.questName} is already initialized in activeQuests.");
         }
     }
-
 
     // Complete a quest and log the next active criteria
     public void CompleteQuest(MainQuest quest)
@@ -61,22 +57,22 @@ public class QuestManager : MonoBehaviour
             bool questCompleted = true;
 
             // Iterate through all criteria to check and update their status
-            foreach (var criteria in quest.questCriteriaList)
+            for (int i = 0; i < quest.questCriteriaList.Count; i++)
             {
-                if (criteria.status == QuestEnums.QuestStatus.NotStarted)
+                var criteria = quest.questCriteriaList[i];
+
+                if (criteria.status == QuestEnums.QuestStatus.InProgress)
                 {
-                    criteria.status = QuestEnums.QuestStatus.InProgress;
-                    questCompleted = false;
-                    break;  // Break only if we found an unstarted criteria
-                }
-                else if (criteria.status == QuestEnums.QuestStatus.InProgress)
-                {
-                    UnityEngine.Debug.Log($"Criteria {criteria.criteriaName} is already in progress.");
-                }
-                else if (criteria.status == QuestEnums.QuestStatus.Completed)
-                {
-                    // Log that the criteria has been completed
+                    // Mark the current criteria as completed
+                    criteria.status = QuestEnums.QuestStatus.Completed;
                     UnityEngine.Debug.Log($"Criteria {criteria.criteriaName} has been completed for quest: {quest.questName}");
+
+                    // If there are more criteria, set the next one to in progress
+                    if (i + 1 < quest.questCriteriaList.Count)
+                    {
+                        quest.questCriteriaList[i + 1].status = QuestEnums.QuestStatus.InProgress;
+                        questCompleted = false;  // The quest isn't completed yet, as there are still criteria in progress
+                    }
                 }
             }
 
@@ -88,11 +84,10 @@ public class QuestManager : MonoBehaviour
                 OnQuestCompleted(quest);
             }
 
-            // Log the next active criteria if quest is not completed
+            // Log the next active criteria or the completion status
             LogActiveCriteria(quest);
         }
     }
-
 
 
     // Log the current active criteria
@@ -106,9 +101,9 @@ public class QuestManager : MonoBehaviour
             // Log the first (highest priority) active criteria
             foreach (var criteria in quest.questCriteriaList)
             {
-                if (criteria.status == QuestEnums.QuestStatus.NotStarted)
+                if (criteria.status == QuestEnums.QuestStatus.InProgress)
                 {
-                    UnityEngine.Debug.Log($"Active criteria: {criteria.criteriaName} (Priority: {criteria.priority}) for quest: {quest.questName}");
+                    UnityEngine.Debug.Log($"Active Task: {criteria.criteriaName} (Priority: {criteria.priority})");
                     break;  // Only log the highest priority (first in sorted list)
                 }
             }
@@ -121,24 +116,24 @@ public class QuestManager : MonoBehaviour
     }
 
     // Check quest completion
-    public void CheckQuestCompletion(MainQuest quest)
+    public void CheckQuestCompletion(MainQuest mainQuest)
     {
-        bool allCompleted = true;
-        foreach (var criteria in quest.questCriteriaList)
+        // Check each criteria for completion
+        foreach (var criteria in mainQuest.questCriteriaList)
         {
             if (criteria.status != QuestEnums.QuestStatus.Completed)
             {
-                allCompleted = false;
-                break;
+                UnityEngine.Debug.Log("Task completed!");
+                UnityEngine.Debug.Log("Next Task: " + criteria.criteriaName);
+                return;  // Return early if any criteria are not complete
             }
         }
 
-        if (allCompleted)
-        {
-            quest.status = QuestEnums.QuestStatus.Completed;
-            UnityEngine.Debug.Log("Main Quest Completed: " + quest.questName);
-        }
+        // All criteria completed
+        UnityEngine.Debug.Log("Main quest completed: " + mainQuest.questName);
+        mainQuest.status = QuestEnums.QuestStatus.Completed;
     }
+
 
     // Optional event to handle quest acceptance
     void OnQuestAccepted(MainQuest quest)

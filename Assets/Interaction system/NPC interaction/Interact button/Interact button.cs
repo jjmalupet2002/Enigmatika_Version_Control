@@ -99,7 +99,6 @@ public class TalkandInteract : MonoBehaviour
     {
         if (currentNPC != null)
         {
-            UnityEngine.Debug.Log("Interacting with NPC");
 
             GameStateManager.Instance.SetPlayerMovementState(false);
 

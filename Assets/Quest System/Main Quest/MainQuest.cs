@@ -10,8 +10,8 @@ public class MainQuest : MonoBehaviour
     public GameObject questGiver;
     public QuestEnums.QuestStatus status;
 
-    // Add a criteria with priority handling
-    public void AddCriteria(string name, QuestEnums.QuestCriteriaType type, GameObject spawnZone, int priority, string conversationName = null)
+    // Modified AddCriteria to accept talkId as a parameter
+    public void AddCriteria(string name, QuestEnums.QuestCriteriaType type, GameObject spawnZone, int priority)
     {
         QuestCriteria newCriteria = new QuestCriteria
         {
@@ -20,7 +20,7 @@ public class MainQuest : MonoBehaviour
             spawnZone = spawnZone,
             priority = priority,
             status = QuestEnums.QuestStatus.NotStarted,
-            conversationName = conversationName // Add this line
+            
         };
 
         questCriteriaList.Add(newCriteria);
@@ -28,31 +28,43 @@ public class MainQuest : MonoBehaviour
         SortCriteriaByPriority();  // Sort criteria by priority after adding
     }
 
-    // Sort the criteria list by priority (ascending order)
+
     public void SortCriteriaByPriority()
     {
         questCriteriaList.Sort((criteria1, criteria2) => criteria1.priority.CompareTo(criteria2.priority));
     }
 
-    // Log active criteria
     public void LogActiveCriteria()
     {
         bool activeCriteriaFound = false;
 
-        UnityEngine.Debug.Log("Active criteria for quest: " + questName);
+        UnityEngine.Debug.Log("Remaining tasks for: " + questName);
         foreach (var criteria in questCriteriaList)
         {
             if (criteria.status != QuestEnums.QuestStatus.Completed)
             {
                 activeCriteriaFound = true;
-                UnityEngine.Debug.Log("Active criteria: " + criteria.criteriaName + " (Priority: " + criteria.priority + ")");
+                UnityEngine.Debug.Log("Task: " + criteria.criteriaName + " (Priority: " + criteria.priority + ")");
             }
         }
 
         if (!activeCriteriaFound)
         {
-            UnityEngine.Debug.Log("No active criteria left, quest is completed!");
+            UnityEngine.Debug.Log("No tasks left, this main quest is completed!");
+        }
+    }
+
+    // Ensures that only the highest priority is InProgress
+    public void SetHighestPriorityCriteriaInProgress()
+    {
+        SortCriteriaByPriority();
+        foreach (var criteria in questCriteriaList)
+        {
+            if (criteria.status == QuestEnums.QuestStatus.NotStarted)
+            {
+                criteria.status = QuestEnums.QuestStatus.InProgress;
+                break;  // Only activate the first NotStarted criteria (highest priority)
+            }
         }
     }
 }
-
