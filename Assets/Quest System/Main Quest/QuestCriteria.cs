@@ -14,9 +14,5 @@ public class QuestCriteria
     // Add any criteria-specific data, such as spawn zones, NPC references, etc.
     public GameObject spawnZone;  // Example for Find/Explore criteria
 
-    // Added talkId to connect criteria with a unique dialogue ID
-    public int talkId;  // Unique identifier for conversation-based criteria
-
-    // A flag for Talk criteria to ensure only one is completed at a time
-    public bool isTalkCompleted;  // Used to track Talk criteria completion
+   
 }
