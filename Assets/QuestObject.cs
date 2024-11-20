@@ -28,7 +28,6 @@ public class QuestObject : MonoBehaviour
     [Header("Talk Quest settings")]
     private Quaternion initialNpcRotation;  // Store the initial rotation of the NPC
     public bool isTalkCompleted = false;
-    private bool rotationDetected = false; // To track if rotation exceeds threshold
 
     [Header("Spawn Zone reference:")]
     public SpawnZone spawnZone;        // Reference to the associated SpawnZone

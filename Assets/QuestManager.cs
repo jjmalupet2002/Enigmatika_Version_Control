@@ -37,16 +37,50 @@ public class QuestManager : MonoBehaviour
             // Set all criteria to NotStarted
             foreach (var criteria in quest.questCriteriaList)
             {
-                criteria.status = QuestEnums.QuestStatus.NotStarted;
+                criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.NotStarted;
             }
 
-            // Ensure highest priority is set to InProgress
-            quest.SetHighestPriorityCriteriaInProgress();
+            // Ensure highest priority is set to InProgress (moved to QuestManager)
+            SetHighestPriorityCriteriaInProgress(quest);
         }
         else
         {
             UnityEngine.Debug.Log($"Quest {quest.questName} is already initialized in activeQuests.");
         }
+    }
+
+    // Set the highest priority criteria to InProgress
+    public void SetHighestPriorityCriteriaInProgress(MainQuest quest)
+    {
+        // Sort the criteria list by priority
+        quest.questCriteriaList.Sort((a, b) => a.priority.CompareTo(b.priority)); // Sort by priority ascending
+
+        // Set the first (highest priority) criteria to InProgress
+        if (quest.questCriteriaList.Count > 0)
+        {
+            quest.questCriteriaList[0].CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
+        }
+    }
+
+    // Set the next active criteria
+    public void SetNextActiveCriteria(MainQuest quest, int currentIndex)
+    {
+        // Look for the next criteria that is NotStarted
+        for (int i = currentIndex + 1; i < quest.questCriteriaList.Count; i++)
+        {
+            var nextCriteria = quest.questCriteriaList[i];
+            UnityEngine.Debug.Log($"Checking next criteria: {nextCriteria.criteriaName}, Status: {nextCriteria.CriteriaStatus}, Priority: {nextCriteria.priority}");
+
+            if (nextCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.NotStarted)
+            {
+                nextCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
+                UnityEngine.Debug.Log($"Next criteria {nextCriteria.criteriaName} is now in progress.");
+                return; // Exit once the next criteria is found and set to InProgress
+            }
+        }
+
+        // If no next criteria are found, log that the quest is completed
+        UnityEngine.Debug.Log("No next criteria found, quest completed.");
     }
 
     // Complete a quest and log the next active criteria
@@ -56,36 +90,53 @@ public class QuestManager : MonoBehaviour
         {
             bool questCompleted = true;
 
-            // Iterate through all criteria to check and update their status
+            // Ensure the criteria are sorted by priority before processing
+            quest.questCriteriaList.Sort((a, b) => a.priority.CompareTo(b.priority)); // Sort by priority (ascending)
+
             for (int i = 0; i < quest.questCriteriaList.Count; i++)
             {
                 var criteria = quest.questCriteriaList[i];
 
-                if (criteria.status == QuestEnums.QuestStatus.InProgress)
+                if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
                 {
-                    // Mark the current criteria as completed
-                    criteria.status = QuestEnums.QuestStatus.Completed;
-                    UnityEngine.Debug.Log($"Criteria {criteria.criteriaName} has been completed for quest: {quest.questName}");
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
+                    UnityEngine.Debug.Log($"Criteria {criteria.criteriaName} has been completed.");
 
-                    // If there are more criteria, set the next one to in progress
-                    if (i + 1 < quest.questCriteriaList.Count)
+                    // Call the method to set the next active criteria
+                    SetNextActiveCriteria(quest, i);
+
+                    // After calling SetNextActiveCriteria, check if any criteria are still InProgress
+                    bool foundNextInProgress = false;
+                    for (int j = i + 1; j < quest.questCriteriaList.Count; j++)
                     {
-                        quest.questCriteriaList[i + 1].status = QuestEnums.QuestStatus.InProgress;
-                        questCompleted = false;  // The quest isn't completed yet, as there are still criteria in progress
+                        if (quest.questCriteriaList[j].CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
+                        {
+                            foundNextInProgress = true;
+                            break;
+                        }
                     }
+
+                    if (!foundNextInProgress)
+                    {
+                        questCompleted = true; // If no more criteria are InProgress, the quest is complete
+                    }
+                    else
+                    {
+                        questCompleted = false; // If there's a next criteria, the quest is not completed
+                    }
+
+                    break; // Exit the loop once a criteria is completed and the next one is set
                 }
             }
 
-            // If all criteria are completed, mark the quest as completed
             if (questCompleted)
             {
                 quest.status = QuestEnums.QuestStatus.Completed;
-                UnityEngine.Debug.Log($"Main Quest Completed: {quest.questName}");
+                UnityEngine.Debug.Log($"Main Quest {quest.questName} Completed!");
                 OnQuestCompleted(quest);
             }
 
-            // Log the next active criteria or the completion status
-            LogActiveCriteria(quest);
+            LogActiveCriteria(quest);  // Log the next active criteria
         }
     }
 
@@ -95,24 +146,15 @@ public class QuestManager : MonoBehaviour
     {
         if (quest.questCriteriaList.Count > 0)
         {
-            // Sort criteria by priority (ascending)
-            quest.SortCriteriaByPriority();
-
-            // Log the first (highest priority) active criteria
             foreach (var criteria in quest.questCriteriaList)
             {
-                if (criteria.status == QuestEnums.QuestStatus.InProgress)
+                if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
                 {
-                    UnityEngine.Debug.Log($"Active Task: {criteria.criteriaName} (Priority: {criteria.priority})");
-                    break;  // Only log the highest priority (first in sorted list)
+                    UnityEngine.Debug.Log($"Active Criteria - Name: {criteria.criteriaName}, Status: {criteria.CriteriaStatus}, Priority: {criteria.priority}");
+                    break;
                 }
             }
         }
-    }
-
-    public Dictionary<string, MainQuest> GetActiveQuests()
-    {
-        return activeQuests;
     }
 
     // Check quest completion
@@ -121,12 +163,14 @@ public class QuestManager : MonoBehaviour
         // Check each criteria for completion
         foreach (var criteria in mainQuest.questCriteriaList)
         {
-            if (criteria.status != QuestEnums.QuestStatus.Completed)
+            if (criteria.CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
             {
-                UnityEngine.Debug.Log("Task completed!");
-                UnityEngine.Debug.Log("Next Task: " + criteria.criteriaName);
+                UnityEngine.Debug.Log($"Task completed!");
+                UnityEngine.Debug.Log("Next task: " + criteria.criteriaName);
                 return;  // Return early if any criteria are not complete
             }
+
+
         }
 
         // All criteria completed
@@ -134,6 +178,11 @@ public class QuestManager : MonoBehaviour
         mainQuest.status = QuestEnums.QuestStatus.Completed;
     }
 
+
+    public Dictionary<string, MainQuest> GetActiveQuests()
+    {
+        return activeQuests;
+    }
 
     // Optional event to handle quest acceptance
     void OnQuestAccepted(MainQuest quest)
@@ -147,3 +196,7 @@ public class QuestManager : MonoBehaviour
         // Implement logic for completing quests here, such as giving rewards
     }
 }
+
+
+
+  

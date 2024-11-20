@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class QuestEnums : MonoBehaviour
 {
+
+    public enum QuestCriteriaStatus
+    {
+        NotStarted,
+        InProgress,
+        Completed
+    }
+
     public enum QuestType
     {
         Main,
@@ -27,3 +35,4 @@ public class QuestEnums : MonoBehaviour
     }
 }
 
+   

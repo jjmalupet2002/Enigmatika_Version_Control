@@ -5,8 +5,8 @@ public class QuestCriteria
 {
     public string criteriaName;
     public QuestEnums.QuestCriteriaType criteriaType;
-    public QuestEnums.QuestStatus status;
     public int priority;  // Higher number = lower priority
+    public QuestEnums.QuestCriteriaStatus CriteriaStatus;  // Use the new enum here
 
     // Add a reference to QuestObject
     public QuestObject associatedQuestObject;  // Reference to the QuestObject

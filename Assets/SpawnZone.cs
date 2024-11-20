@@ -26,11 +26,10 @@ public class SpawnZone : MonoBehaviour
         }
     }
 
-
     private void HandleCriteria(QuestCriteria criteria)
     {
-
-        if (criteria.status != QuestEnums.QuestStatus.InProgress)
+        // Adjusted condition to check for new status logic
+        if (!IsCriteriaInProgress(criteria))
         {
             return; // Skip if not InProgress
         }
@@ -58,15 +57,21 @@ public class SpawnZone : MonoBehaviour
         }
     }
 
+    private bool IsCriteriaInProgress(QuestCriteria criteria)
+    {
+        // Assuming new logic might be to use another method or flag to determine progress.
+        return criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress;
+    }
+
     private void HandleFindCriteria(QuestCriteria criteria)
     {
-        if (criteria.status == QuestEnums.QuestStatus.InProgress)
+        if (IsCriteriaInProgress(criteria))
         {
             foreach (QuestObject item in findItemList)
             {
                 if (item.isFoundByPlayer)
                 {
-                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     UnityEngine.Debug.Log("Find criteria met, marking as complete: " + criteria.criteriaName);
                     NotifyCriteriaComplete(criteria);
                 }
@@ -76,13 +81,13 @@ public class SpawnZone : MonoBehaviour
 
     private void HandleExploreCriteria(QuestCriteria criteria)
     {
-        if (criteria.status == QuestEnums.QuestStatus.InProgress)
+        if (IsCriteriaInProgress(criteria))
         {
             foreach (var questObject in findItemList)
             {
                 if (questObject.isExplorationCompleted)
                 {
-                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     UnityEngine.Debug.Log("Explore criteria met, marking as complete: " + criteria.criteriaName);
                     NotifyCriteriaComplete(criteria);
                 }
@@ -92,31 +97,29 @@ public class SpawnZone : MonoBehaviour
 
     private void HandleEscapeCriteria(QuestCriteria criteria)
     {
-        if (criteria.status == QuestEnums.QuestStatus.InProgress && escapeExitCollider.bounds.Contains(GameObject.FindGameObjectWithTag("Player").transform.position))
+        if (IsCriteriaInProgress(criteria) && escapeExitCollider.bounds.Contains(GameObject.FindGameObjectWithTag("Player").transform.position))
         {
-            criteria.status = QuestEnums.QuestStatus.Completed;
+            criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
             UnityEngine.Debug.Log("Escape criteria met, marking as complete: " + criteria.criteriaName);
             NotifyCriteriaComplete(criteria);
         }
     }
 
-
     private void HandleTalkCriteria(QuestCriteria criteria)
     {
-        if (criteria.status == QuestEnums.QuestStatus.InProgress)
+        if (IsCriteriaInProgress(criteria))
         {
             // Ensure that we check the individual completion condition for this criteria
             var questObject = criteria.associatedQuestObject;
 
             if (questObject.isTalkCompleted)  // Replace with specific condition for talk completion
             {
-                criteria.status = QuestEnums.QuestStatus.Completed;
+                criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                 UnityEngine.Debug.Log("Talk criteria met, marking as complete: " + criteria.criteriaName);
                 NotifyCriteriaComplete(criteria);
             }
         }
     }
-
 
     private void HandleUnlockSolveCriteria(QuestCriteria criteria)
     {
@@ -125,71 +128,11 @@ public class SpawnZone : MonoBehaviour
 
     public void NotifyCriteriaComplete(QuestCriteria criteria)
     {
-        // Log before updating the criteria status
         UnityEngine.Debug.Log("Completing criteria: " + criteria.criteriaName);
+        criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
 
-        // Mark the criteria as completed
-        criteria.status = QuestEnums.QuestStatus.Completed;
-        UnityEngine.Debug.Log("Criteria completed: " + criteria.criteriaName);
-
-        // Now check if the quest is fully completed
-        questManager.CheckQuestCompletion(criteria.associatedQuestObject.associatedQuest);
-
-        // Handle the next criteria
-        foreach (var nextCriteria in criteria.associatedQuestObject.associatedQuest.questCriteriaList)
-        {
-            if (nextCriteria.status == QuestEnums.QuestStatus.NotStarted)
-            {
-                nextCriteria.status = QuestEnums.QuestStatus.InProgress;
-                UnityEngine.Debug.Log($"Next active criteria: {nextCriteria.criteriaName} for quest: {criteria.associatedQuestObject.associatedQuest.questName}");
-                break;  // Only set the first available NotStarted criteria
-            }
-        }
-
-
-        // Handle enabling/disabling MeshRenderer and Colliders based on criteria priority
-        HandleQuestObjectVisibility(criteria);
-    }
-
-
-    private void HandleQuestObjectVisibility(QuestCriteria criteria)
-    {
-        // Sort the criteria by priority (ascending order)
-        List<QuestCriteria> sortedCriteria = new List<QuestCriteria>(criteria.associatedQuestObject.associatedQuest.questCriteriaList);
-        sortedCriteria.Sort((c1, c2) => c1.priority.CompareTo(c2.priority));
-
-        bool foundInProgress = false;
-
-        // Enable MeshRenderer and Collider for the highest-priority, InProgress criteria
-        foreach (var questCriteria in sortedCriteria)
-        {
-            if (questCriteria.status == QuestEnums.QuestStatus.InProgress)
-            {
-                var associatedQuestObject = questCriteria.associatedQuestObject;
-
-                // Enable components only for the highest-priority in-progress criteria
-                if (!foundInProgress)
-                {
-                    if (associatedQuestObject.meshRenderer != null) associatedQuestObject.meshRenderer.enabled = true;
-                    if (associatedQuestObject.colliderComponent != null) associatedQuestObject.colliderComponent.enabled = true;
-
-                    foundInProgress = true; // Mark that we have enabled components for one object
-                }
-                else
-                {
-                    // Disable components for any lower-priority in-progress objects
-                    if (associatedQuestObject.meshRenderer != null) associatedQuestObject.meshRenderer.enabled = false;
-                    if (associatedQuestObject.colliderComponent != null) associatedQuestObject.colliderComponent.enabled = false;
-                }
-            }
-            else
-            {
-                // If the criteria is completed, ensure components are disabled
-                var associatedQuestObject = questCriteria.associatedQuestObject;
-                if (associatedQuestObject.meshRenderer != null) associatedQuestObject.meshRenderer.enabled = false;
-                if (associatedQuestObject.colliderComponent != null) associatedQuestObject.colliderComponent.enabled = false;
-            }
-        }
+        // After completing a criteria, set the next highest priority criteria to InProgress
+        questManager.SetHighestPriorityCriteriaInProgress(criteria.associatedQuestObject.associatedQuest);
     }
 
 
@@ -202,9 +145,8 @@ public class SpawnZone : MonoBehaviour
             {
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Find && criteria.associatedQuestObject == questObject)
                 {
-                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     questManager.CheckQuestCompletion(quest);
-
                 }
             }
         }
@@ -219,14 +161,13 @@ public class SpawnZone : MonoBehaviour
             {
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Explore && criteria.associatedQuestObject == questObject)
                 {
-                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     questManager.CheckQuestCompletion(quest);
                     return;  // Exit the loop after finding the matching criteria
                 }
             }
         }
     }
-
 
     // Existing method for handling talk criteria
     public void NotifyTalkCriteriaComplete(QuestObject questObject)
@@ -238,7 +179,7 @@ public class SpawnZone : MonoBehaviour
             {
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Talk && criteria.associatedQuestObject == questObject)
                 {
-                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     questManager.CheckQuestCompletion(quest);
                     return;  // Exit the loop after finding the matching criteria
                 }
@@ -255,9 +196,8 @@ public class SpawnZone : MonoBehaviour
             {
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Escape && criteria.associatedQuestObject == questObject)
                 {
-                    criteria.status = QuestEnums.QuestStatus.Completed;
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     questManager.CheckQuestCompletion(quest);
-
                 }
             }
         }
