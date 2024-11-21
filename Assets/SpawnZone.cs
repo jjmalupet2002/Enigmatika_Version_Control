@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 using DialogueEditor; // Or the correct namespace where NPCConversation is located
+using System.Linq; // Add this at the top
 
 public class SpawnZone : MonoBehaviour
 {
@@ -71,9 +71,8 @@ public class SpawnZone : MonoBehaviour
             {
                 if (item.isFoundByPlayer)
                 {
-                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     UnityEngine.Debug.Log("Find criteria met, marking as complete: " + criteria.criteriaName);
-                    NotifyCriteriaComplete(criteria);
+                    SetNextActiveCriteria(criteria);
                 }
             }
         }
@@ -87,9 +86,8 @@ public class SpawnZone : MonoBehaviour
             {
                 if (questObject.isExplorationCompleted)
                 {
-                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     UnityEngine.Debug.Log("Explore criteria met, marking as complete: " + criteria.criteriaName);
-                    NotifyCriteriaComplete(criteria);
+                    SetNextActiveCriteria(criteria);
                 }
             }
         }
@@ -97,11 +95,10 @@ public class SpawnZone : MonoBehaviour
 
     private void HandleEscapeCriteria(QuestCriteria criteria)
     {
-        if (IsCriteriaInProgress(criteria) && escapeExitCollider.bounds.Contains(GameObject.FindGameObjectWithTag("Player").transform.position))
+        if (IsCriteriaInProgress(criteria))
         {
-            criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
             UnityEngine.Debug.Log("Escape criteria met, marking as complete: " + criteria.criteriaName);
-            NotifyCriteriaComplete(criteria);
+            SetNextActiveCriteria(criteria);
         }
     }
 
@@ -114,9 +111,8 @@ public class SpawnZone : MonoBehaviour
 
             if (questObject.isTalkCompleted)  // Replace with specific condition for talk completion
             {
-                criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                 UnityEngine.Debug.Log("Talk criteria met, marking as complete: " + criteria.criteriaName);
-                NotifyCriteriaComplete(criteria);
+                SetNextActiveCriteria(criteria);
             }
         }
     }
@@ -126,15 +122,32 @@ public class SpawnZone : MonoBehaviour
         // Implement unlock criteria logic
     }
 
-    public void NotifyCriteriaComplete(QuestCriteria criteria)
+    // Method to mark criteria as complete and move to the next active criteria
+    public void SetNextActiveCriteria(QuestCriteria criteria)
     {
         UnityEngine.Debug.Log("Completing criteria: " + criteria.criteriaName);
         criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
 
-        // After completing a criteria, set the next highest priority criteria to InProgress
-        questManager.SetHighestPriorityCriteriaInProgress(criteria.associatedQuestObject.associatedQuest);
-    }
+        // Find the index of the criteria in the quest's criteria list
+        var quest = criteria.associatedQuestObject.associatedQuest;
+        int currentIndex = quest.questCriteriaList.IndexOf(criteria);
 
+        if (currentIndex >= 0)
+        {
+            // Call SetNextActiveCriteria to move to the next available criteria in the quest
+            questManager.SetNextActiveCriteria(quest, currentIndex);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Criteria not found in the quest's criteria list.");
+        }
+
+        // Check if the quest is now complete
+        if (quest.questCriteriaList.All(c => c.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed))
+        {
+            questManager.CompleteQuest(quest);  // Ensure quest is completed
+        }
+    }
 
     public void NotifyQuestObjectFound(QuestObject questObject)
     {
@@ -146,7 +159,7 @@ public class SpawnZone : MonoBehaviour
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Find && criteria.associatedQuestObject == questObject)
                 {
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
-                    questManager.CheckQuestCompletion(quest);
+                    SetNextActiveCriteria(criteria); // Replacing CheckQuestCompletion
                 }
             }
         }
@@ -162,7 +175,7 @@ public class SpawnZone : MonoBehaviour
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Explore && criteria.associatedQuestObject == questObject)
                 {
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
-                    questManager.CheckQuestCompletion(quest);
+                    SetNextActiveCriteria(criteria); // Replacing CheckQuestCompletion
                     return;  // Exit the loop after finding the matching criteria
                 }
             }
@@ -180,7 +193,7 @@ public class SpawnZone : MonoBehaviour
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Talk && criteria.associatedQuestObject == questObject)
                 {
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
-                    questManager.CheckQuestCompletion(quest);
+                    SetNextActiveCriteria(criteria); // Replacing CheckQuestCompletion
                     return;  // Exit the loop after finding the matching criteria
                 }
             }
@@ -197,7 +210,7 @@ public class SpawnZone : MonoBehaviour
                 if (criteria.criteriaType == QuestEnums.QuestCriteriaType.Escape && criteria.associatedQuestObject == questObject)
                 {
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
-                    questManager.CheckQuestCompletion(quest);
+                    SetNextActiveCriteria(criteria); // Replacing CheckQuestCompletion
                 }
             }
         }

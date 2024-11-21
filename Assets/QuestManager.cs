@@ -1,8 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class QuestManager : MonoBehaviour
 {
+    // Declare events for quest acceptance and completion
+    public delegate void QuestEventHandler(MainQuest quest);
+    public event QuestEventHandler OnQuestAcceptedEvent;
+    public event QuestEventHandler OnQuestCompletedEvent;
+
     public List<MainQuest> mainQuestObjects;
     public Dictionary<string, MainQuest> activeQuests = new Dictionary<string, MainQuest>();
 
@@ -14,7 +20,9 @@ public class QuestManager : MonoBehaviour
             InitializeQuest(quest);
 
             quest.status = QuestEnums.QuestStatus.InProgress;
+            // Trigger the OnQuestAcceptedEvent here
             OnQuestAccepted(quest);
+            OnQuestAcceptedEvent?.Invoke(quest); // Notify listeners
             LogActiveCriteria(quest);  // Log the active criteria after quest acceptance
         }
         else
@@ -69,12 +77,11 @@ public class QuestManager : MonoBehaviour
         for (int i = currentIndex + 1; i < quest.questCriteriaList.Count; i++)
         {
             var nextCriteria = quest.questCriteriaList[i];
-            UnityEngine.Debug.Log($"Checking next criteria: {nextCriteria.criteriaName}, Status: {nextCriteria.CriteriaStatus}, Priority: {nextCriteria.priority}");
 
             if (nextCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.NotStarted)
             {
                 nextCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
-                UnityEngine.Debug.Log($"Next criteria {nextCriteria.criteriaName} is now in progress.");
+                UnityEngine.Debug.Log($"Next Task: {nextCriteria.criteriaName}");
                 return; // Exit once the next criteria is found and set to InProgress
             }
         }
@@ -93,19 +100,21 @@ public class QuestManager : MonoBehaviour
 
             bool allCriteriaCompleted = true;
 
+            // Loop through the quest criteria
             for (int i = 0; i < quest.questCriteriaList.Count; i++)
             {
                 var criteria = quest.questCriteriaList[i];
 
+                // Check if any criteria are still in progress
                 if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
                 {
+                    // If found, mark as completed and continue to next criteria
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
-                    UnityEngine.Debug.Log($"Criteria {criteria.criteriaName} has been completed.");
 
                     // Set the next available criteria to InProgress
                     SetNextActiveCriteria(quest, i);
 
-                    // Check if there are any remaining criteria that aren't completed
+                    // If any criteria are not completed, set the flag to false and break
                     for (int j = i + 1; j < quest.questCriteriaList.Count; j++)
                     {
                         if (quest.questCriteriaList[j].CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
@@ -119,11 +128,14 @@ public class QuestManager : MonoBehaviour
                 }
             }
 
+            // Check if all criteria are completed
             if (allCriteriaCompleted)
             {
                 quest.status = QuestEnums.QuestStatus.Completed;
                 UnityEngine.Debug.Log($"Main Quest {quest.questName} Completed!");
+                // Trigger the OnQuestCompletedEvent here
                 OnQuestCompleted(quest);
+                OnQuestCompletedEvent?.Invoke(quest); // Notify listeners
             }
 
             LogActiveCriteria(quest);
@@ -147,27 +159,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    // Check quest completion
-    public void CheckQuestCompletion(MainQuest mainQuest)
-    {
-        // Check each criteria for completion
-        foreach (var criteria in mainQuest.questCriteriaList)
-        {
-            if (criteria.CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
-            {
-                UnityEngine.Debug.Log($"Task completed!");
-                UnityEngine.Debug.Log("Next task: " + criteria.criteriaName);
-                return;  // Return early if any criteria are not complete
-            }
-
-
-        }
-
-        // All criteria completed
-        UnityEngine.Debug.Log("Main quest completed: " + mainQuest.questName);
-        mainQuest.status = QuestEnums.QuestStatus.Completed;
-    }
-
 
     public Dictionary<string, MainQuest> GetActiveQuests()
     {
@@ -186,7 +177,3 @@ public class QuestManager : MonoBehaviour
         // Implement logic for completing quests here, such as giving rewards
     }
 }
-
-
-
-  
