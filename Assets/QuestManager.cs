@@ -88,10 +88,10 @@ public class QuestManager : MonoBehaviour
     {
         if (quest.status == QuestEnums.QuestStatus.InProgress)
         {
-            bool questCompleted = true;
-
             // Ensure the criteria are sorted by priority before processing
-            quest.questCriteriaList.Sort((a, b) => a.priority.CompareTo(b.priority)); // Sort by priority (ascending)
+            quest.questCriteriaList.Sort((a, b) => a.priority.CompareTo(b.priority));
+
+            bool allCriteriaCompleted = true;
 
             for (int i = 0; i < quest.questCriteriaList.Count; i++)
             {
@@ -102,41 +102,31 @@ public class QuestManager : MonoBehaviour
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
                     UnityEngine.Debug.Log($"Criteria {criteria.criteriaName} has been completed.");
 
-                    // Call the method to set the next active criteria
+                    // Set the next available criteria to InProgress
                     SetNextActiveCriteria(quest, i);
 
-                    // After calling SetNextActiveCriteria, check if any criteria are still InProgress
-                    bool foundNextInProgress = false;
+                    // Check if there are any remaining criteria that aren't completed
                     for (int j = i + 1; j < quest.questCriteriaList.Count; j++)
                     {
-                        if (quest.questCriteriaList[j].CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
+                        if (quest.questCriteriaList[j].CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
                         {
-                            foundNextInProgress = true;
+                            allCriteriaCompleted = false;
                             break;
                         }
                     }
 
-                    if (!foundNextInProgress)
-                    {
-                        questCompleted = true; // If no more criteria are InProgress, the quest is complete
-                    }
-                    else
-                    {
-                        questCompleted = false; // If there's a next criteria, the quest is not completed
-                    }
-
-                    break; // Exit the loop once a criteria is completed and the next one is set
+                    break; // Exit the loop once we've processed the current InProgress criteria
                 }
             }
 
-            if (questCompleted)
+            if (allCriteriaCompleted)
             {
                 quest.status = QuestEnums.QuestStatus.Completed;
                 UnityEngine.Debug.Log($"Main Quest {quest.questName} Completed!");
                 OnQuestCompleted(quest);
             }
 
-            LogActiveCriteria(quest);  // Log the next active criteria
+            LogActiveCriteria(quest);
         }
     }
 
