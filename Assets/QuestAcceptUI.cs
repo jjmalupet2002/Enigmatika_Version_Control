@@ -22,7 +22,6 @@ public class QuestAcceptUI : MonoBehaviour
     public List<MainQuest> mainQuests;  // List of all available main quests
     public List<Page> pages;  // List of pages, each containing quest UI elements
     public List<Sprite> questIconImages; // List of quest icon images
-    public List<Image> rewardIconImages; // List of Image components for displaying multiple reward icons
     private int currentPageIndex = 0;  // To keep track of the current page index
     private MainQuest currentQuest;  // The currently selected quest
     public QuestManager questManager;  // Reference to QuestManager to call AcceptQuest
@@ -118,20 +117,6 @@ public class QuestAcceptUI : MonoBehaviour
             questDescriptionText.text = currentQuest.questDescription;  // Update to use the description from MainQuest
             rewardIconBackground.sprite = currentPage.rewardIcon;  // Update the reward icon background
             questIconImage.sprite = currentPage.questIcon;  // Update the quest icon
-
-            // Update the reward icons based on the current page's reward icon list
-            for (int i = 0; i < rewardIconImages.Count; i++)
-            {
-                if (i < currentPage.rewardIcons.Count)
-                {
-                    rewardIconImages[i].sprite = currentPage.rewardIcons[i];
-                    rewardIconImages[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    rewardIconImages[i].gameObject.SetActive(false);
-                }
-            }
         }
         else
         {
@@ -139,12 +124,6 @@ public class QuestAcceptUI : MonoBehaviour
             questDescriptionText.text = "No description available.";
             rewardIconBackground.sprite = null;  // No reward icon
             questIconImage.sprite = null;  // No quest icon
-
-            // Hide all reward icons
-            foreach (var rewardIconImage in rewardIconImages)
-            {
-                rewardIconImage.gameObject.SetActive(false);
-            }
         }
 
         // Enable/disable navigation buttons based on the quest status
@@ -186,7 +165,6 @@ public class QuestAcceptUI : MonoBehaviour
     }
 }
 
-
 [System.Serializable]
 public class Page
 {
@@ -195,5 +173,4 @@ public class Page
     public Sprite questIcon;  // Quest icon for the page
     public Image questIconImage; // Reference to the Image component for the quest icon
     public MainQuest quest;  // Reference to the main quest associated with this page
-    public List<Sprite> rewardIcons; // List of reward icons for the page
 }

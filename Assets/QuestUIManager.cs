@@ -108,7 +108,7 @@ public class QuestUIManager : MonoBehaviour
     {
         questNameText.text = questName;
         questNameText.gameObject.SetActive(true);  // Ensure text is active
-        float duration = 0.5f;
+        float duration = 0.4f;
         float startAlpha = questNameCanvasGroup.alpha;
         float endAlpha = 1f;
 
@@ -129,7 +129,7 @@ public class QuestUIManager : MonoBehaviour
     // Coroutine to fade in the criteria text alongside the quest name
     private IEnumerator FadeInCriteriaText()
     {
-        float duration = 0.5f;  // Duration of fade-in
+        float duration = 0.4f;  // Duration of fade-in
         float startAlpha = criteriaStatusCanvasGroup.alpha;
         float endAlpha = 1f;
 
@@ -146,7 +146,7 @@ public class QuestUIManager : MonoBehaviour
     // Coroutine to fade in the quest completion text
     private IEnumerator FadeInQuestCompletionText()
     {
-        float duration = 0.5f;  // Duration of fade-in
+        float duration = 0.4f;  // Duration of fade-in
         float startAlpha = questCompletionCanvasGroup.alpha;
         float endAlpha = 1f;
 
@@ -166,7 +166,7 @@ public class QuestUIManager : MonoBehaviour
         yield return new WaitForSeconds(2f);  // Wait for 2 seconds
 
         // Fade out
-        float duration = 0.7f;  // Duration of fade-out
+        float duration = 0.6f;  // Duration of fade-out
         float startAlpha = questCompletionCanvasGroup.alpha;
         float endAlpha = 0f;
 
@@ -186,7 +186,7 @@ public class QuestUIManager : MonoBehaviour
         yield return new WaitForSeconds(2f);  // Wait for 2 seconds
 
         // Fade out
-        float duration = 0.7f;  // Duration of fade-out
+        float duration = 0.6f;  // Duration of fade-out
         float startAlpha = questNameCanvasGroup.alpha;
         float endAlpha = 0f;
 
