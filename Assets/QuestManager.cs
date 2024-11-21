@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class QuestManager : MonoBehaviour
 {
     // Declare events for quest acceptance and completion
     public delegate void QuestEventHandler(MainQuest quest);
     public event QuestEventHandler OnQuestAcceptedEvent;
+    public event QuestEventHandler OnNextCriteriaStartedEvent;
     public event QuestEventHandler OnQuestCompletedEvent;
+
 
     public List<MainQuest> mainQuestObjects;
     public Dictionary<string, MainQuest> activeQuests = new Dictionary<string, MainQuest>();
@@ -46,6 +47,7 @@ public class QuestManager : MonoBehaviour
             foreach (var criteria in quest.questCriteriaList)
             {
                 criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.NotStarted;
+                criteria.associatedQuestObject.gameObject.SetActive(false); // Disable the associated quest object initially
             }
 
             // Ensure highest priority is set to InProgress (moved to QuestManager)
@@ -66,7 +68,14 @@ public class QuestManager : MonoBehaviour
         // Set the first (highest priority) criteria to InProgress
         if (quest.questCriteriaList.Count > 0)
         {
-            quest.questCriteriaList[0].CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
+            var highestPriorityCriteria = quest.questCriteriaList[0];
+            highestPriorityCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
+
+            // Enable the associated quest object
+            if (highestPriorityCriteria.associatedQuestObject != null)
+            {
+                highestPriorityCriteria.associatedQuestObject.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -81,7 +90,11 @@ public class QuestManager : MonoBehaviour
             if (nextCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.NotStarted)
             {
                 nextCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
+                nextCriteria.associatedQuestObject.gameObject.SetActive(true); // Enable the associated quest object
                 UnityEngine.Debug.Log($"Next Task: {nextCriteria.criteriaName}");
+                // Trigger the OnQuestAcceptedEvent here
+                OnNextCriteriaStarted(quest);
+                OnNextCriteriaStartedEvent?.Invoke(quest); // Notify listeners
                 return; // Exit once the next criteria is found and set to InProgress
             }
         }
@@ -142,7 +155,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-
     // Log the current active criteria
     public void LogActiveCriteria(MainQuest quest)
     {
@@ -159,7 +171,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-
     public Dictionary<string, MainQuest> GetActiveQuests()
     {
         return activeQuests;
@@ -171,9 +182,17 @@ public class QuestManager : MonoBehaviour
         // Implement logic for accepting quests here, such as showing UI or activating NPC dialogue
     }
 
+    // Optional event to handle quest acceptance
+    void OnNextCriteriaStarted(MainQuest quest)
+    {
+        // Implement logic for accepting quests here, such as showing UI or activating NPC dialogue
+    }
+
     // Optional event to handle quest completion
     void OnQuestCompleted(MainQuest quest)
     {
         // Implement logic for completing quests here, such as giving rewards
     }
 }
+
+

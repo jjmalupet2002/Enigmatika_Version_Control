@@ -52,6 +52,11 @@ public class QuestObject : MonoBehaviour
 
     void Update()
     {
+        if (associatedQuest == null || associatedQuest.status != QuestEnums.QuestStatus.InProgress)
+        {
+            return; // Exit if the associated quest is not in progress
+        }
+
         // Handle 3D Object inspection (if moved from the initial position)
         if (is3DObject && referenced3DObject != null)
         {
