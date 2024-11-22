@@ -29,7 +29,8 @@ public class QuestAcceptUI : MonoBehaviour
     // Fields for required items and their associated reward items
     public string[] requiredItems = new string[4];
     private GameObject wrongItemUI;
-    public ItemRewardGiver itemHandler;  // Reference to the ItemRewardGiver
+    public ItemEventHandler itemHandler;  // Reference to the ItemRewardGiver
+
 
     void Start()
     {
@@ -47,6 +48,40 @@ public class QuestAcceptUI : MonoBehaviour
 
         // Subscribe to the OnItemUsed event
         InventoryManager.Instance.OnItemUsed += OnItemUsed;
+
+        // Subscribe to item events
+        if (itemHandler != null)
+        {
+            itemHandler.item1Event += OnItem1Event;
+            itemHandler.item2Event += OnItem2Event;
+            itemHandler.item3Event += OnItem3Event;
+            itemHandler.item4Event += OnItem4Event;
+        }
+    }
+
+    // Event handler methods for each item
+    private void OnItem1Event()
+    {
+        UnityEngine.Debug.Log("Item 1 event triggered.");
+        // Handle the item 1 event (for example, reward the player)
+    }
+
+    private void OnItem2Event()
+    {
+        UnityEngine.Debug.Log("Item 2 event triggered.");
+        // Handle the item 2 event (for example, reward the player)
+    }
+
+    private void OnItem3Event()
+    {
+        UnityEngine.Debug.Log("Item 3 event triggered.");
+        // Handle the item 3 event (for example, reward the player)
+    }
+
+    private void OnItem4Event()
+    {
+        UnityEngine.Debug.Log("Item 4 event triggered.");
+        // Handle the item 4 event (for example, reward the player)
     }
 
     void InitializePages()
@@ -181,22 +216,22 @@ public class QuestAcceptUI : MonoBehaviour
             if (item.keyId == requiredItems[currentPageIndex])
             {
                 // Fire event for quest completion
-                QuestComplete(currentPageIndex);            
+                QuestComplete(currentPageIndex);
 
-                // Trigger the corresponding event based on the currentPageIndex
+                // Trigger the corresponding event using HandleItemEvent method
                 switch (currentPageIndex)
                 {
                     case 0:
-                        itemHandler.item1Event?.Invoke();
+                        itemHandler.HandleItemEvent(0); // Calls HandleItemEvent for item 1
                         break;
                     case 1:
-                        itemHandler.item2Event?.Invoke();
+                        itemHandler.HandleItemEvent(1); // Calls HandleItemEvent for item 2
                         break;
                     case 2:
-                        itemHandler.item3Event?.Invoke();
+                        itemHandler.HandleItemEvent(2); // Calls HandleItemEvent for item 3
                         break;
                     case 3:
-                        itemHandler.item4Event?.Invoke();
+                        itemHandler.HandleItemEvent(3); // Calls HandleItemEvent for item 4
                         break;
                     default:
                         UnityEngine.Debug.LogWarning("No matching event for this page index.");

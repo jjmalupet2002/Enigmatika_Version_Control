@@ -1705,18 +1705,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: key 2
-  itemIcon: {fileID: 21300000, guid: a6c10312421cb5e438d8b9edaad2db28, type: 3}
-  itemDescription: A key used to unlock the portal room.
-  keyId: key2
-  isClueItem: 0
-  isGeneralItem: 1
-  isUsable: 1
-  isNote: 0
-  is3dObject: 1
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 0}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  item1Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item2Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item3Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item4Event:
+    m_PersistentCalls:
+      m_Calls: []
+  itemList: []
 --- !u!82 &84117161
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16155,18 +16157,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: The Royal Expansion
-  itemIcon: {fileID: 21300000, guid: 6b22156af64babe4f9bff6441c5b942f, type: 3}
-  itemDescription: What this mysterious book about? It's quite the mystery?
-  keyId: 
-  isClueItem: 1
-  isGeneralItem: 0
-  isUsable: 0
-  isNote: 1
-  is3dObject: 0
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 173239734}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  item1Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item2Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item3Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item4Event:
+    m_PersistentCalls:
+      m_Calls: []
+  itemList: []
 --- !u!114 &684175262 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3057422325179380726, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
@@ -27658,30 +27662,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce40c013f6154442a570d41c90b1c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: 
-  itemIcon: {fileID: 0}
-  itemDescription: 
-  isClueItem: 0
-  isGeneralItem: 0
-  isUsable: 0
-  isNote: 0
-  is3dObject: 0
-  notificationText: {fileID: 0}
-  noteUI: {fileID: 0}
+  items:
+  - itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    isClueItem: 0
+    isGeneralItem: 0
+    isUsable: 0
+    isUsingItem: 0
+    keyId: 
+    isNote: 0
+    noteUI: {fileID: 0}
+  - itemName: 
+    itemIcon: {fileID: 0}
+    itemDescription: 
+    isClueItem: 0
+    isGeneralItem: 0
+    isUsable: 0
+    isUsingItem: 0
+    keyId: 
+    isNote: 0
+    noteUI: {fileID: 0}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
-  item1Event:
-    m_PersistentCalls:
-      m_Calls: []
-  item2Event:
-    m_PersistentCalls:
-      m_Calls: []
-  item3Event:
-    m_PersistentCalls:
-      m_Calls: []
-  item4Event:
-    m_PersistentCalls:
-      m_Calls: []
-  itemList: []
 --- !u!4 &1288001549
 Transform:
   m_ObjectHideFlags: 0
@@ -28851,18 +28853,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: key 4
-  itemIcon: {fileID: 21300000, guid: 17c2d0550f9d2f9418f458279eb57c65, type: 3}
-  itemDescription: A key used to unlock the portal room.
-  keyId: key4
-  isClueItem: 0
-  isGeneralItem: 1
-  isUsable: 1
-  isNote: 0
-  is3dObject: 1
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 0}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  item1Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item2Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item3Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item4Event:
+    m_PersistentCalls:
+      m_Calls: []
+  itemList: []
 --- !u!82 &1352788321
 AudioSource:
   m_ObjectHideFlags: 0
@@ -29226,18 +29230,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: key 3
-  itemIcon: {fileID: 21300000, guid: 13c925c9c6716194f9fe832914b37154, type: 3}
-  itemDescription: A key used to unlock the portal room.
-  keyId: key3
-  isClueItem: 0
-  isGeneralItem: 1
-  isUsable: 1
-  isNote: 0
-  is3dObject: 1
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 0}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  item1Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item2Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item3Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item4Event:
+    m_PersistentCalls:
+      m_Calls: []
+  itemList: []
 --- !u!82 &1373781554
 AudioSource:
   m_ObjectHideFlags: 0
@@ -38018,18 +38024,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Key 1
-  itemIcon: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
-  itemDescription: A key used to unlock the portal room.
-  keyId: key1
-  isClueItem: 0
-  isGeneralItem: 1
-  isUsable: 1
-  isNote: 0
-  is3dObject: 1
-  notificationText: {fileID: 95152010}
-  noteUI: {fileID: 0}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  item1Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item2Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item3Event:
+    m_PersistentCalls:
+      m_Calls: []
+  item4Event:
+    m_PersistentCalls:
+      m_Calls: []
+  itemList: []
 --- !u!82 &1951310177
 AudioSource:
   m_ObjectHideFlags: 0
@@ -62575,6 +62583,7 @@ SceneRoots:
   - {fileID: 1629875898}
   - {fileID: 1352403877}
   - {fileID: 954717466}
+  - {fileID: 1288001549}
   - {fileID: 1284420160}
   - {fileID: 430764464}
   - {fileID: 1881096044}
@@ -62582,4 +62591,3 @@ SceneRoots:
   - {fileID: 1425260493}
   - {fileID: 1972037617}
   - {fileID: 1640136075}
-  - {fileID: 1288001549}
