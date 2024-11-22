@@ -1,30 +1,35 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class QuestAcceptUI : MonoBehaviour
 {
-    // Header 1: UI references
     public Button viewQuestButton;
     public GameObject questAcceptBackground;
     public Button exitButton;
-    public Button startQuestButton; // Initially AcceptButton
-
-    // Header 2: Button references
+    public Button startQuestButton;
     public Text questNameText;
-    public Text questDescriptionText; // Updated reference for quest description
+    public Text questDescriptionText;
     public Image rewardIconBackground;
-    public Image questIconImage; // New reference for the quest icon
+    public Image questIconImage;
     public Button arrowLeftButton;
     public Button arrowRightButton;
-    public Button turnInItemButton; // Replaces accept button after a quest has been started
+    public Button turnInItemButton;
 
-    public List<MainQuest> mainQuests;  // List of all available main quests
-    public List<Page> pages;  // List of pages, each containing quest UI elements
-    public List<Sprite> questIconImages; // List of quest icon images
-    private int currentPageIndex = 0;  // To keep track of the current page index
-    private MainQuest currentQuest;  // The currently selected quest
-    public QuestManager questManager;  // Reference to QuestManager to call AcceptQuest
+    public List<MainQuest> mainQuests;
+    public List<Page> pages;
+    public List<Sprite> questIconImages;
+    public List<Sprite> RewardIcons;
+
+    private int currentPageIndex = 0;
+    private MainQuest currentQuest;
+    public QuestManager questManager;
+
+    // Fields for required items and their associated reward items
+    public string[] requiredItems = new string[4];
+    private GameObject wrongItemUI;
+    public ItemRewardGiver itemHandler;  // Reference to the ItemRewardGiver
 
     void Start()
     {
@@ -38,8 +43,10 @@ public class QuestAcceptUI : MonoBehaviour
         arrowLeftButton.onClick.AddListener(PreviousPage);
         arrowRightButton.onClick.AddListener(NextPage);
 
-        // Initialize pages with quests
         InitializePages();
+
+        // Subscribe to the OnItemUsed event
+        InventoryManager.Instance.OnItemUsed += OnItemUsed;
     }
 
     void InitializePages()
@@ -55,15 +62,20 @@ public class QuestAcceptUI : MonoBehaviour
             if (i < mainQuests.Count)
             {
                 pages[i].quest = mainQuests[i];
-                pages[i].questIcon = questIconImages[i % questIconImages.Count]; // Assign quest icon image based on index
+                pages[i].questIcon = questIconImages[i % questIconImages.Count];
+                pages[i].rewardIcon = RewardIcons[i % RewardIcons.Count];
+
                 // Add event listeners for hover events
-                int index = i;  // Local copy of the index for the lambda
-                pages[i].questIconImage = questIconImage; // Assign the Image component for the quest icon
+                int index = i;
+                pages[i].questIconImage = questIconImage;
                 pages[i].questIconImage.GetComponent<Button>().onClick.AddListener(() => OnQuestIconHover(index));
+
+                pages[i].rewardIconBackground = rewardIconBackground;
+                pages[i].rewardIconBackground.GetComponent<Button>().onClick.AddListener(() => OnQuestIconHover(index));
             }
             else
             {
-                pages[i].quest = null;  // No quest for this page
+                pages[i].quest = null;
             }
         }
 
@@ -73,7 +85,7 @@ public class QuestAcceptUI : MonoBehaviour
     void OpenQuestUI()
     {
         questAcceptBackground.SetActive(true);
-        currentPageIndex = 0;  // Reset to ensure it starts from the first page
+        currentPageIndex = 0;
         UpdateQuestUI();
     }
 
@@ -114,19 +126,18 @@ public class QuestAcceptUI : MonoBehaviour
         if (currentQuest != null)
         {
             questNameText.text = currentQuest.questName;
-            questDescriptionText.text = currentQuest.questDescription;  // Update to use the description from MainQuest
-            rewardIconBackground.sprite = currentPage.rewardIcon;  // Update the reward icon background
-            questIconImage.sprite = currentPage.questIcon;  // Update the quest icon
+            questDescriptionText.text = currentQuest.questDescription;
+            rewardIconBackground.sprite = currentPage.rewardIcon;
+            questIconImage.sprite = currentPage.questIcon;
         }
         else
         {
             questNameText.text = "No Quest";
             questDescriptionText.text = "No description available.";
-            rewardIconBackground.sprite = null;  // No reward icon
-            questIconImage.sprite = null;  // No quest icon
+            rewardIconBackground.sprite = null;
+            questIconImage.sprite = null;
         }
 
-        // Enable/disable navigation buttons based on the quest status
         bool questInProgressOrCompleted = currentQuest != null && currentQuest.status != QuestEnums.QuestStatus.NotStarted;
         arrowLeftButton.interactable = !questInProgressOrCompleted && currentPageIndex > 0;
         arrowRightButton.interactable = !questInProgressOrCompleted && currentPageIndex < pages.Count - 1;
@@ -134,7 +145,6 @@ public class QuestAcceptUI : MonoBehaviour
         turnInItemButton.gameObject.SetActive(questInProgressOrCompleted);
     }
 
-    // Start the current selected quest
     private void StartSelectedQuest()
     {
         if (currentQuest == null)
@@ -145,9 +155,9 @@ public class QuestAcceptUI : MonoBehaviour
 
         if (currentQuest.status == QuestEnums.QuestStatus.NotStarted)
         {
-            questManager.AcceptQuest(currentQuest);  // This triggers the 'Initializing Quest...' log
-            UpdateQuestUI();  // Refresh UI after starting the quest
-            CloseQuestUI();  // Close the quest UI
+            questManager.AcceptQuest(currentQuest);
+            UpdateQuestUI();
+            CloseQuestUI();
         }
         else
         {
@@ -155,7 +165,6 @@ public class QuestAcceptUI : MonoBehaviour
         }
     }
 
-    // Method to handle quest icon hover event
     private void OnQuestIconHover(int index)
     {
         if (index < questIconImages.Count)
@@ -163,12 +172,61 @@ public class QuestAcceptUI : MonoBehaviour
             questIconImage.sprite = questIconImages[index];
         }
     }
+
+    private void OnItemUsed(ItemData item)
+    {
+        if (item != null)
+        {
+            // Check if the item keyId matches the required item for the current page
+            if (item.keyId == requiredItems[currentPageIndex])
+            {
+                // Fire event for quest completion
+                QuestComplete(currentPageIndex);            
+
+                // Trigger the corresponding event based on the currentPageIndex
+                switch (currentPageIndex)
+                {
+                    case 0:
+                        itemHandler.item1Event?.Invoke();
+                        break;
+                    case 1:
+                        itemHandler.item2Event?.Invoke();
+                        break;
+                    case 2:
+                        itemHandler.item3Event?.Invoke();
+                        break;
+                    case 3:
+                        itemHandler.item4Event?.Invoke();
+                        break;
+                    default:
+                        UnityEngine.Debug.LogWarning("No matching event for this page index.");
+                        break;
+                }
+            }
+            else
+            {
+                wrongItemUI.SetActive(true); // Show wrong item UI
+            }
+        }
+    }
+
+    private void QuestComplete(int questIndex)
+    {
+        Page currentPage = pages[questIndex];
+        currentPage.description = "Quest Complete!";
+        UpdateQuestUI();
+        arrowLeftButton.interactable = true;
+        arrowRightButton.interactable = true;
+
+    }
+
 }
 
 [System.Serializable]
 public class Page
 {
     public string description;  // Local description text for the page
+    public Image rewardIconBackground;
     public Sprite rewardIcon;  // Reward icon background for the page
     public Sprite questIcon;  // Quest icon for the page
     public Image questIconImage; // Reference to the Image component for the quest icon

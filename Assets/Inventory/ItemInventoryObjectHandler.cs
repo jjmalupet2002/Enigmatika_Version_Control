@@ -28,12 +28,10 @@ public class ItemInventoryObjectHandler : MonoBehaviour
     [Header("Inventory Manager reference")]
     public InventoryManager inventoryManager; // Reference to your InventoryManager
 
-
     private Vector3 originalPosition; // Original position of the object
     private bool isInspecting = false; // Inspection state
     private bool hasLoggedAlreadyInspecting = false; // Log flag for 3D items
     private bool hasBeenStored = false; // Flag to ensure the note is only stored once
-
 
     void Start()
     {
@@ -73,7 +71,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
             else if (isInspecting)
             {
                 StopNoteInspection(); // Stop inspection if inactive
-
             }
         }
     }
@@ -86,11 +83,10 @@ public class ItemInventoryObjectHandler : MonoBehaviour
             return; // Prevent inspecting a note
         }
 
-        if (isInspecting)
+        if (isInspecting && IsCloseUpCameraActive())
         {
-            if (!hasLoggedAlreadyInspecting)
+            if (!hasLoggedAlreadyInspecting && IsCloseUpCameraActive()) // Check if CloseUp camera is active
             {
-
                 hasLoggedAlreadyInspecting = true; // Log flag
             }
             return; // Prevent re-inspection
@@ -119,7 +115,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         if (collider != null)
         {
             collider.enabled = false; // Disable collider
-
         }
 
         StartCoroutine(DisableGameObjectAfterDelay(2f)); // Disable game object after a delay
@@ -161,26 +156,22 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         if (collider != null)
         {
             collider.enabled = false; // Disable collider
-
         }
 
         isInspecting = false; // Reset state
         hasLoggedAlreadyInspecting = false; // Reset log flag for note inspection
     }
 
-
     private IEnumerator DisableGameObjectAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         gameObject.SetActive(false); // Disable the item
-
     }
 
     private IEnumerator NotifyPickupAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         NotifyPickup(); // Notify after delay
-
     }
 
     public void NotifyPickup()
@@ -212,15 +203,27 @@ public class ItemInventoryObjectHandler : MonoBehaviour
         }
     }
 
-
-
     private IEnumerator HideNotificationAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         if (notificationText != null)
         {
             notificationText.SetActive(false); // Hide notification
-
         }
+    }
+
+    private bool IsCloseUpCameraActive()
+    {
+        // Get all instances of SwitchCamera
+        var switchCameras = FindObjectsOfType<SwitchCamera>();
+        // Check if any instance has the CloseUp camera active
+        foreach (var switchCamera in switchCameras)
+        {
+            if (switchCamera.currentCameraState == CameraState.CloseUp)
+            {
+                return true; // Return true if any close-up camera is active
+            }
+        }
+        return false; // No close-up camera is active
     }
 }
