@@ -20,6 +20,7 @@ public class TutorialManager : MonoBehaviour
     public Button endButton;
     public Image cutSceneImage1;
     public Image cutSceneImage2;
+    public SimpleTimer simpleTimer;
 
 
     void Start()
@@ -74,6 +75,7 @@ public class TutorialManager : MonoBehaviour
         actualUI.SetActive(false);
         skipUI.SetActive(false);
         cutsceneUI.SetActive(false);
+        simpleTimer.StartTimer();
     }
 
     void CancelSkip()
