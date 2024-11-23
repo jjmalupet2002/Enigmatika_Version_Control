@@ -7,7 +7,7 @@ public class KeyboardTester : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        KeyboardKey.onkeyPressed += DebugLetter;
+        KeyboardKey.onKeyPressed += DebugLetter;
     }
 
     // Update is called once per frame
@@ -16,7 +16,7 @@ public class KeyboardTester : MonoBehaviour
         
     }
 
-    private void DebugLetter(string letter)
+    private void DebugLetter(char letter)
     {
         Debug.Log(letter);
     }

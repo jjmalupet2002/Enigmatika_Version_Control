@@ -12,7 +12,7 @@ public class KeyboardKey : MonoBehaviour
     [SerializeField] private TextMeshProUGUI letterText;
 
     [Header(" Events ")]
-    public static Action<string> onkeyPressed;
+    public static Action<char> onKeyPressed;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +28,6 @@ public class KeyboardKey : MonoBehaviour
 
     private void SendKeyPressedEvent()
     {
-        onkeyPressed?.Invoke(letterText.text);
+        onKeyPressed?.Invoke(letterText.text[0]);
     }
 }
