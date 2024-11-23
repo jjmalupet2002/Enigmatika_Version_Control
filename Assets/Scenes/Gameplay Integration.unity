@@ -28030,6 +28030,7 @@ MonoBehaviour:
   arrowLeftButton: {fileID: 2130009762}
   arrowRightButton: {fileID: 66148726}
   turnInItemButton: {fileID: 75134497}
+  completeText: {fileID: 2025884744}
   mainQuests:
   - {fileID: 2077397459}
   - {fileID: 1411415475}
@@ -28165,8 +28166,23 @@ MonoBehaviour:
     keyId: key3
     isNote: 0
     noteUI: {fileID: 0}
+  - itemName: Rusty key
+    itemIcon: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
+    itemDescription: The final key...Now you can open the trap gate and enter the
+      portal room.
+    isClueItem: 0
+    isGeneralItem: 1
+    isUsable: 1
+    isUsingItem: 0
+    keyId: key4
+    isNote: 0
+    noteUI: {fileID: 0}
   inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
   notificationTextUI: {fileID: 95152010}
+  item1PickedUp: 0
+  item2PickedUp: 0
+  item3PickedUp: 0
+  item4PickedUp: 0
 --- !u!4 &1288001549
 Transform:
   m_ObjectHideFlags: 0
@@ -30138,6 +30154,7 @@ RectTransform:
   - {fileID: 231310634}
   - {fileID: 75134494}
   - {fileID: 1029450955}
+  - {fileID: 2025884745}
   - {fileID: 2130009759}
   - {fileID: 66148723}
   m_Father: {fileID: 257255567}
@@ -39526,6 +39543,85 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2465258648875811998, guid: 164e398b45d0b2e45b7937efbe8699ce, type: 3}
   m_PrefabInstance: {fileID: 691535143444734526}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2025884744
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2025884745}
+  - component: {fileID: 2025884747}
+  - component: {fileID: 2025884746}
+  m_Layer: 5
+  m_Name: CompleteText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2025884745
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025884744}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1390883338}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.000015736, y: -327}
+  m_SizeDelta: {x: 254.471, y: 76.844}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2025884746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025884744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.8160377, b: 0.6084906, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 5e66e77026a31924e936fc62ef1e97b9, type: 3}
+    m_FontSize: 40
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 4
+    m_MaxSize: 50
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Completed
+--- !u!222 &2025884747
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025884744}
+  m_CullTransparentMesh: 1
 --- !u!1 &2025933549
 GameObject:
   m_ObjectHideFlags: 0

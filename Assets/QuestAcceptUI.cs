@@ -16,6 +16,8 @@ public class QuestAcceptUI : MonoBehaviour
     public Button arrowLeftButton;
     public Button arrowRightButton;
     public Button turnInItemButton;
+    public GameObject completeText;
+
 
     public List<MainQuest> mainQuests;
     public List<Page> pages;
@@ -205,6 +207,7 @@ public class QuestAcceptUI : MonoBehaviour
         // Ensure buttons reflect the correct state based on quest completion
         startQuestButton.gameObject.SetActive(!questInProgressOrCompleted && currentQuest != null && !questPageCompleted);
         turnInItemButton.gameObject.SetActive(questInProgressOrCompleted && !questPageCompleted);
+        completeText.SetActive(questPageCompleted);
     }
 
     private void StartSelectedQuest()
@@ -328,7 +331,7 @@ public class QuestAcceptUI : MonoBehaviour
             else
             {
                 // Show wrong item UI if the conditions are not met
-                if (hasUsedItem)
+                if (!isComparisonItem && hasUsedItem)
                 {
                     UnityEngine.Debug.Log("Conditions not met for turn-in.");
                     wrongItemUI.SetActive(true);  // Show wrong item UI
@@ -379,6 +382,7 @@ public class QuestAcceptUI : MonoBehaviour
 
         // Disable the turn-in button for the current page
         turnInItemButton.gameObject.SetActive(false);
+        completeText.gameObject.SetActive(true);
 
         // Update the UI with the updated quest information
         UpdateQuestUI();  // Refresh the UI with updated quest info
