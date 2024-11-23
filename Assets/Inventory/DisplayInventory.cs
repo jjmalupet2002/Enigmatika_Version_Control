@@ -126,7 +126,7 @@ public class DisplayInventory : MonoBehaviour
                 {
                     button.interactable = true; // Enable the button if the item is not in use
                     image.color = Color.white; // Set the icon to white
-                    button.onClick.AddListener(() => SelectItem(item));
+                    button.onClick.AddListener(() => SelectItem(item)); // Ensure the SelectItem method is called
                 }
 
                 // Increment the general index for the next general item
