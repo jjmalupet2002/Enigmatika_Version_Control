@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
+    [Header("Tutorial Settings")]
     public GameObject actualUI;
     public GameObject skipUI;
     public Button skipButton;
@@ -11,17 +12,52 @@ public class TutorialManager : MonoBehaviour
     public Button noButton;
     public AudioSource tutorialMusic;
 
+    [Header("Cutscene Settings")]
+    public GameObject cutsceneUI;
+    public GameObject page1;
+    public GameObject page2;
+    public Button nextButton;
+    public Button endButton;
+    public Image cutSceneImage1;
+    public Image cutSceneImage2;
+
+
     void Start()
     {
-        // Ensure the actual UI is active and the skip UI is inactive at the start
-        actualUI.SetActive(true);
+        // Ensure the actual UI and skip UI are inactive at the start
+        actualUI.SetActive(false);
         skipUI.SetActive(false);
+
+        // Ensure the cutscene UI is active at the start and show the first page
+        cutsceneUI.SetActive(true);
+        page1.SetActive(true);
+        page2.SetActive(false);
+        StartCoroutine(FadeInImage(cutSceneImage1));
+
+        // Play the tutorial music
         tutorialMusic.Play();
 
         // Add listeners to the buttons
         skipButton.onClick.AddListener(ShowSkipConfirmation);
         yesButton.onClick.AddListener(SkipTutorial);
         noButton.onClick.AddListener(CancelSkip);
+        nextButton.onClick.AddListener(ShowPage2);
+        endButton.onClick.AddListener(ShowTutorial);
+    }
+
+    void ShowPage2()
+    {
+        // Show the second page and hide the first page
+        page1.SetActive(false);
+        page2.SetActive(true);
+        StartCoroutine(FadeInImage(cutSceneImage2));
+    }
+
+    void ShowTutorial()
+    {
+        // Hide the cutscene UI and show the actual tutorial UI
+        cutsceneUI.SetActive(false);
+        actualUI.SetActive(true);
     }
 
     void ShowSkipConfirmation()
@@ -33,10 +69,11 @@ public class TutorialManager : MonoBehaviour
 
     void SkipTutorial()
     {
-        // Stop the music and deactivate both UIs
+        // Stop the music and deactivate all UIs
         tutorialMusic.Stop();
         actualUI.SetActive(false);
         skipUI.SetActive(false);
+        cutsceneUI.SetActive(false);
     }
 
     void CancelSkip()
@@ -44,5 +81,19 @@ public class TutorialManager : MonoBehaviour
         // Hide the skip confirmation UI and re-enable the skip button
         skipUI.SetActive(false);
         skipButton.gameObject.SetActive(true);
+    }
+
+    IEnumerator FadeInImage(Image image)
+    {
+        Color color = image.color;
+        color.a = 0;
+        image.color = color;
+
+        while (color.a < 1)
+        {
+            color.a += Time.deltaTime / 1f; // Adjust the duration of the fade-in effect as needed
+            image.color = color;
+            yield return null;
+        }
     }
 }

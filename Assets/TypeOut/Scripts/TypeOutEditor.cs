@@ -18,7 +18,7 @@ public class TypeOutEditor : Editor {
 
 	enum TimeModes {TotalTime = 0, TypeRate =1};
 	TimeModes TM = TimeModes.TotalTime;
-	private float Time = 0.5f;
+	private float Time = 8;
 	private float RCCR = 0.1f;
 
 	public void OnEnable()
