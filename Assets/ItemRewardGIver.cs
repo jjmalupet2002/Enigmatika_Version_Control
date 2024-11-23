@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemEventHandler : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class ItemEventHandler : MonoBehaviour
 
     [Header("Inventory Manager reference")]
     public InventoryManager inventoryManager; // Reference to your InventoryManager
+
+    [Header("Notification UI reference")]
+    public GameObject notificationTextUI; // Reference to the notification text UI GameObject
 
     // Events for each item
     public delegate void ItemEvent();
@@ -27,6 +31,12 @@ public class ItemEventHandler : MonoBehaviour
             {
                 items.Add(new ItemData("", null, "", false, false, false, false, false, null, ""));
             }
+        }
+
+        // Hide the notification UI initially
+        if (notificationTextUI != null)
+        {
+            notificationTextUI.SetActive(false);
         }
     }
 
@@ -71,7 +81,21 @@ public class ItemEventHandler : MonoBehaviour
         // Notify the Inventory Manager to add this item
         inventoryManager.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
 
+        // Show the notification text UI for 1 second
+        if (notificationTextUI != null)
+        {
+            StartCoroutine(ShowNotification());
+        }
+
         // Perform any additional actions here if necessary
+    }
+
+    // Coroutine to show and hide the notification UI
+    private IEnumerator ShowNotification()
+    {
+        notificationTextUI.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        notificationTextUI.SetActive(false);
     }
 
     // Example of invoking an event from another script

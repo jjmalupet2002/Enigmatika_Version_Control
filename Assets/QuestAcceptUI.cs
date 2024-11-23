@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,8 +28,10 @@ public class QuestAcceptUI : MonoBehaviour
 
     // Fields for required items and their associated reward items
     public string[] requiredItems = new string[4];
-    private GameObject wrongItemUI;
-    public ItemEventHandler itemHandler;  // Reference to the ItemRewardGiver
+    public GameObject wrongItemUI;
+    public Button wrongItemExitButton;
+    public ItemEventHandler itemHandler;
+    public InventoryManager inventoryManager;
 
 
     void Start()
@@ -44,6 +46,12 @@ public class QuestAcceptUI : MonoBehaviour
         arrowLeftButton.onClick.AddListener(PreviousPage);
         arrowRightButton.onClick.AddListener(NextPage);
 
+        // Initialize the exit button for wrongItemUI
+        if (wrongItemExitButton != null)
+        {
+            wrongItemExitButton.onClick.AddListener(CloseWrongItemUI);
+        }
+
         InitializePages();
 
         // Subscribe to the OnItemUsed event
@@ -57,7 +65,12 @@ public class QuestAcceptUI : MonoBehaviour
             itemHandler.item3Event += OnItem3Event;
             itemHandler.item4Event += OnItem4Event;
         }
+
+        // Add listener for turn in button
+        turnInItemButton.onClick.AddListener(TryTurnIn); // Listen for button click
+
     }
+
 
     // Event handler methods for each item
     private void OnItem1Event()
@@ -120,7 +133,16 @@ public class QuestAcceptUI : MonoBehaviour
     void OpenQuestUI()
     {
         questAcceptBackground.SetActive(true);
-        currentPageIndex = 0;
+
+        // Find the first page with a quest that is in progress or not yet completed
+        currentPageIndex = pages.FindIndex(page => page.quest != null && page.quest.status != QuestEnums.QuestStatus.NotStarted && !page.isQuestComplete);
+
+        // If no active quest page is found, default to the first page
+        if (currentPageIndex == -1)
+        {
+            currentPageIndex = 0;
+        }
+
         UpdateQuestUI();
     }
 
@@ -147,7 +169,7 @@ public class QuestAcceptUI : MonoBehaviour
         }
     }
 
-    void UpdateQuestUI()
+    private void UpdateQuestUI()
     {
         if (pages.Count == 0 || currentPageIndex == -1)
         {
@@ -174,10 +196,15 @@ public class QuestAcceptUI : MonoBehaviour
         }
 
         bool questInProgressOrCompleted = currentQuest != null && currentQuest.status != QuestEnums.QuestStatus.NotStarted;
-        arrowLeftButton.interactable = !questInProgressOrCompleted && currentPageIndex > 0;
-        arrowRightButton.interactable = !questInProgressOrCompleted && currentPageIndex < pages.Count - 1;
-        startQuestButton.gameObject.SetActive(!questInProgressOrCompleted && currentQuest != null);
-        turnInItemButton.gameObject.SetActive(questInProgressOrCompleted);
+        bool questPageCompleted = currentPage.isQuestComplete;
+
+        // If the quest is completed, ensure the arrows remain interactable
+        arrowLeftButton.interactable = !questInProgressOrCompleted && currentPageIndex > 0 || questPageCompleted;
+        arrowRightButton.interactable = !questInProgressOrCompleted && currentPageIndex < pages.Count - 1 || questPageCompleted;
+
+        // Ensure buttons reflect the correct state based on quest completion
+        startQuestButton.gameObject.SetActive(!questInProgressOrCompleted && currentQuest != null && !questPageCompleted);
+        turnInItemButton.gameObject.SetActive(questInProgressOrCompleted && !questPageCompleted);
     }
 
     private void StartSelectedQuest()
@@ -208,53 +235,165 @@ public class QuestAcceptUI : MonoBehaviour
         }
     }
 
-    private void OnItemUsed(ItemData item)
-    {
-        if (item != null)
-        {
-            // Check if the item keyId matches the required item for the current page
-            if (item.keyId == requiredItems[currentPageIndex])
-            {
-                // Fire event for quest completion
-                QuestComplete(currentPageIndex);
+    // Add a class-level variable to store the item used
+    private ItemData currentItem;
 
-                // Trigger the corresponding event using HandleItemEvent method
-                switch (currentPageIndex)
-                {
-                    case 0:
-                        itemHandler.HandleItemEvent(0); // Calls HandleItemEvent for item 1
-                        break;
-                    case 1:
-                        itemHandler.HandleItemEvent(1); // Calls HandleItemEvent for item 2
-                        break;
-                    case 2:
-                        itemHandler.HandleItemEvent(2); // Calls HandleItemEvent for item 3
-                        break;
-                    case 3:
-                        itemHandler.HandleItemEvent(3); // Calls HandleItemEvent for item 4
-                        break;
-                    default:
-                        UnityEngine.Debug.LogWarning("No matching event for this page index.");
-                        break;
-                }
+    // Flag to track if the correct item has been used
+    private bool hasUsedItem = false;
+
+    // Flag to track if the correct comparison item is used
+    private bool isComparisonItem = false;
+
+    // Flag to track if the turn-in button is pressed
+    private bool isTurnInButtonClicked = false;
+
+    // Method to handle button click
+    private void OnTurnInButtonClick()
+    {
+        UnityEngine.Debug.Log("Turn-In button clicked.");
+
+        if (hasUsedItem)  // Only allow turn-in if an item has been used
+        {
+            isTurnInButtonClicked = true;  // Set the flag to true
+            UnityEngine.Debug.Log("Turn-In button click registered.");
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Turn-In button click ignored because no item has been used.");
+        }
+
+        TryTurnIn();  // Always call TryTurnIn, regardless of whether an item has been used or not
+    }
+
+    // Method to handle item usage
+    public void OnItemUsed(ItemData item)
+    {
+        if (item == null)
+        {
+            UnityEngine.Debug.Log("No item passed to OnItemUsed.");
+            return;
+        }
+
+        UnityEngine.Debug.Log($"Item Used: {item.keyId}, Required Item: {requiredItems[currentPageIndex]}");
+
+        // Check if the item keyId matches the required item for the current page
+        if (item.keyId == requiredItems[currentPageIndex])
+        {
+            // Mark that the correct item has been used and store the item
+            isComparisonItem = true;
+            hasUsedItem = true;  // Correct item used
+            currentItem = item; // Store the used item
+
+            UnityEngine.Debug.Log("Correct item used, proceeding to turn in.");
+        }
+        else
+        {
+            // Log the wrong item usage
+            UnityEngine.Debug.Log("Wrong item used!");
+
+            // Ensure hasUsedItem is still set to true when a wrong item is used
+            hasUsedItem = true;  // This allows triggering the wrong item UI when the button is clicked
+        }
+    }
+
+    // Method to check both conditions (item used and button clicked) and perform the action
+    public void TryTurnIn()
+    {
+        UnityEngine.Debug.Log($"TryTurnIn called with states - isComparisonItem: {isComparisonItem}, isTurnInButtonClicked: {isTurnInButtonClicked}, hasUsedItem: {hasUsedItem}");
+
+        // Ensure both conditions are met for the correct item
+        if (isComparisonItem)
+        {
+            // Mark quest as complete and trigger necessary actions
+            QuestComplete(currentPageIndex);
+
+            // Trigger the corresponding event using HandleItemEvent method
+            itemHandler.HandleItemEvent(currentPageIndex);
+            
+            // Pass the stored item
+            StartCoroutine(DeleteItemAfterDelay(currentItem, 1.5f)); 
+
+            UnityEngine.Debug.Log("Quest Completed!");
+
+            // Reset flags after turn-in attempt
+            ResetFlags();
+        }
+        else
+        {
+            // Show wrong item UI if the conditions are not met
+            if (!isComparisonItem && isTurnInButtonClicked)
+            {
+                UnityEngine.Debug.Log("Wrong item used!");
             }
             else
             {
-                wrongItemUI.SetActive(true); // Show wrong item UI
+                // Show wrong item UI if the conditions are not met
+                if (hasUsedItem)
+                {
+                    UnityEngine.Debug.Log("Conditions not met for turn-in.");
+                    wrongItemUI.SetActive(true);  // Show wrong item UI
+                }
+
             }
+
+            // Reset flags after turn-in attempt, without resetting turn-in button immediately
+            ResetFlags();
         }
     }
+
+    // Coroutine to delete item after a delay
+    private IEnumerator DeleteItemAfterDelay(ItemData item, float delay)
+    {
+        yield return new WaitForSeconds(delay); // Wait for the delay before deleting the item
+
+        // Delete the item from inventory
+        inventoryManager.DeleteItem(item);
+
+     }
+
+
+    // Helper method to reset flags
+    private void ResetFlags()
+    {
+        // Reset flags that track the turn-in state
+        isTurnInButtonClicked = false;  // Reset the button press flag
+        isComparisonItem = false;       // Reset the comparison check flag
+        hasUsedItem = false;            // Reset the item usage check flag
+    }
+
 
     private void QuestComplete(int questIndex)
     {
         Page currentPage = pages[questIndex];
-        currentPage.description = "Quest Complete!";
-        UpdateQuestUI();
+
+        // Ensure quest is not null
+        if (currentPage.quest != null)
+        {
+            // Update quest description and status
+            currentPage.quest.questDescription = "Quest Completed!\nPortal room key received!";
+            currentPage.quest.status = QuestEnums.QuestStatus.Completed;
+
+            // Mark the page as quest complete
+            currentPage.isQuestComplete = true;
+        }
+
+        // Disable the turn-in button for the current page
+        turnInItemButton.gameObject.SetActive(false);
+
+        // Update the UI with the updated quest information
+        UpdateQuestUI();  // Refresh the UI with updated quest info
+
+        // Enable the arrows' interactability as the quest is now completed
         arrowLeftButton.interactable = true;
         arrowRightButton.interactable = true;
-
     }
 
+
+    // Method to close the wrongItemUI
+    private void CloseWrongItemUI()
+    {
+        wrongItemUI.SetActive(false);
+    }
 }
 
 [System.Serializable]
@@ -265,5 +404,6 @@ public class Page
     public Sprite rewardIcon;  // Reward icon background for the page
     public Sprite questIcon;  // Quest icon for the page
     public Image questIconImage; // Reference to the Image component for the quest icon
-    public MainQuest quest;  // Reference to the main quest associated with this page
+    public MainQuest quest; // Local quest variable for the page
+    public bool isQuestComplete;
 }

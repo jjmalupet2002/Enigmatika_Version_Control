@@ -1,64 +1,44 @@
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class ItemRewardGiver : MonoBehaviour
+public class ItemInventoryObjectHandler : MonoBehaviour
 {
     [Header("Item Attributes")]
-    private string itemName;
-    private Sprite itemIcon;
-    [TextArea] private string itemDescription;
+    public string itemName;
+    public Sprite itemIcon;
+    [TextArea] public string itemDescription;
+
+    [Header("If Item is a key")]
+    public string keyId = ""; // KeyID for key items (empty if not a key)
 
     [Header("Inventory Settings")]
-    private bool isClueItem;
-    private bool isGeneralItem;
-    private bool isUsable;
+    public bool isClueItem;
+    public bool isGeneralItem;
+    public bool isUsable;
 
     [Header("Item Settings")]
-    private bool isNote;
-    private bool is3dObject;
+    public bool isNote; // Flag for notes
+    public bool is3dObject; // Flag for 3D objects
 
     [Header("UI Notification")]
-    private GameObject notificationText;
-    private GameObject noteUI;
+    public GameObject notificationText; // Reference to Text UI
+    public GameObject noteUI; // Reference to Note UI
 
     [Header("Inventory Manager reference")]
-    public InventoryManager inventoryManager;
+    public InventoryManager inventoryManager; // Reference to your InventoryManager
 
-    [Header("Item Events")]
-    public UnityEvent item1Event;  // Event for the first item
-    public UnityEvent item2Event;  // Event for the second item
-    public UnityEvent item3Event;  // Event for the third item
-    public UnityEvent item4Event;  // Event for the fourth item
 
-    private List<UnityEvent> itemEvents = new List<UnityEvent>();  // List to store item events
-    public List<ItemData> itemList = new List<ItemData>();  // List to store item data
-    private bool[] hasBeenStored = new bool[4];  // Track if each item has been stored
+    private Vector3 originalPosition; // Original position of the object
+    private bool isInspecting = false; // Inspection state
+    private bool hasLoggedAlreadyInspecting = false; // Log flag for 3D items
+
 
     void Start()
     {
-        // Initialize the item events list with the four item events
-        itemEvents.Add(item1Event);
-        itemEvents.Add(item2Event);
-        itemEvents.Add(item3Event);
-        itemEvents.Add(item4Event);
-
-        // Initialize itemList with default ItemData objects for 4 slots
-        for (int i = 0; i < 4; i++)
+        if (is3dObject)
         {
-            itemList.Add(new ItemData(
-                    "",                    // Default name
-                    null,                   // Default icon (null for now)
-                    "",                    // Default description
-                    false,                  // Default isClueItem
-                    false,                  // Default isGeneralItem
-                    false,                  // Default isUsable
-                    false,                  // Default isStored
-                    false,                  // Default isNote
-                    null,                   // Default noteUI (null for now)
-                    ""                      // Default additionalInfo
-            ));
+            originalPosition = transform.position;
         }
 
         if (notificationText != null)
@@ -67,59 +47,150 @@ public class ItemRewardGiver : MonoBehaviour
         }
     }
 
-    // Add items to the list (you can add them via Inspector or dynamically at runtime)
-    public void AddItemToList(ItemData newItem, int itemIndex)
+    void Update()
     {
-        if (itemIndex < 0 || itemIndex >= 4) return;  // Ensure the index is valid
-        itemList[itemIndex] = newItem;  // Replace the item data at the given index
-        hasBeenStored[itemIndex] = false;  // Reset the stored flag
+        // Check for 3D object inspection
+        if (is3dObject)
+        {
+            if (Vector3.Distance(transform.position, originalPosition) > 0.1f)
+            {
+                Inspect3DItem(); // Call InspectItem if moved
+            }
+            else if (isInspecting)
+            {
+                Stop3DInspect(); // Stop inspection if back at original position
+            }
+        }
+
+        // Check the active state of the note UI
+        if (noteUI != null)
+        {
+            if (noteUI.activeSelf)
+            {
+                NoteInspect(); // Call NoteInspect if active
+            }
+            else if (isInspecting)
+            {
+                StopNoteInspection(); // Stop inspection if inactive
+
+            }
+        }
     }
 
-    // Handle item events when triggered
-    public void HandleItemEvent(int itemIndex)
+    public void Inspect3DItem()
     {
-        // Ensure itemIndex is within bounds
-        if (itemIndex < 0 || itemIndex >= 4)
+        if (isNote)
         {
-            UnityEngine.Debug.LogError("Item index out of bounds!");
+            UnityEngine.Debug.Log("Cannot inspect a note as a 3D object.");
+            return; // Prevent inspecting a note
+        }
+
+        if (isInspecting)
+        {
+            if (!hasLoggedAlreadyInspecting)
+            {
+
+                hasLoggedAlreadyInspecting = true; // Log flag
+            }
+            return; // Prevent re-inspection
+        }
+
+        isInspecting = true; // Set inspecting state
+        StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify after a delay
+    }
+
+    public void Stop3DInspect()
+    {
+        if (!isInspecting)
+        {
+            UnityEngine.Debug.Log("No inspection to stop.");
             return;
         }
 
-        // Notify inventory system if the item hasn't been stored
-        if (!hasBeenStored[itemIndex])
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
         {
-            NotifyPickup(itemIndex);
-            hasBeenStored[itemIndex] = true;
+            meshRenderer.enabled = false; // Disable mesh renderer
         }
 
-        // Invoke the event for the item
-        itemEvents[itemIndex]?.Invoke();
+        // Disable colliders (box or sphere)
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false; // Disable collider
+
+        }
+
+        StartCoroutine(DisableGameObjectAfterDelay(2f)); // Disable game object after a delay
+        isInspecting = false; // Reset state
+        hasLoggedAlreadyInspecting = false; // Reset log flag
     }
 
-    private void NotifyPickup(int itemIndex)
+    private bool hasBeenInspected = false; // Flag to track if the note has been inspected
+
+    public void NoteInspect()
     {
-        // Prevent adding the item again if already stored
-        if (hasBeenStored[itemIndex])
+        if (noteUI != null && noteUI.activeSelf)
         {
+            if (isInspecting || hasBeenInspected)
+            {
+                return; // Prevent re-inspection if already inspecting or has been inspected
+            }
+
+            isInspecting = true; // Set inspecting state
+            hasBeenInspected = true; // Set the flag to indicate it has been inspected
+            StartCoroutine(NotifyPickupAfterDelay(1f)); // Notify after a delay
+        }
+    }
+
+    public void StopNoteInspection()
+    {
+        if (!isInspecting)
+        {
+            UnityEngine.Debug.Log("No inspection to stop for the note."); // Log if there was no inspection to stop
             return;
         }
 
-        // Create an instance of ItemData for the item
-        ItemData newItemData = new ItemData(
-            itemList[itemIndex].itemName,                // The item name
-            itemList[itemIndex].itemIcon,                // The item icon
-            itemList[itemIndex].itemDescription,         // The item description
-            itemList[itemIndex].isClueItem,             // Whether it's a clue item
-            itemList[itemIndex].isGeneralItem,          // Whether it's a general item
-            itemList[itemIndex].isUsable,               // Whether it's usable
-            false,                                       // isStored, initially false as it hasn't been stored yet
-            itemList[itemIndex].isNote,                 // Whether it's a note
-            itemList[itemIndex].noteUI,                 // The note UI (if applicable)
-            ""                                           // Placeholder for any additional information (if needed)
-        );
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
+        {
+            meshRenderer.enabled = false; // Disable mesh renderer
+        }
+
+        // Disable colliders (box or sphere)
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false; // Disable collider
+
+        }
+
+        isInspecting = false; // Reset state
+        hasLoggedAlreadyInspecting = false; // Reset log flag for note inspection
+    }
+
+
+    private IEnumerator DisableGameObjectAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(false); // Disable the item
+
+    }
+
+    private IEnumerator NotifyPickupAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        NotifyPickup(); // Notify after delay
+
+    }
+
+    public void NotifyPickup()
+    {
+        // Create an instance of ItemData and pass the keyId (if available)
+        ItemData newItemData = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, is3dObject, isNote, noteUI, keyId);
 
         // Notify the Inventory Manager to add this item
-        inventoryManager.AddItem(newItemData);
+        InventoryManager.Instance.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
 
         // Show notification
         if (notificationText != null)
@@ -127,7 +198,12 @@ public class ItemRewardGiver : MonoBehaviour
             notificationText.SetActive(true); // Show notification
             StartCoroutine(HideNotificationAfterDelay(2f)); // Hide after 2 seconds
         }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned."); // Warn if null
+        }
     }
+
 
     private IEnumerator HideNotificationAfterDelay(float delay)
     {
@@ -135,6 +211,7 @@ public class ItemRewardGiver : MonoBehaviour
         if (notificationText != null)
         {
             notificationText.SetActive(false); // Hide notification
+
         }
     }
 }
