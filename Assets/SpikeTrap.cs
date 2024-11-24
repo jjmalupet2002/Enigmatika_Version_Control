@@ -108,7 +108,7 @@ public class SpikeTrap : MonoBehaviour
 
         // Move the spike to the target position using Lerp for smooth movement
         float elapsedTime = 0f;
-        float duration = 0.3f; // Duration of the spike movement
+        float duration = 0.2f; // Duration of the spike movement
 
         while (elapsedTime < duration)
         {
@@ -185,5 +185,12 @@ public class SpikeTrap : MonoBehaviour
     {
         yield return new WaitForSeconds(delay); // Wait for the specified delay
         textComponent.gameObject.SetActive(false); // Disable the text GameObject
+    }
+
+    // Draw Gizmos to visualize the interact range
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
     }
 }
