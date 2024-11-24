@@ -34696,20 +34696,128 @@ MonoBehaviour:
   m_GameObject: {fileID: 1435656245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10cc5b2b163a345769b9c7b3cf379aa7, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  On: 1
-  reset: 0
-  FinalText: 'After gaining composure, a tall hooded figure approached you. You are
-    taken a back by his stature. As you wonder what this enigmatic figure is holding.
-
-'
-  TotalTypeTime: 8
-  TypeRate: 0
-  RandomCharactor: 
-  RandomCharacterChangeRate: 0.1
-  i: 0
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: After gaining composure, a tall hooded figure approached you. You are taken
+    a back by his stature. As you wonder what this enigmatic figure is holding.
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  m_sharedMaterial: {fileID: 5033988485147071341, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 48
+  m_fontSizeBase: 48
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 20
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1435656251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435656245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd31b5fd0cebd364580445091f9a4e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullText: "After gaining composure, a tall hooded figure approached you. You are
+    taken a back by his stature. \nAs you wonder what this enigmatic figure is holding."
+  uiText: {fileID: 1435656250}
+  typingDuration: 6
+  slideInDuration: 2
+  slideInStartDelay: 0.5
+  fadeInDuration: 2
+  fadeOutDuration: 2
+  glitchDuration: 2
+  glitchIntensity: 0.1
+  zoomInDuration: 2
+  zoomInStartDelay: 1
+  zoomOutDuration: 2
+  zoomOutStartDelay: 1
+  startDelay: 0
+  effectType: 4
+  slideDirection: 0
+--- !u!114 &1435656252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435656245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5075b6da9ec2e34393620b6fb107936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1437229306 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9133520100772612809, guid: f1e970cff733dcb4f8046f6bccb83080, type: 3}
@@ -37219,20 +37327,128 @@ MonoBehaviour:
   m_GameObject: {fileID: 1640508235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10cc5b2b163a345769b9c7b3cf379aa7, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  On: 1
-  reset: 0
-  FinalText: 'You were suddenly transported to a portal. As you fell to the ground,
-    you see that you are inside a storage room...
-
-'
-  TotalTypeTime: 8
-  TypeRate: 0
-  RandomCharactor: 
-  RandomCharacterChangeRate: 0.1
-  i: 0
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "You were suddenly transported to a portal. \nAs you fell to the ground,
+    you see \nthat you are inside a storage room...\r\n"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  m_sharedMaterial: {fileID: 5033988485147071341, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 50
+  m_fontSizeBase: 50
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 0
+  m_fontSizeMax: 0
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 20
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 0
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1640508241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640508235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd31b5fd0cebd364580445091f9a4e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullText: "You were suddenly transported to a portal. \nAs you fell to the ground,
+    you see \nthat you are inside a storage room...\r\n"
+  uiText: {fileID: 1640508240}
+  typingDuration: 6
+  slideInDuration: 2
+  slideInStartDelay: 0.5
+  fadeInDuration: 2
+  fadeOutDuration: 2
+  glitchDuration: 2
+  glitchIntensity: 0.1
+  zoomInDuration: 2
+  zoomInStartDelay: 1
+  zoomOutDuration: 2
+  zoomOutStartDelay: 1
+  startDelay: 0
+  effectType: 4
+  slideDirection: 0
+--- !u!114 &1640508242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640508235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5075b6da9ec2e34393620b6fb107936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1640701334 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
@@ -38857,21 +39073,131 @@ MonoBehaviour:
   m_GameObject: {fileID: 1729610220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10cc5b2b163a345769b9c7b3cf379aa7, type: 3}
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  On: 1
-  reset: 0
-  FinalText: 'You tried to escape through the portal where you came from. However,
-    the Hooded figure caught you and suprisingly, he strike up a conversation with
-    you.
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'You tried to escape through the portal where you came from. However, the
+    Hooded figure caught you and suprisingly, he striked up a conversation with you.
 
 '
-  TotalTypeTime: 8
-  TypeRate: 0
-  RandomCharactor: 
-  RandomCharacterChangeRate: 0.1
-  i: 0
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  m_sharedMaterial: {fileID: 5033988485147071341, guid: 64512e9dfd71def43aa73c399fa62cba, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 45
+  m_fontSizeBase: 45
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 30
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1729610226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729610220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd31b5fd0cebd364580445091f9a4e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullText: "You tried to escape through the portal where you came from. However,
+    the Hooded figure \ncaught you and suprisingly, he striked up a conversation
+    with you.\r\n"
+  uiText: {fileID: 1729610225}
+  typingDuration: 6
+  slideInDuration: 2
+  slideInStartDelay: 0.5
+  fadeInDuration: 2
+  fadeOutDuration: 2
+  glitchDuration: 2
+  glitchIntensity: 0.1
+  zoomInDuration: 2
+  zoomInStartDelay: 1
+  zoomOutDuration: 2
+  zoomOutStartDelay: 1
+  startDelay: 0
+  effectType: 4
+  slideDirection: 0
+--- !u!114 &1729610227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729610220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5075b6da9ec2e34393620b6fb107936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1733882090 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5024374547610174000, guid: 90c6c53ad7dd0ee479b123c430f50dec, type: 3}
@@ -39659,8 +39985,10 @@ MonoBehaviour:
 '
   TotalTypeTime: 8
   TypeRate: 0
+  LastTime: 0
   RandomCharactor: 
   RandomCharacterChangeRate: 0.1
+  RandomCharacterTime: 0
   i: 0
 --- !u!4 &1756601631 stripped
 Transform:
@@ -62690,6 +63018,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1491696816}
     m_Modifications:
+    - target: {fileID: 1728902555502958428, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -280
+      objectReference: {fileID: 0}
     - target: {fileID: 4083396210439892595, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
       propertyPath: player
       value: 
@@ -62698,6 +63030,14 @@ PrefabInstance:
       propertyPath: interactCollider
       value: 
       objectReference: {fileID: 948277044}
+    - target: {fileID: 5508897337620034153, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7402612746585033642, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7662169723938667237, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
       propertyPath: m_Text
       value: 
@@ -62796,7 +63136,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5508897337620034153, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1729610226}
+    - targetCorrespondingSourceObject: {fileID: 5508897337620034153, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1729610225}
+    - targetCorrespondingSourceObject: {fileID: 5508897337620034153, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1729610227}
   m_SourcePrefab: {fileID: 100100000, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
 --- !u!1001 &5654644290790354724
 PrefabInstance:
@@ -67502,13 +67848,29 @@ PrefabInstance:
       propertyPath: m_Text
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4044163090144544994, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4428443218828551407, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
       propertyPath: canvas
       value: 
       objectReference: {fileID: 1491696815}
+    - target: {fileID: 5322100686551415245, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5462155669557345004, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
       propertyPath: TotalTypeTime
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5741123387095205442, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164684992548242183, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8857792926179531063, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
       propertyPath: m_Pivot.x
@@ -67596,10 +67958,22 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5322100686551415245, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1640508241}
+    - targetCorrespondingSourceObject: {fileID: 5322100686551415245, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1640508240}
+    - targetCorrespondingSourceObject: {fileID: 5322100686551415245, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1640508242}
+    - targetCorrespondingSourceObject: {fileID: 8164684992548242183, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1435656251}
     - targetCorrespondingSourceObject: {fileID: 8164684992548242183, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1435656250}
+    - targetCorrespondingSourceObject: {fileID: 8164684992548242183, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1435656252}
   m_SourcePrefab: {fileID: 100100000, guid: e6cbfdb4d4b45344eb36069c6d02a896, type: 3}
 --- !u!1001 &8619466630571891471
 PrefabInstance:
