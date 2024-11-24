@@ -7,6 +7,7 @@ public class QuestAcceptUI : MonoBehaviour
 {
     public Button viewQuestButton;
     public GameObject questAcceptBackground;
+    public GameObject QuestAcceptBlackbackground;
     public Button exitButton;
     public Button startQuestButton;
     public Text questNameText;
@@ -135,6 +136,7 @@ public class QuestAcceptUI : MonoBehaviour
     void OpenQuestUI()
     {
         questAcceptBackground.SetActive(true);
+        QuestAcceptBlackbackground.SetActive(true);
 
         // Find the first page with a quest that is in progress or not yet completed
         currentPageIndex = pages.FindIndex(page => page.quest != null && page.quest.status != QuestEnums.QuestStatus.NotStarted && !page.isQuestComplete);
@@ -151,6 +153,7 @@ public class QuestAcceptUI : MonoBehaviour
     void CloseQuestUI()
     {
         questAcceptBackground.SetActive(false);
+        QuestAcceptBlackbackground.SetActive(false);
     }
 
     void PreviousPage()

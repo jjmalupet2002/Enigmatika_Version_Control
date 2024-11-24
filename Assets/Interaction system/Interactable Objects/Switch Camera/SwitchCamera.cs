@@ -63,6 +63,7 @@ public class SwitchCamera : MonoBehaviour
             currentCloseUpCamera = newCloseUpCamera; // Update current close-up camera
             backButton.SetActive(true); // Enable the back button when switching to close-up camera
             inventoryButton.SetActive(false); // Disable the inventory button when switching to close-up camera
+
             ToggleOutlines(false); // Disable outlines
             GameStateManager.Instance.DisableUIElements(); // Disable UI elements
             playerModel.SetActive(false); // Disable player model
@@ -75,6 +76,7 @@ public class SwitchCamera : MonoBehaviour
             SetCamera(CameraState.Main); // Switch back to the main camera
             backButton.SetActive(false); // Disable the back button when switching back to the main camera
             inventoryButton.SetActive(true); // Re-enable the inventory button when switching back to main camera
+
             ToggleOutlines(true); // Enable outlines
             GameStateManager.Instance.EnableUIElements(); // Enable UI elements
             playerModel.SetActive(true); // Enable player model
