@@ -167,7 +167,7 @@ public class QuestUIManager : MonoBehaviour
         yield return new WaitForSeconds(2f);  // Wait for 2 seconds
 
         // Fade out
-        float duration = 0.4f;  // Duration of fade-out
+        float duration = 0.3f;  // Duration of fade-out
         float startAlpha = questCompletionCanvasGroup.alpha;
         float endAlpha = 0f;
 
@@ -187,7 +187,7 @@ public class QuestUIManager : MonoBehaviour
         yield return new WaitForSeconds(2f);  // Wait for 2 seconds
 
         // Fade out
-        float duration = 0.4f;  // Duration of fade-out
+        float duration = 0.3f;  // Duration of fade-out
         float startAlpha = questNameCanvasGroup.alpha;
         float endAlpha = 0f;
 
