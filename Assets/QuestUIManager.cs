@@ -87,6 +87,7 @@ public class QuestUIManager : MonoBehaviour
         if (quest.status == QuestEnums.QuestStatus.Completed)
         {
             criteriaStatusText.gameObject.SetActive(false);
+            criteriaStatusText.text = "";
         }
     }
 

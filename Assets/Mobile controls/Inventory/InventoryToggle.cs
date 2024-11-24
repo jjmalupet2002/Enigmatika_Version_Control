@@ -10,7 +10,6 @@ public class InventoryToggle : MonoBehaviour
     public AudioSource closeSound; // Assign the AudioSource for closing sound
     public GameObject joystickCanvasGroup; // Reference to the GameObject for the joystick canvas group
     public GameObject inventoryUI; // Reference to the actual Inventory UI
-    public GameObject CriteriaText;
     public GameObject ObjectiveText;
 
     private bool isInventoryOpen = false; // Track the state of the inventory
@@ -62,7 +61,6 @@ public class InventoryToggle : MonoBehaviour
     {
         inventoryUI.SetActive(false); // Hide the inventory UI
         SetControlsActive(true);
-        CriteriaText.gameObject.SetActive(true);
         ObjectiveText.gameObject.SetActive(true);
 
         // Enable player movement and joystick input only if we're not in close-up view
@@ -108,7 +106,6 @@ public class InventoryToggle : MonoBehaviour
 
                 TalkButton.gameObject.SetActive(false);
                 InteractButton.gameObject.SetActive(false);
-                CriteriaText.gameObject.SetActive(false);
                 ObjectiveText.gameObject.SetActive(false);
             }
         }
