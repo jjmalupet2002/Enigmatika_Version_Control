@@ -22,6 +22,8 @@ public class TutorialManager : MonoBehaviour
     public Image cutSceneImage2;
     public SimpleTimer simpleTimer;
 
+    [Header("Post-Tutorial Audio")]
+    public AudioSource postTutorialAudio;
 
     void Start()
     {
@@ -76,6 +78,9 @@ public class TutorialManager : MonoBehaviour
         skipUI.SetActive(false);
         cutsceneUI.SetActive(false);
         simpleTimer.StartTimer();
+
+        // Play the post-tutorial audio
+        postTutorialAudio.Play();
     }
 
     void CancelSkip()
