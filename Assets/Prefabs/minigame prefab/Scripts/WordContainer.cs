@@ -30,6 +30,7 @@ public class WordContainer : MonoBehaviour
 
     public void Initialize()
     {
+        currentLetterIndex = 0; // Reset index when initializing
         for (int i = 0; i < letterContainers.Length; i++)
         {
             letterContainers[i].Initialize();
@@ -38,13 +39,38 @@ public class WordContainer : MonoBehaviour
 
     public void Add(char letter)
     {
-        letterContainers[currentLetterIndex].SetLetter(letter);
-        currentLetterIndex++;
+        // Ensure we don't exceed the bounds of the array
+        if (currentLetterIndex < letterContainers.Length)
+        {
+            letterContainers[currentLetterIndex].SetLetter(letter);
+            currentLetterIndex++;
+        }
+        else
+        {
+            Debug.LogWarning("Attempted to add a letter when the container is already full.");
+        }
+    }
+
+    public string GetWord()
+    {
+        string word = "";
+
+        for (int i = 0; i < letterContainers.Length; i++)
+        {
+            word += letterContainers[i].GetLetter().ToString();
+        }
+
+        return word;
     }
 
     public bool IsComplete()
     {
-        return currentLetterIndex >= 9;
+        // Check if all letters have been filled (index equals the length of the array)
+        return currentLetterIndex >= letterContainers.Length;
     }
-
+    public int GetLetterContainerCount()
+    {
+        return letterContainers.Length;
+    }
+    
 }

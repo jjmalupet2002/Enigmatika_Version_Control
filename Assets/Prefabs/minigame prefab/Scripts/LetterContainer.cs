@@ -6,7 +6,7 @@ using UnityEngine;
 public class LetterContainer : MonoBehaviour
 {
     [Header("TextMeshPro Letter")]
-    [SerializeField] private TextMeshPro letter;
+    [SerializeField] private TextMeshProUGUI letter;
 
 
     // Start is called before the first frame update
@@ -30,4 +30,10 @@ public class LetterContainer : MonoBehaviour
     {
         this.letter.text = letter.ToString();
     }
+
+    public char GetLetter()
+    {
+        return letter.text[0];
+    }
+
 }
