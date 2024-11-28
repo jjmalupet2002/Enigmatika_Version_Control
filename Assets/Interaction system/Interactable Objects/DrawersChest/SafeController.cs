@@ -173,6 +173,7 @@ public class SafeController : MonoBehaviour
         onSafeOpened.Invoke();
         isSafeOpened = true; // Mark the safe as opened
         PlaySafeAlreadyOpenSound(); // Play sound
+        safeInspectButton.gameObject.SetActive(false);
         CloseSafeUI();
         hintPointManager.AddHintPoints(1); // Adds 1 hint point
     }
