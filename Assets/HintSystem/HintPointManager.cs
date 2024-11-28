@@ -1,55 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HintPointManager : MonoBehaviour
 {
-    public int totalHintPoints;
+    public HintPoints hintPointsSO;
+    public UnityEvent onHintPointsUpdated;
+    public UnityEvent onHintButtonDisplay;
 
-    private void OnEnable()
-    {
-        // Adding listeners for the hint events
-        HintEventManager.OnAddHintPoints.AddListener(AddHintPoints);
-        HintEventManager.OnSubtractHintPoints.AddListener(SubtractHintPoints);
-    }
+    public AudioClip addHintSound; // Sound to play when hint points are added
+    public AudioClip subtractHintSound; // Sound to play when hint points are subtracted
+    public float soundVolume = 1f; // Volume for the sounds (1 = full volume, 0 = muted)
 
-    private void OnDisable()
-    {
-        // Removing listeners when the object is disabled
-        HintEventManager.OnAddHintPoints.RemoveListener(AddHintPoints);
-        HintEventManager.OnSubtractHintPoints.RemoveListener(SubtractHintPoints);
-    }
-
-    // Method to add hint points
     public void AddHintPoints(int points)
     {
-        totalHintPoints += points;
-        Debug.Log("Hint points added: " + points + ". Total hint points: " + totalHintPoints);
-        // Update UI or any other relevant components here
+        hintPointsSO.hintPoints += points;
+        onHintPointsUpdated.Invoke();
+
+        PlaySound(addHintSound); // Play sound when points are added
     }
 
-    // Method to subtract hint points (return type is now void)
     public void SubtractHintPoints(int points)
     {
-        Debug.Log("Attempting to subtract: " + points + " points.");
+        hintPointsSO.hintPoints -= points;
+        onHintPointsUpdated.Invoke();
 
-        if (totalHintPoints >= points)
-        {
-            totalHintPoints -= points;
-            Debug.Log("Hint points subtracted: " + points + ". Total hint points: " + totalHintPoints);
-
-            // Call a UI update method here, if necessary
-            UpdateHintPointsUI();
-        }
-        else
-        {
-            Debug.Log("Not enough hint points.");
-        }
+        PlaySound(subtractHintSound); // Play sound when points are subtracted
     }
 
-    private void UpdateHintPointsUI()
+    public void UpdateHintPoints()
     {
-        // Update the hint points UI here if needed
-        Debug.Log("Updated hint points: " + totalHintPoints);
+        onHintPointsUpdated.Invoke();
+    }
+
+    public void DisplayHintButton()
+    {
+        onHintButtonDisplay.Invoke();
+    }
+
+    // Play sound based on the AudioClip passed in with volume control
+    private void PlaySound(AudioClip sound)
+    {
+        if (sound != null)
+        {
+            AudioSource.PlayClipAtPoint(sound, Camera.main.transform.position, soundVolume);
+        }
     }
 }
