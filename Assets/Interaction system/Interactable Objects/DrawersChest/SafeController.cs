@@ -39,6 +39,10 @@ public class SafeController : MonoBehaviour
     public AudioClip wrongCombinationAudioClip; // Use AudioClip for UI alert sounds
     public AudioSource safeAlreadyOpenAudioSource; // Use AudioSource for 3D object sounds
 
+    [Header("References to hint system")]
+    public HintPointManager hintPointManager;
+    public HintUIManager hintUIManager;
+
     [Header("Unity Event - What happens when you open the safe?")]
     public UnityEvent onSafeOpened;
 
@@ -150,6 +154,7 @@ public class SafeController : MonoBehaviour
         else
         {
             wrongCombinationUI.SetActive(true);
+            hintUIManager.DisplayHintButton();
             PlayWrongCombinationSound(); // Play sound
             Invoke("HideWrongCombinationUI", 2f); // Hide after 2 seconds
         }
@@ -169,6 +174,7 @@ public class SafeController : MonoBehaviour
         isSafeOpened = true; // Mark the safe as opened
         PlaySafeAlreadyOpenSound(); // Play sound
         CloseSafeUI();
+        hintPointManager.AddHintPoints(1); // Adds 1 hint point
     }
 
     private void OnCameraStateChange(CameraState state)
