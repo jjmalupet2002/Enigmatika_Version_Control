@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     [Header("Elements")]
     [SerializeField] private WordContainer wordContainerPrefab;
     [SerializeField] private Transform wordContainerParent;
+    [SerializeField] private Boss boss; // Reference to Boss
 
     private WordContainer currentWordContainer;
 
@@ -78,6 +79,16 @@ public class InputManager : MonoBehaviour
         if (wordToCheck == secretWord)
         {
             Debug.Log("Hit Boss");
+
+            // If the word is correct, damage the boss
+            if (boss != null)
+            {
+                boss.TakeDamage(20); // Deal 20 damage to the boss
+            }
+            else
+            {
+                Debug.LogError("Boss reference is missing!");
+            }
         }
         else
         {
@@ -93,6 +104,4 @@ public class InputManager : MonoBehaviour
         currentWordContainer = Instantiate(wordContainerPrefab, wordContainerParent);
         currentWordContainer.Initialize();
     }
-
-
 }
