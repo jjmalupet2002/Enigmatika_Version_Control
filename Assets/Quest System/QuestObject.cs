@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class QuestObject : MonoBehaviour
 {
@@ -86,7 +87,7 @@ public class QuestObject : MonoBehaviour
                     UnityEngine.Debug.Log("Player has explored a new area");
 
                     isExplorationCompleted = true; // Mark exploration as completed
-                    NotifySpawnZoneExploreComplete(); // Notify spawn zone that exploration is complete
+                    StartCoroutine(NotifySpawnZoneExploreComplete()); // Notify spawn zone that exploration is complete
                     break; // Exit the loop as the player has been found
                 }
             }
@@ -102,7 +103,7 @@ public class QuestObject : MonoBehaviour
                 if (col.CompareTag("Player"))
                 {
                     isEscapeCompleted = true;
-                    NotifySpawnZoneEscapeComplete();
+                    StartCoroutine(NotifySpawnZoneEscapeComplete());
                     break; // Exit the loop as the player has escaped
                 }
             }
@@ -117,7 +118,7 @@ public class QuestObject : MonoBehaviour
         {
             // Here, you can update the state of the QuestObject
             isTalkCompleted = true;
-            NotifySpawnZoneTalkComplete();
+            StartCoroutine(NotifySpawnZoneTalkComplete());
         }
     }
 
@@ -127,12 +128,13 @@ public class QuestObject : MonoBehaviour
         if (isInteractable && !isFoundByPlayer)
         {
             isFoundByPlayer = true; // Mark the object as found
-            NotifySpawnZone();      // Notify the spawn zone that the object was found
+            StartCoroutine(NotifySpawnZone()); // Notify the spawn zone that the object was found
         }
     }
 
-    private void NotifySpawnZone()
+    private IEnumerator NotifySpawnZone()
     {
+        yield return new WaitForSeconds(2); // Wait for 2 seconds
         if (associatedQuest != null && isFoundByPlayer && spawnZone != null)
         {
             // Debug log for when an object is found
@@ -140,8 +142,9 @@ public class QuestObject : MonoBehaviour
         }
     }
 
-    private void NotifySpawnZoneExploreComplete()
+    private IEnumerator NotifySpawnZoneExploreComplete()
     {
+        yield return new WaitForSeconds(2); // Wait for 2 seconds
         if (associatedQuest != null && isExplorationCompleted && spawnZone != null)
         {
             // Notify the spawn zone that exploration is complete
@@ -149,8 +152,9 @@ public class QuestObject : MonoBehaviour
         }
     }
 
-    private void NotifySpawnZoneEscapeComplete()
+    private IEnumerator NotifySpawnZoneEscapeComplete()
     {
+        yield return new WaitForSeconds(2); // Wait for 2 seconds
         if (associatedQuest != null && isEscapeCompleted && spawnZone != null)
         {
             // Notify the spawn zone that escape is complete
@@ -158,8 +162,9 @@ public class QuestObject : MonoBehaviour
         }
     }
 
-    private void NotifySpawnZoneTalkComplete()
+    private IEnumerator NotifySpawnZoneTalkComplete()
     {
+        yield return new WaitForSeconds(2); // Wait for 2 seconds
         if (associatedQuest != null && spawnZone != null)
         {
             spawnZone.NotifyTalkCriteriaComplete(this);
