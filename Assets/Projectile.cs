@@ -6,17 +6,12 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"Projectile hit: {collision.collider.name}");
 
         PlayerDetective player = collision.collider.GetComponent<PlayerDetective>();
         if (player != null)
         {
             Debug.Log("Projectile hit the player!");
             player.TakeDamage(damage);
-        }
-        else
-        {
-            Debug.Log("Hit object does not have PlayerDetective.");
         }
 
         Destroy(gameObject);

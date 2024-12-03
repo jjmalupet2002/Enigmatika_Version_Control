@@ -23,11 +23,18 @@ public class KeyboardKey : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void SendKeyPressedEvent()
     {
         onKeyPressed?.Invoke(letterText.text[0]);
     }
+
+    public void SetLetter(char letter)
+    {
+        letterText.text = letter.ToString();
+        gameObject.SetActive(true); // Ensure the button is active
+    }
+
 }

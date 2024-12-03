@@ -1748,7 +1748,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9f0ebee12ab01499badb33a1a733e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secretWord: BUTTERFLY
+  secretWords:
+  - BUTTERFLY
+  - ABHORRENT
+  - ADULTHOOD
+  - ABILITIES
 --- !u!4 &1359837544
 Transform:
   m_ObjectHideFlags: 0
@@ -1934,7 +1938,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914720298728357343, guid: bc1e9e09682f22c43b94721e9b14de60, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.62
+      value: 7.25
       objectReference: {fileID: 0}
     - target: {fileID: 8914720298728357343, guid: bc1e9e09682f22c43b94721e9b14de60, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3423,6 +3427,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1384888960928799911, guid: b1b5c5712bd59254bba83d147ea045a1, type: 3}
+      propertyPath: m_text
+      value: B
+      objectReference: {fileID: 0}
     - target: {fileID: 1700232753558230478, guid: b1b5c5712bd59254bba83d147ea045a1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3956,6 +3964,6 @@ SceneRoots:
   - {fileID: 165412378}
   - {fileID: 1359837544}
   - {fileID: 4035239343460162443}
+  - {fileID: 171968298}
   - {fileID: 1635617359}
   - {fileID: 943737982}
-  - {fileID: 171968298}
