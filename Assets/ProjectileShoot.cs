@@ -3,58 +3,48 @@ using UnityEngine;
 
 public class ProjectileShooter : MonoBehaviour
 {
-    // Projectile Prefab
-    public GameObject projectilePrefab;
+    public GameObject projectilePrefab; // Prefab for the projectile
+    public Transform shootPoint;       // Where the projectile spawns
+    public float projectileSpeed = 10f; // Speed of the projectile
 
-    // Shooting Parameters
-    public float shootInterval = 0.2f; // Time between each shot
-    public float shootDuration = 2.0f; // Duration of continuous shooting
-    public float pauseDuration = 1.0f; // Pause duration after shooting
-
-    // Projectile Speed
-    public float projectileSpeed = 10f;
-
-    // Shooting Direction
-    public Transform shootPoint;
-
-    private bool isShooting = true;
+    public float shootInterval = 0.5f; // Time between each shot
+    public Transform player;           // Reference to the player's Transform
 
     void Start()
     {
-        // Start the shooting cycle
-        StartCoroutine(ShootingCycle());
+        StartCoroutine(ShootAtPlayer());
     }
 
-    private IEnumerator ShootingCycle()
+    private IEnumerator ShootAtPlayer()
     {
         while (true)
         {
-            // Shooting phase (shoot for shootDuration)
-            float shootEndTime = Time.time + shootDuration;
-            while (isShooting && Time.time < shootEndTime)
+            if (player != null) // Ensure the player exists
             {
-                ShootProjectile();
-                yield return new WaitForSeconds(shootInterval);
+                ShootProjectileAtPlayer();
             }
-
-            // Pause phase (pause for pauseDuration)
-            yield return new WaitForSeconds(pauseDuration);
+            yield return new WaitForSeconds(shootInterval); // Wait before shooting again
         }
     }
 
-    private void ShootProjectile()
+    private void ShootProjectileAtPlayer()
     {
         // Instantiate the projectile at the shoot point
-        GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
 
-        // Add velocity to the projectile
+        // Calculate the direction to the player on the same horizontal plane (ignore height)
+        Vector3 directionToPlayer = (player.position - shootPoint.position).normalized;
+        directionToPlayer.y = 0; // Ignore the Y-axis to keep the projectile on the same horizontal level
+        directionToPlayer.Normalize();
+
+        // Set the projectile's velocity
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = shootPoint.forward * projectileSpeed;
+            rb.velocity = directionToPlayer * projectileSpeed;
         }
 
         // Destroy the projectile after a certain time to prevent clutter
-        Destroy(projectile, 5f); // Adjust time if needed
+        Destroy(projectile, 5f); // Adjust time as needed
     }
 }
