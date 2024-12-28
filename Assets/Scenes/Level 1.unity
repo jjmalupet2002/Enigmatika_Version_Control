@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 1718790}
   - component: {fileID: 1718789}
   m_Layer: 0
-  m_Name: 'Criteria 1: Talk to the Hooded baliw (1)'
+  m_Name: Test Unlock Criteria Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,10 +184,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questManager: {fileID: 954717465}
   findItemList: []
-  exploreAreaCollider: {fileID: 1210633450}
+  exploreAreaCollider: {fileID: 0}
   escapeExitCollider: {fileID: 0}
   unlockableObject: {fileID: 0}
-  unlockableObjectPrefab: {fileID: 0}
+  unlockableObjectPrefab: {fileID: 1779892152}
   onUnlockEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1468,6 +1468,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!4 &62150800 stripped
 Transform:
@@ -2614,6 +2616,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &86522201
 GameObject:
@@ -11586,6 +11590,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 172945116}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 283690483}
 --- !u!33 &172945114
 MeshFilter:
@@ -14468,6 +14474,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!82 &262957762
 AudioSource:
@@ -15299,6 +15307,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!4 &280430937 stripped
 Transform:
@@ -16916,6 +16926,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!114 &338530163
 MonoBehaviour:
@@ -17583,6 +17595,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 163716820}
 --- !u!4 &366650152 stripped
 Transform:
@@ -17645,6 +17659,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!1 &370224589 stripped
 GameObject:
@@ -19875,6 +19891,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!1 &408421147
 GameObject:
@@ -20024,6 +20042,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!1 &413742702
 GameObject:
@@ -20119,6 +20139,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!23 &419574598 stripped
 MeshRenderer:
@@ -20781,6 +20803,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 448703182}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 842658310}
 --- !u!65 &448703182
 BoxCollider:
@@ -21475,6 +21499,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 487304638}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &487388058
 GameObject:
@@ -22749,6 +22775,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!65 &534075520
 BoxCollider:
@@ -24017,11 +24045,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 585726903}
   m_Mesh: {fileID: 5133378042767878019, guid: 01102a114103e314d9426fb5357b454a, type: 3}
---- !u!4 &587746096 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5352094061510662421, guid: 534f7c34a0fb0cb40864c9fe374b5edc, type: 3}
-  m_PrefabInstance: {fileID: 1749357338}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &588229721 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6580924965129486688, guid: 6b8f4289dadd1ae4fa6083b27c7d0ad9, type: 3}
@@ -24448,6 +24471,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &599675624
 GameObject:
@@ -27810,7 +27835,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681972591}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
   m_Name: 
@@ -27830,6 +27855,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1718789}
 --- !u!114 &681972597
 MonoBehaviour:
@@ -28186,6 +28213,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!1 &692049557
 GameObject:
@@ -28532,6 +28561,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 283690483}
 --- !u!65 &697829179
 BoxCollider:
@@ -29136,7 +29167,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3950456801651131873, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
       insertIndex: 0
       addedObject: {fileID: 691194854}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 182854328826685045, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1779892153}
   m_SourcePrefab: {fileID: 100100000, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
 --- !u!1001 &715421394
 PrefabInstance:
@@ -30467,6 +30501,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 750514386}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!33 &750514388
 MeshFilter:
@@ -32812,7 +32848,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5755694330397422718, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
   m_PrefabInstance: {fileID: 715073478}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1779892152}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72c30ece46a6b5345977d30399dbfa28, type: 3}
@@ -35010,6 +35046,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 856425272}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 163716820}
 --- !u!4 &856425276 stripped
 Transform:
@@ -38782,6 +38820,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!135 &922517143
 SphereCollider:
@@ -39741,6 +39781,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!1 &954717464
 GameObject:
@@ -40563,6 +40605,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!135 &986835768 stripped
 SphereCollider:
@@ -41333,6 +41377,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!135 &1017017437
 SphereCollider:
@@ -41980,6 +42026,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!1 &1046500483
 GameObject:
@@ -42351,6 +42399,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1 &1052422738
 GameObject:
@@ -42785,6 +42835,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &1060860574
 PrefabInstance:
@@ -44908,6 +44960,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &1134160008
 PrefabInstance:
@@ -46669,6 +46723,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!114 &1188203728
 MonoBehaviour:
@@ -47340,66 +47396,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1208967855}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1210633449 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8936475579029870274, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-  m_PrefabInstance: {fileID: 1857237541}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &1210633450
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210633449}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3402742096233047544, guid: 122e68e228ec97e46a4f66f591f15e49, type: 3}
---- !u!114 &1210633451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210633449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  associatedQuest: {fileID: 1853668933}
-  meshRenderer: {fileID: 0}
-  colliderComponent: {fileID: 0}
-  isInteractable: 0
-  isCompleted: 0
-  isFoundByPlayer: 0
-  isNote: 0
-  is3DObject: 0
-  noteUI: {fileID: 0}
-  referenced3DObject: {fileID: 0}
-  exploreAreaCollider: {fileID: 1210633450}
-  isExplorationCompleted: 0
-  escapeCollider: {fileID: 0}
-  isEscapeCompleted: 0
-  isTalkCompleted: 0
-  spawnZone: {fileID: 1718789}
---- !u!4 &1210633453 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-  m_PrefabInstance: {fileID: 1857237541}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1213325871
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50886,6 +50882,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 842658310}
 --- !u!4 &1335205622 stripped
 Transform:
@@ -51391,6 +51389,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &1353545559 stripped
 GameObject:
@@ -51442,6 +51442,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 842658310}
 --- !u!4 &1356669040 stripped
 Transform:
@@ -52032,6 +52034,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &1374006446
 GameObject:
@@ -52830,6 +52834,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 1409604526}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!4 &1409604525 stripped
 Transform:
@@ -55412,6 +55418,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!1001 &1480058820
 PrefabInstance:
@@ -55628,6 +55636,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!4 &1490825343 stripped
 Transform:
@@ -57704,6 +57714,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &1561637553
 PrefabInstance:
@@ -58299,6 +58311,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!4 &1584414805 stripped
 Transform:
@@ -59050,6 +59064,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!65 &1620006508
 BoxCollider:
@@ -59393,6 +59409,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!4 &1626347192 stripped
 Transform:
@@ -61645,6 +61663,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!114 &1690007142
 MonoBehaviour:
@@ -61861,6 +61881,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 1692828920}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!4 &1693305888 stripped
 Transform:
@@ -64224,9 +64246,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1523698287230708702, guid: 534f7c34a0fb0cb40864c9fe374b5edc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1660104271}
-    - targetCorrespondingSourceObject: {fileID: 5352094061510662421, guid: 534f7c34a0fb0cb40864c9fe374b5edc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1210633453}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3205270150574233307, guid: 534f7c34a0fb0cb40864c9fe374b5edc, type: 3}
       insertIndex: -1
@@ -64850,6 +64869,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 210720881216264570, guid: 2023a0a9a67424f45a0c87b7b4d32d48, type: 3}
   m_PrefabInstance: {fileID: 2134663827}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1779892152 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 182854328826685045, guid: 1c7eda20f0330564a907c7ecdc399f9f, type: 3}
+  m_PrefabInstance: {fileID: 715073478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1779892153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779892152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 1853668933}
+  meshRenderer: {fileID: 0}
+  colliderComponent: {fileID: 0}
+  isInteractable: 1
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 0
+  is3DObject: 1
+  noteUI: {fileID: 0}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 0}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  unlockObject: {fileID: 1779892152}
+  isUnlockCompleted: 0
+  spawnZone: {fileID: 1718789}
 --- !u!1001 &1785614914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67197,17 +67251,11 @@ MonoBehaviour:
   questGiver: {fileID: 0}
   status: 0
   questCriteriaList:
-  - criteriaName: Kausapin si Sir Garret
-    criteriaType: 4
+  - criteriaName: Find a way to unlock the chest
+    criteriaType: 3
     priority: 0
     CriteriaStatus: 0
-    associatedQuestObject: {fileID: 681972596}
-    spawnZone: {fileID: 1718788}
-  - criteriaName: Pumunta sa Thiefs Hideout
-    criteriaType: 1
-    priority: 1
-    CriteriaStatus: 0
-    associatedQuestObject: {fileID: 1210633451}
+    associatedQuestObject: {fileID: 1779892153}
     spawnZone: {fileID: 1718788}
 --- !u!4 &1853668934
 Transform:
@@ -67290,86 +67338,6 @@ MonoBehaviour:
   Event:
     m_PersistentCalls:
       m_Calls: []
---- !u!1001 &1857237541
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 587746096}
-    m_Modifications:
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.1000005
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.1000005
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.9999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.00048073035
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 179.945
-      objectReference: {fileID: 0}
-    - target: {fileID: 6087324489254930013, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8936475579029870274, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      propertyPath: m_Name
-      value: StairQuestObject
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 390853806904531177, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8936475579029870274, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1210633450}
-    - targetCorrespondingSourceObject: {fileID: 8936475579029870274, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1210633451}
-  m_SourcePrefab: {fileID: 100100000, guid: 4b04dd311a29c1848bf5eaa7f6aa144d, type: 3}
 --- !u!4 &1859493617 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1865948603492791689, guid: eeea2201d68467f489dabe4e26024fbe, type: 3}
@@ -72091,6 +72059,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!4 &2010055229 stripped
 Transform:
@@ -73214,6 +73184,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &2039087055
 PrefabInstance:
@@ -73338,6 +73310,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 1725667619}
 --- !u!1001 &2040174982
 PrefabInstance:
@@ -74631,6 +74605,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!114 &2078707716
 MonoBehaviour:
@@ -74919,6 +74895,8 @@ MonoBehaviour:
   escapeCollider: {fileID: 0}
   isEscapeCompleted: 0
   isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
   spawnZone: {fileID: 283690483}
 --- !u!114 &2080537044
 MonoBehaviour:

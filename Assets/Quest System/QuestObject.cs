@@ -30,6 +30,10 @@ public class QuestObject : MonoBehaviour
     private Quaternion initialNpcRotation;  // Store the initial rotation of the NPC
     public bool isTalkCompleted = false;
 
+    [Header("Solve/Unlock settings")]
+    public GameObject unlockObject;    // Reference to the unlock object
+    public bool isUnlockCompleted = false; // Flag to track if unlock is completed
+
     [Header("Spawn Zone reference:")]
     public SpawnZone spawnZone;        // Reference to the associated SpawnZone
 
@@ -108,6 +112,17 @@ public class QuestObject : MonoBehaviour
                 }
             }
         }
+
+        // Check if the unlock object's rotation has changed
+        if (!isUnlockCompleted && unlockObject != null)
+        {
+            Vector3 rotation = unlockObject.transform.eulerAngles;
+            if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0)
+            {
+                isUnlockCompleted = true;
+                StartCoroutine(NotifySpawnZoneUnlockComplete());
+            }
+        }
     }
 
     // This method will be called when NPC rotation exceeds the threshold
@@ -168,6 +183,16 @@ public class QuestObject : MonoBehaviour
         if (associatedQuest != null && spawnZone != null)
         {
             spawnZone.NotifyTalkCriteriaComplete(this);
+        }
+    }
+
+    private IEnumerator NotifySpawnZoneUnlockComplete()
+    {
+        yield return new WaitForSeconds(2); // Wait for 2 seconds
+        if (associatedQuest != null && isUnlockCompleted && spawnZone != null)
+        {
+            // Notify the spawn zone that unlock is complete
+            spawnZone.NotifyUnlockCriteriaComplete(this);
         }
     }
 }

@@ -200,6 +200,24 @@ public class SpawnZone : MonoBehaviour
         }
     }
 
+    public void NotifyUnlockCriteriaComplete(QuestObject questObject)
+    {
+        foreach (var entry in questManager.GetActiveQuests())
+        {
+            MainQuest quest = entry.Value;
+            foreach (var criteria in quest.questCriteriaList)
+            {
+                if (criteria.criteriaType == QuestEnums.QuestCriteriaType.UnlockSolve && criteria.associatedQuestObject == questObject)
+                {
+                    criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
+                    SetNextActiveCriteria(criteria); // Replacing CheckQuestCompletion
+                    return;  // Exit the loop after finding the matching criteria
+                }
+            }
+        }
+    }
+
+
     public void NotifyEscapeCriteriaComplete(QuestObject questObject)
     {
         foreach (var entry in questManager.GetActiveQuests())

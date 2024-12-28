@@ -24,6 +24,7 @@ public class QuestEnums : MonoBehaviour
         Explore,
         Escape,
         UnlockSolve,
+        Deliver,
         Talk
     }
 
