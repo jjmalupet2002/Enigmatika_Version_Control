@@ -6,6 +6,7 @@ public class ButtonController : MonoBehaviour
     public Animator[] animators; // Array of button animator controllers
     public AudioSource[] buttonSounds; // Audio sources for each button
     public Material litMaterial; // Material for lit up button
+    public SpikeTrap spikeTrap; // Reference to the SpikeTrap script
     private bool[] buttonStates; // Track the current state (false = initial, true = lit)
     private Material[] originalMaterials; // Store the original materials for each button
 
@@ -75,6 +76,9 @@ public class ButtonController : MonoBehaviour
 
         // Handle the pattern logic for each button press
         HandleButtonPattern(buttonIndex);
+
+        // Check if the puzzle is unlocked
+        CheckPuzzleUnlocked();
     }
 
     private void HandleButtonPattern(int buttonIndex)
@@ -121,6 +125,30 @@ public class ButtonController : MonoBehaviour
             {
                 buttons[i].GetComponent<Renderer>().material = originalMaterials[i];
             }
+        }
+    }
+
+    private void CheckPuzzleUnlocked()
+    {
+        // Check if all buttons are unlit (white)
+        bool allUnlit = true;
+        for (int i = 0; i < buttonStates.Length; i++)
+        {
+            if (buttonStates[i])
+            {
+                allUnlit = false;
+                break;
+            }
+        }
+
+        // If all buttons are unlit, unlock the spike trap
+        if (allUnlit)
+        {
+            spikeTrap.unlockSpike = true;
+}
+        else
+        {
+            spikeTrap.unlockSpike = false;
         }
     }
 }
