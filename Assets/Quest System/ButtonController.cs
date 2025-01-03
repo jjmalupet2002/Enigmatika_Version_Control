@@ -5,19 +5,21 @@ public class ButtonController : MonoBehaviour
     public GameObject[] buttons; // Array of button GameObjects
     public Animator[] animators; // Array of button animator controllers
     public AudioSource[] buttonSounds; // Audio sources for each button
-    public Material litMaterial; // Material for lit up button
+    public Material litMaterial; // Material for lit-up button (white)
     public SpikeTrap spikeTrap; // Reference to the SpikeTrap script
-    private bool[] buttonStates; // Track the current state (false = initial, true = lit)
+    private bool[] buttonStates; // Track the current state (true = brown/unlit, false = white/lit)
     private Material[] originalMaterials; // Store the original materials for each button
+    private bool hasInteracted; // Track if any button has been interacted with
 
     void Start()
     {
         buttonStates = new bool[buttons.Length];
         originalMaterials = new Material[buttons.Length];
+        hasInteracted = false; // No interaction at the start
 
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttonStates[i] = false; // Initially all buttons are unlit
+            buttonStates[i] = true; // Initially all buttons are brown (unlit)
             originalMaterials[i] = buttons[i].GetComponent<Renderer>().material; // Store the original material
         }
     }
@@ -54,17 +56,19 @@ public class ButtonController : MonoBehaviour
 
     public void OnButtonPress(int buttonIndex)
     {
+        hasInteracted = true; // Mark that interaction has occurred
+
         // Toggle the button's state and update its material immediately
         if (buttonStates[buttonIndex])
         {
-            // If it's lit, turn it off and restore the original material
-            buttons[buttonIndex].GetComponent<Renderer>().material = originalMaterials[buttonIndex];
+            // If it's brown (unlit), turn it white (lit)
+            buttons[buttonIndex].GetComponent<Renderer>().material = litMaterial;
             buttonStates[buttonIndex] = false;
         }
         else
         {
-            // If it's not lit, light it up
-            buttons[buttonIndex].GetComponent<Renderer>().material = litMaterial; // Apply material
+            // If it's white (lit), turn it brown (unlit)
+            buttons[buttonIndex].GetComponent<Renderer>().material = originalMaterials[buttonIndex];
             buttonStates[buttonIndex] = true;
         }
 
@@ -83,32 +87,20 @@ public class ButtonController : MonoBehaviour
 
     private void HandleButtonPattern(int buttonIndex)
     {
-        // Logic to handle the state of other buttons based on the pressed button
-        switch (buttonIndex)
+        // Toggle the pressed button's state
+        buttonStates[buttonIndex] = !buttonStates[buttonIndex];
+
+        // Define the logic: Toggle adjacent buttons' states
+        if (buttonIndex > 0) // Toggle the previous button if it exists
         {
-            case 0: // Button 1 pressed
-                buttonStates[1] = false; // Button 2 remains unlit
-                buttonStates[2] = true;  // Button 3 lights up
-                buttonStates[3] = true;  // Button 4 lights up
-                break;
-            case 1: // Button 2 pressed
-                buttonStates[0] = false; // Button 1 remains unlit
-                buttonStates[2] = false; // Button 3 remains unlit
-                buttonStates[3] = true;  // Button 4 remains lit
-                break;
-            case 2: // Button 3 pressed
-                buttonStates[0] = true;  // Button 1 lights up
-                buttonStates[1] = false; // Button 2 remains unlit
-                buttonStates[3] = false; // Button 4 remains unlit
-                break;
-            case 3: // Button 4 pressed
-                buttonStates[0] = false; // Button 1 remains unlit
-                buttonStates[1] = true;  // Button 2 lights up
-                buttonStates[2] = true;  // Button 3 lights up
-                break;
+            buttonStates[buttonIndex - 1] = !buttonStates[buttonIndex - 1];
+        }
+        if (buttonIndex < buttonStates.Length - 1) // Toggle the next button if it exists
+        {
+            buttonStates[buttonIndex + 1] = !buttonStates[buttonIndex + 1];
         }
 
-        // Update the visual states for all buttons
+        // Update the visuals after modifying the states
         UpdateButtonVisuals();
     }
 
@@ -119,33 +111,33 @@ public class ButtonController : MonoBehaviour
         {
             if (buttonStates[i])
             {
-                buttons[i].GetComponent<Renderer>().material = litMaterial;
+                buttons[i].GetComponent<Renderer>().material = originalMaterials[i]; // Brown (unlit)
             }
             else
             {
-                buttons[i].GetComponent<Renderer>().material = originalMaterials[i];
+                buttons[i].GetComponent<Renderer>().material = litMaterial; // White (lit)
             }
         }
     }
 
     private void CheckPuzzleUnlocked()
     {
-        // Check if all buttons are unlit (white)
-        bool allUnlit = true;
+        // Check if all buttons are lit (white) and if interaction has occurred
+        bool allLit = true;
         for (int i = 0; i < buttonStates.Length; i++)
         {
-            if (buttonStates[i])
+            if (buttonStates[i]) // If any button is brown (unlit)
             {
-                allUnlit = false;
+                allLit = false;
                 break;
             }
         }
 
-        // If all buttons are unlit, unlock the spike trap
-        if (allUnlit)
+        // If all buttons are white (lit) and interaction has occurred, unlock the spike trap
+        if (allLit && hasInteracted)
         {
             spikeTrap.unlockSpike = true;
-}
+        }
         else
         {
             spikeTrap.unlockSpike = false;
