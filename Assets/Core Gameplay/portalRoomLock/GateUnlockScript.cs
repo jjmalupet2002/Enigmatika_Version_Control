@@ -38,6 +38,7 @@ public class GateUnlockScript : MonoBehaviour
     // Camera Reference
     [Header("Camera Reference")]
     public Camera portalRoomCamera; // Reference to the camera component (PortalRoomCamera)
+    public GameObject EscapeText;
 
     // Variables for item usage and button click
     private bool[] isUnlockButtonClicked; // Array to track button click states
@@ -172,6 +173,7 @@ public class GateUnlockScript : MonoBehaviour
 
         // All locks are unlocked, unlock the gate
         trapGateScript.UnlockGate();
+        EscapeText.SetActive(true);
     }
 
     // Coroutine to delete item from inventory after a delay

@@ -17,6 +17,8 @@ public class MiniGameLoader : MonoBehaviour
     private Vector3 initialTrapGatePosition; // Store the initial position of the trapGate
 
     private bool isCutsceneActive = false;  // Flag to track cutscene state
+    public GameObject EscapeText;
+
 
     void Start()
     {
@@ -65,6 +67,12 @@ public class MiniGameLoader : MonoBehaviour
 
         // Optionally, start a coroutine to display the slideshow images
         StartCoroutine(ShowCutsceneImages());
+
+        // Disable EscapeText if it is active
+        if (EscapeText.activeSelf)
+        {
+            EscapeText.SetActive(false);
+        }
     }
 
     // Coroutine to handle the slideshow of images
