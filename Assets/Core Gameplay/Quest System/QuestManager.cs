@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
@@ -79,9 +81,33 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+
+    // Coroutine to disable the quest object after a delay
+    private IEnumerator DisableAfterDelay(GameObject questObject, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        questObject.SetActive(false);
+    }
+
     // Set the next active criteria
     public void SetNextActiveCriteria(MainQuest quest, int currentIndex)
     {
+        // Disable the associated quest object of the completed criteria
+        if (currentIndex >= 0 && currentIndex < quest.questCriteriaList.Count)
+        {
+            var completedCriteria = quest.questCriteriaList[currentIndex];
+            if (completedCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed)
+            {
+                // Only disable the associated quest object for the "Talk" quest criteria type
+                if (completedCriteria.associatedQuestObject != null &&
+                    completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Talk)
+                {
+                    // Assuming QuestObject has a gameObject property, pass it to the coroutine
+                    StartCoroutine(DisableAfterDelay(completedCriteria.associatedQuestObject.gameObject, 30f));
+                }
+            }
+        }
+
         // Look for the next criteria that is NotStarted
         for (int i = currentIndex + 1; i < quest.questCriteriaList.Count; i++)
         {
@@ -103,6 +129,7 @@ public class QuestManager : MonoBehaviour
         UnityEngine.Debug.Log("No next criteria found, quest completed.");
     }
 
+
     // Complete a quest and log the next active criteria
     public void CompleteQuest(MainQuest quest)
     {
@@ -123,6 +150,7 @@ public class QuestManager : MonoBehaviour
                 {
                     // If found, mark as completed and continue to next criteria
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
+                                        
 
                     // Set the next available criteria to InProgress
                     SetNextActiveCriteria(quest, i);

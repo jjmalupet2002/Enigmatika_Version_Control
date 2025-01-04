@@ -149,7 +149,7 @@ public class QuestObject : MonoBehaviour
 
     private IEnumerator NotifySpawnZone()
     {
-        yield return new WaitForSeconds(2); // Wait for 2 seconds
+        yield return new WaitForSeconds(5); // Wait for 5 seconds
         if (associatedQuest != null && isFoundByPlayer && spawnZone != null)
         {
             // Debug log for when an object is found
@@ -179,7 +179,7 @@ public class QuestObject : MonoBehaviour
 
     private IEnumerator NotifySpawnZoneTalkComplete()
     {
-        yield return new WaitForSeconds(2); // Wait for 2 seconds
+        yield return new WaitForSeconds(5); // Wait for 5 seconds
         if (associatedQuest != null && spawnZone != null)
         {
             spawnZone.NotifyTalkCriteriaComplete(this);
