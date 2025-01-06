@@ -625,7 +625,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8715255077149815298, guid: 617751f3af792a84f822d00e250fab07, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5428932321118819536, guid: 617751f3af792a84f822d00e250fab07, type: 3}
@@ -1502,6 +1502,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!4 &62150800 stripped
 Transform:
@@ -2205,7 +2206,7 @@ GameObject:
   - component: {fileID: 75134495}
   m_Layer: 5
   m_Name: TurnInItemBTN
-  m_TagString: Untagged
+  m_TagString: TurnInQuestButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2651,6 +2652,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &86522201
 GameObject:
@@ -11320,8 +11322,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questManager: {fileID: 954717465}
   findItemList: []
-  exploreAreaCollider: {fileID: 366650148}
-  escapeExitCollider: {fileID: 856425272}
+  exploreAreaCollider: {fileID: 952594476}
+  escapeExitCollider: {fileID: 0}
   unlockableObject: {fileID: 0}
   unlockableObjectPrefab: {fileID: 0}
   onUnlockEvent:
@@ -11758,6 +11760,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 283690483}
 --- !u!33 &172945114
 MeshFilter:
@@ -12070,7 +12073,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2124549061}
   m_Father: {fileID: 372283929}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &189073734
@@ -12092,7 +12096,19 @@ MonoBehaviour:
   questReward: {fileID: 0}
   questGiver: {fileID: 0}
   status: 0
-  questCriteriaList: []
+  questCriteriaList:
+  - criteriaName: Deliver the Wrong Item
+    criteriaType: 4
+    priority: 0
+    CriteriaStatus: 0
+    associatedQuestObject: {fileID: 670874897}
+    spawnZone: {fileID: 2124549059}
+  - criteriaName: Find the Correct Item
+    criteriaType: 0
+    priority: 1
+    CriteriaStatus: 0
+    associatedQuestObject: {fileID: 716058621}
+    spawnZone: {fileID: 2124549059}
 --- !u!225 &191608336 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4268992858819869647, guid: 90c6c53ad7dd0ee479b123c430f50dec, type: 3}
@@ -14000,6 +14016,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!95 &242923142
 Animator:
@@ -14767,6 +14784,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!82 &262957762
 AudioSource:
@@ -15600,6 +15618,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!4 &280430937 stripped
 Transform:
@@ -17219,6 +17238,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!114 &338530163
 MonoBehaviour:
@@ -17451,7 +17471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2457273537969178838, guid: fbac80f280a03844bbdc56acff09ba24, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2457273537969178838, guid: fbac80f280a03844bbdc56acff09ba24, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -17866,67 +17886,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5376073837650197851, guid: dce278a18cc98aa41a4185c95e564f6f, type: 3}
   m_PrefabInstance: {fileID: 1417701644}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &366650147 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-  m_PrefabInstance: {fileID: 569437083}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &366650148
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366650147}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 4, y: 0, z: 4}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &366650149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366650147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  associatedQuest: {fileID: 1892092167}
-  meshRenderer: {fileID: 0}
-  colliderComponent: {fileID: 0}
-  isInteractable: 0
-  isCompleted: 0
-  isFoundByPlayer: 0
-  isNote: 0
-  is3DObject: 0
-  noteUI: {fileID: 0}
-  referenced3DObject: {fileID: 0}
-  exploreAreaCollider: {fileID: 366650148}
-  isExplorationCompleted: 0
-  escapeCollider: {fileID: 0}
-  isEscapeCompleted: 0
-  isTalkCompleted: 0
-  unlockObject: {fileID: 0}
-  isUnlockCompleted: 0
-  spawnZone: {fileID: 163716820}
---- !u!4 &366650152 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-  m_PrefabInstance: {fileID: 569437083}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &369500436 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2789850836169686952, guid: c96ad4a3c81fd184abddb8f04ad0288a, type: 3}
@@ -17985,6 +17944,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!1 &370224589 stripped
 GameObject:
@@ -19081,6 +19041,74 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 986835766}
   m_SourcePrefab: {fileID: 100100000, guid: f925146e97b574945b581269a9251c10, type: 3}
+--- !u!1001 &397923120
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1273697142}
+    m_Modifications:
+    - target: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_Name
+      value: GoBackHoodedQuest1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.82553303
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 35.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -66.7939
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1563464522814601850, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 952594476}
+    - targetCorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 952594475}
+  m_SourcePrefab: {fileID: 100100000, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
 --- !u!1 &399072799
 GameObject:
   m_ObjectHideFlags: 0
@@ -20097,6 +20125,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!1 &408421147
 GameObject:
@@ -20305,6 +20334,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!23 &419574598 stripped
 MeshRenderer:
@@ -21540,6 +21570,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &487388058
 GameObject:
@@ -21783,16 +21814,13 @@ PrefabInstance:
       addedObject: {fileID: 125823921}
     - targetCorrespondingSourceObject: {fileID: 776224062119213960, guid: c8749b57fa502fa499c3877178b47593, type: 3}
       insertIndex: 3
-      addedObject: {fileID: 366650152}
-    - targetCorrespondingSourceObject: {fileID: 776224062119213960, guid: c8749b57fa502fa499c3877178b47593, type: 3}
-      insertIndex: 4
       addedObject: {fileID: 2039087057}
     - targetCorrespondingSourceObject: {fileID: 776224062119213960, guid: c8749b57fa502fa499c3877178b47593, type: 3}
-      insertIndex: 5
+      insertIndex: 4
       addedObject: {fileID: 697829176}
     - targetCorrespondingSourceObject: {fileID: 776224062119213960, guid: c8749b57fa502fa499c3877178b47593, type: 3}
       insertIndex: 7
-      addedObject: {fileID: 856425276}
+      addedObject: {fileID: 952594474}
     - targetCorrespondingSourceObject: {fileID: 776224062119213960, guid: c8749b57fa502fa499c3877178b47593, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1584414805}
@@ -22816,6 +22844,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!65 &534075520
 BoxCollider:
@@ -23646,70 +23675,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569340176}
   m_CullTransparentMesh: 1
---- !u!1001 &569437083
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1273697142}
-    m_Modifications:
-    - target: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_Name
-      value: questObjectGoBackToTheHooded
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 38.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -66.444954
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1563464522814601850, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 366650148}
-    - targetCorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 366650149}
-  m_SourcePrefab: {fileID: 100100000, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
 --- !u!4 &570220818 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
@@ -24399,6 +24364,40 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
   m_PrefabInstance: {fileID: 6112464347180596318}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &591060707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 591060708}
+  m_Layer: 0
+  m_Name: DeliverQuestGameObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &591060708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591060707}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.3225, y: 8.307028, z: -114.95373}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1745662484}
+  - {fileID: 670874898}
+  - {fileID: 716058620}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &595079340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1865948603492791689, guid: eeea2201d68467f489dabe4e26024fbe, type: 3}
@@ -24512,6 +24511,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &599675624
 GameObject:
@@ -27274,6 +27274,69 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 681695643343605763, guid: bf6e1d40ac0618a42bf0ef591a6289bc, type: 3}
   m_PrefabInstance: {fileID: 458342944}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &670874896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 670874898}
+  - component: {fileID: 670874897}
+  m_Layer: 0
+  m_Name: 'Quest 4: Deliver Wrong'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &670874897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670874896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 189073734}
+  meshRenderer: {fileID: 0}
+  colliderComponent: {fileID: 0}
+  isInteractable: 0
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 0
+  is3DObject: 0
+  noteUI: {fileID: 0}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 0}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
+  isDeliverCompleted: 0
+  spawnZone: {fileID: 2124549060}
+--- !u!4 &670874898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670874896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 591060708}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &671900433 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
@@ -28007,6 +28070,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1718789}
 --- !u!114 &681972597
 MonoBehaviour:
@@ -28365,6 +28429,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!1 &692049557
 GameObject:
@@ -28713,6 +28778,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 283690483}
 --- !u!65 &697829179
 BoxCollider:
@@ -29395,6 +29461,69 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a85d74d78da4d334caf7d581691d2df7, type: 3}
+--- !u!1 &716058619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 716058620}
+  - component: {fileID: 716058621}
+  m_Layer: 0
+  m_Name: 'Quest 4: Find Correct'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &716058620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716058619}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 591060708}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &716058621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716058619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 189073734}
+  meshRenderer: {fileID: 2025933554}
+  colliderComponent: {fileID: 2025933553}
+  isInteractable: 1
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 1
+  is3DObject: 0
+  noteUI: {fileID: 2121025116}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 0}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
+  isDeliverCompleted: 0
+  spawnZone: {fileID: 2124549060}
 --- !u!1 &716666510 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9ab530eea9c7b0e4083f3a931103ec7c, type: 3}
@@ -30669,6 +30798,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!33 &750514388
 MeshFilter:
@@ -33237,6 +33367,11 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!224 &808325420 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4357688221244906084, guid: a49b75846742ad5468cb053573445259, type: 3}
+  m_PrefabInstance: {fileID: 3689435855033464234}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &810260683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4693631023846928095, guid: 0aa495299b846c3438f6a5851b7cd3b1, type: 3}
@@ -34072,6 +34207,100 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 2.5
+--- !u!1 &822187588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 822187589}
+  - component: {fileID: 822187592}
+  - component: {fileID: 822187591}
+  - component: {fileID: 822187590}
+  m_Layer: 5
+  m_Name: QuestCompleteSmall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &822187589
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822187588}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 808325420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.000038147, y: -87}
+  m_SizeDelta: {x: 794.7895, y: 83.3986}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &822187590
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822187588}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &822187591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822187588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 5e66e77026a31924e936fc62ef1e97b9, type: 3}
+    m_FontSize: 40
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 60
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Deliver the Clue item to the Hooded Figure
+
+'
+--- !u!222 &822187592
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822187588}
+  m_CullTransparentMesh: 1
 --- !u!1 &822698681
 GameObject:
   m_ObjectHideFlags: 0
@@ -35270,67 +35499,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1297038567}
   m_SourcePrefab: {fileID: 100100000, guid: 47db3385c08c24e44bbd4d77fb43cc39, type: 3}
---- !u!1 &856425271 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-  m_PrefabInstance: {fileID: 1982878419}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &856425272
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856425271}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 4, y: 0, z: 4}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &856425273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 856425271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  associatedQuest: {fileID: 1892092167}
-  meshRenderer: {fileID: 0}
-  colliderComponent: {fileID: 856425272}
-  isInteractable: 0
-  isCompleted: 0
-  isFoundByPlayer: 0
-  isNote: 0
-  is3DObject: 0
-  noteUI: {fileID: 0}
-  referenced3DObject: {fileID: 0}
-  exploreAreaCollider: {fileID: 0}
-  isExplorationCompleted: 0
-  escapeCollider: {fileID: 856425272}
-  isEscapeCompleted: 0
-  isTalkCompleted: 0
-  unlockObject: {fileID: 0}
-  isUnlockCompleted: 0
-  spawnZone: {fileID: 163716820}
---- !u!4 &856425276 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-  m_PrefabInstance: {fileID: 1982878419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &856688290 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5829122266640360646, guid: c96ad4a3c81fd184abddb8f04ad0288a, type: 3}
@@ -38964,6 +39132,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!135 &922517143
 SphereCollider:
@@ -39805,6 +39974,73 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a3812370b8ee4c4199050258c5be938, type: 3}
+--- !u!1 &952594473 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+  m_PrefabInstance: {fileID: 397923120}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &952594474 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+  m_PrefabInstance: {fileID: 397923120}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &952594475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952594473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 1892092167}
+  meshRenderer: {fileID: 952594477}
+  colliderComponent: {fileID: 952594476}
+  isInteractable: 0
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 0
+  is3DObject: 0
+  noteUI: {fileID: 0}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 952594476}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
+  isDeliverCompleted: 0
+  spawnZone: {fileID: 163716820}
+--- !u!65 &952594476
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952594473}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 0, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &952594477 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4729723302331074421, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
+  m_PrefabInstance: {fileID: 397923120}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &954054488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39926,6 +40162,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!1 &954717464
 GameObject:
@@ -40511,7 +40748,7 @@ GameObject:
   - component: {fileID: 976096323}
   m_Layer: 5
   m_Name: WrongItemBackground
-  m_TagString: Untagged
+  m_TagString: WrongItemDeliverUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40750,6 +40987,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!135 &986835768 stripped
 SphereCollider:
@@ -41522,6 +41760,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!135 &1017017437
 SphereCollider:
@@ -42171,6 +42410,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!1 &1046500483
 GameObject:
@@ -42544,6 +42784,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1 &1052422738
 GameObject:
@@ -42980,6 +43221,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &1060860574
 PrefabInstance:
@@ -43283,7 +43525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 322969909244090201, guid: 1a4ce7ed7389af14cbc47a4b3ba8a164, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 322969909244090201, guid: 1a4ce7ed7389af14cbc47a4b3ba8a164, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -45105,6 +45347,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &1134160008
 PrefabInstance:
@@ -46759,6 +47002,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!114 &1188203728
 MonoBehaviour:
@@ -51222,6 +51466,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 842658310}
 --- !u!4 &1335205622 stripped
 Transform:
@@ -51729,6 +51974,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &1353545559 stripped
 GameObject:
@@ -51782,6 +52028,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!4 &1356669040 stripped
 Transform:
@@ -52374,6 +52621,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 0}
 --- !u!1 &1374006446
 GameObject:
@@ -53174,6 +53422,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!4 &1409604525 stripped
 Transform:
@@ -54434,7 +54683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1430978801
 Transform:
   m_ObjectHideFlags: 0
@@ -55243,7 +55492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1439482474
 Transform:
   m_ObjectHideFlags: 0
@@ -55758,6 +56007,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!1001 &1480058820
 PrefabInstance:
@@ -56029,6 +56279,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!4 &1490825343 stripped
 Transform:
@@ -58140,6 +58391,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &1561637553
 PrefabInstance:
@@ -58737,6 +58989,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1842346034}
 --- !u!4 &1584414805 stripped
 Transform:
@@ -59490,6 +59743,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!65 &1620006508
 BoxCollider:
@@ -59835,6 +60089,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 701545216}
 --- !u!4 &1626347192 stripped
 Transform:
@@ -62080,6 +62335,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 2054935456}
 --- !u!114 &1690007142
 MonoBehaviour:
@@ -62298,6 +62554,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!4 &1693305888 stripped
 Transform:
@@ -64159,6 +64416,69 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 441450465226613757, guid: 667648ba453719e4683cbbab5e2b30c8, type: 3}
   m_PrefabInstance: {fileID: 8341415700092351779}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1745662483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1745662484}
+  - component: {fileID: 1745662485}
+  m_Layer: 0
+  m_Name: 'Quest 1: Deliver Wrong'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1745662484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745662483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 591060708}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1745662485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745662483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca96cee1a33079b4caf28790e4dc43fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuest: {fileID: 1892092167}
+  meshRenderer: {fileID: 0}
+  colliderComponent: {fileID: 0}
+  isInteractable: 0
+  isCompleted: 0
+  isFoundByPlayer: 0
+  isNote: 0
+  is3DObject: 0
+  noteUI: {fileID: 0}
+  referenced3DObject: {fileID: 0}
+  exploreAreaCollider: {fileID: 0}
+  isExplorationCompleted: 0
+  escapeCollider: {fileID: 0}
+  isEscapeCompleted: 0
+  isTalkCompleted: 0
+  unlockObject: {fileID: 0}
+  isUnlockCompleted: 0
+  isDeliverCompleted: 0
+  spawnZone: {fileID: 163716820}
 --- !u!224 &1746573918 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 847696488058542319, guid: d1bbd15a78361004da5f31b6a662836d, type: 3}
@@ -65209,6 +65529,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 1779892152}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1718789}
 --- !u!1 &1784671342
 GameObject:
@@ -69443,10 +69764,10 @@ MonoBehaviour:
     associatedQuestObject: {fileID: 1059562683}
     spawnZone: {fileID: 137290551}
   - criteriaName: Deliver the new clue item to the Hooded figure
-    criteriaType: 2
+    criteriaType: 4
     priority: 18
     CriteriaStatus: 0
-    associatedQuestObject: {fileID: 856425273}
+    associatedQuestObject: {fileID: 1745662485}
     spawnZone: {fileID: 163716818}
   - criteriaName: Find out why the book evidence was incorrect
     criteriaType: 0
@@ -69464,7 +69785,7 @@ MonoBehaviour:
     criteriaType: 1
     priority: 21
     CriteriaStatus: 0
-    associatedQuestObject: {fileID: 366650149}
+    associatedQuestObject: {fileID: 952594475}
     spawnZone: {fileID: 163716818}
 --- !u!4 &1892656392 stripped
 Transform:
@@ -72078,71 +72399,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0059999996, y: 0.005999999, z: 0.0018506154}
   m_Center: {x: 0, y: 6.5747078e-18, z: 0.00092530396}
---- !u!1001 &1982878419
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1273697142}
-    m_Modifications:
-    - target: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_Name
-      value: GroundDelivertheHoodedQUESTOBJECT
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 38.49
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -66.444954
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1563464522814601850, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-    - {fileID: 4729723302331074421, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 856425272}
-    - targetCorrespondingSourceObject: {fileID: 916917378494744782, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 856425273}
-  m_SourcePrefab: {fileID: 100100000, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
 --- !u!4 &1986327241 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6603488554207994483, guid: 98f5378049f9b5745a77677f581b32b1, type: 3}
@@ -72491,6 +72747,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 483192909}
 --- !u!4 &2010055229 stripped
 Transform:
@@ -73004,7 +73261,7 @@ GameObject:
   - component: {fileID: 2025884746}
   m_Layer: 5
   m_Name: CompleteText
-  m_TagString: Untagged
+  m_TagString: CompleteQuestText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73090,7 +73347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2025933550
 Transform:
   m_ObjectHideFlags: 0
@@ -73124,7 +73381,7 @@ MonoBehaviour:
     full of joy. Unlike in today''s events....
 
 '
-  keyId: newspaper
+  keyId: diary
   isClueItem: 1
   isGeneralItem: 0
   isUsable: 1
@@ -73616,6 +73873,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!1001 &2039087055
 PrefabInstance:
@@ -73742,6 +74000,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 1725667619}
 --- !u!1001 &2040174982
 PrefabInstance:
@@ -75026,6 +75285,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 137290552}
 --- !u!114 &2078707716
 MonoBehaviour:
@@ -75316,6 +75576,7 @@ MonoBehaviour:
   isTalkCompleted: 0
   unlockObject: {fileID: 0}
   isUnlockCompleted: 0
+  isDeliverCompleted: 0
   spawnZone: {fileID: 283690483}
 --- !u!114 &2080537044
 MonoBehaviour:
@@ -76660,6 +76921,61 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9051238300485817969, guid: 2f6c4572e07a60b43b00e1c4f489a806, type: 3}
   m_PrefabInstance: {fileID: 205175898}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2124549059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2124549061}
+  - component: {fileID: 2124549060}
+  m_Layer: 0
+  m_Name: Test Deliver Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2124549060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124549059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991b6b8ea299ffe43b475798ac446db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questManager: {fileID: 954717465}
+  findItemList:
+  - {fileID: 716058621}
+  exploreAreaCollider: {fileID: 0}
+  escapeExitCollider: {fileID: 0}
+  unlockableObject: {fileID: 0}
+  unlockableObjectPrefab: {fileID: 0}
+  onUnlockEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  conversation: {fileID: 0}
+--- !u!4 &2124549061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124549059}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 189073733}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2124873775 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 501a19826a840da4a93f946d0d749a6e, type: 3}
@@ -89998,6 +90314,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: QuestUI ( with quest log script)
       objectReference: {fileID: 0}
+    - target: {fileID: 2392415747521878218, guid: a49b75846742ad5468cb053573445259, type: 3}
+      propertyPath: m_Text
+      value: 'Quest Complete
+
+'
+      objectReference: {fileID: 0}
     - target: {fileID: 2717853402821695228, guid: a49b75846742ad5468cb053573445259, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -90100,6 +90422,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2717853402821695228, guid: a49b75846742ad5468cb053573445259, type: 3}
       insertIndex: 1
       addedObject: {fileID: 173812777}
+    - targetCorrespondingSourceObject: {fileID: 4357688221244906084, guid: a49b75846742ad5468cb053573445259, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 822187589}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2090659487097127724, guid: a49b75846742ad5468cb053573445259, type: 3}
       insertIndex: -1
@@ -96847,6 +97172,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1397924819133021945, guid: 65b2489a082d0854eac15d2d60135018, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2465322977553380253, guid: 65b2489a082d0854eac15d2d60135018, type: 3}
       propertyPath: m_Name
       value: QuestTurnInUI
@@ -96854,6 +97183,10 @@ PrefabInstance:
     - target: {fileID: 2465322977553380253, guid: 65b2489a082d0854eac15d2d60135018, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314708390360896863, guid: 65b2489a082d0854eac15d2d60135018, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4744741963839344446, guid: 65b2489a082d0854eac15d2d60135018, type: 3}
       propertyPath: m_LocalRotation.x
@@ -98196,3 +98529,4 @@ SceneRoots:
   - {fileID: 1352403877}
   - {fileID: 2062274435}
   - {fileID: 1535211114}
+  - {fileID: 591060708}

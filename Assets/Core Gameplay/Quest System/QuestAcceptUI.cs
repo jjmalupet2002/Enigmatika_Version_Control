@@ -315,9 +315,9 @@ public class QuestAcceptUI : MonoBehaviour
 
             // Trigger the corresponding event using HandleItemEvent method
             itemHandler.HandleItemEvent(currentPageIndex);
-            
+
             // Pass the stored item
-            StartCoroutine(DeleteItemAfterDelay(currentItem, 1.5f)); 
+            StartCoroutine(DeleteItemAfterDelay(currentItem, 1.5f));
 
             UnityEngine.Debug.Log("Quest Completed!");
 
@@ -355,7 +355,7 @@ public class QuestAcceptUI : MonoBehaviour
         // Delete the item from inventory
         inventoryManager.DeleteItem(item);
 
-     }
+    }
 
 
     // Helper method to reset flags
