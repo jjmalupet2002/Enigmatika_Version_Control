@@ -185,7 +185,7 @@ public class QuestObject : MonoBehaviour
 
     private IEnumerator NotifySpawnZoneTalkComplete()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(15);
         if (associatedQuest != null && spawnZone != null)
         {
             spawnZone.NotifyTalkCriteriaComplete(this);
