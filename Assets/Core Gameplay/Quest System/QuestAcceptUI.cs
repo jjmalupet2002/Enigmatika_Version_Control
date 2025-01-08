@@ -31,6 +31,7 @@ public class QuestAcceptUI : MonoBehaviour
 
     // Fields for required items and their associated reward items
     public string[] requiredItems = new string[4];
+    public List<GameObject> wrongItemUIs; // List to hold references for each wrong item UI
     public GameObject wrongItemUI;
     public Button wrongItemExitButton;
     public ItemEventHandler itemHandler;
@@ -102,7 +103,7 @@ public class QuestAcceptUI : MonoBehaviour
 
     void InitializePages()
     {
-        if (mainQuests.Count == 0 || pages.Count == 0)
+        if (mainQuests.Count == 0 || pages.Count == 0 || wrongItemUIs.Count < 4)
         {
             UnityEngine.Debug.LogWarning("No available quests or pages to display.");
             return;
@@ -123,6 +124,9 @@ public class QuestAcceptUI : MonoBehaviour
 
                 pages[i].rewardIconBackground = rewardIconBackground;
                 pages[i].rewardIconBackground.GetComponent<Button>().onClick.AddListener(() => OnQuestIconHover(index));
+
+                // Assign the corresponding wrongItemUI to each page
+                pages[i].wrongItemUI = wrongItemUIs[i];
             }
             else
             {
@@ -326,20 +330,16 @@ public class QuestAcceptUI : MonoBehaviour
         }
         else
         {
-            // Show wrong item UI if the conditions are not met
-            if (!isComparisonItem && isTurnInButtonClicked)
+            // Show the wrong item UI for the current page
+            GameObject currentWrongItemUI = wrongItemUIs[currentPageIndex];
+            if (currentWrongItemUI != null)
             {
-                UnityEngine.Debug.Log("Wrong item used!");
+                currentWrongItemUI.SetActive(true);
+                Debug.Log("Displayed wrong item UI for page " + currentPageIndex);
             }
             else
             {
-                // Show wrong item UI if the conditions are not met
-                if (!isComparisonItem && hasUsedItem)
-                {
-                    UnityEngine.Debug.Log("Conditions not met for turn-in.");
-                    wrongItemUI.SetActive(true);  // Show wrong item UI
-                }
-
+                Debug.LogWarning("No wrongItemUI assigned for page " + currentPageIndex);
             }
 
             // Reset flags after turn-in attempt, without resetting turn-in button immediately
@@ -413,4 +413,5 @@ public class Page
     public Image questIconImage; // Reference to the Image component for the quest icon
     public MainQuest quest; // Local quest variable for the page
     public bool isQuestComplete;
+    public GameObject wrongItemUI;
 }
