@@ -32,7 +32,6 @@ public class QuestAcceptUI : MonoBehaviour
     // Fields for required items and their associated reward items
     public string[] requiredItems = new string[4];
     public List<GameObject> wrongItemUIs; // List to hold references for each wrong item UI
-    public GameObject wrongItemUI;
     public Button wrongItemExitButton;
     public ItemEventHandler itemHandler;
     public InventoryManager inventoryManager;
@@ -335,6 +334,7 @@ public class QuestAcceptUI : MonoBehaviour
             if (currentWrongItemUI != null)
             {
                 currentWrongItemUI.SetActive(true);
+                wrongItemExitButton.gameObject.SetActive(true);
                 Debug.Log("Displayed wrong item UI for page " + currentPageIndex);
             }
             else
@@ -396,22 +396,31 @@ public class QuestAcceptUI : MonoBehaviour
     }
 
 
-    // Method to close the wrongItemUI
+    // Method to close all wrongItemUI pages
     private void CloseWrongItemUI()
     {
-        wrongItemUI.SetActive(false);
+        foreach (var wrongItemUI in wrongItemUIs)
+        {
+            if (wrongItemUI != null && wrongItemUI.activeSelf)
+            {
+                wrongItemUI.SetActive(false);
+                wrongItemExitButton.gameObject.SetActive(false);
+                UnityEngine.Debug.Log($"Closed wrongItemUI: {wrongItemUI.name}");
+                ResetFlags();
+            }
+        }
     }
 }
 
-[System.Serializable]
-public class Page
-{
-    public string description;  // Local description text for the page
-    public Image rewardIconBackground;
-    public Sprite rewardIcon;  // Reward icon background for the page
-    public Sprite questIcon;  // Quest icon for the page
-    public Image questIconImage; // Reference to the Image component for the quest icon
-    public MainQuest quest; // Local quest variable for the page
-    public bool isQuestComplete;
-    public GameObject wrongItemUI;
-}
+    [System.Serializable]
+    public class Page
+    {
+        public string description;  // Local description text for the page
+        public Image rewardIconBackground;
+        public Sprite rewardIcon;  // Reward icon background for the page
+        public Sprite questIcon;  // Quest icon for the page
+        public Image questIconImage; // Reference to the Image component for the quest icon
+        public MainQuest quest; // Local quest variable for the page
+        public bool isQuestComplete;
+        public GameObject wrongItemUI;
+    }
