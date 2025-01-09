@@ -11,7 +11,6 @@ public class HintUIManager : MonoBehaviour
     private void OnEnable()
     {
         hintPointManager.onHintPointsUpdated.AddListener(UpdateHintPointsUI);
-        hintPointManager.onHintButtonDisplay.AddListener(DisplayHintButton);
     }
 
     private void OnDisable()

@@ -42,6 +42,7 @@ public class SafeController : MonoBehaviour
     [Header("References to hint system")]
     public HintPointManager hintPointManager;
     public HintUIManager hintUIManager;
+    public HintMessageUIManager hintMessageUIManager; // Reference to your hint message UI manager
 
     [Header("Unity Event - What happens when you open the safe?")]
     public UnityEvent onSafeOpened;
@@ -58,9 +59,10 @@ public class SafeController : MonoBehaviour
         safeNumberConfirmationUI.onClick.AddListener(CheckCombination);
         safeExitButton.onClick.AddListener(CloseSafeUI);
 
-        // Initialize UI states
+        // Initialize UI states and register to HINT UI MANAGER
         wrongCombinationUI.SetActive(false);
         safeUI.SetActive(false);
+        RegisterSafePuzzleHint();
 
         // Initialize the numbers and update UI
         currentNum1 = 0;
@@ -155,9 +157,16 @@ public class SafeController : MonoBehaviour
         {
             wrongCombinationUI.SetActive(true);
             hintUIManager.DisplayHintButton();
+            hintMessageUIManager.SetCurrentContext("SafePuzzle");
             PlayWrongCombinationSound(); // Play sound
             Invoke("HideWrongCombinationUI", 2f); // Hide after 2 seconds
         }
+    }
+
+    private void RegisterSafePuzzleHint()
+    {
+        string hintMessage = "Try different combinations! The numbers are hidden around the room. Edi wow Haha!";
+        hintMessageUIManager.RegisterHintMessage("SafePuzzle", hintMessage); // Register the hint for the 'SafePuzzle' context
     }
 
     private void HideWrongCombinationUI()

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public class ButtonController : MonoBehaviour
@@ -10,12 +11,21 @@ public class ButtonController : MonoBehaviour
     private bool[] buttonStates; // Track the current state (true = brown/unlit, false = white/lit)
     private Material[] originalMaterials; // Store the original materials for each button
     private bool hasInteracted; // Track if any button has been interacted with
+    private int[] pressCount; // Track the number of presses for each button
+    private int pressThreshold = 3; // Set the threshold for button presses
+
+    [Header("References to hint system")]
+    public HintPointManager hintPointManager;
+    public HintUIManager hintUIManager;
+    public HintMessageUIManager hintMessageUIManager; // Reference to your hint message UI manager
 
     void Start()
     {
         buttonStates = new bool[buttons.Length];
         originalMaterials = new Material[buttons.Length];
         hasInteracted = false; // No interaction at the start
+        pressCount = new int[buttons.Length]; // Initialize the press count for each button
+        RegisterButtonHint(); // Register the hint when the threshold is reached
 
         for (int i = 0; i < buttons.Length; i++)
         {
@@ -72,6 +82,9 @@ public class ButtonController : MonoBehaviour
             buttonStates[buttonIndex] = true;
         }
 
+        // Increment the press count for the button
+        pressCount[buttonIndex]++;
+
         // Trigger animation for the button press
         animators[buttonIndex].SetTrigger("ButtonPress");
 
@@ -83,6 +96,9 @@ public class ButtonController : MonoBehaviour
 
         // Check if the puzzle is unlocked
         CheckPuzzleUnlocked();
+
+        // Check if all buttons have reached the threshold
+        CheckPressThreshold();
     }
 
     private void HandleButtonPattern(int buttonIndex)
@@ -141,6 +157,41 @@ public class ButtonController : MonoBehaviour
         else
         {
             spikeTrap.unlockSpike = false;
+        }
+    }
+
+    private void RegisterButtonHint()
+    {
+        string hintMessage = "Every press counts! Consider how each button affects the others when you press them.";
+        hintMessageUIManager.RegisterHintMessage("ButtonPuzzle", hintMessage); // Register the hint for the 'SafePuzzle' context
+    }
+
+    // New method to check if all buttons have reached the press threshold
+    private bool hintDisplayed = false; // Flag to track if the hint has already been shown
+
+    private void CheckPressThreshold()
+    {
+        bool allPressedEnough = true;
+
+        for (int i = 0; i < pressCount.Length; i++)
+        {
+            if (pressCount[i] < pressThreshold)
+            {
+                allPressedEnough = false;
+                break;
+            }
+        }
+
+        if (allPressedEnough && !hintDisplayed) // Check if the hint has already been shown
+        {
+            hintUIManager.DisplayHintButton();
+            hintMessageUIManager.SetCurrentContext("ButtonPuzzle");
+            UnityEngine.Debug.Log("All buttons have been pressed the required number of times!");
+            hintDisplayed = true; // Set the flag to prevent further display
+        }
+        else if (!allPressedEnough)
+        {
+            UnityEngine.Debug.Log("Press more buttons!");
         }
     }
 }
