@@ -37,6 +37,12 @@ public class HintPointManager : MonoBehaviour
         onHintButtonDisplay.Invoke();
     }
 
+    public void ResetHintPoints()
+    {
+        hintPointsSO.hintPoints = 0;
+        onHintPointsUpdated.Invoke();
+    }
+
     // Play sound based on the AudioClip passed in with volume control
     private void PlaySound(AudioClip sound)
     {

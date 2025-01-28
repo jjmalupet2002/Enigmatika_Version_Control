@@ -24,6 +24,7 @@ public class TutorialManager : MonoBehaviour
 
     [Header("Post-Tutorial Audio")]
     public AudioSource postTutorialAudio;
+    public HintPointManager hintManager;
 
     void Start()
     {
@@ -78,6 +79,7 @@ public class TutorialManager : MonoBehaviour
         skipUI.SetActive(false);
         cutsceneUI.SetActive(false);
         simpleTimer.StartTimer();
+        hintManager.ResetHintPoints();
 
         // Play the post-tutorial audio
         postTutorialAudio.Play();
