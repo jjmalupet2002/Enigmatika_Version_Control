@@ -13,16 +13,19 @@ public class RampUnlockScript : MonoBehaviour
 
     public InputActionAsset inputActionAsset;
     public AudioSource rampAudioSource;
+    public GameObject unlockText; // Reference to the unlock text object
 
     private float currentRotation = 0f;
     private bool isTouchingValve = false;
     private Vector2 previousTouchPosition;
     private bool isValveSpinning = false;
     private bool canSpin = true;
+    private bool unlockTextTriggered = false; // Flag to check if the unlock text has been triggered
 
     private float spinStopTimer = 0f;
     private float spinCooldown = 0.2f;
     private float audioPlaybackPosition = 0f;
+
 
     private void OnEnable()
     {
@@ -117,9 +120,15 @@ public class RampUnlockScript : MonoBehaviour
             StartCoroutine(ResetValveRotation());
         }
 
-        if (rampObjectHandler.currentRampRotation >= rampObjectHandler.endXRotation)
+        if (rampObjectHandler.currentRampRotation >= rampObjectHandler.endXRotation && !unlockTextTriggered)
         {
             canSpin = false;
+            unlockTextTriggered = true; // Ensure text only triggers once
+            if (unlockText != null)
+            {
+                unlockText.SetActive(true); // Enable the text when valve reaches end rotation
+                StartCoroutine(DisableUnlockText()); // Start the coroutine to disable it after 2 seconds
+            }
         }
     }
 
@@ -154,6 +163,15 @@ public class RampUnlockScript : MonoBehaviour
         }
 
         currentRotation = 0;
+    }
+
+    private IEnumerator DisableUnlockText()
+    {
+        yield return new WaitForSeconds(2f); // Wait for 2 seconds
+        if (unlockText != null) // Check if the text object is assigned
+        {
+            unlockText.SetActive(false); // Disable the text
+        }
     }
 
     private bool IsCloseUpCameraActive()

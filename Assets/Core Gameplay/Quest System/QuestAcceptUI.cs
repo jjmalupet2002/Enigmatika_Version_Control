@@ -42,6 +42,7 @@ public class QuestAcceptUI : MonoBehaviour
         // Initialize UI elements
         questAcceptBackground.SetActive(false);
         turnInItemButton.gameObject.SetActive(false);
+        turnInItemButton.interactable = false;
         startQuestButton.onClick.AddListener(StartSelectedQuest);
         exitButton.onClick.AddListener(CloseQuestUI);
         viewQuestButton.onClick.AddListener(OpenQuestUI);
@@ -157,6 +158,7 @@ public class QuestAcceptUI : MonoBehaviour
     {
         questAcceptBackground.SetActive(false);
         QuestAcceptBlackbackground.SetActive(false);
+        turnInItemButton.interactable = false;
     }
 
     void PreviousPage()
@@ -284,6 +286,7 @@ public class QuestAcceptUI : MonoBehaviour
         }
 
         UnityEngine.Debug.Log($"Item Used: {item.keyId}, Required Item: {requiredItems[currentPageIndex]}");
+        turnInItemButton.interactable = true; // Enable the button component
 
         // Check if the item keyId matches the required item for the current page
         if (item.keyId == requiredItems[currentPageIndex])
