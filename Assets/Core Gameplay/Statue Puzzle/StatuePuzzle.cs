@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -59,6 +58,16 @@ public class StatuePuzzle : MonoBehaviour
         {
             CheckRaycast();
         }
+
+        // Always check the rotation status and manage audio here
+        if (isRotatingKnight1)
+        {
+            RotateKnight(Knight1, Knight1RotateAudio, Knight1EndY);
+        }
+        else if (isRotatingKnight2)
+        {
+            RotateKnight(Knight2, Knight2RotateAudio, Knight2EndY);
+        }
     }
 
     private void CheckRaycast()
@@ -91,19 +100,9 @@ public class StatuePuzzle : MonoBehaviour
             {
                 allStatueRotated = true;
                 rotateAction.Disable();
+                // Stop audio for both statues before raising the thief hideout
+                StopStatueAudio();
                 StartCoroutine(RaiseThiefHideout());
-            }
-        }
-        else
-        {
-            // Rotate statues regardless of the camera state
-            if (isRotatingKnight1)
-            {
-                RotateKnight(Knight1, Knight1RotateAudio, Knight1EndY);
-            }
-            else if (isRotatingKnight2)
-            {
-                RotateKnight(Knight2, Knight2RotateAudio, Knight2EndY);
             }
         }
     }
@@ -113,16 +112,44 @@ public class StatuePuzzle : MonoBehaviour
         // Rotate knight only if close-up camera is active
         if (IsCloseUpCameraActive())
         {
-            float newYRotation = Mathf.MoveTowardsAngle(knight.transform.rotation.eulerAngles.y, endRotation, rotationSpeed * Time.deltaTime);
+            float currentYRotation = knight.transform.rotation.eulerAngles.y;
+            float newYRotation = Mathf.MoveTowardsAngle(currentYRotation, endRotation, rotationSpeed * Time.deltaTime);
             knight.transform.rotation = Quaternion.Euler(knight.transform.rotation.eulerAngles.x, newYRotation, knight.transform.rotation.eulerAngles.z);
 
-            if (audioSource != null && !audioSource.isPlaying)
+            // Check if the knight is still rotating in real-time
+            bool isRotating = Mathf.Abs(Mathf.DeltaAngle(currentYRotation, newYRotation)) > 0.1f;
+
+            // If statue is rotating, play the audio if not already playing
+            if (isRotating)
             {
-                audioSource.Play();
+                if (audioSource != null && !audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
+            }
+            else
+            {
+                // Stop the audio immediately when rotation stops
+                if (audioSource != null && audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                }
             }
         }
     }
 
+    // Method to explicitly stop audio for both statues
+    private void StopStatueAudio()
+    {
+        if (Knight1RotateAudio != null && Knight1RotateAudio.isPlaying)
+        {
+            Knight1RotateAudio.Stop();
+        }
+        if (Knight2RotateAudio != null && Knight2RotateAudio.isPlaying)
+        {
+            Knight2RotateAudio.Stop();
+        }
+    }
 
     private IEnumerator RaiseThiefHideout()
     {
@@ -135,7 +162,7 @@ public class StatuePuzzle : MonoBehaviour
         Vector3 startPosition = new Vector3(ThiefHideout.transform.position.x, ThiefStartY, ThiefHideout.transform.position.z);
         Vector3 endPosition = new Vector3(ThiefHideout.transform.position.x, ThiefEndY, ThiefHideout.transform.position.z);
 
-        UnityEngine.Debug.Log("Rising Thief Hideout");  // Debugging line
+        UnityEngine.Debug.Log("Rising Thief Hideout");
 
         while (elapsedTime < 4f)
         {
@@ -145,8 +172,8 @@ public class StatuePuzzle : MonoBehaviour
         }
 
         ThiefHideout.transform.position = endPosition;
+        ThiefHideoutRising.Stop();
     }
-
 
     private bool IsCloseUpCameraActive()
     {

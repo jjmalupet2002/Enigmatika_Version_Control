@@ -70,7 +70,7 @@ public class SpikeTrap : MonoBehaviour
     {
         if (currentSpikeState == SpikeState.Closed && !isSpikeUnlocked)
         {
-            StartCoroutine(ActivateSpike());
+            StartCoroutine(TriggerWithDelay());
         }
     }
 
@@ -142,6 +142,15 @@ public class SpikeTrap : MonoBehaviour
 
         spikeObject.transform.position = initialPosition;
         currentSpikeState = SpikeState.Closed;
+    }
+
+    private IEnumerator TriggerWithDelay()
+    {
+        // Wait for 2 seconds before triggering the spike
+        yield return new WaitForSeconds(2f);
+
+        // Now trigger the spike
+        StartCoroutine(ActivateSpike());
     }
 
     private IEnumerator HideTextAfterDelay(Text textComponent, float delay)
