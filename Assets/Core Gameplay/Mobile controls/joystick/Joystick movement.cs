@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using CarterGames.Assets.SaveManager;
+using Save;
+
 
 public class PlayerJoystickControl : MonoBehaviour
 {
@@ -19,11 +22,19 @@ public class PlayerJoystickControl : MonoBehaviour
     [SerializeField] float stepHeight = 0.3f; // Height of the stairs
     [SerializeField] float stepSmooth = 2f; // Smoothing for climbing
 
+    [Header("Save System:")]
+    public PlayerPositionSaveObject playerPositionSaveObject; // Reference to your PlayerPositionSaveObject
+
     private Vector2 movementInput; // Stores joystick input
     private bool isInputEnabled = true; // Flag to control input processing
     private bool isOnStairs = false; // Flag to check if the player is on stairs
     private float idleTimer = 0f; // Timer to track idle time
     private const float idleThreshold = 15f; // Time threshold for secondary idle animation
+
+    private void Start()
+    {
+        LoadPlayerPosition(); // Ensure this is called when the game starts
+    }
 
     private void Awake()
     {
@@ -41,11 +52,34 @@ public class PlayerJoystickControl : MonoBehaviour
         stepRayUpper.transform.position = new Vector3(stepRayUpper.transform.position.x, stepHeight, stepRayUpper.transform.position.z);
     }
 
+    private void SavePlayerPosition()
+    {
+        playerPositionSaveObject.playerPosition.Value = transform.position;
+        SaveManager.Save(playerPositionSaveObject);
+        UnityEngine.Debug.Log($"Saved Position: {transform.position}");
+    }
+
+    private void LoadPlayerPosition()
+    {
+        if (playerPositionSaveObject.playerPosition.Value != Vector3.zero)
+        {
+            transform.position = playerPositionSaveObject.playerPosition.Value;
+            UnityEngine.Debug.Log($"Loaded Position: {transform.position}");
+        }
+        else
+        {
+            UnityEngine.Debug.Log("No saved position found.");
+        }
+    }
+
     private void OnEnable()
     {
         var playerInput = GetComponent<PlayerInput>();
         playerInput.actions["Run"].performed += HandleMovement;
         playerInput.actions["Run"].canceled += HandleMovementCanceled;
+        // Subscribe to save and load events
+        SaveEvents.OnSaveGame += SavePlayerPosition;
+        SaveEvents.OnLoadGame += LoadPlayerPosition;
     }
 
     private void OnDisable()
@@ -53,6 +87,9 @@ public class PlayerJoystickControl : MonoBehaviour
         var playerInput = GetComponent<PlayerInput>();
         playerInput.actions["Run"].performed -= HandleMovement;
         playerInput.actions["Run"].canceled -= HandleMovementCanceled;
+        // Unsubscribe to avoid memory leaks
+        SaveEvents.OnSaveGame -= SavePlayerPosition;
+        SaveEvents.OnLoadGame -= LoadPlayerPosition;
     }
 
     private void HandleMovement(InputAction.CallbackContext context)
