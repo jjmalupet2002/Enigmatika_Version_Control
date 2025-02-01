@@ -16,6 +16,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
 
     public float portalInteractRange = 5f; // Interaction range for the portal objective
     public float exitPortalRoomInteractRange = 5f; // Interaction range for the final objective
+    public bool IntroQuestFinished = false;
 
     private enum QuestState
     {
@@ -134,6 +135,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
                 break;
             case QuestState.Complete:
                 objectiveText.text = "Quest Complete!";
+                IntroQuestFinished = true;
                 break;
         }
     }
