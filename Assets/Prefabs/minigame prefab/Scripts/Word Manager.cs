@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +8,9 @@ public class WordManager : MonoBehaviour
     [Header("Elements")]
     [SerializeField] private List<string> secretWords; // List of possible secret words
     private string secretWord; // The chosen secret word
+
+    [Header("Questions/Hints")]
+    [SerializeField] private Dictionary<string, string> wordToQuestionMap; // Maps words to questions
 
     private void Awake()
     {
@@ -23,10 +25,22 @@ public class WordManager : MonoBehaviour
             Destroy(gameObject); // Destroy duplicate instances
         }
 
+        InitializeWordToQuestionMap(); // Initialize the word-to-question mapping
         ChooseRandomSecretWord(); // Choose secret word early
     }
 
-    private void ChooseRandomSecretWord()
+    private void InitializeWordToQuestionMap()
+    {
+        wordToQuestionMap = new Dictionary<string, string>
+    {
+        { "BUTTERFLY", "What is often live in gardens, fields, and forests, and they can be found all over the world?" },
+        { "ABHORRENT", "What describes actions, ideas, or behaviors that people strongly dislike or find morally wrong?" },
+        { "ABILITIES", "What refers to the skills or talents that someone has?" },
+        { "BLEACHERS", "What provides a place for spectators to sit and watch events like games, concerts, or performances." }
+    };
+    }
+
+    public void ChooseRandomSecretWord()
     {
         if (secretWords == null || secretWords.Count == 0)
         {
@@ -43,6 +57,19 @@ public class WordManager : MonoBehaviour
     {
         Debug.Log($"GetSecretWord called. Current secret word: {secretWord}");
         return secretWord; // Return the selected secret word
+    }
+
+    public string GetQuestionForSecretWord()
+    {
+        if (wordToQuestionMap.ContainsKey(secretWord))
+        {
+            return wordToQuestionMap[secretWord];
+        }
+        else
+        {
+            Debug.LogWarning($"No question found for secret word: {secretWord}");
+            return "No question available.";
+        }
     }
 
     public bool IsInitialized()

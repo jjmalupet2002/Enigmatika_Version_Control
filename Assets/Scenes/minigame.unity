@@ -1083,6 +1083,35 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &1361576880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6816502418467100494, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+  m_PrefabInstance: {fileID: 6665920677841857974}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1361576882 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 963372180514048157, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+  m_PrefabInstance: {fileID: 6665920677841857974}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361576880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1361576884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361576880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233a03d8965256243a1b1900cf15319f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questionText: {fileID: 1361576882}
 --- !u!4 &1378727176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 227333731539182790, guid: 519e0ad066e723c439cac4e1b78c2287, type: 3}
@@ -2526,6 +2555,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1144658765}
     m_Modifications:
+    - target: {fileID: 126532313747804635, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 700.6096
+      objectReference: {fileID: 0}
+    - target: {fileID: 126532313747804635, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 316.5954
+      objectReference: {fileID: 0}
+    - target: {fileID: 126532313747804635, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2169
+      objectReference: {fileID: 0}
+    - target: {fileID: 126532313747804635, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -102
+      objectReference: {fileID: 0}
+    - target: {fileID: 963372180514048157, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 963372180514048157, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 963372180514048157, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3553470152403378567, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2606,6 +2663,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6816502418467100494, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7000848083873592356, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
       propertyPath: m_Name
       value: PlayerUI
@@ -2613,7 +2674,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6816502418467100494, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1361576884}
   m_SourcePrefab: {fileID: 100100000, guid: 45568ead92494ec41b1b517827e9e35e, type: 3}
 --- !u!1 &7106355809633364491 stripped
 GameObject:

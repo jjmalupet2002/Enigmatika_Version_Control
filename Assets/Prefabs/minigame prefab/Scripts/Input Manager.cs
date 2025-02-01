@@ -37,8 +37,6 @@ public class InputManager : MonoBehaviour
         }
 
         InitializeKeyboard(secretWord); // Set keyboard buttons
-
-
     }
 
     private void KeyPressedCallback(char letter)
@@ -93,6 +91,13 @@ public class InputManager : MonoBehaviour
             {
                 Debug.LogError("Boss reference is missing!");
             }
+
+            // Get a new secret word from WordManager
+            WordManager.instance.ChooseRandomSecretWord();
+            string newSecretWord = WordManager.instance.GetSecretWord();
+
+            // Reinitialize the keyboard with the new secret word
+            InitializeKeyboard(newSecretWord);
         }
         else
         {
@@ -153,6 +158,4 @@ public class InputManager : MonoBehaviour
             array[randomIndex] = temp;
         }
     }
-
-
 }
