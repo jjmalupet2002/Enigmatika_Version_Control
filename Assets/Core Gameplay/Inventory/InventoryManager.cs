@@ -97,7 +97,7 @@ public class InventoryManager : ScriptableObject
             inventorySystem = loadedInventorySystem; // Assign it only if valid
             UnityEngine.Debug.Log("InventorySystem loaded successfully.");
 
-            // Clear the inventory list before loading new data
+            // Clear inventory before loading new data
             inventory.Clear();
 
             for (int i = 0; i < inventorySystem.itemNames.Count; i++)
@@ -114,16 +114,26 @@ public class InventoryManager : ScriptableObject
                 GameObject noteUI = inventorySystem.noteUIs[i];
                 bool hasBeenInspected = inventorySystem.itemInspectionStatus[i];
 
-                // Rebuild the item based on the loaded data
-                ItemData item = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, isUsingItem, isNote, hasBeenInspected, noteUI, keyId);
+                // Check if this item already exists and has been inspected
+                bool alreadyInInventory = inventory.Any(item => item.itemName == itemName && item.hasBeenInspected);
 
-                // Add the item to the inventory
-                inventory.Add(item);
-
-                // If the item was inspected previously, mark it as inspected
-                if (hasBeenInspected)
+                if (!alreadyInInventory)
                 {
-                    InspectItem(item); // Mark the item as inspected in the inventory system
+                    // Create a new item based on the loaded data
+                    ItemData item = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, isUsingItem, isNote, hasBeenInspected, noteUI, keyId);
+
+                    // Add the item to the inventory
+                    inventory.Add(item);
+
+                    // If the item was inspected previously, mark it as inspected
+                    if (hasBeenInspected)
+                    {
+                        InspectItem(item); // Mark the item as inspected in the inventory system
+                    }
+                }
+                else
+                {
+                    UnityEngine.Debug.Log($"Skipped adding {itemName} as it was already inspected.");
                 }
             }
 
@@ -137,18 +147,18 @@ public class InventoryManager : ScriptableObject
         }
     }
 
-    // Add an item to the inventory
-    public void AddItem(ItemData item)
-    {
-        inventory.Add(item);
-        OnInventoryChanged?.Invoke(); // Notify that the inventory changed
-    }
-
     public void InspectItem(ItemData item)
     {
         item.hasBeenInspected = true; // Mark the item as inspected globally
         UnityEngine.Debug.Log($"Item {item.itemName} has been inspected.");
         OnInventoryChanged?.Invoke(); // Notify inventory change
+    }
+
+    // Add an item to the inventory
+    public void AddItem(ItemData item)
+    {
+        inventory.Add(item);
+        OnInventoryChanged?.Invoke(); // Notify that the inventory changed
     }
 
     // Equip/Use an item from the inventory (but not delete it)

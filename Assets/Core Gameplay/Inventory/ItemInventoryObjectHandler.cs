@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class ItemInventoryObjectHandler : MonoBehaviour
 {
@@ -186,40 +187,49 @@ public class ItemInventoryObjectHandler : MonoBehaviour
 
     public void NotifyPickup()
     {
-        ItemData newItemData = new ItemData(
-            itemName,
-            itemIcon,
-            itemDescription,
-            isClueItem,
-            isGeneralItem,
-            isUsable,
-            false,
-            isNote,
-            hasBeenInspected, // Ensure this reflects inspection status
-            noteUI,
-            keyId
-        );
+        // Check if the item is already in the inventory (loaded from save)
+        bool alreadyInInventory = InventoryManager.Instance.inventory.Any(item => item.itemName == itemName);
 
-        InventoryManager.Instance.AddItem(newItemData);
-
-        // If the item has been inspected before pickup, update it in InventoryManager
-        if (hasBeenInspected)
+        if (!alreadyInInventory)
         {
-            InventoryManager.Instance.InspectItem(newItemData);
-        }
+            ItemData newItemData = new ItemData(
+                itemName,
+                itemIcon,
+                itemDescription,
+                isClueItem,
+                isGeneralItem,
+                isUsable,
+                false,
+                isNote,
+                hasBeenInspected, // Ensure this reflects inspection status
+                noteUI,
+                keyId
+            );
 
-        // Show notification
-        if (notificationText != null)
-        {
-            notificationText.SetActive(true);
-            StartCoroutine(HideNotificationAfterDelay(2f));
+            InventoryManager.Instance.AddItem(newItemData);
+
+            // If the item has been inspected before pickup, update it in InventoryManager
+            if (hasBeenInspected)
+            {
+                InventoryManager.Instance.InspectItem(newItemData);
+            }
+
+            // Show notification only if the item is newly picked up
+            if (notificationText != null)
+            {
+                notificationText.SetActive(true);
+                StartCoroutine(HideNotificationAfterDelay(1f));
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned.");
+            }
         }
         else
         {
-            UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned.");
+            UnityEngine.Debug.Log($"Item {itemName} was already loaded. Skipping pickup.");
         }
     }
-
 
     private IEnumerator HideNotificationAfterDelay(float delay)
     {
