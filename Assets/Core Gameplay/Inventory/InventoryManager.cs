@@ -119,6 +119,12 @@ public class InventoryManager : ScriptableObject
 
                 // Add the item to the inventory
                 inventory.Add(item);
+
+                // If the item was inspected previously, mark it as inspected
+                if (hasBeenInspected)
+                {
+                    InspectItem(item); // Mark the item as inspected in the inventory system
+                }
             }
 
             // Notify the system that inventory has changed
@@ -130,7 +136,6 @@ public class InventoryManager : ScriptableObject
             UnityEngine.Debug.LogWarning("Failed to load InventorySystem.");
         }
     }
-
 
     // Add an item to the inventory
     public void AddItem(ItemData item)
