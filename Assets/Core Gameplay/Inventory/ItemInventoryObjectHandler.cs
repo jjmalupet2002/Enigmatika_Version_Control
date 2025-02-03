@@ -186,7 +186,6 @@ public class ItemInventoryObjectHandler : MonoBehaviour
 
     public void NotifyPickup()
     {
-        // Create an instance of ItemData and pass the keyId (if available)
         ItemData newItemData = new ItemData(
             itemName,
             itemIcon,
@@ -194,24 +193,30 @@ public class ItemInventoryObjectHandler : MonoBehaviour
             isClueItem,
             isGeneralItem,
             isUsable,
-            false, // Ensure isUsingItem is set to false when adding to inventory
+            false,
             isNote,
+            hasBeenInspected, // Ensure this reflects inspection status
             noteUI,
             keyId
         );
 
-        // Notify the Inventory Manager to add this item
-        InventoryManager.Instance.AddItem(newItemData); // Ensure you have a reference to the Inventory Manager
+        InventoryManager.Instance.AddItem(newItemData);
+
+        // If the item has been inspected before pickup, update it in InventoryManager
+        if (hasBeenInspected)
+        {
+            InventoryManager.Instance.InspectItem(newItemData);
+        }
 
         // Show notification
         if (notificationText != null)
         {
-            notificationText.SetActive(true); // Show notification
-            StartCoroutine(HideNotificationAfterDelay(2f)); // Hide after 2 seconds
+            notificationText.SetActive(true);
+            StartCoroutine(HideNotificationAfterDelay(2f));
         }
         else
         {
-            UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned."); // Warn if null
+            UnityEngine.Debug.LogWarning("Notification text GameObject is not assigned.");
         }
     }
 

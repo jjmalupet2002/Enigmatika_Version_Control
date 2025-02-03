@@ -6,20 +6,19 @@ using UnityEngine;
 [System.Serializable]
 public class ItemData
 {
-    // Item attributes (make them non-readonly for Inspector visibility)
-    public string itemName;            // Name of the item
-    public Sprite itemIcon;            // Icon for the item
-    public string itemDescription;     // Description of the item
-    public bool isClueItem;            // Is this item a clue?
-    public bool isGeneralItem;         // Is this item a general item?
-    public bool isUsable;              // Is this item usable?
-    public bool isUsingItem;           // Indicates if the item is currently in use
-    public string keyId;               // The ID of the key (if this is a key item)
-    public bool isNote;                // Is this item a note?
-    public GameObject noteUI;          // UI for displaying the note
+    public string itemName;
+    public Sprite itemIcon;
+    public string itemDescription;
+    public bool isClueItem;
+    public bool isGeneralItem;
+    public bool isUsable;
+    public bool isUsingItem;
+    public string keyId;
+    public bool isNote;
+    public GameObject noteUI;
+    public bool hasBeenInspected; // New flag
 
-    // Constructor for easy instantiation
-    public ItemData(string name, Sprite icon, string description, bool clueItem, bool generalItem, bool usable, bool usingItem, bool note, GameObject noteUI = null, string keyId = "")
+    public ItemData(string name, Sprite icon, string description, bool clueItem, bool generalItem, bool usable, bool usingItem, bool note, bool inspected, GameObject noteUI = null, string keyId = "")
     {
         itemName = name;
         itemIcon = icon;
@@ -27,9 +26,11 @@ public class ItemData
         isClueItem = clueItem;
         isGeneralItem = generalItem;
         isUsable = usable;
-        isUsingItem = usingItem; // Initialize with passed value
-        this.keyId = keyId;      // Initialize keyId (empty string for non-key items)
+        isUsingItem = usingItem;
+        this.keyId = keyId;
         isNote = note;
-        this.noteUI = noteUI; // Initialize note UI
+        hasBeenInspected = inspected; // Initialize from constructor
+        this.noteUI = noteUI;
     }
 }
+

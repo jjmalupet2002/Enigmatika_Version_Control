@@ -35,7 +35,7 @@ public class ItemEventHandler : MonoBehaviour
             // Automatically fill with empty ItemData (if necessary).
             while (items.Count < 4)
             {
-                items.Add(new ItemData("", null, "", false, false, false, false, false, null, ""));
+                items.Add(new ItemData("", null, "", false, false, false, false, false, false, null, ""));
             }
         }
 

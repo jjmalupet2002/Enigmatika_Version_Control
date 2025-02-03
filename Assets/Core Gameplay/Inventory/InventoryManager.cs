@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using Save;
+using CarterGames.Assets.SaveManager;
+using System.Diagnostics;
 
 [CreateAssetMenu(fileName = "NewInventoryManager", menuName = "Inventory/Manager")]
 public class InventoryManager : ScriptableObject
@@ -9,6 +12,7 @@ public class InventoryManager : ScriptableObject
     public static InventoryManager Instance { get; private set; }
 
     public List<ItemData> inventory = new List<ItemData>(); // List to store item data
+    public InventorySystem inventorySystem;
 
     // Event to notify when the inventory changes
     public delegate void InventoryChanged();
@@ -20,23 +24,126 @@ public class InventoryManager : ScriptableObject
     // Event to notify when an item is deleted
     public event Action<ItemData> OnItemDeleted;
 
+    // Add event listeners in OnEnable
     private void OnEnable()
     {
+        // Ensure only one instance of the InventoryManager exists
         if (Instance != null && Instance != this)
         {
-            DestroyImmediate(this);
+            DestroyImmediate(this); // If another instance exists, destroy this one
         }
         else
         {
-            Instance = this;
+            Instance = this; // Assign this instance as the singleton
+        }
+
+        // Subscribe to the save and load events
+        SaveEvents.OnSaveGame += SaveInventory;
+        SaveEvents.OnLoadGame += LoadInventory;
+    }
+
+    // Remove event listeners in OnDisable to avoid memory leaks
+    private void OnDisable()
+    {
+        // Unsubscribe from events
+        SaveEvents.OnSaveGame -= SaveInventory;
+        SaveEvents.OnLoadGame -= LoadInventory;
+    }
+
+    // Method to save the inventory data
+    public void SaveInventory()
+    {
+        inventorySystem.itemNames.Clear(); // Clear the list before adding new data
+        inventorySystem.itemIcons.Clear();
+        inventorySystem.itemDescriptions.Clear();
+        inventorySystem.isClueItems.Clear();
+        inventorySystem.isGeneralItems.Clear();
+        inventorySystem.isUsableItems.Clear();
+        inventorySystem.isUsingItems.Clear();
+        inventorySystem.keyIds.Clear();
+        inventorySystem.isNotes.Clear();
+        inventorySystem.noteUIs.Clear();
+        inventorySystem.itemInspectionStatus.Clear();
+
+        foreach (ItemData item in inventory)
+        {
+            inventorySystem.itemNames.Add(item.itemName); // Save item name
+            inventorySystem.itemIcons.Add(item.itemIcon); // Save item icon
+            inventorySystem.itemDescriptions.Add(item.itemDescription); // Save item description
+            inventorySystem.isClueItems.Add(item.isClueItem); // Save clue item flag
+            inventorySystem.isGeneralItems.Add(item.isGeneralItem); // Save general item flag
+            inventorySystem.isUsableItems.Add(item.isUsable); // Save usability flag
+            inventorySystem.isUsingItems.Add(item.isUsingItem); // Save usage status
+            inventorySystem.keyIds.Add(item.keyId); // Save key ID
+            inventorySystem.isNotes.Add(item.isNote); // Save note flag
+            inventorySystem.noteUIs.Add(item.noteUI); // Save note UI object
+            inventorySystem.itemInspectionStatus.Add(item.hasBeenInspected); // Save inspection status
+        }
+
+        // Call SaveManager to save the data
+        SaveManager.Save(inventorySystem);
+        UnityEngine.Debug.Log("Inventory Saved!");
+    }
+
+    // Method to load the inventory data
+    public void LoadInventory()
+    {
+        // Load the InventorySystem asset from Resources folder
+        InventorySystem loadedInventorySystem = Resources.Load<InventorySystem>("Save System/Enigmatika Save Game Classes/Inventory/InventorySystem");
+
+        // Check if the loaded InventorySystem is valid
+        if (loadedInventorySystem != null)
+        {
+            inventorySystem = loadedInventorySystem; // Assign it only if valid
+            UnityEngine.Debug.Log("InventorySystem loaded successfully.");
+
+            // Clear the inventory list before loading new data
+            inventory.Clear();
+
+            for (int i = 0; i < inventorySystem.itemNames.Count; i++)
+            {
+                string itemName = inventorySystem.itemNames[i];
+                Sprite itemIcon = inventorySystem.itemIcons[i];
+                string itemDescription = inventorySystem.itemDescriptions[i];
+                bool isClueItem = inventorySystem.isClueItems[i];
+                bool isGeneralItem = inventorySystem.isGeneralItems[i];
+                bool isUsable = inventorySystem.isUsableItems[i];
+                bool isUsingItem = inventorySystem.isUsingItems[i];
+                string keyId = inventorySystem.keyIds[i];
+                bool isNote = inventorySystem.isNotes[i];
+                GameObject noteUI = inventorySystem.noteUIs[i];
+                bool hasBeenInspected = inventorySystem.itemInspectionStatus[i];
+
+                // Rebuild the item based on the loaded data
+                ItemData item = new ItemData(itemName, itemIcon, itemDescription, isClueItem, isGeneralItem, isUsable, isUsingItem, isNote, hasBeenInspected, noteUI, keyId);
+
+                // Add the item to the inventory
+                inventory.Add(item);
+            }
+
+            // Notify the system that inventory has changed
+            OnInventoryChanged?.Invoke();
+            UnityEngine.Debug.Log("Inventory Loaded!");
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Failed to load InventorySystem.");
         }
     }
+
 
     // Add an item to the inventory
     public void AddItem(ItemData item)
     {
         inventory.Add(item);
         OnInventoryChanged?.Invoke(); // Notify that the inventory changed
+    }
+
+    public void InspectItem(ItemData item)
+    {
+        item.hasBeenInspected = true; // Mark the item as inspected globally
+        UnityEngine.Debug.Log($"Item {item.itemName} has been inspected.");
+        OnInventoryChanged?.Invoke(); // Notify inventory change
     }
 
     // Equip/Use an item from the inventory (but not delete it)

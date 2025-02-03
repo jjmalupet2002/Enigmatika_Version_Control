@@ -31,11 +31,6 @@ public class PlayerJoystickControl : MonoBehaviour
     private float idleTimer = 0f; // Timer to track idle time
     private const float idleThreshold = 15f; // Time threshold for secondary idle animation
 
-    private void Start()
-    {
-        LoadPlayerPosition(); // Ensure this is called when the game starts
-    }
-
     private void Awake()
     {
         // Automatically assign the main camera transform if not already set
