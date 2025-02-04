@@ -10,6 +10,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
 
     public Collider portalCollider; // Collider for the portal objective
     public Collider exitPortalRoomCollider; // Collider for the final objective
+    public Collider PortalRoomExit; // Box Collider for the portal room exit
 
     public GameObject hoodedFigureUI; // UI game object for the hooded figure objective
     public GameObject bookUI; // UI game object for the book objective
@@ -35,6 +36,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     void Start()
     {
         currentState = QuestState.EscapePortal;
+        PortalRoomExit.gameObject.SetActive(false); // Disable at start
         UpdateObjectiveText();
     }
 
@@ -83,17 +85,19 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
                 break;
 
             case QuestState.ExitPortalRoom:
+                PortalRoomExit.gameObject.SetActive(true); // Activate when reaching ExitPortalRoom state
+
                 if (IsPlayerInRange(exitPortalRoomCollider, exitPortalRoomInteractRange))
                 {
                     currentState = QuestState.Complete;
                     UpdateObjectiveText();
-                    isQuestComplete = true; // Mark the quest as complete
-                    StartCoroutine(HideCompleteTextAfterDelay(2f)); // Hide the complete text after 2 seconds
+                    isQuestComplete = true;
+                    StartCoroutine(HideCompleteTextAfterDelay(2f));
                 }
                 break;
 
             case QuestState.Complete:
-                // Quest complete, you can add any additional logic here if needed
+                PortalRoomExit.gameObject.SetActive(false); // Disable once quest is complete
                 break;
         }
     }
