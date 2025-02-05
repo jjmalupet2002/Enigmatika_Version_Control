@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EscapePortalRoomShortQuest : MonoBehaviour
 {
-    public Text objectiveText; // Reference to the UI text component for displaying objectives
-    public Transform player; // Reference to the player's transform
+    public Text objectiveText; // UI text component for displaying objectives
+    public Transform player; // Player's transform
 
-    public Collider portalCollider; // Collider for the portal objective
-    public Collider exitPortalRoomCollider; // Collider for the final objective
-    public Collider PortalRoomExit; // Box Collider for the portal room exit
+    public Collider portalCollider; // Portal objective collider
+    public Collider exitPortalRoomCollider; // Final objective collider
+    public Collider PortalRoomExit; // Portal room exit collider
+    public GameObject EscapeFailedCutscene; // Cutscene game object
+    public Button EndEscapeCutsceneButton; // Button to exit cutscene
 
-    public GameObject hoodedFigureUI; // UI game object for the hooded figure objective
-    public GameObject bookUI; // UI game object for the book objective
+    public GameObject hoodedFigureUI; // Hooded figure UI
+    public GameObject bookUI; // Book UI
 
-    public float portalInteractRange = 5f; // Interaction range for the portal objective
-    public float exitPortalRoomInteractRange = 5f; // Interaction range for the final objective
+    public float portalInteractRange = 5f;
+    public float exitPortalRoomInteractRange = 5f;
     public bool IntroQuestFinished = false;
 
     private enum QuestState
@@ -35,8 +38,22 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
 
     void Start()
     {
+        if (portalCollider == null)
+        {
+            UnityEngine.Debug.LogError("portalCollider is not assigned!", this);
+        }
+
+        if (EndEscapeCutsceneButton != null)
+        {
+            EndEscapeCutsceneButton.onClick.AddListener(DisableEscapeCutscene);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("EndEscapeCutsceneButton is not assigned!", this);
+        }
+
         currentState = QuestState.EscapePortal;
-        PortalRoomExit.gameObject.SetActive(false); // Disable at start
+        PortalRoomExit.gameObject.SetActive(false);
         UpdateObjectiveText();
     }
 
@@ -85,7 +102,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
                 break;
 
             case QuestState.ExitPortalRoom:
-                PortalRoomExit.gameObject.SetActive(true); // Activate when reaching ExitPortalRoom state
+                PortalRoomExit.gameObject.SetActive(true);
 
                 if (IsPlayerInRange(exitPortalRoomCollider, exitPortalRoomInteractRange))
                 {
@@ -97,7 +114,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
                 break;
 
             case QuestState.Complete:
-                PortalRoomExit.gameObject.SetActive(false); // Disable once quest is complete
+                PortalRoomExit.gameObject.SetActive(false);
                 break;
         }
     }
@@ -109,6 +126,11 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
         {
             if (hitCollider.CompareTag("Player"))
             {
+                // Only trigger the cutscene if the quest is NOT complete
+                if (!isQuestComplete && currentState == QuestState.EscapePortal)
+                {
+                    EscapeFailedCutscene.SetActive(true);
+                }
                 return true;
             }
         }
@@ -147,6 +169,14 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     IEnumerator HideCompleteTextAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        objectiveText.text = ""; // Clear the text after the delay
+        objectiveText.text = "";
+    }
+
+    void DisableEscapeCutscene()
+    {
+        if (EscapeFailedCutscene != null)
+        {
+            EscapeFailedCutscene.SetActive(false);
+        }
     }
 }

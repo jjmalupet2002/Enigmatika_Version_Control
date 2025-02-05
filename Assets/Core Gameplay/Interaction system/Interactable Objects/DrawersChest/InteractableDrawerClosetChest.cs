@@ -305,12 +305,24 @@ public class InteractableDrawerClosetChest : MonoBehaviour
                 isDrawerLocked = false;
                 PlaySound(OpenUsingKeyAudio);
                 onUnlockDrawer.Invoke(); // Trigger unlock action for drawer
+
+                // Disable the drawer locked text
+                if (drawerLockedText != null)
+                {
+                    drawerLockedText.gameObject.SetActive(false);
+                }
             }
             else if (isChest)
             {
                 isChestLocked = false;
                 PlaySound(OpenUsingKeyAudio);
                 onUnlockChest.Invoke(); // Trigger unlock action for chest
+
+                // Disable the chest locked text
+                if (chestLockedText != null)
+                {
+                    chestLockedText.gameObject.SetActive(false);
+                }
             }
 
             // Remove the key after unlocking
@@ -322,9 +334,6 @@ public class InteractableDrawerClosetChest : MonoBehaviour
             // Reset the flags after unlocking
             isUnlockButtonClicked = false; // Reset the button click flag
             hasUsedKey = false; // Reset the key use flag
-        }
-        else
-        {
         }
     }
 
