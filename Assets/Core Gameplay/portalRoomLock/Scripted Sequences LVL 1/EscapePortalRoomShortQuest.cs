@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+using Save;
+using CarterGames.Assets.SaveManager;
 
 public class EscapePortalRoomShortQuest : MonoBehaviour
 {
@@ -20,7 +22,10 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
 
     public float portalInteractRange = 5f;
     public float exitPortalRoomInteractRange = 5f;
+
+    [Header("Saving and Loading")]
     public bool IntroQuestFinished = false;
+    public Tutorial_IntroQuestSaveObject tutorialSaveObject;
 
     private enum QuestState
     {
@@ -35,6 +40,20 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
 
     private QuestState currentState;
     private bool isQuestComplete = false;
+
+    private void OnEnable()
+    {
+        // Subscribe to the save and load events
+        SaveEvents.OnSaveGame += SaveQuestState;
+        SaveEvents.OnLoadGame += LoadQuestState;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from the save and load events
+        SaveEvents.OnSaveGame -= SaveQuestState;
+        SaveEvents.OnLoadGame -= LoadQuestState;
+    }
 
     void Start()
     {
@@ -53,8 +72,8 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
         }
 
         currentState = QuestState.EscapePortal;
-        PortalRoomExit.gameObject.SetActive(false);
         UpdateObjectiveText();
+        PortalRoomExit.gameObject.SetActive(false);
     }
 
     void Update()
@@ -115,6 +134,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
 
             case QuestState.Complete:
                 PortalRoomExit.gameObject.SetActive(false);
+                PortalRoomExit.gameObject.SetActive(true);
                 break;
         }
     }
@@ -177,6 +197,43 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
         if (EscapeFailedCutscene != null)
         {
             EscapeFailedCutscene.SetActive(false);
+        }
+    }
+
+    // Save the current quest state
+    private void SaveQuestState()
+    {
+        // Save the state by setting the Value
+        tutorialSaveObject.currentQuestState.Value = (int)currentState;
+    }
+
+    // Load the saved quest state
+    private void LoadQuestState()
+    {
+        int savedState = tutorialSaveObject.currentQuestState.Value;
+        UnityEngine.Debug.Log("Loaded state: " + savedState);
+        currentState = (QuestState)savedState;
+
+        // Debug log the current state
+        UnityEngine.Debug.Log("Current state after load: " + currentState);
+
+        if (currentState == QuestState.ExitPortalRoom || currentState == QuestState.Complete)
+        {
+            PortalRoomExit.gameObject.SetActive(true);
+        }
+        else
+        {
+            PortalRoomExit.gameObject.SetActive(false);
+        }
+
+        if (currentState == QuestState.Complete)
+        {
+            objectiveText.text = "";
+            IntroQuestFinished = true;  // Ensure this is set after loading
+        }
+        else
+        {
+            UpdateObjectiveText();
         }
     }
 }

@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Save;
+using CarterGames.Assets.SaveManager;
+using System.Diagnostics;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -28,25 +31,47 @@ public class TutorialManager : MonoBehaviour
     public HintPointManager hintManager;
 
     [Header("Video Cutscene")]
-    public RawImage videoRawImage; // The UI RawImage displaying the render texture
-    public VideoPlayer videoPlayer; // The VideoPlayer component
+    public RawImage videoRawImage;
+    public VideoPlayer videoPlayer;
 
-    void Start()
+    [Header("Saving and Loading")]
+    public bool IsTutorialFinished = false;
+    public Tutorial_IntroQuestSaveObject tutorialSaveObject;
+
+    private void OnEnable()
     {
-        // Ensure the actual UI and skip UI are inactive at the start
+        // Subscribe to the save and load events
+        SaveEvents.OnSaveGame += SaveTutorialState;
+        SaveEvents.OnLoadGame += LoadTutorialState;
+    }
+
+    private void OnDisable()
+    {
+        // Unsubscribe from the save and load events
+        SaveEvents.OnSaveGame -= SaveTutorialState;
+        SaveEvents.OnLoadGame -= LoadTutorialState;
+    }
+
+    private void Start()
+    {
+        if (IsTutorialFinished)
+        {
+            SkipTutorial();  // If the tutorial was already finished, skip it automatically
+            return;
+        }
+
+        // Ensure UI states at start
         actualUI.SetActive(false);
         skipUI.SetActive(false);
-
-        // Ensure the cutscene UI is active at the start and show the first page
         cutsceneUI.SetActive(true);
         page1.SetActive(true);
         page2.SetActive(false);
         StartCoroutine(FadeInImage(cutSceneImage1));
 
-        // Play the tutorial music
+        // Play tutorial music
         tutorialMusic.Play();
 
-        // Add listeners to the buttons
+        // Add button listeners
         skipButton.onClick.AddListener(ShowSkipConfirmation);
         yesButton.onClick.AddListener(SkipTutorial);
         noButton.onClick.AddListener(CancelSkip);
@@ -54,64 +79,75 @@ public class TutorialManager : MonoBehaviour
         endButton.onClick.AddListener(ShowTutorial);
     }
 
-    IEnumerator PlayCutsceneVideo()
+    private void SkipTutorial()
     {
-        if (videoPlayer != null && videoRawImage != null)
-        {
-            videoRawImage.gameObject.SetActive(true); // Ensure the video UI is visible
-            videoPlayer.Play();
-            yield return new WaitForSeconds(5f); // Wait for 5 seconds
-            videoPlayer.Stop();
-            videoRawImage.gameObject.SetActive(false); // Hide the video UI
-        }
-    }
-
-    void ShowPage2()
-    {
-        // Show the second page and hide the first page
-        page1.SetActive(false);
-        page2.SetActive(true);
-        StartCoroutine(FadeInImage(cutSceneImage2));
-    }
-
-    void ShowTutorial()
-    {
-        // Hide the cutscene UI and show the actual tutorial UI
-        cutsceneUI.SetActive(false);
-        actualUI.SetActive(true);
-        // Play the cutscene video
-        StartCoroutine(PlayCutsceneVideo());
-    }
-
-    void ShowSkipConfirmation()
-    {
-        // Show the skip confirmation UI and disable the skip button
-        skipUI.SetActive(true);
-        skipButton.gameObject.SetActive(false);
-    }
-
-    void SkipTutorial()
-    {
-        // Stop the music and deactivate all UIs
         tutorialMusic.Stop();
         actualUI.SetActive(false);
         skipUI.SetActive(false);
         cutsceneUI.SetActive(false);
         simpleTimer.StartTimer();
         hintManager.ResetHintPoints();
+        IsTutorialFinished = true;
+        SaveTutorialState();
 
-        // Play the post-tutorial audio
         postTutorialAudio.Play();
     }
 
-    void CancelSkip()
+    private void SaveTutorialState()
     {
-        // Hide the skip confirmation UI and re-enable the skip button
+        tutorialSaveObject.isTutorialFinished.Value = IsTutorialFinished;
+    }
+
+    private void LoadTutorialState()
+    {
+        IsTutorialFinished = tutorialSaveObject.isTutorialFinished.Value;
+
+        // If the tutorial is finished, skip the tutorial automatically
+        if (IsTutorialFinished)
+        {
+            SkipTutorial();
+        }
+    }
+
+    private void ShowPage2()
+    {
+        page1.SetActive(false);
+        page2.SetActive(true);
+        StartCoroutine(FadeInImage(cutSceneImage2));
+    }
+
+    private void ShowTutorial()
+    {
+        cutsceneUI.SetActive(false);
+        actualUI.SetActive(true);
+        StartCoroutine(PlayCutsceneVideo());
+    }
+
+    private void ShowSkipConfirmation()
+    {
+        skipUI.SetActive(true);
+        skipButton.gameObject.SetActive(false);
+    }
+
+    private void CancelSkip()
+    {
         skipUI.SetActive(false);
         skipButton.gameObject.SetActive(true);
     }
 
-    IEnumerator FadeInImage(Image image)
+    private IEnumerator PlayCutsceneVideo()
+    {
+        if (videoPlayer != null && videoRawImage != null)
+        {
+            videoRawImage.gameObject.SetActive(true);
+            videoPlayer.Play();
+            yield return new WaitForSeconds(5f);
+            videoPlayer.Stop();
+            videoRawImage.gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator FadeInImage(Image image)
     {
         Color color = image.color;
         color.a = 0;
@@ -119,7 +155,7 @@ public class TutorialManager : MonoBehaviour
 
         while (color.a < 1)
         {
-            color.a += Time.deltaTime / 1f; // Adjust the duration of the fade-in effect as needed
+            color.a += Time.deltaTime / 1f;
             image.color = color;
             yield return null;
         }

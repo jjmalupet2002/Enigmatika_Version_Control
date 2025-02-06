@@ -8,6 +8,10 @@ public class HintUIManager : MonoBehaviour
     public Button hintButton;
     public GameObject hintPointIcon;
 
+    private float cooldownTime = 300f; // 5 minutes in seconds
+    private float lastHintTime = -300f; // Last time hint button was displayed
+    private bool isCooldownActive = false;
+
     private void OnEnable()
     {
         hintPointManager.onHintPointsUpdated.AddListener(UpdateHintPointsUI);
@@ -32,6 +36,14 @@ public class HintUIManager : MonoBehaviour
         {
             hintButton.gameObject.SetActive(false); // Disable hint button if close-up camera is not active
         }
+        else
+        {
+            // Check cooldown status and if enough time has passed, allow the button to display
+            if (Time.time - lastHintTime >= cooldownTime)
+            {
+                isCooldownActive = false;
+            }
+        }
     }
 
     private void UpdateHintPointsUI()
@@ -42,7 +54,7 @@ public class HintUIManager : MonoBehaviour
     public void DisplayHintButton()
     {
         // Check if the close-up camera is active and show the hint button if so
-        if (IsCloseUpCameraActive())
+        if (IsCloseUpCameraActive() && !isCooldownActive)
         {
             hintButton.gameObject.SetActive(true); // Show the hint button when the close-up camera is active
         }
@@ -50,8 +62,13 @@ public class HintUIManager : MonoBehaviour
 
     private void OnHintButtonPressed()
     {
-        hintPointManager.SubtractHintPoints(1); // Adjust the number of points subtracted as needed
-        hintButton.gameObject.SetActive(false); // Optionally hide the button after use
+        if (!isCooldownActive)
+        {
+            hintPointManager.SubtractHintPoints(1); // Adjust the number of points subtracted as needed
+            hintButton.gameObject.SetActive(false); // Optionally hide the button after use
+            lastHintTime = Time.time; // Record the time the button was pressed
+            isCooldownActive = true; // Start the cooldown
+        }
     }
 
     // Method to check if the close-up camera is active
