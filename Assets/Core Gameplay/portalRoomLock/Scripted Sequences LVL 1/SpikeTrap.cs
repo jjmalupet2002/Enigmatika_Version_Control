@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using CarterGames.Assets.SaveManager;
+using Save;
 
 public class SpikeTrap : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class SpikeTrap : MonoBehaviour
     public float spikeMovementDelay = 1f;
     public AudioSource trapSpikeSound;
     public AudioSource unlockSpikeSound;
+    public PuzzlesStates1SaveObject spikeTrapSaveObject;
 
     // Reference to the Gold King Trigger object
     public Transform goldKingTrigger; // Assign in Inspector
@@ -64,6 +67,18 @@ public class SpikeTrap : MonoBehaviour
             UnlockSpike();
             unlockSpike = false; // Prevent repeated unlocks
         }
+    }
+
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveSpikeState;
+        SaveEvents.OnLoadGame += LoadSpikeState;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveSpikeState;
+        SaveEvents.OnLoadGame -= LoadSpikeState;
     }
 
     private void TriggerSpikeTrap()
@@ -121,6 +136,20 @@ public class SpikeTrap : MonoBehaviour
         }
 
         StartCoroutine(DeactivateSpike());
+    }
+
+    private void SaveSpikeState()
+    {
+        spikeTrapSaveObject.spikePosition.Value = spikeObject.transform.position;
+        spikeTrapSaveObject.isSpikeUnlocked.Value = isSpikeUnlocked;
+        spikeTrapSaveObject.currentSpikeState.Value = (int)currentSpikeState;
+    }
+
+    private void LoadSpikeState()
+    {
+        spikeObject.transform.position = spikeTrapSaveObject.spikePosition.Value;
+        isSpikeUnlocked = spikeTrapSaveObject.isSpikeUnlocked.Value;
+        currentSpikeState = (SpikeState)spikeTrapSaveObject.currentSpikeState.Value;
     }
 
     private IEnumerator DeactivateSpike()

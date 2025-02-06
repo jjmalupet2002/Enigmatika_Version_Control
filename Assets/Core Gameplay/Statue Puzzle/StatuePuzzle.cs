@@ -2,6 +2,9 @@ using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using CarterGames.Assets.SaveManager;
+using Save;
+
 
 public class StatuePuzzle : MonoBehaviour
 {
@@ -26,8 +29,10 @@ public class StatuePuzzle : MonoBehaviour
     public float ThiefEndY;
     public AudioSource ThiefHideoutRising;
 
-    [Header("Input System")]
+    [Header("Input System and Save System")]
     public InputActionAsset inputActions;
+    public PuzzlesStates1SaveObject statuePuzzleSaveObject;
+
 
     private InputAction rotateAction;
     private bool isRotatingKnight1 = false;
@@ -66,6 +71,36 @@ public class StatuePuzzle : MonoBehaviour
         {
             RotateKnight(Knight2, Knight2RotateAudio, Knight2EndY);
         }
+    }
+
+    // Save puzzle state
+    private void SaveStatuePuzzleState()
+    {
+        statuePuzzleSaveObject.knight1Rotation.Value = Knight1.transform.rotation.eulerAngles;
+        statuePuzzleSaveObject.knight2Rotation.Value = Knight2.transform.rotation.eulerAngles;
+        statuePuzzleSaveObject.allStatueRotated.Value = allStatueRotated;
+        statuePuzzleSaveObject.thiefHideoutPosition.Value = ThiefHideout.transform.position;
+    }
+
+    // Load puzzle state
+    private void LoadStatuePuzzleState()
+    {
+        Knight1.transform.rotation = Quaternion.Euler(statuePuzzleSaveObject.knight1Rotation.Value);
+        Knight2.transform.rotation = Quaternion.Euler(statuePuzzleSaveObject.knight2Rotation.Value);
+        allStatueRotated = statuePuzzleSaveObject.allStatueRotated.Value;
+        ThiefHideout.transform.position = statuePuzzleSaveObject.thiefHideoutPosition.Value;
+    }
+
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveStatuePuzzleState;
+        SaveEvents.OnLoadGame += LoadStatuePuzzleState;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveStatuePuzzleState;
+        SaveEvents.OnLoadGame -= LoadStatuePuzzleState;
     }
 
     private void CheckRaycast()

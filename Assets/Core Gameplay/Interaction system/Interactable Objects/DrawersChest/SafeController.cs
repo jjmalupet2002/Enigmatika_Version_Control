@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Diagnostics;
+using CarterGames.Assets.SaveManager;
+using Save;
 
 public class SafeController : MonoBehaviour
 {
@@ -46,6 +48,7 @@ public class SafeController : MonoBehaviour
 
     [Header("Unity Event - What happens when you open the safe?")]
     public UnityEvent onSafeOpened;
+    public PuzzlesStates1SaveObject safeStateSaveObject;
 
     private int currentNum1;
     private int currentNum2;
@@ -122,7 +125,7 @@ public class SafeController : MonoBehaviour
         }
         else
         {
-            
+
         }
     }
 
@@ -161,6 +164,18 @@ public class SafeController : MonoBehaviour
             PlayWrongCombinationSound(); // Play sound
             Invoke("HideWrongCombinationUI", 2f); // Hide after 2 seconds
         }
+    }
+
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveSafeState;
+        SaveEvents.OnLoadGame += LoadSafeState;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveSafeState;
+        SaveEvents.OnLoadGame -= LoadSafeState;
     }
 
     private void RegisterSafePuzzleHint()
@@ -229,6 +244,21 @@ public class SafeController : MonoBehaviour
         if (safeAlreadyOpenAudioSource != null)
         {
             safeAlreadyOpenAudioSource.Play();
+        }
+    }
+
+    private void SaveSafeState()
+    {
+        safeStateSaveObject.isSafeOpened.Value = isSafeOpened;
+    }
+
+    private void LoadSafeState()
+    {
+        isSafeOpened = safeStateSaveObject.isSafeOpened.Value;
+        if (isSafeOpened)
+        {
+            safeAnimator.SetTrigger("Open");
+            safeInspectButton.gameObject.SetActive(false);
         }
     }
 }
