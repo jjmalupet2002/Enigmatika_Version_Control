@@ -54,16 +54,50 @@ public class PlayerJoystickControl : MonoBehaviour
         UnityEngine.Debug.Log($"Saved Position: {transform.position}");
     }
 
+    private bool hasLoadedPosition = false;
+
+    // This function is triggered when you manually load the game
+    public void ManuallyLoadPlayerPosition()
+    {
+        if (!hasLoadedPosition)
+        {
+            LoadPlayerPosition();
+        }
+    }
+
     private void LoadPlayerPosition()
     {
         if (playerPositionSaveObject.playerPosition.Value != Vector3.zero)
         {
-            transform.position = playerPositionSaveObject.playerPosition.Value;
+            // Temporarily disable gravity to prevent unwanted sliding
+            playerRigid.useGravity = false;
+
+            // Move the Rigidbody to the saved position
+            playerRigid.MovePosition(playerPositionSaveObject.playerPosition.Value);
+
+            // Reset velocity to ensure no unintended forces are applied
+            playerRigid.velocity = Vector3.zero;
+
+            hasLoadedPosition = true;
             UnityEngine.Debug.Log($"Loaded Position: {transform.position}");
+
+            // Re-enable gravity after setting position
+            playerRigid.useGravity = true;
         }
         else
         {
             UnityEngine.Debug.Log("No saved position found.");
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // Removed the call to LoadPlayerPosition() here
+        if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
+        {
+            MovePlayer();
+            ClimbStairs();
+            ApplyGravity();
         }
     }
 
@@ -101,18 +135,6 @@ public class PlayerJoystickControl : MonoBehaviour
         if (isInputEnabled)
         {
             movementInput = Vector2.zero;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
-        {
-            MovePlayer();
-            ClimbStairs(); // Call the stair climbing method
-
-            // Add gravity logic
-            ApplyGravity();
         }
     }
 
