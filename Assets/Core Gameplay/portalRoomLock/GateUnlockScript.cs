@@ -42,7 +42,7 @@ public class GateUnlockScript : MonoBehaviour
     public Camera portalRoomCamera; // Reference to the camera component (PortalRoomCamera)
     public GameObject EscapeText;
     [SerializeField] private PortalRoomTrapLockSaveObject saveObject; // Reference to the save object
-
+  
     // Variables for item usage and button click
     private bool[] isUnlockButtonClicked; // Array to track button click states
     private bool[] hasUsedKey; // Array to track if the correct key has been used
@@ -50,6 +50,7 @@ public class GateUnlockScript : MonoBehaviour
 
     // Track each lock object's unlock state
     private bool[] lockStates;
+    private bool[] keyAnimationStates;
 
     private void OnEnable()
     {
@@ -63,6 +64,10 @@ public class GateUnlockScript : MonoBehaviour
         currentItems = new ItemData[unlockButtons.Length];
         lockStates = new bool[unlockButtons.Length];
         keyAnimators = new Animator[keyObjects.Length];
+
+        // Load saved states if available
+        lockStates = saveObject.lockStates.Value ?? new bool[unlockButtons.Length];
+        keyAnimationStates = saveObject.keyAnimationStates.Value ?? new bool[keyObjects.Length];
 
         // Subscribe to the button click events
         for (int i = 0; i < unlockButtons.Length; i++)
@@ -98,47 +103,26 @@ public class GateUnlockScript : MonoBehaviour
 
     private void SaveLockState()
     {
-        // Ensure arrays are initialized properly
-        if (saveObject.lockStates.Value == null || saveObject.lockStates.Value.Length != lockObjects.Length)
-            saveObject.lockStates.Value = new bool[lockObjects.Length];
-
-        if (saveObject.keyAnimationStates.Value == null || saveObject.keyAnimationStates.Value.Length != keyObjects.Length)
-            saveObject.keyAnimationStates.Value = new bool[keyObjects.Length];
-
-        // Save all lock and key states
-        for (int i = 0; i < lockObjects.Length; i++)
-        {
-            saveObject.lockStates.Value[i] = !lockObjects[i].activeSelf; // If inactive, it's unlocked
-
-            var animState = keyAnimators[i].GetCurrentAnimatorStateInfo(0);
-            saveObject.keyAnimationStates.Value[i] = animState.IsName("Unlocked") && animState.normalizedTime >= 1.0f; // Ensure animation is fully completed
-        }
+        saveObject.lockStates.Value = lockStates;
+        saveObject.keyAnimationStates.Value = keyAnimationStates;
     }
 
     private void LoadLockState()
     {
-        // Ensure arrays are initialized
-        if (saveObject.lockStates.Value == null || saveObject.lockStates.Value.Length < lockObjects.Length)
-            saveObject.lockStates.Value = new bool[lockObjects.Length];
+        lockStates = saveObject.lockStates.Value ?? new bool[unlockButtons.Length];
+        keyAnimationStates = saveObject.keyAnimationStates.Value ?? new bool[keyObjects.Length];
 
-        if (saveObject.keyAnimationStates.Value == null || saveObject.keyAnimationStates.Value.Length < keyObjects.Length)
-            saveObject.keyAnimationStates.Value = new bool[keyObjects.Length];
-
-        for (int i = 0; i < lockObjects.Length; i++)
+        for (int i = 0; i < lockStates.Length; i++)
         {
-            lockStates[i] = saveObject.lockStates.Value[i];
-
             if (lockStates[i])
             {
-                DisableUnlockButton(i); // Disable unlock button
+                // Ensure buttons are disabled for already unlocked locks
+                DisableUnlockButton(i);
             }
-        }
 
-        for (int i = 0; i < keyObjects.Length; i++)
-        {
-            if (saveObject.keyAnimationStates.Value[i])
+            if (keyAnimationStates[i] && keyAnimators[i] != null)
             {
-                keyAnimators[i].SetTrigger(unlockTrigger); // Play animation if previously unlocked
+                keyAnimators[i].SetTrigger(unlockTrigger);
             }
         }
     }
@@ -184,6 +168,7 @@ public class GateUnlockScript : MonoBehaviour
             if (keyAnimators[index] != null)
             {
                 keyAnimators[index].SetTrigger(unlockTrigger);
+                keyAnimationStates[index] = true; // Mark animation as played
                 UnityEngine.Debug.Log($"Unlock animation triggered on key {index}!");
             }
 
@@ -223,6 +208,9 @@ public class GateUnlockScript : MonoBehaviour
                 return; // Exit if any lock is still locked
             }
         }
+
+        // Debug to check if it's reaching this point
+        UnityEngine.Debug.Log("All locks are unlocked, attempting to unlock the gate!");
 
         // All locks are unlocked, unlock the gate
         trapGateScript.UnlockGate();

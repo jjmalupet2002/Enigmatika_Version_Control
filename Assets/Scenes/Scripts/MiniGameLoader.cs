@@ -39,9 +39,6 @@ public class MiniGameLoader : MonoBehaviour
         // Store the initial position of the trapGate
         initialTrapGatePosition = trapGateObject.position;
 
-        // Load saved state
-        LoadMiniGameState();
-
         // Add the button listener for the "End Button"
         endButton.onClick.AddListener(LoadMiniGameScene);
     }
@@ -85,9 +82,6 @@ public class MiniGameLoader : MonoBehaviour
         {
             EscapeText.SetActive(false);
         }
-
-        // Save state after cutscene starts
-        SaveMiniGameState();
     }
 
     private IEnumerator ShowCutsceneImages()

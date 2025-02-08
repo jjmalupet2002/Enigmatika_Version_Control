@@ -114,6 +114,7 @@ public class TrapGate : MonoBehaviour
 
     public void UnlockGate()
     {
+        UnityEngine.Debug.Log("UnlockGate() called: Opening the gate!");
         if (isGateUnlocked) return;
 
         isGateUnlocked = true;
