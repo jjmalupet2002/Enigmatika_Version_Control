@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using CarterGames.Assets.SaveManager; // Import SaveManager for saving/loading
+using Save;
 
 public class GateUnlockScript : MonoBehaviour
 {
@@ -39,6 +41,7 @@ public class GateUnlockScript : MonoBehaviour
     [Header("Camera Reference")]
     public Camera portalRoomCamera; // Reference to the camera component (PortalRoomCamera)
     public GameObject EscapeText;
+    [SerializeField] private PortalRoomTrapLockSaveObject saveObject; // Reference to the save object
 
     // Variables for item usage and button click
     private bool[] isUnlockButtonClicked; // Array to track button click states
@@ -51,6 +54,8 @@ public class GateUnlockScript : MonoBehaviour
     private void OnEnable()
     {
         InventoryManager.Instance.OnItemUsed += OnItemUsed;
+        SaveEvents.OnSaveGame += SaveLockState;
+        SaveEvents.OnLoadGame += LoadLockState;
 
         // Initialize arrays
         isUnlockButtonClicked = new bool[unlockButtons.Length];
@@ -78,6 +83,8 @@ public class GateUnlockScript : MonoBehaviour
     private void OnDisable()
     {
         InventoryManager.Instance.OnItemUsed -= OnItemUsed;
+        SaveEvents.OnSaveGame += SaveLockState;
+        SaveEvents.OnLoadGame += LoadLockState;
 
         // Unsubscribe from the button click events
         for (int i = 0; i < unlockButtons.Length; i++)
@@ -89,6 +96,57 @@ public class GateUnlockScript : MonoBehaviour
         }
     }
 
+    private void SaveLockState()
+    {
+        UnityEngine.Debug.Log("Saving Lock State...");
+
+        if (saveObject.lockStates.Value == null || saveObject.lockStates.Value.Length != lockObjects.Length)
+            saveObject.lockStates.Value = new bool[lockObjects.Length];
+
+        if (saveObject.keyAnimationStates.Value == null || saveObject.keyAnimationStates.Value.Length != keyObjects.Length)
+            saveObject.keyAnimationStates.Value = new bool[keyObjects.Length];
+
+        for (int i = 0; i < lockObjects.Length; i++)
+        {
+            saveObject.lockStates.Value[i] = !lockObjects[i].activeSelf;
+            saveObject.keyAnimationStates.Value[i] = keyAnimators[i].GetCurrentAnimatorStateInfo(0).IsName("Unlocked");
+
+            UnityEngine.Debug.Log($"Lock {i} saved state: {saveObject.lockStates.Value[i]}");
+            UnityEngine.Debug.Log($"Key {i} saved animation state: {saveObject.keyAnimationStates.Value[i]}");
+        }
+    }
+
+    private void LoadLockState()
+    {
+        UnityEngine.Debug.Log("Loading Lock State...");
+
+        if (saveObject.lockStates.Value == null || saveObject.lockStates.Value.Length < lockObjects.Length)
+            saveObject.lockStates.Value = new bool[lockObjects.Length];
+
+        if (saveObject.keyAnimationStates.Value == null || saveObject.keyAnimationStates.Value.Length < keyObjects.Length)
+            saveObject.keyAnimationStates.Value = new bool[keyObjects.Length];
+
+        for (int i = 0; i < lockObjects.Length; i++)
+        {
+            lockObjects[i].SetActive(!saveObject.lockStates.Value[i]); // Set active state correctly
+
+            if (saveObject.lockStates.Value[i])
+            {
+                DisableUnlockButton(i); // Disable unlock button
+            }
+
+            UnityEngine.Debug.Log($"Lock {i} loaded state: {saveObject.lockStates.Value[i]}");
+        }
+
+        for (int i = 0; i < keyObjects.Length; i++)
+        {
+            if (saveObject.keyAnimationStates.Value[i])
+            {
+                keyAnimators[i].SetTrigger(unlockTrigger);
+                UnityEngine.Debug.Log($"Key {i} animation state re-triggered.");
+            }
+        }
+    }
 
     // When the item is used, update the hasUsedKey flags accordingly
     private void OnItemUsed(ItemData item)

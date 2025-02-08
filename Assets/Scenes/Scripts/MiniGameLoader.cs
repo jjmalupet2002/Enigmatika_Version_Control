@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement; // For scene loading
 using UnityEngine.UI; // For button interaction
+using CarterGames.Assets.SaveManager; // Import SaveManager for saving/loading
+using Save;
 
 public class MiniGameLoader : MonoBehaviour
 {
@@ -15,15 +17,30 @@ public class MiniGameLoader : MonoBehaviour
     public Button endButton;          // End button to trigger the scene load
 
     private Vector3 initialTrapGatePosition; // Store the initial position of the trapGate
-
     private bool isCutsceneActive = false;  // Flag to track cutscene state
     public GameObject EscapeText;
 
+    [SerializeField] private PortalRoomTrapLockSaveObject saveObject; // Reference to the save object
+
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveMiniGameState;
+        SaveEvents.OnLoadGame += LoadMiniGameState;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveMiniGameState;
+        SaveEvents.OnLoadGame -= LoadMiniGameState;
+    }
 
     void Start()
     {
         // Store the initial position of the trapGate
         initialTrapGatePosition = trapGateObject.position;
+
+        // Load saved state
+        LoadMiniGameState();
 
         // Add the button listener for the "End Button"
         endButton.onClick.AddListener(LoadMiniGameScene);
@@ -40,24 +57,19 @@ public class MiniGameLoader : MonoBehaviour
         // If the MiniGameStarter collider is enabled, check for interaction range
         if (miniGameStarter.enabled && !isCutsceneActive)
         {
-            // Check if the player is within the interact range using OverlapSphere
             Collider[] colliders = Physics.OverlapSphere(miniGameStarter.transform.position, interactRange);
 
             foreach (Collider collider in colliders)
             {
-                // Check if the colliding object is tagged as "Player"
                 if (collider.CompareTag("Player"))
                 {
                     UnityEngine.Debug.Log("Player is within interact range, starting cutscene...");
-
-                    // Trigger the cutscene
                     StartCutscene();
                 }
             }
         }
     }
 
-    // Starts the cutscene sequence
     private void StartCutscene()
     {
         isCutsceneActive = true;
@@ -65,7 +77,7 @@ public class MiniGameLoader : MonoBehaviour
         // Show the cutscene page
         cutscenePage1.SetActive(true);
 
-        // Optionally, start a coroutine to display the slideshow images
+        // Start a coroutine to display the slideshow images
         StartCoroutine(ShowCutsceneImages());
 
         // Disable EscapeText if it is active
@@ -73,25 +85,41 @@ public class MiniGameLoader : MonoBehaviour
         {
             EscapeText.SetActive(false);
         }
+
+        // Save state after cutscene starts
+        SaveMiniGameState();
     }
 
-    // Coroutine to handle the slideshow of images
     private IEnumerator ShowCutsceneImages()
     {
-        // Show the first cutscene image
         cutsceneImage1.gameObject.SetActive(true);
-
-        // Wait for some time before allowing interaction (e.g., 5 seconds)
         yield return new WaitForSeconds(5f);
-
-        // After the cutscene, enable the End Button for interaction
         endButton.gameObject.SetActive(true);
     }
 
-    // Loads the "minigame1" scene when the End Button is clicked
     private void LoadMiniGameScene()
     {
         UnityEngine.Debug.Log("End Button clicked, loading minigame1...");
         SceneManager.LoadScene("minigame1");
+    }
+
+    // Save the EscapeText and miniGameStarter states
+    private void SaveMiniGameState()
+    {
+        if (saveObject != null)
+        {
+            saveObject.isEscapeTextActive.Value = EscapeText.activeSelf;
+            saveObject.isMiniGameStarterEnabled.Value = miniGameStarter.enabled;
+        }
+    }
+
+    // Load the EscapeText and miniGameStarter states
+    private void LoadMiniGameState()
+    {
+        if (saveObject != null)
+        {
+            EscapeText.SetActive(saveObject.isEscapeTextActive.Value);
+            miniGameStarter.enabled = saveObject.isMiniGameStarterEnabled.Value;
+        }
     }
 }

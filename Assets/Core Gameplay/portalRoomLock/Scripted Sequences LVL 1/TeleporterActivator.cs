@@ -1,11 +1,25 @@
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+using CarterGames.Assets.SaveManager; // Include SaveManager namespace
+using Save;
 
 public class TeleporterActivator : MonoBehaviour
 {
     public Text questCriteria; // Reference to the quest criteria text object
     public BoxCollider LibraryTeleporter; // Reference to the Library teleporter collider
+    public PortalRoomTrapLockSaveObject saveObject;
+
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveTeleporterState;
+        SaveEvents.OnLoadGame += LoadTeleporterState;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveTeleporterState;
+        SaveEvents.OnLoadGame -= LoadTeleporterState;
+    }
 
     void Start()
     {
@@ -30,7 +44,25 @@ public class TeleporterActivator : MonoBehaviour
         if (LibraryTeleporter != null && !LibraryTeleporter.enabled)
         {
             LibraryTeleporter.enabled = true;
-            UnityEngine.Debug.Log("Library Teleporter Enabled");
+            saveObject.isTeleporterActive.Value = true; // Save teleporter state
+            UnityEngine.Debug.Log("Library Teleporter Enabled and Saved.");
+        }
+    }
+
+    private void SaveTeleporterState()
+    {
+        if (saveObject != null)
+        {
+            saveObject.isTeleporterActive.Value = LibraryTeleporter.enabled;
+        }
+    }
+
+    private void LoadTeleporterState()
+    {
+        if (saveObject != null)
+        {
+            LibraryTeleporter.enabled = saveObject.isTeleporterActive.Value;
+            UnityEngine.Debug.Log($"Library Teleporter Loaded: {LibraryTeleporter.enabled}");
         }
     }
 }

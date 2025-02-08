@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1e7b4abbc67cbf429da22b6a6ac0202, type: 3}
   m_Name: PortalRoomTrapLockSaveObject
   m_EditorClassIdentifier: 
-  isExpanded: 0
+  isExpanded: 1
   saveKey: a0a428cb-c32a-452d-ba26-c80890f95e9f
   gatePosition:
     key: gatePosition
@@ -20,9 +20,29 @@ MonoBehaviour:
     defaultValue: {x: 0, y: 0, z: 0}
   isGateUnlocked:
     key: isGateUnlocked
-    value: 1
+    value: 0
     defaultValue: 0
   currentGateState:
     key: currentGateState
     value: 1
     defaultValue: 0
+  isTeleporterActive:
+    key: isTeleporterActive
+    value: 0
+    defaultValue: 0
+  isEscapeTextActive:
+    key: isEscapeTextActive
+    value: 0
+    defaultValue: 0
+  isMiniGameStarterEnabled:
+    key: isMiniGameStarterEnabled
+    value: 1
+    defaultValue: 0
+  lockStates:
+    key: lockStates
+    value: 00000000
+    defaultValue: 
+  keyAnimationStates:
+    key: keyAnimationStates
+    value: 00000000
+    defaultValue: 
