@@ -83,8 +83,8 @@ public class GateUnlockScript : MonoBehaviour
     private void OnDisable()
     {
         InventoryManager.Instance.OnItemUsed -= OnItemUsed;
-        SaveEvents.OnSaveGame += SaveLockState;
-        SaveEvents.OnLoadGame += LoadLockState;
+        SaveEvents.OnSaveGame -= SaveLockState;
+        SaveEvents.OnLoadGame -= LoadLockState;
 
         // Unsubscribe from the button click events
         for (int i = 0; i < unlockButtons.Length; i++)
@@ -98,28 +98,26 @@ public class GateUnlockScript : MonoBehaviour
 
     private void SaveLockState()
     {
-        UnityEngine.Debug.Log("Saving Lock State...");
-
+        // Ensure arrays are initialized properly
         if (saveObject.lockStates.Value == null || saveObject.lockStates.Value.Length != lockObjects.Length)
             saveObject.lockStates.Value = new bool[lockObjects.Length];
 
         if (saveObject.keyAnimationStates.Value == null || saveObject.keyAnimationStates.Value.Length != keyObjects.Length)
             saveObject.keyAnimationStates.Value = new bool[keyObjects.Length];
 
+        // Save all lock and key states
         for (int i = 0; i < lockObjects.Length; i++)
         {
-            saveObject.lockStates.Value[i] = !lockObjects[i].activeSelf;
-            saveObject.keyAnimationStates.Value[i] = keyAnimators[i].GetCurrentAnimatorStateInfo(0).IsName("Unlocked");
+            saveObject.lockStates.Value[i] = !lockObjects[i].activeSelf; // If inactive, it's unlocked
 
-            UnityEngine.Debug.Log($"Lock {i} saved state: {saveObject.lockStates.Value[i]}");
-            UnityEngine.Debug.Log($"Key {i} saved animation state: {saveObject.keyAnimationStates.Value[i]}");
+            var animState = keyAnimators[i].GetCurrentAnimatorStateInfo(0);
+            saveObject.keyAnimationStates.Value[i] = animState.IsName("Unlocked") && animState.normalizedTime >= 1.0f; // Ensure animation is fully completed
         }
     }
 
     private void LoadLockState()
     {
-        UnityEngine.Debug.Log("Loading Lock State...");
-
+        // Ensure arrays are initialized
         if (saveObject.lockStates.Value == null || saveObject.lockStates.Value.Length < lockObjects.Length)
             saveObject.lockStates.Value = new bool[lockObjects.Length];
 
@@ -128,22 +126,19 @@ public class GateUnlockScript : MonoBehaviour
 
         for (int i = 0; i < lockObjects.Length; i++)
         {
-            lockObjects[i].SetActive(!saveObject.lockStates.Value[i]); // Set active state correctly
+            lockStates[i] = saveObject.lockStates.Value[i];
 
-            if (saveObject.lockStates.Value[i])
+            if (lockStates[i])
             {
                 DisableUnlockButton(i); // Disable unlock button
             }
-
-            UnityEngine.Debug.Log($"Lock {i} loaded state: {saveObject.lockStates.Value[i]}");
         }
 
         for (int i = 0; i < keyObjects.Length; i++)
         {
             if (saveObject.keyAnimationStates.Value[i])
             {
-                keyAnimators[i].SetTrigger(unlockTrigger);
-                UnityEngine.Debug.Log($"Key {i} animation state re-triggered.");
+                keyAnimators[i].SetTrigger(unlockTrigger); // Play animation if previously unlocked
             }
         }
     }
