@@ -7,10 +7,8 @@ namespace Save
     [CreateAssetMenu(fileName = "DoorSaveObject")]
     public class DoorSaveObjectSaveObject : SaveObject
     {
-        [SerializeField] public SaveValue<bool> isDoorLocked = new SaveValue<bool>("isDoorLocked");
-        [SerializeField] public SaveValue<bool> isDoorOpened = new SaveValue<bool>("isDoorOpened");
-        [SerializeField] public SaveValue<bool> isButtonPressed = new SaveValue<bool>("isButtonPressed");
-        [SerializeField] public SaveValue<bool> isLeverUsed = new SaveValue<bool>("isLeverUsed");
+        [SerializeField] public SaveValue<bool[]> lockStates = new SaveValue<bool[]>("lockStates"); // To save lock/unlock states
+        [SerializeField] public SaveValue<bool[]> openStates = new SaveValue<bool[]>("openStates"); // To save open/closed states
 
     }
 }

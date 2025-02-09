@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CarterGames.Assets.SaveManager; // Include SaveManager namespace
 using Save;
+using System.Diagnostics;
 
 public class DoorObjectHandler : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class DoorObjectHandler : MonoBehaviour
     public bool CanClose = true;
 
     [Tooltip("When true, the door hinge is free to move, and the player will be able to move through.")]
-    public bool IsOpened = false;
+    public bool IsOpened { get; private set; } = false;
 
     [Tooltip("The interaction radius for the door.")]
     public float interactRange = 3f;
@@ -41,6 +42,7 @@ public class DoorObjectHandler : MonoBehaviour
 
     [Tooltip("Save System References")]
     public DoorSaveObjectSaveObject doorSaveObject;
+    public int doorIndex; // Assign a unique index to each door in the Inspector or dynamically in Awake()
 
     private HingeJoint hinge;
     private Rigidbody rbDoor;
@@ -170,20 +172,50 @@ public class DoorObjectHandler : MonoBehaviour
 
     private void SaveDoorState()
     {
-        // Save the door state
-        doorSaveObject.isDoorLocked.Value = Locked;
-        doorSaveObject.isDoorOpened.Value = IsOpened;
+        // Get local copies of the arrays
+        bool[] lockStates = doorSaveObject.lockStates.Value;
+        bool[] openStates = doorSaveObject.openStates.Value;
 
-        UnityEngine.Debug.Log("Saved door state: Locked = " + Locked + ", Opened = " + IsOpened);
+        if (lockStates.Length <= doorIndex)
+        {
+            // Expand the arrays and reassign them back to the properties
+            lockStates = ExpandArray(lockStates, doorIndex + 1);
+            openStates = ExpandArray(openStates, doorIndex + 1);
+
+            doorSaveObject.lockStates.Value = lockStates;
+            doorSaveObject.openStates.Value = openStates;
+        }
+
+        // Modify the array directly
+        lockStates[doorIndex] = Locked;
+        openStates[doorIndex] = IsOpened;
+
+        // Ensure the modified arrays are saved back
+        doorSaveObject.lockStates.Value = lockStates;
+        doorSaveObject.openStates.Value = openStates;
+
+        UnityEngine.Debug.Log($"Saved Door {doorIndex} - Locked: {Locked}, Opened: {IsOpened}");
     }
 
     private void LoadDoorState()
     {
-        // Load the door state
-        Locked = doorSaveObject.isDoorLocked.Value;
-        IsOpened = doorSaveObject.isDoorOpened.Value;
+        if (doorIndex >= 0 && doorIndex < doorSaveObject.lockStates.Value.Length)
+        {
+            Locked = doorSaveObject.lockStates.Value[doorIndex];
+            IsOpened = doorSaveObject.openStates.Value[doorIndex];
+            UnityEngine.Debug.Log($"Loaded Door {doorIndex} - Locked: {Locked}, Opened: {IsOpened}");
+        }
+    }
 
-        UnityEngine.Debug.Log("Loaded door state: Locked = " + Locked + ", Opened = " + IsOpened);
+    private bool[] ExpandArray(bool[] array, int newSize)
+    {
+        bool[] newArray = new bool[newSize];
+
+        // Copy old values
+        for (int i = 0; i < array.Length; i++)
+            newArray[i] = array[i];
+
+        return newArray; // Return the new expanded array
     }
 
     private void FixedUpdate()
