@@ -65,10 +65,6 @@ public class GateUnlockScript : MonoBehaviour
         lockStates = new bool[unlockButtons.Length];
         keyAnimators = new Animator[keyObjects.Length];
 
-        // Load saved states if available
-        lockStates = saveObject.lockStates.Value ?? new bool[unlockButtons.Length];
-        keyAnimationStates = saveObject.keyAnimationStates.Value ?? new bool[keyObjects.Length];
-
         // Subscribe to the button click events
         for (int i = 0; i < unlockButtons.Length; i++)
         {

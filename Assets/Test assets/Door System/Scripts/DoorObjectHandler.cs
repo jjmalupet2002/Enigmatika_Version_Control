@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using CarterGames.Assets.SaveManager; // Include SaveManager namespace
+using Save;
 
 public class DoorObjectHandler : MonoBehaviour
 {
@@ -37,6 +39,10 @@ public class DoorObjectHandler : MonoBehaviour
     [Tooltip("Audio source for Opening using key sound.")]
     public AudioSource OpeningUsingKey;
 
+    [Tooltip("Save System References")]
+    public DoorSaveObjectSaveObject doorSaveObject;
+    [SerializeField] private string doorID;
+
     private HingeJoint hinge;
     private Rigidbody rbDoor;
     private bool isPlayerNearby = false;
@@ -70,6 +76,18 @@ public class DoorObjectHandler : MonoBehaviour
     void Update()
     {
         CheckPlayerProximity();
+    }
+
+    void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveDoorState;
+        SaveEvents.OnLoadGame += LoadDoorState;
+    }
+
+    void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveDoorState;
+        SaveEvents.OnLoadGame -= LoadDoorState;
     }
 
     private void CheckPlayerProximity()
@@ -149,6 +167,25 @@ public class DoorObjectHandler : MonoBehaviour
                 ShowText(unlockedText);
             }
         }
+    }
+
+    private void SaveDoorState()
+    {
+        doorSaveObject.doorID.Value = doorID;  // Store the door's unique ID
+        doorSaveObject.isDoorLocked.Value = Locked;
+        doorSaveObject.isDoorOpened.Value = IsOpened;
+
+        UnityEngine.Debug.Log($"Saved door {doorID}: Locked = {Locked}, Opened = {IsOpened}");
+    }
+
+    private void LoadDoorState()
+    {
+        // Just load directly (No HasSave check)
+        Locked = doorSaveObject.isDoorLocked.Value;
+        IsOpened = doorSaveObject.isDoorOpened.Value;
+        doorID = doorSaveObject.doorID.Value;  // Restore the saved door ID
+
+        UnityEngine.Debug.Log($"Loaded door {doorID}: Locked = {Locked}, Opened = {IsOpened}");
     }
 
     private void FixedUpdate()

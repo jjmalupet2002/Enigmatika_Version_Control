@@ -179,11 +179,11 @@ public class TrapGate : MonoBehaviour
         if (isGateUnlocked)
         {
             currentGateState = GateState.Open;
-            gateObject.transform.position = targetPosition; // If unlocked, move the gate to the open position
+            gateObject.transform.position = initialPosition; // If unlocked, move the gate to the open position
         }
         else if (currentGateState == GateState.Closed)
         {
-            gateObject.transform.position = initialPosition; // If closed, move the gate to the starting position
+            gateObject.transform.position = targetPosition; // If closed, move the gate to the starting position
         }
     }
 }
