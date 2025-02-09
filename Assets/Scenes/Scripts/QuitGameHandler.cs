@@ -7,6 +7,7 @@ public class QuitGameHandler : MonoBehaviour
     public Button exitButton;
     public GameObject quitAlertUI;
     public Button noButton;
+    public Button yesButton;
 
     void Start()
     {
@@ -28,5 +29,11 @@ public class QuitGameHandler : MonoBehaviour
     void OnNoButtonPressed()
     {
         quitAlertUI.SetActive(false);
+    }
+
+    // Hide the quit alert UI when the no button is pressed
+    void OnYesButtonPressed()
+    {
+        Application.Quit();
     }
 }
