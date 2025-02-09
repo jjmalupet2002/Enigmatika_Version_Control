@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject quitAlertUI;
     public Button yesButton;
     public Button noButton;
+    public SaveUI saveUI;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseUI.SetActive(true);
         Time.timeScale = 0f; // Pause the game
+        saveUI.OnPauseMenuOpened();
     }
 
     private void ResumeGame()
