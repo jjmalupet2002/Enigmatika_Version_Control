@@ -41,7 +41,6 @@ public class DoorObjectHandler : MonoBehaviour
 
     [Tooltip("Save System References")]
     public DoorSaveObjectSaveObject doorSaveObject;
-    [SerializeField] private string doorID;
 
     private HingeJoint hinge;
     private Rigidbody rbDoor;
@@ -171,21 +170,20 @@ public class DoorObjectHandler : MonoBehaviour
 
     private void SaveDoorState()
     {
-        doorSaveObject.doorID.Value = doorID;  // Store the door's unique ID
+        // Save the door state
         doorSaveObject.isDoorLocked.Value = Locked;
         doorSaveObject.isDoorOpened.Value = IsOpened;
 
-        UnityEngine.Debug.Log($"Saved door {doorID}: Locked = {Locked}, Opened = {IsOpened}");
+        UnityEngine.Debug.Log("Saved door state: Locked = " + Locked + ", Opened = " + IsOpened);
     }
 
     private void LoadDoorState()
     {
-        // Just load directly (No HasSave check)
+        // Load the door state
         Locked = doorSaveObject.isDoorLocked.Value;
         IsOpened = doorSaveObject.isDoorOpened.Value;
-        doorID = doorSaveObject.doorID.Value;  // Restore the saved door ID
 
-        UnityEngine.Debug.Log($"Loaded door {doorID}: Locked = {Locked}, Opened = {IsOpened}");
+        UnityEngine.Debug.Log("Loaded door state: Locked = " + Locked + ", Opened = " + IsOpened);
     }
 
     private void FixedUpdate()
@@ -274,7 +272,7 @@ public class DoorObjectHandler : MonoBehaviour
             {
                 PlaySound(OpeningUsingKey);
                 UnlockDoor(); // Unlock the door if the player is nearby and the key matches
-              
+
 
 
                 // Start a coroutine to delete the item after a delay
@@ -298,5 +296,3 @@ public class DoorObjectHandler : MonoBehaviour
         inventoryManager.DeleteItem(item); // Delete item after delay
     }
 }
-
-
