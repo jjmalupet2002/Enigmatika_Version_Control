@@ -25,8 +25,8 @@ public class Play : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
+    //public void ExitGame()
+    //{
+    //    Application.Quit();
+    //}
 }
