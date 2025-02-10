@@ -3,15 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ChSelect : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
 
+    public bool havePlayed = false; // Boolean variable
+    public GameObject playIndicator; // Assign the GameObject in the Inspector
+
+    void Update()
+    {
+        if (havePlayed)
+        {
+            playIndicator.SetActive(true); // Make the GameObject visible
+        }
+    }
+
     [Header("Main Menu UI")]
+    [SerializeField] private GameObject titleScreen;
     [SerializeField] private GameObject chSelect;
 
     [Header("Loading Screens")]
     [SerializeField] private GameObject loadCh1;
     //[SerializeField] private GameObject loadCh2;
+
+    public void ChapterSelect()
+    {
+        // Set havePlayed to true when the game starts. Just a test. In actual implementation, modify to actually detect for a save file.
+        havePlayed = true;
+
+        // Disable title screen and enable chapter select
+        titleScreen.SetActive(false);
+        chSelect.SetActive(true);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 
     public void playChOne()
     {
@@ -48,8 +75,8 @@ public class ChSelect : MonoBehaviour
 
     public void mainMenu()
     {
-        // Go back to Main Menu
-        // Ensure index of the said scene in the Scene Manager is 0, else change the value below
-        SceneManager.LoadSceneAsync(0);
+        // Hide chapter select then, show main menu
+        chSelect.SetActive(false);
+        titleScreen.SetActive(true);
     }
 }
