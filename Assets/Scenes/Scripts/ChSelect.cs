@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using CarterGames.Assets.SaveManager;
 using UnityEngine.SceneManagement;
+using System.ComponentModel;
 
 public class ChSelect : MonoBehaviour
 {
@@ -19,9 +22,23 @@ public class ChSelect : MonoBehaviour
         chSelect.SetActive(false);
         loadCh1.SetActive(true);
 
-        // Go to Chapter 1
-        // Ensure index of the said scene in the Scene Manager is 2, else change the value below
-        StartCoroutine(LoadLevelAsync(2));
+        // Check if we should load a saved game
+        if (PlayerPrefs.GetInt("havePlayed", 0) == 1 || PlayerPrefs.HasKey("lastSavedScene"))
+        {
+            UnityEngine.Debug.Log("Continuing from last save...");
+            SaveManager.Load(); // Load saved game state
+
+            // Get last saved scene (default to Chapter 1 if missing)
+            int lastScene = PlayerPrefs.GetInt("lastSavedScene", 2);
+
+            // Load the last saved scene manually
+            StartCoroutine(LoadLevelAsync(lastScene));
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Starting a new game...");
+            StartCoroutine(LoadLevelAsync(2)); // Load Chapter 1 normally
+        }
     }
 
     //WIP: Chapter agnostic load code
@@ -38,7 +55,7 @@ public class ChSelect : MonoBehaviour
 
     IEnumerator LoadLevelAsync(int leveltoLoad)
     {
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(leveltoLoad);
+        UnityEngine.AsyncOperation loadOperation = SceneManager.LoadSceneAsync(leveltoLoad);
 
         while (!loadOperation.isDone)
         {

@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using CarterGames.Assets.SaveManager;
 using System.Collections;
+using System.Diagnostics;
 
 public class SaveUI : MonoBehaviour
 {
@@ -16,19 +18,27 @@ public class SaveUI : MonoBehaviour
     private void Awake()
     {
         SaveEvents.OnSaveGame += HandleGameSave;
-        SaveEvents.OnSaveGame += StartAutoSaveAnimation; //Subscribe AutoSave Animation
+        SaveEvents.OnSaveGame += StartAutoSaveAnimation; // Subscribe AutoSave Animation
         saveButton.onClick.AddListener(SaveGame);
     }
 
     private void OnDestroy()
     {
         SaveEvents.OnSaveGame -= HandleGameSave;
-        SaveEvents.OnSaveGame -= StartAutoSaveAnimation; //Unsubscribe to prevent memory leaks
+        SaveEvents.OnSaveGame -= StartAutoSaveAnimation; // Unsubscribe to prevent memory leaks
         saveButton.onClick.RemoveListener(SaveGame);
     }
 
     private void SaveGame()
     {
+        // Save the current scene index
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        PlayerPrefs.SetInt("lastSavedScene", currentSceneIndex);
+        PlayerPrefs.Save();
+
+        UnityEngine.Debug.Log("Game Saved at Scene Index: " + currentSceneIndex);
+
+        // Trigger the save event (other save functions remain unaffected)
         SaveEvents.SaveGame();
     }
 
@@ -56,7 +66,7 @@ public class SaveUI : MonoBehaviour
         wasDisabledEarlier = false;
     }
 
-    //Automatically starts the auto-save animation when any script calls SaveEvents.SaveGame()
+    // Automatically starts the auto-save animation when any script calls SaveEvents.SaveGame()
     private void StartAutoSaveAnimation()
     {
         StartCoroutine(ShowAutoSaveIcon());
@@ -75,6 +85,6 @@ public class SaveUI : MonoBehaviour
             yield return null;
         }
 
-        autoSaveIcon.SetActive(false); // Disable after 4 seconds
+        autoSaveIcon.SetActive(false); // Disable after 3 seconds
     }
 }

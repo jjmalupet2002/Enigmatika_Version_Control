@@ -1,8 +1,7 @@
 using UnityEngine;
 using CarterGames.Assets.SaveManager;
-using System.Diagnostics;
 using System;
-
+using System.Diagnostics;
 
 public class SaveKeyLogger : MonoBehaviour
 {
@@ -10,13 +9,19 @@ public class SaveKeyLogger : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            SaveEvents.SaveGame(); // Trigger the save game event
-            UnityEngine.Debug.Log("Game Saved!");
+            int currentSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+
+            // Save the current scene index
+            PlayerPrefs.SetInt("lastSavedScene", currentSceneIndex);
+            PlayerPrefs.Save();
+
+            SaveEvents.SaveGame(); // Trigger save event
+            UnityEngine.Debug.Log("Game Saved at Scene Index: " + currentSceneIndex);
         }
 
         if (Input.GetKeyDown(KeyCode.F9))
         {
-            SaveEvents.LoadGame(); // Trigger the load game event
+            SaveEvents.LoadGame(); // Trigger load event
             UnityEngine.Debug.Log("Game Loaded!");
         }
     }
