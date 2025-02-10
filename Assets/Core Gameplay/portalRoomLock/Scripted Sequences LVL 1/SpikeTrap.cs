@@ -136,6 +136,7 @@ public class SpikeTrap : MonoBehaviour
         }
 
         StartCoroutine(DeactivateSpike());
+        SaveEvents.SaveGame();
     }
 
     private void SaveSpikeState()

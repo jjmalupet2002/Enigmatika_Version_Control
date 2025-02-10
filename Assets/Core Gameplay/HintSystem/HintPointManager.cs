@@ -32,6 +32,7 @@ public class HintPointManager : MonoBehaviour
     {
         hintPointsSO.hintPoints += points;
         onHintPointsUpdated.Invoke();
+
         PlaySound(addHintSound); // Play sound when points are added
     }
 
@@ -45,6 +46,7 @@ public class HintPointManager : MonoBehaviour
     public void UpdateHintPoints()
     {
         onHintPointsUpdated.Invoke();
+        SaveEvents.SaveGame(); // Auto-save before switching to minigame scene
     }
 
     public void DisplayHintButton()

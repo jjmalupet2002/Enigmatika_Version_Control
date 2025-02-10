@@ -130,6 +130,7 @@ public class TrapGate : MonoBehaviour
 
         StartCoroutine(MoveGateBackToStart());
         SaveGateState(); // Save the gate state when unlocked
+        SaveEvents.SaveGame();
     }
 
     private IEnumerator MoveGateBackToStart()

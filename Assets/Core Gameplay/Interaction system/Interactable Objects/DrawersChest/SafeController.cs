@@ -200,6 +200,7 @@ public class SafeController : MonoBehaviour
         safeInspectButton.gameObject.SetActive(false);
         CloseSafeUI();
         hintPointManager.AddHintPoints(1); // Adds 1 hint point
+        SaveEvents.SaveGame(); // Auto-save before switching to minigame scene
     }
 
     private void OnCameraStateChange(CameraState state)

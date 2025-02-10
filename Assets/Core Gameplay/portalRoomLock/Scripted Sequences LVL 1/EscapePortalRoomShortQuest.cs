@@ -182,6 +182,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
             case QuestState.Complete:
                 objectiveText.text = "Quest Complete!";
                 IntroQuestFinished = true;
+                SaveEvents.SaveGame(); // Auto-save before switching to minigame scene
                 break;
         }
     }

@@ -177,6 +177,9 @@ public class GateUnlockScript : MonoBehaviour
             // Set the lock state to unlocked
             lockStates[index] = true;
 
+            // **Auto-save the game after updating lock state**
+            SaveEvents.SaveGame();
+
             // Remove used key from inventory
             if (currentItems[index] != null)
             {
@@ -211,6 +214,9 @@ public class GateUnlockScript : MonoBehaviour
         // All locks are unlocked, unlock the gate
         trapGateScript.UnlockGate();
         EscapeText.SetActive(true);
+
+        // **Auto-save the game after unlocking all locks**
+        SaveEvents.SaveGame();
     }
 
     // Coroutine to delete item from inventory after a delay

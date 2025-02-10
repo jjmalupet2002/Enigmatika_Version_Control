@@ -147,6 +147,9 @@ public class StatuePuzzle : MonoBehaviour
                 rotateAction.Disable();
                 StopStatueAudio();
                 StartCoroutine(RaiseThiefHideout());
+
+                // Auto-save when puzzle is completed
+                SaveEvents.SaveGame();
             }
         }
     }
