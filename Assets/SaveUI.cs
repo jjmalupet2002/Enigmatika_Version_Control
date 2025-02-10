@@ -40,6 +40,7 @@ public class SaveUI : MonoBehaviour
 
         // Trigger the save event (other save functions remain unaffected)
         SaveEvents.SaveGame();
+        SaveManager.Save();
     }
 
     private void HandleGameSave()

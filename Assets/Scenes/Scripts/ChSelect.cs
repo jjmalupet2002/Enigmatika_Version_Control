@@ -12,33 +12,11 @@ public class ChSelect : MonoBehaviour
     [Header("Main Menu UI")]
     [SerializeField] private GameObject chSelect;
 
-    [Header("Loading Screens")]
-    [SerializeField] private GameObject loadCh1;
-    //[SerializeField] private GameObject loadCh2;
-
     public void playChOne()
     {
-        // Hide chapter select then, show loading screen
-        chSelect.SetActive(false);
-        loadCh1.SetActive(true);
-
-        // Check if we should load a saved game
-        if (PlayerPrefs.GetInt("havePlayed", 0) == 1 || PlayerPrefs.HasKey("lastSavedScene"))
-        {
-            UnityEngine.Debug.Log("Continuing from last save...");
-            SaveEvents.LoadGame(); // Trigger load event
-
-            // Get last saved scene (default to Chapter 1 if missing)
-            int lastScene = PlayerPrefs.GetInt("lastSavedScene", 2);
-
-            // Load the last saved scene manually
-            StartCoroutine(LoadLevelAsync(lastScene));
-        }
-        else
-        {
-            UnityEngine.Debug.Log("Starting a new game...");
-            StartCoroutine(LoadLevelAsync(2)); // Load Chapter 1 normally
-        }
+        // If the player has played before, load last saved scene
+        int lastScene = PlayerPrefs.GetInt("lastSavedScene", 2);
+        SceneManager.LoadSceneAsync(lastScene);
     }
 
     //WIP: Chapter agnostic load code
