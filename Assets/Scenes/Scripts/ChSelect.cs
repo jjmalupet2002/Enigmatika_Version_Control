@@ -26,7 +26,7 @@ public class ChSelect : MonoBehaviour
         if (PlayerPrefs.GetInt("havePlayed", 0) == 1 || PlayerPrefs.HasKey("lastSavedScene"))
         {
             UnityEngine.Debug.Log("Continuing from last save...");
-            SaveManager.Load(); // Load saved game state
+            SaveEvents.LoadGame(); // Trigger load event
 
             // Get last saved scene (default to Chapter 1 if missing)
             int lastScene = PlayerPrefs.GetInt("lastSavedScene", 2);
