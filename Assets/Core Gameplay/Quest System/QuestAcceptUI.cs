@@ -301,8 +301,6 @@ public class QuestAcceptUI : MonoBehaviour
         else
         {
             // Log the wrong item usage
-            UnityEngine.Debug.Log("Wrong item used!");
-
             // Ensure hasUsedItem is still set to true when a wrong item is used
             hasUsedItem = true;  // This allows triggering the wrong item UI when the button is clicked
         }

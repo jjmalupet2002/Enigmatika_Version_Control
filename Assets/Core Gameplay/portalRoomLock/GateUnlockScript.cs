@@ -42,7 +42,7 @@ public class GateUnlockScript : MonoBehaviour
     public Camera portalRoomCamera; // Reference to the camera component (PortalRoomCamera)
     public GameObject EscapeText;
     [SerializeField] private PortalRoomTrapLockSaveObject saveObject; // Reference to the save object
-  
+
     // Variables for item usage and button click
     private bool[] isUnlockButtonClicked; // Array to track button click states
     private bool[] hasUsedKey; // Array to track if the correct key has been used
@@ -64,19 +64,6 @@ public class GateUnlockScript : MonoBehaviour
         currentItems = new ItemData[unlockButtons.Length];
         lockStates = new bool[unlockButtons.Length];
         keyAnimators = new Animator[keyObjects.Length];
-        
-        // Debugging array lengths
-        UnityEngine.Debug.Log($"unlockButtons.Length: {unlockButtons.Length}");
-        UnityEngine.Debug.Log($"keyObjects.Length: {keyObjects.Length}");
-        UnityEngine.Debug.Log($"requiredKeyIds.Length: {requiredKeyIds.Length}");
-
-        // Verify that all arrays are correctly initialized
-        UnityEngine.Debug.Log($"isUnlockButtonClicked.Length: {isUnlockButtonClicked.Length}");
-        UnityEngine.Debug.Log($"hasUsedKey.Length: {hasUsedKey.Length}");
-        UnityEngine.Debug.Log($"currentItems.Length: {currentItems.Length}");
-        UnityEngine.Debug.Log($"lockStates.Length: {lockStates.Length}");
-        UnityEngine.Debug.Log($"keyAnimators.Length: {keyAnimators.Length}");
-
 
         // Subscribe to the button click events
         for (int i = 0; i < unlockButtons.Length; i++)
@@ -161,9 +148,10 @@ public class GateUnlockScript : MonoBehaviour
 
     private void OnUnlockButtonClick(int index)
     {
-        UnityEngine.Debug.Log($"Unlock Button {index} Clicked!");
         isUnlockButtonClicked[index] = true;
         TryUnlock(index);
+        UnityEngine.Debug.Log($"Unlock button clicked! Calling TryUnlock({index})");
+
     }
 
     // Method to check both conditions and perform unlock action for a specific lock
@@ -189,9 +177,12 @@ public class GateUnlockScript : MonoBehaviour
 
             // Set the lock state to unlocked
             lockStates[index] = true;
+            UnityEngine.Debug.Log($"Checking values at index {index}:");
+            UnityEngine.Debug.Log($"hasUsedKey[{index}] = {hasUsedKey[index]}");
+            UnityEngine.Debug.Log($"isUnlockButtonClicked[{index}] = {isUnlockButtonClicked[index]}");
+            UnityEngine.Debug.Log($"keyAnimators[{index}] = {keyAnimators[index]}");
+            UnityEngine.Debug.Log($"currentItems[{index}] = {currentItems[index]}");
 
-            // **Auto-save the game after updating lock state**
-            SaveEvents.SaveGame();
 
             // Remove used key from inventory
             if (currentItems[index] != null)
