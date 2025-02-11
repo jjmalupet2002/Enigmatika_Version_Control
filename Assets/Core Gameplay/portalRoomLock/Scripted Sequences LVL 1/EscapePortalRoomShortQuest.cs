@@ -182,7 +182,6 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
             case QuestState.Complete:
                 objectiveText.text = "Quest Complete!";
                 IntroQuestFinished = true;
-                SaveEvents.SaveGame(); // Auto-save before switching to minigame scene
                 break;
         }
     }
@@ -212,11 +211,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     private void LoadQuestState()
     {
         int savedState = tutorialSaveObject.currentQuestState.Value;
-        UnityEngine.Debug.Log("Loaded state: " + savedState);
         currentState = (QuestState)savedState;
-
-        // Debug log the current state
-        UnityEngine.Debug.Log("Current state after load: " + currentState);
 
         if (currentState == QuestState.ExitPortalRoom || currentState == QuestState.Complete)
         {

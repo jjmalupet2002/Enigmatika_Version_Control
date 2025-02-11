@@ -82,7 +82,6 @@ public class InventoryManager : ScriptableObject
 
         // Call SaveManager to save the data
         SaveManager.Save(inventorySystem);
-        UnityEngine.Debug.Log("Inventory Saved!");
     }
 
     // Method to load the inventory data
@@ -95,7 +94,6 @@ public class InventoryManager : ScriptableObject
         if (loadedInventorySystem != null)
         {
             inventorySystem = loadedInventorySystem; // Assign it only if valid
-            UnityEngine.Debug.Log("InventorySystem loaded successfully.");
 
             // Clear inventory before loading new data
             inventory.Clear();
@@ -150,7 +148,6 @@ public class InventoryManager : ScriptableObject
     public void InspectItem(ItemData item)
     {
         item.hasBeenInspected = true; // Mark the item as inspected globally
-        UnityEngine.Debug.Log($"Item {item.itemName} has been inspected.");
         OnInventoryChanged?.Invoke(); // Notify inventory change
     }
 

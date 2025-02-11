@@ -114,7 +114,6 @@ public class TrapGate : MonoBehaviour
 
     public void UnlockGate()
     {
-        UnityEngine.Debug.Log("UnlockGate() called: Opening the gate!");
         if (isGateUnlocked) return;
 
         isGateUnlocked = true;
@@ -164,7 +163,6 @@ public class TrapGate : MonoBehaviour
         portalRoomTrapLockSaveObject.gatePosition.Value = gateObject.transform.position;
         portalRoomTrapLockSaveObject.isGateUnlocked.Value = isGateUnlocked; // Save the unlocked state
         portalRoomTrapLockSaveObject.currentGateState.Value = (int)currentGateState; // Save the current gate state (Closed = 0, Open = 1)
-        UnityEngine.Debug.Log("Saved gate position: " + gateObject.transform.position + ", state: " + currentGateState + ", unlocked: " + isGateUnlocked);
     }
 
     private void LoadGateState()
@@ -174,7 +172,5 @@ public class TrapGate : MonoBehaviour
 
         // Ensure correct position is loaded from saved data
         gateObject.transform.position = portalRoomTrapLockSaveObject.gatePosition.Value;
-
-        UnityEngine.Debug.Log($"Loaded gate state: {currentGateState}, Unlocked: {isGateUnlocked}, Position: {gateObject.transform.position}");
     }
 }

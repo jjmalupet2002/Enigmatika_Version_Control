@@ -90,7 +90,6 @@ public class TutorialManager : MonoBehaviour
         IsTutorialFinished = true;
         SaveTutorialState();
         postTutorialAudio.Play();
-        SaveEvents.SaveGame(); // Auto-save before switching to minigame scene
     }
 
     private void SaveTutorialState()

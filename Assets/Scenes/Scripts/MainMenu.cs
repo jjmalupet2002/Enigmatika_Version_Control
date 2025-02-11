@@ -2,6 +2,7 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI; // Required for Button component
+using CarterGames.Assets.SaveManager;
 
 public class Play : MonoBehaviour
 {
@@ -59,7 +60,6 @@ public class Play : MonoBehaviour
         PlayerPrefs.DeleteKey("havePlayed");     // Reset havePlayed status
         PlayerPrefs.DeleteKey("loadGame");       // Reset load flag
         PlayerPrefs.Save();
-
         UnityEngine.Debug.Log("Game progress reset!");
 
         // Hide the Continue button
