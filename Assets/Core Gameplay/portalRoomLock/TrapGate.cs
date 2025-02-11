@@ -103,7 +103,7 @@ public class TrapGate : MonoBehaviour
         }
 
         gateObject.transform.position = targetPosition;
-        currentGateState = GateState.Open;
+        currentGateState = GateState.Closed;
 
         if (displayText != null)
         {
@@ -149,7 +149,7 @@ public class TrapGate : MonoBehaviour
         }
 
         gateObject.transform.position = initialPosition;
-        currentGateState = GateState.Closed;
+        currentGateState = GateState.Open;
     }
 
     private IEnumerator HideTextAfterDelay(Text textComponent, float delay)
@@ -169,22 +169,20 @@ public class TrapGate : MonoBehaviour
 
     private void LoadGateState()
     {
-        // Load the gate's position and state
-        gateObject.transform.position = portalRoomTrapLockSaveObject.gatePosition.Value;
-        isGateUnlocked = portalRoomTrapLockSaveObject.isGateUnlocked.Value; // Load the unlocked state
-        currentGateState = (GateState)portalRoomTrapLockSaveObject.currentGateState.Value; // Load the current gate state
+        isGateUnlocked = portalRoomTrapLockSaveObject.isGateUnlocked.Value;
+        currentGateState = (GateState)portalRoomTrapLockSaveObject.currentGateState.Value;
 
-        UnityEngine.Debug.Log("Loaded gate position: " + gateObject.transform.position + ", state: " + currentGateState + ", unlocked: " + isGateUnlocked);
-
-        // Apply the loaded gate state (open or closed)
         if (isGateUnlocked)
         {
+            gateObject.transform.position = initialPosition;  // Ensure it's open
             currentGateState = GateState.Open;
-            gateObject.transform.position = initialPosition; // If unlocked, move the gate to the open position
         }
-        else if (currentGateState == GateState.Closed)
+        else
         {
-            gateObject.transform.position = targetPosition; // If closed, move the gate to the starting position
+            gateObject.transform.position = targetPosition;  // Ensure it's closed
+            currentGateState = GateState.Closed;
         }
+
+        UnityEngine.Debug.Log($"Loaded gate state: {currentGateState}, Unlocked: {isGateUnlocked}, Position: {gateObject.transform.position}");
     }
 }

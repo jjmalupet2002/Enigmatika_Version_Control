@@ -114,7 +114,6 @@ public class MiniGameLoader : MonoBehaviour
         if (saveObject != null)
         {
             EscapeText.SetActive(saveObject.isEscapeTextActive.Value);
-            SaveEvents.SaveGame(); // Auto-save before switching to minigame scene
             miniGameStarter.enabled = saveObject.isMiniGameStarterEnabled.Value;
         }
     }
