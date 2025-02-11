@@ -39,12 +39,10 @@ public class HintMessageUIManager : MonoBehaviour
         if (!hintMessages.ContainsKey(context))
         {
             hintMessages.Add(context, hintMessage);
-            UnityEngine.Debug.Log($"Hint message for '{context}' added.");
         }
         else
         {
             hintMessages[context] = hintMessage; // Update existing hint
-            UnityEngine.Debug.Log($"Hint message for '{context}' updated.");
         }
     }
 

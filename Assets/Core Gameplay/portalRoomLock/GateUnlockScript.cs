@@ -64,6 +64,19 @@ public class GateUnlockScript : MonoBehaviour
         currentItems = new ItemData[unlockButtons.Length];
         lockStates = new bool[unlockButtons.Length];
         keyAnimators = new Animator[keyObjects.Length];
+        
+        // Debugging array lengths
+        UnityEngine.Debug.Log($"unlockButtons.Length: {unlockButtons.Length}");
+        UnityEngine.Debug.Log($"keyObjects.Length: {keyObjects.Length}");
+        UnityEngine.Debug.Log($"requiredKeyIds.Length: {requiredKeyIds.Length}");
+
+        // Verify that all arrays are correctly initialized
+        UnityEngine.Debug.Log($"isUnlockButtonClicked.Length: {isUnlockButtonClicked.Length}");
+        UnityEngine.Debug.Log($"hasUsedKey.Length: {hasUsedKey.Length}");
+        UnityEngine.Debug.Log($"currentItems.Length: {currentItems.Length}");
+        UnityEngine.Debug.Log($"lockStates.Length: {lockStates.Length}");
+        UnityEngine.Debug.Log($"keyAnimators.Length: {keyAnimators.Length}");
+
 
         // Subscribe to the button click events
         for (int i = 0; i < unlockButtons.Length; i++)

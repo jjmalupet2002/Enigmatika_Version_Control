@@ -25,8 +25,8 @@ public class TrapGate : MonoBehaviour
     private bool isPlayerNearby = false;
     private bool isGateUnlocked = false;
 
-    private enum GateState { Closed, Open }
-    private GateState currentGateState = GateState.Closed;
+    private enum GateState { Open, Closed }
+    private GateState currentGateState = GateState.Open;
 
     public bool unlockGate = false;
 
@@ -64,7 +64,7 @@ public class TrapGate : MonoBehaviour
             unlockGate = false;
         }
 
-        if (isPlayerNearby && currentGateState == GateState.Closed && !isGateUnlocked)
+        if (isPlayerNearby && currentGateState == GateState.Open && !isGateUnlocked)
         {
             StartCoroutine(MoveGate());
             isPlayerNearby = false;
@@ -172,16 +172,8 @@ public class TrapGate : MonoBehaviour
         isGateUnlocked = portalRoomTrapLockSaveObject.isGateUnlocked.Value;
         currentGateState = (GateState)portalRoomTrapLockSaveObject.currentGateState.Value;
 
-        if (isGateUnlocked)
-        {
-            gateObject.transform.position = initialPosition;  // Ensure it's open
-            currentGateState = GateState.Open;
-        }
-        else
-        {
-            gateObject.transform.position = targetPosition;  // Ensure it's closed
-            currentGateState = GateState.Closed;
-        }
+        // Ensure correct position is loaded from saved data
+        gateObject.transform.position = portalRoomTrapLockSaveObject.gatePosition.Value;
 
         UnityEngine.Debug.Log($"Loaded gate state: {currentGateState}, Unlocked: {isGateUnlocked}, Position: {gateObject.transform.position}");
     }

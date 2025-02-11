@@ -45,7 +45,6 @@ public class TeleporterActivator : MonoBehaviour
         {
             LibraryTeleporter.enabled = true;
             saveObject.isTeleporterActive.Value = true; // Save teleporter state
-            UnityEngine.Debug.Log("Library Teleporter Enabled and Saved.");
         }
     }
 
@@ -62,7 +61,6 @@ public class TeleporterActivator : MonoBehaviour
         if (saveObject != null)
         {
             LibraryTeleporter.enabled = saveObject.isTeleporterActive.Value;
-            UnityEngine.Debug.Log($"Library Teleporter Loaded: {LibraryTeleporter.enabled}");
         }
     }
 }

@@ -193,8 +193,6 @@ public class DoorObjectHandler : MonoBehaviour
         // Ensure the modified arrays are saved back
         doorSaveObject.lockStates.Value = lockStates;
         doorSaveObject.openStates.Value = openStates;
-
-        UnityEngine.Debug.Log($"Saved Door {doorIndex} - Locked: {Locked}, Opened: {IsOpened}");
     }
 
     private void LoadDoorState()
@@ -203,7 +201,6 @@ public class DoorObjectHandler : MonoBehaviour
         {
             Locked = doorSaveObject.lockStates.Value[doorIndex];
             IsOpened = doorSaveObject.openStates.Value[doorIndex];
-            UnityEngine.Debug.Log($"Loaded Door {doorIndex} - Locked: {Locked}, Opened: {IsOpened}");
         }
     }
 

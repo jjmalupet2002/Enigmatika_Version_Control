@@ -18,16 +18,14 @@ public class SaveKeyLogger : MonoBehaviour
                 // Save the current scene index
                 PlayerPrefs.SetInt("lastSavedScene", currentSceneIndex);
                 PlayerPrefs.Save();
-                SaveEvents.SaveGame();
-                UnityEngine.Debug.Log("Game Saved!");
+                SaveEvents.SaveGame();           
             }
         }
 
         if (Input.GetKeyDown(KeyCode.F9))
         {
             isLoading = true; // Set flag to prevent saving
-            SaveEvents.LoadGame();
-            UnityEngine.Debug.Log("Game Loaded!");
+            SaveEvents.LoadGame();     
 
             // Reset after delay
             Invoke(nameof(ResetLoadingFlag), 2f);
@@ -47,13 +45,13 @@ public static class SaveEvents
 
     public static void SaveGame()
     {
-        UnityEngine.Debug.Log($"SaveGame Event Triggered by: {new StackTrace().GetFrame(1).GetMethod().DeclaringType}");
+        UnityEngine.Debug.Log($"Game Saved: {new StackTrace().GetFrame(1).GetMethod().DeclaringType}");
         OnSaveGame?.Invoke();
     }
 
     public static void LoadGame()
     {
-        UnityEngine.Debug.Log("LoadGame Event Triggered");
+        UnityEngine.Debug.Log("Game Loaded!");
         OnLoadGame?.Invoke();
     }
 }

@@ -51,7 +51,6 @@ public class PlayerJoystickControl : MonoBehaviour
     {
         playerPositionSaveObject.playerPosition.Value = transform.position;
         SaveManager.Save(playerPositionSaveObject);
-        UnityEngine.Debug.Log($"Saved Position: {transform.position}");
     }
 
     private bool hasLoadedPosition = false;
@@ -79,7 +78,6 @@ public class PlayerJoystickControl : MonoBehaviour
             playerRigid.velocity = Vector3.zero;
 
             hasLoadedPosition = true;
-            UnityEngine.Debug.Log($"Loaded Position: {transform.position}");
 
             // Re-enable gravity after setting position
             playerRigid.useGravity = true;
