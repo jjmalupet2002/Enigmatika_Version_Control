@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,30 +17,27 @@ public class WordContainer : MonoBehaviour
         Initialize();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        // Start is called before the first frame update
+        BackspaceKey.onBackspacePressed += RemoveLastLetter;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        // Update is called once per frame
+        BackspaceKey.onBackspacePressed -= RemoveLastLetter;
     }
 
     public void Initialize()
     {
-        currentLetterIndex = 0; // Reset index when initializing
-        for (int i = 0; i < letterContainers.Length; i++)
+        currentLetterIndex = 0;
+        foreach (var container in letterContainers)
         {
-            letterContainers[i].Initialize();
+            container.Initialize();
         }
     }
 
     public void Add(char letter)
     {
-        // Ensure we don't exceed the bounds of the array
         if (currentLetterIndex < letterContainers.Length)
         {
             letterContainers[currentLetterIndex].SetLetter(letter);
@@ -51,26 +49,36 @@ public class WordContainer : MonoBehaviour
         }
     }
 
+    public void RemoveLastLetter()
+    {
+        if (currentLetterIndex > 0)
+        {
+            currentLetterIndex--;
+            letterContainers[currentLetterIndex].SetLetter(' '); // Clear last letter
+        }
+        else
+        {
+            
+        }
+    }
+
     public string GetWord()
     {
         string word = "";
-
-        for (int i = 0; i < letterContainers.Length; i++)
+        foreach (var container in letterContainers)
         {
-            word += letterContainers[i].GetLetter().ToString();
+            word += container.GetLetter().ToString();
         }
-
-        return word;
+        return word.Trim();
     }
 
     public bool IsComplete()
     {
-        // Check if all letters have been filled (index equals the length of the array)
         return currentLetterIndex >= letterContainers.Length;
     }
+
     public int GetLetterContainerCount()
     {
         return letterContainers.Length;
     }
-    
 }
