@@ -8,6 +8,7 @@ public class PlayerDetective : MonoBehaviour
     public int currentHealth;
 
     public PlayerHealthBar playerhealthBar;
+    public GameOver gameOverManager; 
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +40,6 @@ public class PlayerDetective : MonoBehaviour
         // Check if the player is dead
         if (currentHealth <= 0)
         {
-            Debug.Log("Player is dead!");
             Die();
         }
     }
@@ -47,7 +47,11 @@ public class PlayerDetective : MonoBehaviour
     void Die()
     {
         Debug.Log("Player Died!");
-        // Add player death logic here (e.g., disable player controls, trigger animations)
-        gameObject.SetActive(false); // Example: Disable the player object
+
+        gameObject.SetActive(false); // Disable player
+            
+        gameOverManager.ShowGameOver(); // Shows Game Over Screen
+       
     }
+
 }
