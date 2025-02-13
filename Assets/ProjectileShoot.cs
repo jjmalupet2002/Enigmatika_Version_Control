@@ -8,6 +8,7 @@ public class ProjectileShooter : MonoBehaviour
     public float projectileSpeed = 10f; // Speed of the projectile
 
     public float shootInterval = 0.5f; // Time between each shot
+    public float restPeriod = 5f;      // Rest period after shooting for 5 seconds
     public Transform player;           // Reference to the player's Transform
 
     void Start()
@@ -19,11 +20,20 @@ public class ProjectileShooter : MonoBehaviour
     {
         while (true)
         {
-            if (player != null) // Ensure the player exists
+            float startTime = Time.time;
+
+            // Shoot for 5 seconds
+            while (Time.time - startTime < 5f)
             {
-                ShootProjectileAtPlayer();
+                if (player != null) // Ensure the player exists
+                {
+                    ShootProjectileAtPlayer();
+                }
+                yield return new WaitForSeconds(shootInterval); // Wait before shooting again
             }
-            yield return new WaitForSeconds(shootInterval); // Wait before shooting again
+
+            // Rest period
+            yield return new WaitForSeconds(restPeriod);
         }
     }
 
