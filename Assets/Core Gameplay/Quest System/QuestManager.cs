@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Save;
+using CarterGames.Assets.SaveManager;
 
 public class QuestManager : MonoBehaviour
 {
@@ -11,9 +13,23 @@ public class QuestManager : MonoBehaviour
     public event QuestEventHandler OnNextCriteriaStartedEvent;
     public event QuestEventHandler OnQuestCompletedEvent;
 
-
     public List<MainQuest> mainQuestObjects;
     public Dictionary<string, MainQuest> activeQuests = new Dictionary<string, MainQuest>();
+    public QuestSavingSaveObject QuestSaveObject;
+    public QuestUIManager questUIManager;
+
+
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveQuest;
+        SaveEvents.OnLoadGame += LoadQuest;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveQuest;
+        SaveEvents.OnLoadGame -= LoadQuest;
+    }
 
     public void AcceptQuest(MainQuest quest)
     {
@@ -203,6 +219,114 @@ public class QuestManager : MonoBehaviour
     {
         return activeQuests;
     }
+
+    private void SaveQuest()
+    {
+        // Save active quest names
+        QuestSaveObject.activeQuestNames.Value = new List<string>(activeQuests.Keys);
+
+        // Save quest statuses, criteria statuses, and criteria completion statuses
+        List<QuestStatusData> questStatusList = new List<QuestStatusData>();
+        List<QuestCriteriaData> criteriaStatusList = new List<QuestCriteriaData>();
+        List<CriteriaCompletionData> criteriaCompletionList = new List<CriteriaCompletionData>();
+
+        foreach (var questEntry in activeQuests)
+        {
+            string questName = questEntry.Key;
+            MainQuest quest = questEntry.Value;
+
+            // Save quest status
+            questStatusList.Add(new QuestStatusData
+            {
+                questName = questName,
+                questStatus = quest.status
+            });
+
+            // Save each criteria status
+            foreach (var criteria in quest.questCriteriaList)
+            {
+                criteriaStatusList.Add(new QuestCriteriaData
+                {
+                    questName = questName,
+                    criteriaName = criteria.criteriaName,
+                    criteriaStatus = criteria.CriteriaStatus
+                });
+            }
+
+            // Save criteria completion status
+            List<bool> completionStatusList = new List<bool>();
+            foreach (var criteria in quest.questCriteriaList)
+            {
+                completionStatusList.Add(criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed);
+            }
+            criteriaCompletionList.Add(new CriteriaCompletionData
+            {
+                questName = questName,
+                completionStatus = completionStatusList
+            });
+        }
+
+        // Assign to save object (saving directly without GetValue/SetValue)
+        QuestSaveObject.questStatuses.Value = questStatusList;
+        QuestSaveObject.criteriaStatuses.Value = criteriaStatusList;
+        QuestSaveObject.criteriaCompletionStatus.Value = criteriaCompletionList;
+    }
+    private void LoadQuest()
+    {
+        // Load data from the save object (directly referencing Value)
+        List<string> savedQuestNames = QuestSaveObject.activeQuestNames.Value;
+        List<QuestStatusData> questStatuses = QuestSaveObject.questStatuses.Value;
+        List<QuestCriteriaData> criteriaStatuses = QuestSaveObject.criteriaStatuses.Value;
+        List<CriteriaCompletionData> criteriaCompletionStatus = QuestSaveObject.criteriaCompletionStatus.Value;
+
+        if (savedQuestNames == null || savedQuestNames.Count == 0) return;
+
+        activeQuests.Clear();
+
+        foreach (var questStatusData in questStatuses)
+        {
+            // Find the corresponding quest
+            MainQuest quest = mainQuestObjects.Find(q => q.questName == questStatusData.questName);
+            if (quest != null)
+            {
+                // Restore the quest status
+                quest.status = questStatusData.questStatus;
+                activeQuests.Add(quest.questName, quest);
+
+                // Restore criteria statuses
+                foreach (var criteriaData in criteriaStatuses)
+                {
+                    if (criteriaData.questName == quest.questName)
+                    {
+                        quest.UpdateCriteriaStatus(criteriaData.criteriaName, criteriaData.criteriaStatus);
+                    }
+                }
+
+                // Restore criteria completion statuses
+                foreach (var completionData in criteriaCompletionStatus)
+                {
+                    if (completionData.questName == quest.questName)
+                    {
+                        for (int i = 0; i < completionData.completionStatus.Count && i < quest.questCriteriaList.Count; i++)
+                        {
+                            if (completionData.completionStatus[i])
+                            {
+                                quest.questCriteriaList[i].CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
+                            }
+                        }
+                    }
+                }
+
+                // Update the UI for this quest after loading
+                QuestUIManager questUIManager = FindObjectOfType<QuestUIManager>();
+                if (questUIManager != null)
+                {
+                    questUIManager.UpdateQuestUI(quest);  // Call the UI update method
+                }
+            }
+        }
+    }
+
 
     // Optional event to handle quest acceptance
     void OnQuestAccepted(MainQuest quest)

@@ -24,7 +24,9 @@ public class SceneLoader : MonoBehaviour
         if (PlayerPrefs.GetInt("loadGame", 0) == 1)
         {
             UnityEngine.Debug.Log("Loading saved game data...");
-            SaveEvents.LoadGame();
+
+            // Wait until the loading is done
+            yield return StartCoroutine(LoadSavedGameData());
         }
         else
         {
@@ -36,7 +38,14 @@ public class SceneLoader : MonoBehaviour
 
         if (loadingScreen != null)
         {
+            UnityEngine.Debug.Log("Disabling loading screen...");
             loadingScreen.SetActive(false);
         }
+    }
+
+    IEnumerator LoadSavedGameData()
+    {
+        SaveEvents.LoadGame();
+        yield return null; // Ensures coroutine continues after LoadGame() runs
     }
 }

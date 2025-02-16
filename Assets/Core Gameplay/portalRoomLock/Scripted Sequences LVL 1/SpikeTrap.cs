@@ -68,7 +68,6 @@ public class SpikeTrap : MonoBehaviour
             unlockSpike = false; // Prevent repeated unlocks
         }
     }
-
     private void OnEnable()
     {
         SaveEvents.OnSaveGame += SaveSpikeState;
@@ -145,9 +144,20 @@ public class SpikeTrap : MonoBehaviour
         spikeTrapSaveObject.isSpikeUnlocked.Value = isSpikeUnlocked;
         spikeTrapSaveObject.currentSpikeState.Value = (int)currentSpikeState;
     }
-
     private void LoadSpikeState()
     {
+        if (spikeTrapSaveObject == null)
+        {
+            UnityEngine.Debug.LogError("[LoadSpikeState] ERROR: spikeTrapSaveObject is null!");
+            return;
+        }
+
+        if (spikeTrapSaveObject.spikePosition == null)
+        {
+            UnityEngine.Debug.LogWarning("[LoadSpikeState] WARNING: No saved spike position found!");
+            return;
+        }
+
         spikeObject.transform.position = spikeTrapSaveObject.spikePosition.Value;
         isSpikeUnlocked = spikeTrapSaveObject.isSpikeUnlocked.Value;
         currentSpikeState = (SpikeState)spikeTrapSaveObject.currentSpikeState.Value;

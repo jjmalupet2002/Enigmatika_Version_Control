@@ -65,6 +65,9 @@ public class GateUnlockScript : MonoBehaviour
         lockStates = new bool[unlockButtons.Length];
         keyAnimators = new Animator[keyObjects.Length];
 
+        // Ensure arrays are properly initialized
+        keyAnimationStates = new bool[unlockButtons.Length];
+
         // Subscribe to the button click events
         for (int i = 0; i < unlockButtons.Length; i++)
         {
@@ -177,12 +180,6 @@ public class GateUnlockScript : MonoBehaviour
 
             // Set the lock state to unlocked
             lockStates[index] = true;
-            UnityEngine.Debug.Log($"Checking values at index {index}:");
-            UnityEngine.Debug.Log($"hasUsedKey[{index}] = {hasUsedKey[index]}");
-            UnityEngine.Debug.Log($"isUnlockButtonClicked[{index}] = {isUnlockButtonClicked[index]}");
-            UnityEngine.Debug.Log($"keyAnimators[{index}] = {keyAnimators[index]}");
-            UnityEngine.Debug.Log($"currentItems[{index}] = {currentItems[index]}");
-
 
             // Remove used key from inventory
             if (currentItems[index] != null)

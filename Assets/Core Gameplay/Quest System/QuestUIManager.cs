@@ -40,7 +40,7 @@ public class QuestUIManager : MonoBehaviour
     }
 
     // Update UI when a quest is accepted or completed
-    void UpdateQuestUI(MainQuest quest)
+    public void UpdateQuestUI(MainQuest quest)
     {
         if (quest.status == QuestEnums.QuestStatus.InProgress || quest.status == QuestEnums.QuestStatus.Completed)
         {
