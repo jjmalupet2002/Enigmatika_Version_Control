@@ -10,36 +10,32 @@ namespace Save
         // To save the active quest names
         [SerializeField] public SaveValue<List<string>> activeQuestNames = new SaveValue<List<string>>("activeQuestNames");
 
-        // To save the quest statuses
-        [SerializeField] public SaveValue<List<QuestStatusData>> questStatuses = new SaveValue<List<QuestStatusData>>("questStatuses");
-
-        // To save the criteria statuses
-        [SerializeField] public SaveValue<List<QuestCriteriaData>> criteriaStatuses = new SaveValue<List<QuestCriteriaData>>("criteriaStatuses");
-
-        // To save the quest's criteria completion status
-        [SerializeField] public SaveValue<List<CriteriaCompletionData>> criteriaCompletionStatus = new SaveValue<List<CriteriaCompletionData>>("criteriaCompletionStatus");
+        // To save the quest data
+        [SerializeField] public SaveValue<List<QuestData>> questDataList = new SaveValue<List<QuestData>>("questDataList");
     }
 
-    // Custom classes to hold the quest status, criteria status, and completion status
+    // Custom class to hold all the quest-related data in one place
     [System.Serializable]
-    public class QuestStatusData
+    public class QuestData
     {
         public string questName;
         public QuestEnums.QuestStatus questStatus;
+        public List<QuestCriteriaData> criteriaStatuses;
+        public List<bool> criteriaCompletionStatus;
+        public List<QuestObjectStateData> questObjectStates;
     }
 
     [System.Serializable]
     public class QuestCriteriaData
     {
-        public string questName;
         public string criteriaName;
         public QuestEnums.QuestCriteriaStatus criteriaStatus;
     }
 
     [System.Serializable]
-    public class CriteriaCompletionData
+    public class QuestObjectStateData
     {
-        public string questName;
-        public List<bool> completionStatus;
+        public string criteriaName;
+        public bool isActive;
     }
 }
