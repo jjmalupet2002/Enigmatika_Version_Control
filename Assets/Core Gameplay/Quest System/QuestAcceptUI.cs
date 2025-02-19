@@ -93,54 +93,33 @@ public class QuestAcceptUI : MonoBehaviour
 
     private void SaveQuestAccept()
     {
-        List<QuestData> questDataList = new List<QuestData>();
         List<bool> questCompletionList = new List<bool>(); // Track quest completion separately
         foreach (var page in pages)
         {
             if (page.quest != null)
             {
-                QuestData questData = new QuestData
-                {
-                    questName = page.quest.questName,
-                    questStatus = page.quest.status,
-                    criteriaStatuses = new List<QuestCriteriaData>(),
-                    criteriaCompletionStatus = new List<bool>(),
-                    questObjectStates = new List<QuestObjectStateData>()
-                };
-
-                questDataList.Add(questData);
                 questCompletionList.Add(page.isQuestComplete); // Store separate completion status
-
-                UnityEngine.Debug.Log($"Saved quest: {page.quest.questName}, Status: {page.quest.status}, Completed: {page.isQuestComplete}");
             }
         }
 
-        QuestSaveObject.questDataList.Value = questDataList;
-        QuestSaveObject.questCompletionList.Value = questCompletionList; // Save completion list
+        QuestSaveObject.questCompletionList.Value = questCompletionList; // Save only completion list
     }
 
     private void LoadQuestAccept()
     {
-        List<QuestData> loadedQuestData = QuestSaveObject.questDataList.Value;
         List<bool> loadedQuestCompletion = QuestSaveObject.questCompletionList.Value;
 
-        if (loadedQuestData == null || loadedQuestCompletion == null)
+        if (loadedQuestCompletion == null)
         {
-            UnityEngine.Debug.LogWarning("No saved quest data found.");
+            UnityEngine.Debug.LogWarning("No saved quest completion data found.");
             return;
         }
 
-        for (int i = 0; i < loadedQuestData.Count; i++)
+        for (int i = 0; i < loadedQuestCompletion.Count && i < pages.Count; i++)
         {
-            Page matchingPage = pages.Find(p => p.quest != null && p.quest.questName == loadedQuestData[i].questName);
-
-            if (matchingPage != null)
+            if (pages[i].quest != null)
             {
-                matchingPage.isQuestComplete = loadedQuestCompletion[i]; // Restore completion status
-            }
-            else
-            {
-                UnityEngine.Debug.LogWarning($"No matching page found for quest: {loadedQuestData[i].questName}");
+                pages[i].isQuestComplete = loadedQuestCompletion[i]; // Restore completion status
             }
         }
 
