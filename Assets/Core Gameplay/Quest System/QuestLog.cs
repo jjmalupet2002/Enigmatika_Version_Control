@@ -83,15 +83,19 @@ public class QuestLog : MonoBehaviour
             notCompletedText.gameObject.SetActive(false);
             mainObjectiveText.text = selectedQuest.questDescription;
 
-            // Find the active criteria and display it
-            QuestCriteria activeCriteria = selectedQuest.questCriteriaList.Find(criteria => criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress);
-            if (activeCriteria != null)
+            // NEW: If the quest is completed, show "All criteria completed" and return
+            if (selectedQuest.status == QuestEnums.QuestStatus.Completed)
             {
-                activeCriteriaText.text = "In Progress: " + activeCriteria.criteriaName;
+                activeCriteriaText.text = "All criteria completed";
             }
             else
             {
-                activeCriteriaText.text = "All criteria completed";
+                // Find the active criteria and display it
+                QuestCriteria activeCriteria = selectedQuest.questCriteriaList.Find(criteria => criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress);
+                if (activeCriteria != null)
+                {
+                    activeCriteriaText.text = "In Progress: " + activeCriteria.criteriaName;
+                }
             }
 
             // Display all completed criteria
@@ -127,6 +131,12 @@ public class QuestLog : MonoBehaviour
                 {
                     criteriaUpdated = true;
                 }
+            }
+
+            // NEW: Also check if the entire quest is marked as Completed
+            if (quest.status == QuestEnums.QuestStatus.Completed)
+            {
+                criteriaUpdated = true; // Force update if quest is completed
             }
 
             if (criteriaUpdated && i == currentQuestIndex)

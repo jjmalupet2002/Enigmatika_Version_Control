@@ -264,6 +264,8 @@ public class QuestManager : MonoBehaviour
 
                 // Save completion status
                 questData.criteriaCompletionStatus.Add(criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed);
+                UnityEngine.Debug.Log($"    Saved Criteria: {criteria.criteriaName}, Status: {criteria.CriteriaStatus}");
+
             }
 
             questDataList.Add(questData);
@@ -319,6 +321,7 @@ public class QuestManager : MonoBehaviour
                         quest.questCriteriaList[i].CriteriaStatus = questData.criteriaStatuses[i].criteriaStatus;
                     }
 
+                    UnityEngine.Debug.Log($"    Restoring Criteria: {quest.questCriteriaList[i].criteriaName}, Status: {quest.questCriteriaList[i].CriteriaStatus}");
                     // Only set the next active criteria if it is not already active and not completed
                     if (!setNextActive && quest.questCriteriaList[i].CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
                     {
