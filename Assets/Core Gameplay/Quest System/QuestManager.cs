@@ -56,19 +56,22 @@ public class QuestManager : MonoBehaviour
         if (!activeQuests.ContainsKey(quest.questName))
         {
             activeQuests.Add(quest.questName, quest);
-            UnityEngine.Debug.Log($"Main Quest Started: {quest.questName}");
-
-            // Ensure status is set to NotStarted
             quest.status = QuestEnums.QuestStatus.NotStarted;
 
-            // Set all criteria to NotStarted
             foreach (var criteria in quest.questCriteriaList)
             {
                 criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.NotStarted;
-                criteria.associatedQuestObject.gameObject.SetActive(false); // Disable the associated quest object initially
+
+                if (criteria.associatedQuestObject != null)  // Add this check
+                {
+                    criteria.associatedQuestObject.gameObject.SetActive(false);
+                }
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"Quest '{quest.questName}' criteria '{criteria.criteriaName}' has a null associatedQuestObject.");
+                }
             }
 
-            // Ensure highest priority is set to InProgress (moved to QuestManager)
             SetHighestPriorityCriteriaInProgress(quest);
         }
         else
@@ -170,7 +173,7 @@ public class QuestManager : MonoBehaviour
                 {
                     // If found, mark as completed and continue to next criteria
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
-                                        
+
 
                     // Set the next available criteria to InProgress
                     SetNextActiveCriteria(quest, i);
@@ -256,7 +259,7 @@ public class QuestManager : MonoBehaviour
                 questData.questObjectStates.Add(new QuestObjectStateData
                 {
                     criteriaName = criteria.criteriaName,
-                    isActive = criteria.associatedQuestObject.gameObject.activeSelf
+                    isActive = criteria.associatedQuestObject != null && criteria.associatedQuestObject.gameObject.activeSelf
                 });
 
                 // Save completion status
@@ -342,10 +345,13 @@ public class QuestManager : MonoBehaviour
                 }
 
                 // Update the UI for this quest after loading
-                QuestUIManager questUIManager = FindObjectOfType<QuestUIManager>();
-                if (questUIManager != null)
+                if (quest.status != QuestEnums.QuestStatus.Completed)
                 {
-                    questUIManager.UpdateQuestUI(quest);  // Call the UI update method
+                    if (questUIManager != null)
+                    {
+                        questUIManager.UpdateQuestUI(quest);  // Call the UI update method
+                        UnityEngine.Debug.Log($"Updating UI for quest: {quest.questName}, Status: {quest.status}");
+                    }
                 }
             }
         }

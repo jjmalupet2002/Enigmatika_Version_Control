@@ -12,6 +12,9 @@ namespace Save
 
         // To save the quest data
         [SerializeField] public SaveValue<List<QuestData>> questDataList = new SaveValue<List<QuestData>>("questDataList");
+
+        // To save the quest completion statuses separately
+        [SerializeField] public SaveValue<List<bool>> questCompletionList = new SaveValue<List<bool>>("questCompletionList");
     }
 
     // Custom class to hold all the quest-related data in one place

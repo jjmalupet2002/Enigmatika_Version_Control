@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,6 +43,7 @@ public class QuestUIManager : MonoBehaviour
     // Update UI when a quest is accepted or completed
     public void UpdateQuestUI(MainQuest quest)
     {
+        UnityEngine.Debug.Log($"UpdateQuestUI called for: {quest.questName}");
         if (quest.status == QuestEnums.QuestStatus.InProgress || quest.status == QuestEnums.QuestStatus.Completed)
         {
             // Only show quest name and criteria text if the quest is in progress
@@ -75,12 +77,6 @@ public class QuestUIManager : MonoBehaviour
                 // Quest is completed, so display the completion text
                 StartCoroutine(ShowQuestCompletionText());
             }
-        }
-        else
-        {
-            questNameText.gameObject.SetActive(false);
-            criteriaStatusText.gameObject.SetActive(false);
-            questCompletionText.gameObject.SetActive(false);
         }
 
         // Hide criteria when completed

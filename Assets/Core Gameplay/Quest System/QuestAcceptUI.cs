@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Save;
+using CarterGames.Assets.SaveManager;
+using System.Diagnostics;
 
 public class QuestAcceptUI : MonoBehaviour
 {
@@ -35,6 +38,7 @@ public class QuestAcceptUI : MonoBehaviour
     public Button wrongItemExitButton;
     public ItemEventHandler itemHandler;
     public InventoryManager inventoryManager;
+    public QuestSavingSaveObject QuestSaveObject;
 
 
     void Start()
@@ -75,6 +79,73 @@ public class QuestAcceptUI : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        SaveEvents.OnSaveGame += SaveQuestAccept;
+        SaveEvents.OnLoadGame += LoadQuestAccept;
+    }
+
+    private void OnDisable()
+    {
+        SaveEvents.OnSaveGame -= SaveQuestAccept;
+        SaveEvents.OnLoadGame -= LoadQuestAccept;
+    }
+
+    private void SaveQuestAccept()
+    {
+        List<QuestData> questDataList = new List<QuestData>();
+        List<bool> questCompletionList = new List<bool>(); // Track quest completion separately
+        foreach (var page in pages)
+        {
+            if (page.quest != null)
+            {
+                QuestData questData = new QuestData
+                {
+                    questName = page.quest.questName,
+                    questStatus = page.quest.status,
+                    criteriaStatuses = new List<QuestCriteriaData>(),
+                    criteriaCompletionStatus = new List<bool>(),
+                    questObjectStates = new List<QuestObjectStateData>()
+                };
+
+                questDataList.Add(questData);
+                questCompletionList.Add(page.isQuestComplete); // Store separate completion status
+
+                UnityEngine.Debug.Log($"Saved quest: {page.quest.questName}, Status: {page.quest.status}, Completed: {page.isQuestComplete}");
+            }
+        }
+
+        QuestSaveObject.questDataList.Value = questDataList;
+        QuestSaveObject.questCompletionList.Value = questCompletionList; // Save completion list
+    }
+
+    private void LoadQuestAccept()
+    {
+        List<QuestData> loadedQuestData = QuestSaveObject.questDataList.Value;
+        List<bool> loadedQuestCompletion = QuestSaveObject.questCompletionList.Value;
+
+        if (loadedQuestData == null || loadedQuestCompletion == null)
+        {
+            UnityEngine.Debug.LogWarning("No saved quest data found.");
+            return;
+        }
+
+        for (int i = 0; i < loadedQuestData.Count; i++)
+        {
+            Page matchingPage = pages.Find(p => p.quest != null && p.quest.questName == loadedQuestData[i].questName);
+
+            if (matchingPage != null)
+            {
+                matchingPage.isQuestComplete = loadedQuestCompletion[i]; // Restore completion status
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning($"No matching page found for quest: {loadedQuestData[i].questName}");
+            }
+        }
+
+        UpdateQuestUI();
+    }
 
     // Event handler methods for each item
     private void OnItem1Event()
@@ -336,11 +407,10 @@ public class QuestAcceptUI : MonoBehaviour
             {
                 currentWrongItemUI.SetActive(true);
                 wrongItemExitButton.gameObject.SetActive(true);
-                Debug.Log("Displayed wrong item UI for page " + currentPageIndex);
             }
             else
             {
-                Debug.LogWarning("No wrongItemUI assigned for page " + currentPageIndex);
+                UnityEngine.Debug.LogWarning("No wrongItemUI assigned for page " + currentPageIndex);
             }
 
             // Reset flags after turn-in attempt, without resetting turn-in button immediately
@@ -382,6 +452,7 @@ public class QuestAcceptUI : MonoBehaviour
 
             // Mark the page as quest complete
             currentPage.isQuestComplete = true;
+            SaveQuestAccept(); // Save the completion status
         }
 
         // Disable the turn-in button for the current page
@@ -413,15 +484,15 @@ public class QuestAcceptUI : MonoBehaviour
     }
 }
 
-    [System.Serializable]
-    public class Page
-    {
-        public string description;  // Local description text for the page
-        public Image rewardIconBackground;
-        public Sprite rewardIcon;  // Reward icon background for the page
-        public Sprite questIcon;  // Quest icon for the page
-        public Image questIconImage; // Reference to the Image component for the quest icon
-        public MainQuest quest; // Local quest variable for the page
-        public bool isQuestComplete;
-        public GameObject wrongItemUI;
-    }
+[System.Serializable]
+public class Page
+{
+    public string description;  // Local description text for the page
+    public Image rewardIconBackground;
+    public Sprite rewardIcon;  // Reward icon background for the page
+    public Sprite questIcon;  // Quest icon for the page
+    public Image questIconImage; // Reference to the Image component for the quest icon
+    public MainQuest quest; // Local quest variable for the page
+    public bool isQuestComplete;
+    public GameObject wrongItemUI;
+}
