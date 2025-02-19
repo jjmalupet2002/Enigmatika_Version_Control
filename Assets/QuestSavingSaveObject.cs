@@ -23,10 +23,11 @@ namespace Save
     {
         public string questName;
         public QuestEnums.QuestStatus questStatus;
-        public List<QuestCriteriaData> criteriaStatuses;
-        public List<bool> criteriaCompletionStatus;
-        public List<QuestObjectStateData> questObjectStates;
+        public List<QuestCriteriaData> criteriaStatuses = new List<QuestCriteriaData>();  // Ensure it's initialized
+        public List<bool> criteriaCompletionStatus = new List<bool>();
+        public List<QuestObjectStateData> questObjectStates = new List<QuestObjectStateData>();
     }
+
 
     [System.Serializable]
     public class QuestCriteriaData
