@@ -85,8 +85,6 @@ public class QuestObject : MonoBehaviour
             {
                 if (col.CompareTag("Player"))
                 {
-                    UnityEngine.Debug.Log("Player has explored a new area");
-
                     isExplorationCompleted = true;
                     StartCoroutine(NotifySpawnZoneExploreComplete());
                     break;

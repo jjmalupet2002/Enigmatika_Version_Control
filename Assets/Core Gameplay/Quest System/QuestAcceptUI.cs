@@ -111,7 +111,6 @@ public class QuestAcceptUI : MonoBehaviour
                 questDataList.Add(questData);
                 questCompletionList.Add(page.isQuestComplete); // Store separate completion status
 
-                UnityEngine.Debug.Log($"Saved quest: {page.quest.questName}, Status: {page.quest.status}, Completed: {page.isQuestComplete}");
             }
         }
 

@@ -56,6 +56,8 @@ public class QuestManager : MonoBehaviour
         if (!activeQuests.ContainsKey(quest.questName))
         {
             activeQuests.Add(quest.questName, quest);
+            UnityEngine.Debug.Log($"Main Quest Started: {quest.questName}");
+
             quest.status = QuestEnums.QuestStatus.NotStarted;
 
             foreach (var criteria in quest.questCriteriaList)
@@ -259,13 +261,11 @@ public class QuestManager : MonoBehaviour
                 questData.questObjectStates.Add(new QuestObjectStateData
                 {
                     criteriaName = criteria.criteriaName,
-                    isActive = criteria.associatedQuestObject != null && criteria.associatedQuestObject.gameObject.activeSelf
+                    isActive = criteria.associatedQuestObject.gameObject.activeSelf
                 });
 
                 // Save completion status
                 questData.criteriaCompletionStatus.Add(criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed);
-                UnityEngine.Debug.Log($"    Saved Criteria: {criteria.criteriaName}, Status: {criteria.CriteriaStatus}");
-
             }
 
             questDataList.Add(questData);
@@ -321,7 +321,6 @@ public class QuestManager : MonoBehaviour
                         quest.questCriteriaList[i].CriteriaStatus = questData.criteriaStatuses[i].criteriaStatus;
                     }
 
-                    UnityEngine.Debug.Log($"    Restoring Criteria: {quest.questCriteriaList[i].criteriaName}, Status: {quest.questCriteriaList[i].CriteriaStatus}");
                     // Only set the next active criteria if it is not already active and not completed
                     if (!setNextActive && quest.questCriteriaList[i].CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
                     {
@@ -350,10 +349,10 @@ public class QuestManager : MonoBehaviour
                 // Update the UI for this quest after loading
                 if (quest.status != QuestEnums.QuestStatus.Completed)
                 {
+                    QuestUIManager questUIManager = FindObjectOfType<QuestUIManager>();
                     if (questUIManager != null)
                     {
                         questUIManager.UpdateQuestUI(quest);  // Call the UI update method
-                        UnityEngine.Debug.Log($"Updating UI for quest: {quest.questName}, Status: {quest.status}");
                     }
                 }
             }
@@ -378,5 +377,3 @@ public class QuestManager : MonoBehaviour
         // Implement logic for completing quests here, such as giving rewards
     }
 }
-
-
