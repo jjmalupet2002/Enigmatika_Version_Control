@@ -349,7 +349,6 @@ public class QuestManager : MonoBehaviour
                 // Update the UI for this quest after loading
                 if (quest.status != QuestEnums.QuestStatus.Completed)
                 {
-                    QuestUIManager questUIManager = FindObjectOfType<QuestUIManager>();
                     if (questUIManager != null)
                     {
                         questUIManager.UpdateQuestUI(quest);  // Call the UI update method
@@ -358,7 +357,7 @@ public class QuestManager : MonoBehaviour
             }
         }
     }
-
+    
     // Optional event to handle quest acceptance
     void OnQuestAccepted(MainQuest quest)
     {
