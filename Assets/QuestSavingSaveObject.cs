@@ -15,6 +15,9 @@ namespace Save
 
         // To save the quest completion statuses separately
         [SerializeField] public SaveValue<List<bool>> questCompletionList = new SaveValue<List<bool>>("questCompletionList");
+
+        // New: Save whether the quest has been loaded
+        [SerializeField] public SaveValue<bool> isLoaded = new SaveValue<bool>("isLoaded", false);
     }
 
     // Custom class to hold all the quest-related data in one place

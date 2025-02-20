@@ -121,9 +121,11 @@ public class QuestManager : MonoBehaviour
             var completedCriteria = quest.questCriteriaList[currentIndex];
             if (completedCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed)
             {
-                // Only disable the associated quest object for the "Talk" quest criteria type
+                // Disable the associated quest object for the Talk, Escape, and Explore quest criteria types
                 if (completedCriteria.associatedQuestObject != null &&
-                    completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Talk)
+                    (completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Talk ||
+                     completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Explore ||
+                     completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Escape))
                 {
                     // Assuming QuestObject has a gameObject property, pass it to the coroutine
                     StartCoroutine(DisableAfterDelay(completedCriteria.associatedQuestObject.gameObject, 30f));
@@ -283,75 +285,56 @@ public class QuestManager : MonoBehaviour
 
         foreach (var questData in savedQuestDataList)
         {
-            // Find the corresponding quest
             MainQuest quest = mainQuestObjects.Find(q => q.questName == questData.questName);
             if (quest != null)
             {
-                // Check if quest is already in the activeQuests dictionary
+                // Instead of reinitializing, just add to active quests
                 if (!activeQuests.ContainsKey(quest.questName))
                 {
-                    InitializeQuest(quest);
-                }
-                else
-                {
-                    // Update the existing quest (if needed, you can handle updating other data here)
-                    quest = activeQuests[quest.questName];
+                    activeQuests.Add(quest.questName, quest);
                 }
 
-                // Restore the quest status
+                // Restore quest status
                 quest.status = questData.questStatus;
-                activeQuests[quest.questName] = quest;  // Ensure quest is correctly assigned or updated
 
-                // Track if we have set the next "in progress" criteria
-                bool setNextActive = false;
+                bool foundActiveCriteria = false; // Track if an active criteria has been set
 
-                // Restore criteria statuses and completion statuses
-                for (int i = 0; i < questData.criteriaCompletionStatus.Count && i < quest.questCriteriaList.Count; i++)
+                for (int i = 0; i < questData.criteriaStatuses.Count; i++)
                 {
-                    // If the criteria is completed, set its status as completed
-                    if (questData.criteriaCompletionStatus[i])
+                    var criteria = quest.questCriteriaList[i];
+                    var savedCriteria = questData.criteriaStatuses[i];
+
+                    // Restore criteria status
+                    if (!foundActiveCriteria && savedCriteria.criteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
                     {
-                        quest.questCriteriaList[i].CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
+                        // First found active criteria remains active
+                        foundActiveCriteria = true;
                     }
-                    else
+                    else if (savedCriteria.criteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
                     {
-                        // If the criteria is not completed, restore the previous saved status
-                        quest.questCriteriaList[i].CriteriaStatus = questData.criteriaStatuses[i].criteriaStatus;
+                        // Any additional "InProgress" criteria is reset to NotStarted
+                        savedCriteria.criteriaStatus = QuestEnums.QuestCriteriaStatus.NotStarted;
                     }
 
-                    // Only set the next active criteria if it is not already active and not completed
-                    if (!setNextActive && quest.questCriteriaList[i].CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
+                    criteria.CriteriaStatus = savedCriteria.criteriaStatus;
+
+                    // Restore associated quest object states
+                    if (criteria.associatedQuestObject != null)
                     {
-                        SetNextActiveCriteria(quest, i); // Set the next uncompleted criteria as active
-                        setNextActive = true; // Prevent setting more than one criteria
+                        criteria.associatedQuestObject.gameObject.SetActive(questData.questObjectStates[i].isActive);
                     }
                 }
 
-                // Restore quest object states (active/inactive)
-                foreach (var objectState in questData.questObjectStates)
+                // Ensure only one criteria is in progress
+                if (quest.status == QuestEnums.QuestStatus.InProgress)
                 {
-                    var criteria = quest.questCriteriaList.Find(c => c.criteriaName == objectState.criteriaName);
-                    if (criteria != null)
-                    {
-                        // Restore the associated object active state
-                        criteria.associatedQuestObject.gameObject.SetActive(objectState.isActive);
-                    }
-                }
-
-                // Set Highest Priority only if the first criteria isn't completed
-                if (quest.questCriteriaList[0].CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
-                {
-                    SetHighestPriorityCriteriaInProgress(quest); // This might need to ensure it only sets the next active one as well
+                    LogActiveCriteria(quest);
                 }
 
                 // Update the UI for this quest after loading
                 if (quest.status != QuestEnums.QuestStatus.Completed)
                 {
-                    if (questUIManager != null)
-                    {
-                        questUIManager.UpdateQuestUI(quest);  // Call the UI update method
-                        UnityEngine.Debug.Log($"Updating UI for quest: {quest.questName}, Status: {quest.status}");
-                    }
+                    questUIManager?.UpdateQuestUI(quest);
                 }
             }
         }

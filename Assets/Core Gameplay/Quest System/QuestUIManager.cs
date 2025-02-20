@@ -43,7 +43,6 @@ public class QuestUIManager : MonoBehaviour
     // Update UI when a quest is accepted or completed
     public void UpdateQuestUI(MainQuest quest)
     {
-        UnityEngine.Debug.Log($"UpdateQuestUI called for: {quest.questName}");
         if (quest.status == QuestEnums.QuestStatus.InProgress || quest.status == QuestEnums.QuestStatus.Completed)
         {
             // Only show quest name and criteria text if the quest is in progress
