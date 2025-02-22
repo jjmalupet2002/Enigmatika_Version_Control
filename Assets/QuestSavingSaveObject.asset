@@ -17,33 +17,106 @@ MonoBehaviour:
   activeQuestNames:
     key: activeQuestNames
     value:
-    - 'The Protagonist '
+    - The Nugget Hunt
     defaultValue: []
   questDataList:
     key: questDataList
     value:
-    - questName: 'The Protagonist '
-      questStatus: 0
-      criteriaStatuses: []
-      criteriaCompletionStatus: 
-      questObjectStates: []
-    - questName: The King's Rage
-      questStatus: 2
-      criteriaStatuses: []
-      criteriaCompletionStatus: 
-      questObjectStates: []
     - questName: The Nugget Hunt
-      questStatus: 0
-      criteriaStatuses: []
-      criteriaCompletionStatus: 
-      questObjectStates: []
-    - questName: The Pragmatist's Path
-      questStatus: 0
-      criteriaStatuses: []
-      criteriaCompletionStatus: 
-      questObjectStates: []
+      questStatus: 1
+      criteriaStatuses:
+      - criteriaName: Go to the castle courtyard
+        criteriaStatus: 2
+      - criteriaName: Talk to the Stablehand
+        criteriaStatus: 1
+      - criteriaName: Visit the old tool shed
+        criteriaStatus: 0
+      - criteriaName: Lower the ramp and talk to the stablehand
+        criteriaStatus: 0
+      - criteriaName: Investigate the trees
+        criteriaStatus: 0
+      - criteriaName: Inspect the chest
+        criteriaStatus: 0
+      - criteriaName: Discuss what you found to the Stablehand
+        criteriaStatus: 0
+      - criteriaName: Visit the Library
+        criteriaStatus: 0
+      - criteriaName: Investigate the library
+        criteriaStatus: 0
+      - criteriaName: Solve the mystery of the missing key 0/2
+        criteriaStatus: 0
+      - criteriaName: Solve the mystery of the missing key 1/2
+        criteriaStatus: 0
+      - criteriaName: Take the key
+        criteriaStatus: 0
+      - criteriaName: Take the key and unlock the chest
+        criteriaStatus: 0
+      - criteriaName: Deliver the clue item to the Hooded Figure
+        criteriaStatus: 0
+      - criteriaName: Find out why the clue item was incorrect
+        criteriaStatus: 0
+      - criteriaName: Meet the Merchant
+        criteriaStatus: 0
+      - criteriaName: 'From Rubble Path: Investigate the bridge'
+        criteriaStatus: 0
+      - criteriaName: Investigate the secret hideout
+        criteriaStatus: 0
+      - criteriaName: Who did the blueprint belong to?
+        criteriaStatus: 0
+      - criteriaName: Investigate the Thief's hideout further
+        criteriaStatus: 0
+      - criteriaName: Find a way to escape the thief's hideout
+        criteriaStatus: 0
+      criteriaCompletionStatus: 010000000000000000000000000000000000000000
+      questObjectStates:
+      - criteriaName: Go to the castle courtyard
+        isActive: 0
+      - criteriaName: Talk to the Stablehand
+        isActive: 1
+      - criteriaName: Visit the old tool shed
+        isActive: 0
+      - criteriaName: Lower the ramp and talk to the stablehand
+        isActive: 0
+      - criteriaName: Investigate the trees
+        isActive: 0
+      - criteriaName: Inspect the chest
+        isActive: 0
+      - criteriaName: Discuss what you found to the Stablehand
+        isActive: 0
+      - criteriaName: Visit the Library
+        isActive: 0
+      - criteriaName: Investigate the library
+        isActive: 0
+      - criteriaName: Solve the mystery of the missing key 0/2
+        isActive: 0
+      - criteriaName: Solve the mystery of the missing key 1/2
+        isActive: 0
+      - criteriaName: Take the key
+        isActive: 0
+      - criteriaName: Take the key and unlock the chest
+        isActive: 0
+      - criteriaName: Deliver the clue item to the Hooded Figure
+        isActive: 0
+      - criteriaName: Find out why the clue item was incorrect
+        isActive: 0
+      - criteriaName: Meet the Merchant
+        isActive: 0
+      - criteriaName: 'From Rubble Path: Investigate the bridge'
+        isActive: 0
+      - criteriaName: Investigate the secret hideout
+        isActive: 0
+      - criteriaName: Who did the blueprint belong to?
+        isActive: 0
+      - criteriaName: Investigate the Thief's hideout further
+        isActive: 0
+      - criteriaName: Find a way to escape the thief's hideout
+        isActive: 0
     defaultValue: []
   questCompletionList:
     key: questCompletionList
-    value: 00010000
+    value: 00000000
     defaultValue: 
+  isLoaded:
+    key: isLoaded
+    value: 0
+    defaultValue: 0

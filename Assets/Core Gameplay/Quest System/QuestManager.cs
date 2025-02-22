@@ -121,39 +121,57 @@ public class QuestManager : MonoBehaviour
             var completedCriteria = quest.questCriteriaList[currentIndex];
             if (completedCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed)
             {
-                // Disable the associated quest object for the Talk, Escape, and Explore quest criteria types
-                if (completedCriteria.associatedQuestObject != null &&
-                    (completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Talk ||
-                     completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Explore ||
-                     completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Escape))
+                // Disable the associated quest object for Talk, Explore, and Escape criteria types
+                if (completedCriteria.associatedQuestObject != null)
                 {
-                    // Assuming QuestObject has a gameObject property, pass it to the coroutine
-                    StartCoroutine(DisableAfterDelay(completedCriteria.associatedQuestObject.gameObject, 30f));
+                    float delay = 0f;
+
+                    if (completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Talk)
+                    {
+                        delay = 30f; // 30 seconds for Talk criteria
+                    }
+                    else if (completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Explore ||
+                             completedCriteria.criteriaType == QuestEnums.QuestCriteriaType.Escape)
+                    {
+                        delay = 3f; // 3 seconds for Explore and Escape criteria
+                    }
+
+                    // Start the coroutine with the correct delay
+                    if (delay > 0)
+                    {
+                        StartCoroutine(DisableAfterDelay(completedCriteria.associatedQuestObject.gameObject, delay));
+                    }
                 }
-            }
+
+                // Look for the next criteria that is NotStarted
+                for (int i = currentIndex + 1; i < quest.questCriteriaList.Count; i++)
+                {
+                    var nextCriteria = quest.questCriteriaList[i];
+
+                    if (nextCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.NotStarted)
+                    {
+                        nextCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
+
+                        if (nextCriteria.associatedQuestObject != null) // Added null check for safety
+                        {
+                            nextCriteria.associatedQuestObject.gameObject.SetActive(true); // Enable the associated quest object
+                        }
+
+                        UnityEngine.Debug.Log($"Next Task: {nextCriteria.criteriaName}");
+
+                        // Trigger the OnQuestAcceptedEvent here
+                        OnNextCriteriaStarted(quest);
+                        OnNextCriteriaStartedEvent?.Invoke(quest); // Notify listeners
+
+                        return; // Exit once the next criteria is found and set to InProgress
+                    }
+                }
+
+                // If no next criteria are found, log that the quest is completed
+                UnityEngine.Debug.Log("No next criteria found, quest completed.");
+            } // <-- This closing bracket was missing
         }
-
-        // Look for the next criteria that is NotStarted
-        for (int i = currentIndex + 1; i < quest.questCriteriaList.Count; i++)
-        {
-            var nextCriteria = quest.questCriteriaList[i];
-
-            if (nextCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.NotStarted)
-            {
-                nextCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
-                nextCriteria.associatedQuestObject.gameObject.SetActive(true); // Enable the associated quest object
-                UnityEngine.Debug.Log($"Next Task: {nextCriteria.criteriaName}");
-                // Trigger the OnQuestAcceptedEvent here
-                OnNextCriteriaStarted(quest);
-                OnNextCriteriaStartedEvent?.Invoke(quest); // Notify listeners
-                return; // Exit once the next criteria is found and set to InProgress
-            }
-        }
-
-        // If no next criteria are found, log that the quest is completed
-        UnityEngine.Debug.Log("No next criteria found, quest completed.");
     }
-
 
     // Complete a quest and log the next active criteria
     public void CompleteQuest(MainQuest quest)
