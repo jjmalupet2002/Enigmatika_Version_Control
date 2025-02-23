@@ -280,6 +280,7 @@ public class PlayerJoystickControl : MonoBehaviour
         if (!enabled)
         {
             movementInput = Vector2.zero; // Stop movement when input is disabled
+
         }
     }
 }
