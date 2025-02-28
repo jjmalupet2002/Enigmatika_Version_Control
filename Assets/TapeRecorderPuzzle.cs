@@ -15,59 +15,60 @@ public class TapeRecorderPuzzle : MonoBehaviour
     [Header("Cassette Reels & Controls")]
     public GameObject cassette1Object;
     public GameObject cassette2Object;
-    public Button rotateButton1; // Button for rotating cassette 1
-    public Button rotateButton2; // Button for rotating cassette 2
-    public Button confirmButton; // Button to confirm answer
+    public Button rotateButton1;
+    public Button rotateButton2;
 
-    private Transform cassette1;
-    private Transform cassette2;
+    [Header("Confirm Button Settings")]
+    public GameObject confirmButtonObject;
+    private Animator confirmButtonAnimator;
+
+    private Animator cassette1Animator;
+    private Animator cassette2Animator;
     private int cassette1Index = 0;
     private int cassette2Index = 0;
-    private bool wasCloseUpActive = false; // Track previous camera state
-
-    [Header("Defined Rotation Angles")]
-    public List<float> cassette1Rotations = new List<float> { 0f, 90f, 180f, 270f };
-    public List<float> cassette2Rotations = new List<float> { 0f, 100f, 180f, 250f };
+    private bool wasCloseUpActive = false;
+    private bool isConfirmButtonMoving = false;
+    private bool confirmPressed = false;
 
     [Header("Event Data")]
     public List<EventData> cassette1Events = new List<EventData>();
     public List<EventData> cassette2Events = new List<EventData>();
-    public Dictionary<float, float> correctPairs = new Dictionary<float, float>(); // Correct rotation pairs
+
+    [Header("Correct Answer")]
+    public List<int> correctAnswer = new List<int> { 1, 2 };
 
     [Header("Camera Reference")]
-    public SwitchCamera switchCamera; // Reference to SwitchCamera script
+    public SwitchCamera switchCamera;
 
     private void Start()
     {
-        cassette1 = cassette1Object.transform;
-        cassette2 = cassette2Object.transform;
+        cassette1Animator = cassette1Object.GetComponent<Animator>();
+        cassette2Animator = cassette2Object.GetComponent<Animator>();
 
         textBackground1.SetActive(false);
         textBackground2.SetActive(false);
 
-        // Add button listeners
         rotateButton1.onClick.AddListener(() => RotateCassette(1));
         rotateButton2.onClick.AddListener(() => RotateCassette(2));
-        confirmButton.onClick.AddListener(PressConfirmButton);
 
-        UpdateButtonVisibility(); // Ensure correct initial state
+        // Store the initial position of the confirm button
+        confirmButtonAnimator = confirmButtonObject.GetComponent<Animator>();
+
     }
 
     private void Update()
     {
-        UpdateButtonVisibility(); // Continuously check if buttons should be visible
-        TrackCassetteRotation();  // Ensure correct tracking of rotation
+        UpdateButtonVisibility();
+        DetectConfirmButtonPress();
+        UpdateConfirmButtonState();
     }
 
     private void UpdateButtonVisibility()
     {
         bool isCloseUpActive = IsCloseUpCameraActive();
-
-        // Show or hide rotate buttons based on camera state
         rotateButton1.gameObject.SetActive(isCloseUpActive);
         rotateButton2.gameObject.SetActive(isCloseUpActive);
 
-        // Hide text backgrounds when exiting close-up mode
         if (!isCloseUpActive && wasCloseUpActive)
         {
             textBackground1.SetActive(false);
@@ -77,78 +78,95 @@ public class TapeRecorderPuzzle : MonoBehaviour
         wasCloseUpActive = isCloseUpActive;
     }
 
-    private void TrackCassetteRotation()
+    private void UpdateConfirmButtonState()
     {
-        // Continuously track and adjust cassette rotation
-        float cassette1X = NormalizeAngle(cassette1.localEulerAngles.x);
-        float cassette2X = NormalizeAngle(cassette2.localEulerAngles.x);
+        bool isTextVisible = textBackground1.activeSelf && textBackground2.activeSelf;
+        confirmButtonObject.GetComponent<BoxCollider>().enabled = isTextVisible;
+    }
 
-        cassette1Index = FindClosestRotationIndex(cassette1X, cassette1Rotations);
-        cassette2Index = FindClosestRotationIndex(cassette2X, cassette2Rotations);
+    private bool IsCloseUpCameraActive()
+    {
+        var switchCameras = FindObjectsOfType<SwitchCamera>();
+        foreach (var switchCamera in switchCameras)
+        {
+            if (switchCamera.currentCameraState == CameraState.CloseUp)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void RotateCassette(int cassetteNumber)
     {
         if (cassetteNumber == 1)
         {
-            cassette1Index = (cassette1Index + 1) % cassette1Rotations.Count;
-            SetCassetteRotation(cassette1, cassette1Rotations[cassette1Index]);
+            cassette1Index = (cassette1Index - 1 + cassette1Events.Count) % cassette1Events.Count;
+            StartCoroutine(PlayCassetteAnimation(cassette1Animator, cassette1Index, cassette1Events, text1, textBackground1));
         }
         else if (cassetteNumber == 2)
         {
-            cassette2Index = (cassette2Index + 1) % cassette2Rotations.Count;
-            SetCassetteRotation(cassette2, cassette2Rotations[cassette2Index]);
+            cassette2Index = (cassette2Index - 1 + cassette2Events.Count) % cassette2Events.Count;
+            StartCoroutine(PlayCassetteAnimation(cassette2Animator, cassette2Index, cassette2Events, text2, textBackground2));
         }
-
-        CheckMatchingRotation();
     }
 
-    private void SetCassetteRotation(Transform cassette, float targetRotation)
+    private IEnumerator PlayCassetteAnimation(Animator animator, int index, List<EventData> events, TextMeshProUGUI text, GameObject textBackground)
     {
-        // Explicitly set only X-axis rotation to prevent unintended Y/Z flips
-        cassette.localRotation = Quaternion.AngleAxis(targetRotation, Vector3.right);
+        animator.SetTrigger("Spin");
+        yield return new WaitForSeconds(0.5f);
+
+        animator.SetTrigger("Idle");
+        yield return new WaitForSeconds(1f);
+
+        DisplayEvent(index, events, text, textBackground);
     }
 
-    private void CheckMatchingRotation()
+    private void DisplayEvent(int index, List<EventData> events, TextMeshProUGUI text, GameObject textBackground)
     {
-        float currentRotation1 = cassette1Rotations[cassette1Index];
-        float currentRotation2 = cassette2Rotations[cassette2Index];
-
-        bool cassette1HasEvent = false;
-        bool cassette2HasEvent = false;
-
-        foreach (EventData eventData in cassette1Events)
+        if (index >= 0 && index < events.Count)
         {
-            if (Mathf.Approximately(currentRotation1, eventData.rotationValue))
+            text.text = events[index].text;
+            textBackground.SetActive(true);
+        }
+        else
+        {
+            text.text = "";
+            textBackground.SetActive(false);
+        }
+    }
+
+    private void DetectConfirmButtonPress()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
             {
-                text1.text = eventData.text;
-                cassette1HasEvent = true;
-                break;
+                if (hit.collider.gameObject == confirmButtonObject)
+                {
+                    UnityEngine.Debug.Log("Confirm button pressed!");
+                    confirmButtonAnimator.SetTrigger("PressDown");
+                    confirmPressed = true;
+                    PressConfirmButton();
+                    Invoke(nameof(ResetConfirmButton), 1.5f);
+                }
             }
         }
+    }
 
-        foreach (EventData eventData in cassette2Events)
-        {
-            if (Mathf.Approximately(currentRotation2, eventData.rotationValue))
-            {
-                text2.text = eventData.text;
-                cassette2HasEvent = true;
-                break;
-            }
-        }
-
-        textBackground1.SetActive(cassette1HasEvent);
-        textBackground2.SetActive(cassette2HasEvent);
+    private void ResetConfirmButton()
+    {
+        confirmButtonAnimator.SetTrigger("PressUp");
     }
 
     private void PressConfirmButton()
     {
-        float currentRotation1 = cassette1Rotations[cassette1Index];
-        float currentRotation2 = cassette2Rotations[cassette2Index];
-
-        if (correctPairs.ContainsKey(currentRotation1) && correctPairs[currentRotation1] == currentRotation2)
+        if (cassette1Index == correctAnswer[0] && cassette2Index == correctAnswer[1])
         {
-            UnityEngine.Debug.Log("Correct Pair! Puzzle progresses.");
+            UnityEngine.Debug.Log("Correct Pair! Puzzle unlocked.");
             PlayCorrectSequence();
         }
         else
@@ -168,7 +186,7 @@ public class TapeRecorderPuzzle : MonoBehaviour
     {
         textBackground1.GetComponent<Image>().color = Color.red;
         textBackground2.GetComponent<Image>().color = Color.red;
-        Invoke(nameof(ResetBackgrounds), 0.5f);
+        // Removed the Invoke to reset color to white.
     }
 
     private void ResetBackgrounds()
@@ -177,48 +195,10 @@ public class TapeRecorderPuzzle : MonoBehaviour
         textBackground2.GetComponent<Image>().color = Color.white;
     }
 
-    private bool IsCloseUpCameraActive()
-    {
-        var switchCameras = FindObjectsOfType<SwitchCamera>();
-        foreach (var switchCamera in switchCameras)
-        {
-            if (switchCamera.currentCameraState == CameraState.CloseUp)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private int FindClosestRotationIndex(float currentRotation, List<float> rotationList)
-    {
-        int closestIndex = 0;
-        float closestDistance = Mathf.Abs(currentRotation - rotationList[0]);
-
-        for (int i = 1; i < rotationList.Count; i++)
-        {
-            float distance = Mathf.Abs(currentRotation - rotationList[i]);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestIndex = i;
-            }
-        }
-        return closestIndex;
-    }
-
-    private float NormalizeAngle(float angle)
-    {
-        angle = angle % 360;
-        if (angle < 0) angle += 360;
-        return angle;
-    }
-
     [System.Serializable]
     public class EventData
     {
         public int index;
         public string text;
-        public float rotationValue;
     }
 }
