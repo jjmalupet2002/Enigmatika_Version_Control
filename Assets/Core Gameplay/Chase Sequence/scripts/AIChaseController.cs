@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -12,7 +11,9 @@ public class AIChaseController : MonoBehaviour
     public Transform playerStartPosition;
     public Transform enemyStartPosition;
     public AudioSource chaseMusic;
+    public AudioSource backgroundMusic; // Reference to background music
     public CanvasGroup blackScreenCanvasGroup; // Using CanvasGroup instead of Image
+
     private NavMeshAgent enemyAgent;
     private Rigidbody enemyRigidbody;
     private Rigidbody playerRigidbody;
@@ -92,8 +93,17 @@ public class AIChaseController : MonoBehaviour
         {
             isChasing = true;
 
+            // Stop background music if it's playing
+            if (backgroundMusic != null && backgroundMusic.isPlaying)
+            {
+                backgroundMusic.Stop();
+            }
+
+            // Start chase music if it's not playing
             if (chaseMusic != null && !chaseMusic.isPlaying)
+            {
                 chaseMusic.Play();
+            }
         }
     }
 
@@ -129,6 +139,12 @@ public class AIChaseController : MonoBehaviour
         yield return new WaitForSeconds(chaseCooldown);
         isOnCooldown = false;
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(true);
+
+        // Resume background music when chase ends
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Play();
+        }
     }
 
     private void ResetPlayerPosition()

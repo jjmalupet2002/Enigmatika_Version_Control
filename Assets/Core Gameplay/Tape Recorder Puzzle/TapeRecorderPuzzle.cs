@@ -40,6 +40,10 @@ public class TapeRecorderPuzzle : MonoBehaviour
     [Header("Camera Reference")]
     public SwitchCamera switchCamera;
 
+    [Header("Audio Settings")]
+    public AudioSource rotateSound;
+    public AudioSource confirmSound;
+
     private void Start()
     {
         cassette1Animator = cassette1Object.GetComponent<Animator>();
@@ -109,6 +113,11 @@ public class TapeRecorderPuzzle : MonoBehaviour
             cassette2Index = (cassette2Index - 1 + cassette2Events.Count) % cassette2Events.Count;
             StartCoroutine(PlayCassetteAnimation(cassette2Animator, cassette2Index, cassette2Events, text2, textBackground2));
         }
+
+        if (rotateSound != null)
+        {
+            rotateSound.Play();
+        }
     }
 
     private IEnumerator PlayCassetteAnimation(Animator animator, int index, List<EventData> events, TextMeshProUGUI text, GameObject textBackground)
@@ -152,6 +161,11 @@ public class TapeRecorderPuzzle : MonoBehaviour
                     confirmPressed = true;
                     PressConfirmButton();
                     Invoke(nameof(ResetConfirmButton), 1.5f);
+
+                    if (confirmSound != null)
+                    {
+                        confirmSound.Play();
+                    }
                 }
             }
         }
