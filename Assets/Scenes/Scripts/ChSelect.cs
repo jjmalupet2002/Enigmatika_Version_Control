@@ -14,9 +14,10 @@ public class ChSelect : MonoBehaviour
 
     public void playChOne()
     {
-        // If the player has played before, load last saved scene
-        int lastScene = PlayerPrefs.GetInt("lastSavedScene", 2);
-        SceneManager.LoadSceneAsync(lastScene);
+        UnityEngine.Debug.Log("Playing Chapter 1...");
+
+        // **Always load Level 1 (Scene Index 2)**
+        SceneManager.LoadSceneAsync(2);
     }
 
     //WIP: Chapter agnostic load code

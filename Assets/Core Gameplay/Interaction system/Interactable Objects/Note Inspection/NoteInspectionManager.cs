@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem; // Keep this line for Input System usage
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics;
 
 public class NoteInspectionManager : MonoBehaviour
 {
@@ -68,8 +69,11 @@ public class NoteInspectionManager : MonoBehaviour
 
     private void OnEnable()
     {
-        swipeLeftAction.Enable();
-        swipeRightAction.Enable();
+        if (swipeLeftAction != null) swipeLeftAction.Enable();
+        else UnityEngine.Debug.LogError("SwipeLeft action is null. Check inputActionAsset configuration.");
+
+        if (swipeRightAction != null) swipeRightAction.Enable();
+        else UnityEngine.Debug.LogError("SwipeRight action is null. Check inputActionAsset configuration.");
     }
 
     private void OnDisable()

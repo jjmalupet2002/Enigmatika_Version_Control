@@ -69,7 +69,9 @@ public class TapeRecorderPuzzle : MonoBehaviour
 
     private void UpdateButtonVisibility()
     {
-        bool isCloseUpActive = IsCloseUpCameraActive();
+        // Only show rotate buttons if THIS specific switchCamera instance is in CloseUp mode
+        bool isCloseUpActive = switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp;
+
         rotateButton1.gameObject.SetActive(isCloseUpActive);
         rotateButton2.gameObject.SetActive(isCloseUpActive);
 
