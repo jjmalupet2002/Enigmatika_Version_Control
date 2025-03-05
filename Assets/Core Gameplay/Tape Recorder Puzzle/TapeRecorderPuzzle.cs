@@ -44,6 +44,12 @@ public class TapeRecorderPuzzle : MonoBehaviour
     public AudioSource rotateSound;
     public AudioSource confirmSound;
 
+    [Header("Hidden Note Settings")]
+    public GameObject hiddenNoteObject; // Reference to the hidden note GameObject
+    private Vector3 initialPosition;
+    public Vector3 targetPosition;
+    public float lerpSpeed = 2f; // Speed of movement
+
     private void Start()
     {
         cassette1Animator = cassette1Object.GetComponent<Animator>();
@@ -58,6 +64,12 @@ public class TapeRecorderPuzzle : MonoBehaviour
         // Store the initial position of the confirm button
         confirmButtonAnimator = confirmButtonObject.GetComponent<Animator>();
 
+        // Store the initial position of the hidden note
+        if (hiddenNoteObject != null)
+        {
+            initialPosition = hiddenNoteObject.transform.position;
+            hiddenNoteObject.SetActive(false); // Ensure it's disabled at start
+        }
     }
 
     private void Update()
@@ -184,6 +196,7 @@ public class TapeRecorderPuzzle : MonoBehaviour
         {
             UnityEngine.Debug.Log("Correct Pair! Puzzle unlocked.");
             PlayCorrectSequence();
+            ReleaseHiddenNote(); // Call the new method when puzzle is solved
         }
         else
         {
@@ -209,6 +222,30 @@ public class TapeRecorderPuzzle : MonoBehaviour
     {
         textBackground1.GetComponent<Image>().color = Color.white;
         textBackground2.GetComponent<Image>().color = Color.white;
+    }
+
+    private void ReleaseHiddenNote()
+    {
+        if (hiddenNoteObject != null)
+        {
+            hiddenNoteObject.SetActive(true);
+            StartCoroutine(MoveHiddenNote());
+        }
+    }
+
+    private IEnumerator MoveHiddenNote()
+    {
+        float elapsedTime = 0f;
+        Vector3 startPosition = initialPosition;
+
+        while (elapsedTime < 1f) // Adjust duration as needed
+        {
+            hiddenNoteObject.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime);
+            elapsedTime += Time.deltaTime * lerpSpeed;
+            yield return null;
+        }
+
+        hiddenNoteObject.transform.position = targetPosition; // Ensure final position is set
     }
 
     [System.Serializable]
