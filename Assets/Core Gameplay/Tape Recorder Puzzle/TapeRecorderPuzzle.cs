@@ -46,9 +46,7 @@ public class TapeRecorderPuzzle : MonoBehaviour
 
     [Header("Hidden Note Settings")]
     public GameObject hiddenNoteObject; // Reference to the hidden note GameObject
-    private Vector3 initialPosition;
-    public Vector3 targetPosition;
-    public float lerpSpeed = 2f; // Speed of movement
+    private Animator hiddenNoteAnimator; // Animator reference
 
     private void Start()
     {
@@ -64,11 +62,10 @@ public class TapeRecorderPuzzle : MonoBehaviour
         // Store the initial position of the confirm button
         confirmButtonAnimator = confirmButtonObject.GetComponent<Animator>();
 
-        // Store the initial position of the hidden note
+        // Get the Animator component from the hidden note
         if (hiddenNoteObject != null)
         {
-            initialPosition = hiddenNoteObject.transform.position;
-            hiddenNoteObject.SetActive(false); // Ensure it's disabled at start
+            hiddenNoteAnimator = hiddenNoteObject.GetComponent<Animator>();
         }
     }
 
@@ -196,7 +193,7 @@ public class TapeRecorderPuzzle : MonoBehaviour
         {
             UnityEngine.Debug.Log("Correct Pair! Puzzle unlocked.");
             PlayCorrectSequence();
-            ReleaseHiddenNote(); // Call the new method when puzzle is solved
+            MoveHiddenNote(); // Call the new method when puzzle is solved
         }
         else
         {
@@ -209,6 +206,8 @@ public class TapeRecorderPuzzle : MonoBehaviour
     {
         textBackground1.GetComponent<Image>().color = Color.green;
         textBackground2.GetComponent<Image>().color = Color.green;
+        textBackground1.SetActive(false);
+        textBackground2.SetActive(false);
     }
 
     private void PlayIncorrectSequence()
@@ -224,28 +223,13 @@ public class TapeRecorderPuzzle : MonoBehaviour
         textBackground2.GetComponent<Image>().color = Color.white;
     }
 
-    private void ReleaseHiddenNote()
+    private void MoveHiddenNote()
     {
-        if (hiddenNoteObject != null)
+        if (hiddenNoteAnimator != null)
         {
-            hiddenNoteObject.SetActive(true);
-            StartCoroutine(MoveHiddenNote());
+            hiddenNoteObject.SetActive(true); // Ensure the note is visible
+            hiddenNoteAnimator.SetTrigger("releaseNote"); // Trigger animation
         }
-    }
-
-    private IEnumerator MoveHiddenNote()
-    {
-        float elapsedTime = 0f;
-        Vector3 startPosition = initialPosition;
-
-        while (elapsedTime < 1f) // Adjust duration as needed
-        {
-            hiddenNoteObject.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime);
-            elapsedTime += Time.deltaTime * lerpSpeed;
-            yield return null;
-        }
-
-        hiddenNoteObject.transform.position = targetPosition; // Ensure final position is set
     }
 
     [System.Serializable]
