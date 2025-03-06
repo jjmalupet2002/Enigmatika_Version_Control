@@ -4697,7 +4697,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.3550677
+      value: -0.7138619
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.x
@@ -4705,11 +4705,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9348406
+      value: -0.7002865
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4717,7 +4717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 41.595
+      value: -271.1
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -10365,6 +10365,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 697349708}
   - {fileID: 1141478512}
   m_Father: {fileID: 1688544758}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12703,6 +12704,153 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 2.5
+--- !u!1 &697349707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 697349708}
+  - component: {fileID: 697349713}
+  - component: {fileID: 697349712}
+  - component: {fileID: 697349711}
+  - component: {fileID: 697349710}
+  - component: {fileID: 697349709}
+  m_Layer: 0
+  m_Name: 'Correct: Unfinished Music Sheet'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &697349708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697349707}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.349, y: -0.5098, z: 0.2252}
+  m_LocalScale: {x: 0.3019, y: 0.00006, z: 0.5497}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 569442062}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &697349709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697349707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Untitled Music Sheet
+  itemIcon: {fileID: 21300000, guid: 0264549fdba6d3e4ea8f2ffb71bf7cf8, type: 3}
+  itemDescription: ' The note conveys that his heart is still bound to the memory
+    of Seraphina, and only when he finds peace can he truly finish the music that
+    once symbolized their shared dreams.'
+  keyId: untitledmusicsheet
+  isClueItem: 1
+  isGeneralItem: 0
+  isUsable: 0
+  isNote: 1
+  is3dObject: 0
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 1485000988}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+--- !u!114 &697349710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697349707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notePages:
+  - {fileID: 1485000988}
+--- !u!65 &697349711
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697349707}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 500, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &697349712
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697349707}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &697349713
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697349707}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &698493640
 GameObject:
   m_ObjectHideFlags: 0
@@ -14588,8 +14736,6 @@ MonoBehaviour:
   rotateSound: {fileID: 1216321947}
   confirmSound: {fileID: 323819290}
   hiddenNoteObject: {fileID: 838895576}
-  targetPosition: {x: 0.009900873, y: 0.8487294, z: -0.23}
-  lerpSpeed: 1.5
 --- !u!1 &769036609
 GameObject:
   m_ObjectHideFlags: 0
@@ -15580,6 +15726,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notePages:
   - {fileID: 1065470233}
+--- !u!95 &838895582
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838895576}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0ca0fe9962eabba47b13a1c5534789a3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &856100318
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17663,7 +17830,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1485000991}
   m_Father: {fileID: 1806890208}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -22384,6 +22552,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       insertIndex: -1
       addedObject: {fileID: 838895578}
+    - targetCorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 838895582}
   m_SourcePrefab: {fileID: 100100000, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
 --- !u!1 &1199511295 stripped
 GameObject:
@@ -25047,6 +25218,136 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 645bb802a52d37342acd891643812fe3, type: 3}
+--- !u!1001 &1383897080
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2037483104}
+    m_Modifications:
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_RootOrder
+      value: 249
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.872
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.11157036
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.7599945
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_Name
+      value: 'Wrong: Diary Seraphina'
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1383897084}
+    - targetCorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1383897083}
+  m_SourcePrefab: {fileID: 100100000, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+--- !u!4 &1383897081 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+  m_PrefabInstance: {fileID: 1383897080}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1383897082 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+  m_PrefabInstance: {fileID: 1383897080}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1383897083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383897082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Another Diary of Seraphina
+  itemIcon: {fileID: 21300000, guid: 04abd636f7c76074c8c75e4b8625e2b6, type: 3}
+  itemDescription: 'The Diary of Elliana. What might this piece of diary infer from
+    the spectral symphony?
+
+'
+  keyId: wrongseraphina
+  isClueItem: 1
+  isGeneralItem: 0
+  isUsable: 0
+  isNote: 1
+  is3dObject: 0
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 479023771}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+--- !u!114 &1383897084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383897082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notePages:
+  - {fileID: 1065470233}
 --- !u!1 &1384871489 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5959072874434246514, guid: b6dbf3551f3f6864094a1891cf95ad8c, type: 3}
@@ -27134,6 +27435,82 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5652133289608528303, guid: 796cc8e6b614c304c9448fea6ab63427, type: 3}
   m_PrefabInstance: {fileID: 1039004639}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1485000988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1485000991}
+  - component: {fileID: 1485000990}
+  - component: {fileID: 1485000989}
+  m_Layer: 5
+  m_Name: 'Correct: Untitled Music Sheet'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1485000989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485000988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0264549fdba6d3e4ea8f2ffb71bf7cf8, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1485000990
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485000988}
+  m_CullTransparentMesh: 1
+--- !u!224 &1485000991
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485000988}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1853284004}
+  m_Father: {fileID: 999616700}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -0.000015259}
+  m_SizeDelta: {x: 1110.594, y: 1223.5507}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1491696812
 GameObject:
   m_ObjectHideFlags: 0
@@ -32719,19 +33096,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9348406
+      value: 0.9650852
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.3550677
+      value: -0.26193643
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -32739,7 +33116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 41.595
+      value: -30.37
       objectReference: {fileID: 0}
     - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -34745,6 +35122,87 @@ Transform:
   m_Children: []
   m_Father: {fileID: 286458945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1853284003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1853284004}
+  - component: {fileID: 1853284006}
+  - component: {fileID: 1853284005}
+  m_Layer: 5
+  m_Name: Text (Legacy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1853284004
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853284003}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1485000991}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000015259, y: 0.0000076293945}
+  m_SizeDelta: {x: 838.2998, y: 450.6054}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1853284005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853284003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 5e66e77026a31924e936fc62ef1e97b9, type: 3}
+    m_FontSize: 50
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 50
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1.32
+  m_Text: The music will finish when my heart can breathe again, freed from the weight
+    of grief, allowing the notes of our shared love to flow once more, unburdened
+    by loss.
+--- !u!222 &1853284006
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853284003}
+  m_CullTransparentMesh: 1
 --- !u!1 &1860540254 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7096264683651746517, guid: c0f0345dccebbdf45be46b1490cf3755, type: 3}
@@ -37336,6 +37794,134 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 22443772, guid: fe9bfb5044c0cc646baba1ad7d354100, type: 3}
   m_PrefabInstance: {fileID: 464360831}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1995116176
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2037483104}
+    m_Modifications:
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_RootOrder
+      value: 249
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.11157036
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.7599945
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.3550677
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9348406
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 41.595
+      objectReference: {fileID: 0}
+    - target: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      propertyPath: m_Name
+      value: 'Correct: Diary Seraphina'
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1995116180}
+    - targetCorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1995116179}
+  m_SourcePrefab: {fileID: 100100000, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+--- !u!4 &1995116177 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4144105643464745191, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+  m_PrefabInstance: {fileID: 1995116176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1995116178 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5612143742458422442, guid: e1d71bf233ce21d47baab4220cd7ed21, type: 3}
+  m_PrefabInstance: {fileID: 1995116176}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1995116179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995116178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Diary of Seraphina
+  itemIcon: {fileID: 21300000, guid: 04abd636f7c76074c8c75e4b8625e2b6, type: 3}
+  itemDescription: Another diary from Seraphina? That's odd, what's the difference
+    between this piece and the other one?
+  keyId: correctseraphina
+  isClueItem: 1
+  isGeneralItem: 0
+  isUsable: 0
+  isNote: 1
+  is3dObject: 0
+  notificationText: {fileID: 95152010}
+  noteUI: {fileID: 101919495}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+--- !u!114 &1995116180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995116178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a84a9f079145f469840a5bc1392f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notePages:
+  - {fileID: 1065470233}
 --- !u!114 &1997579684 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 799923223536264943, guid: 7806714dcf5527b4db388e6ddce9ec29, type: 3}
@@ -38151,7 +38737,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1995116177}
+  - {fileID: 1383897081}
   m_Father: {fileID: 1688544758}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2050024268
