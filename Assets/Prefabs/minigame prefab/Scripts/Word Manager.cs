@@ -33,10 +33,16 @@ public class WordManager : MonoBehaviour
     {
         wordToQuestionMap = new Dictionary<string, string>
     {
-        { "BUTTERFLY", "What is often live in gardens, fields, and forests, and they can be found all over the world?" },
-        { "ABHORRENT", "What describes actions, ideas, or behaviors that people strongly dislike or find morally wrong?" },
-        { "ABILITIES", "What refers to the skills or talents that someone has?" },
-        { "BLEACHERS", "What provides a place for spectators to sit and watch events like games, concerts, or performances." }
+        { "AUDACIOUS", "What word describes someone who is bold, daring, or willing to take risks?" },
+        { "PARAMOUNT", "What term means something of the highest importance or significance?" },
+        { "TREASURES", "What word refers to valuable items like gold, jewels, or other prized possessions?" },
+        { "STANDOFFS", "What term describes a situation where two opposing forces are locked in a tense confrontation?" },
+        { "NOTORIOUS", "What word describes someone or something that is widely known for being bad or infamous?" },
+        { "COMMANDED", "What word means to give an official order or directive with authority?" },
+        { "STRATEGIC", "What term describes actions or plans that are carefully designed to achieve a specific goal?" },
+        { "COMMENCED", "What word means to begin or start something, like a project or event?" },
+        { "RECOVERED", "What term means to retrieve something that was lost or stolen?" },
+        { "INFORMANT", "What word describes someone who provides information, often secretly, to help solve a problem?" },
     };
     }
 
