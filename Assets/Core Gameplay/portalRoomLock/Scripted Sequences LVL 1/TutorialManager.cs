@@ -38,6 +38,9 @@ public class TutorialManager : MonoBehaviour
     public bool IsTutorialFinished = false;
     public Tutorial_IntroQuestSaveObject tutorialSaveObject;
 
+    // New public bool to allow skipping after the cutscene
+    public bool skipTutorialAfterCutscene = false;
+
     private void OnEnable()
     {
         // Subscribe to the save and load events
@@ -68,15 +71,18 @@ public class TutorialManager : MonoBehaviour
         page2.SetActive(false);
         StartCoroutine(FadeInImage(cutSceneImage1));
 
-        // Play tutorial music
-        tutorialMusic.Play();
+        // Play tutorial music if it is not null
+        if (tutorialMusic != null)
+        {
+            tutorialMusic.Play();
+        }
 
         // Add button listeners
         skipButton.onClick.AddListener(ShowSkipConfirmation);
         yesButton.onClick.AddListener(SkipTutorial);
         noButton.onClick.AddListener(CancelSkip);
         nextButton.onClick.AddListener(ShowPage2);
-        endButton.onClick.AddListener(ShowTutorial);
+        endButton.onClick.AddListener(EndCutscene);
     }
 
     private void SkipTutorial()
@@ -132,6 +138,18 @@ public class TutorialManager : MonoBehaviour
     {
         skipUI.SetActive(false);
         skipButton.gameObject.SetActive(true);
+    }
+
+    private void EndCutscene()
+    {
+        if (skipTutorialAfterCutscene)
+        {
+            SkipTutorial(); // Skip the tutorial after the cutscene ends
+        }
+        else
+        {
+            ShowTutorial(); // Show the tutorial if the skip is not enabled
+        }
     }
 
     private IEnumerator PlayCutsceneVideo()
