@@ -155,4 +155,10 @@ public class HiddenPassageTrigger : MonoBehaviour
         yield return new WaitForSeconds(duration);  // Wait for the duration
         targetCamera.enabled = false;  // Disable the camera
     }
+
+    public void LeverInteract()
+    {
+        // Your logic when the LeverInteract animation event is triggered
+        UnityEngine.Debug.Log("Lever interaction triggered!");
+    }
 }
