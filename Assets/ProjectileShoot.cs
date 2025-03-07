@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic; // Add this line to include the System.Collections.Generic namespace
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileShooter : MonoBehaviour
@@ -13,6 +13,9 @@ public class ProjectileShooter : MonoBehaviour
 
     private bool isShootingEnabled = false; // Controls whether shooting is active
     private List<GameObject> activeProjectiles = new List<GameObject>(); // Track active projectiles
+
+    // Define a static event for projectile spawn
+    public static System.Action OnProjectileSpawned;
 
     void Start()
     {
@@ -54,6 +57,9 @@ public class ProjectileShooter : MonoBehaviour
         {
             rb.velocity = directionToPlayer * projectileSpeed;
         }
+
+        // Invoke the projectile spawned event
+        OnProjectileSpawned?.Invoke();
 
         // Destroy the projectile after a certain time to prevent clutter
         Destroy(projectile, 5f); // Adjust time as needed

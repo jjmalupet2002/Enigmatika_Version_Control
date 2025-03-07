@@ -110,7 +110,7 @@ public class InputManager : MonoBehaviour
         {
             Debug.Log("Wrong Answer!");
 
-            boss.TakeDamage(-20); // Heal 20 damage to the boss
+            boss.HealDamage(20); // Heal 20 damage to the boss
 
             // Switch to top-down camera for incorrect answer
             cameraManager.SwitchToTopDownCamera();

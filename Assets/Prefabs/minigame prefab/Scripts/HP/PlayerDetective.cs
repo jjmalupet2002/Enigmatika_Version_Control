@@ -8,7 +8,14 @@ public class PlayerDetective : MonoBehaviour
     public int currentHealth;
 
     public PlayerHealthBar playerhealthBar;
-    public GameOver gameOverManager; 
+    public GameOver gameOverManager;
+
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +35,8 @@ public class PlayerDetective : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        audioManager.PlaySFX(audioManager.bonecrack); // Play damage sound effect
+
         Debug.Log($"Player took damage: {damage}");
         currentHealth -= damage;
 

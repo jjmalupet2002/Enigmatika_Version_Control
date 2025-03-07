@@ -9,6 +9,13 @@ public class Boss : MonoBehaviour
 
     public BossHealthBar bosshealthBar;
 
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +35,7 @@ public class Boss : MonoBehaviour
     // Make TakeDamage public so it can be called by other scripts
     public void TakeDamage(int damage)
     {
+        audioManager.PlaySFX(audioManager.oof); // Play damage sound effect
         currentHealth -= damage;
 
         // Ensure health doesn't go below zero
@@ -40,5 +48,16 @@ public class Boss : MonoBehaviour
             Debug.Log("Boss Defeated!");
             // Add any additional logic for when the boss is defeated
         }
+    }
+
+    public void HealDamage(int damage)
+    {
+        
+        currentHealth += damage;
+
+        // Ensure health doesn't go below zero
+        currentHealth = Mathf.Max(currentHealth, 0);
+
+        bosshealthBar.SetHealth(currentHealth);
     }
 }
