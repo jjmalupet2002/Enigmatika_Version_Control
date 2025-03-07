@@ -9,6 +9,9 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Transform wordContainerParent;
     [SerializeField] private Boss boss; // Reference to Boss
 
+    [Header("Camera Manager")]
+    [SerializeField] private CameraManager cameraManager; // Reference to CameraManager
+
     private WordContainer currentWordContainer;
 
     // Start is called before the first frame update
@@ -17,6 +20,7 @@ public class InputManager : MonoBehaviour
         Initialize();
 
         KeyboardKey.onKeyPressed += KeyPressedCallback;
+        cameraManager.SwitchToCloseUpCamera(); // Start with the close-up camera
     }
 
     // Update is called once per frame
@@ -80,7 +84,7 @@ public class InputManager : MonoBehaviour
 
         if (wordToCheck == secretWord)
         {
-            Debug.Log("Hit Boss");
+            Debug.Log("Correct Answer! Hit Boss");
 
             // If the word is correct, damage the boss
             if (boss != null)
@@ -92,6 +96,9 @@ public class InputManager : MonoBehaviour
                 Debug.LogError("Boss reference is missing!");
             }
 
+            // Switch to close-up camera for correct answer
+            cameraManager.SwitchToCloseUpCamera();
+
             // Get a new secret word from WordManager
             WordManager.instance.ChooseRandomSecretWord();
             string newSecretWord = WordManager.instance.GetSecretWord();
@@ -101,7 +108,10 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Wrong word");
+            Debug.Log("Wrong Answer!");
+
+            // Switch to top-down camera for incorrect answer
+            cameraManager.SwitchToTopDownCamera();
         }
 
         // Hide the completed WordContainer
