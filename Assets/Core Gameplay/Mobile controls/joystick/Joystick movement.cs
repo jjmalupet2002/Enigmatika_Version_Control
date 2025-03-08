@@ -240,7 +240,7 @@ public class PlayerJoystickControl : MonoBehaviour
     {
         if (isDescending)
         {
-            moveSpeed = 2f; // Reduced speed when climbing down
+            moveSpeed = 3f; // Reduced speed when climbing down
         }
         else
         {
