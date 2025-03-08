@@ -34,7 +34,7 @@ public class GameOver : MonoBehaviour
     }
     public void RestartButton()
     {
-        SceneManager.LoadScene("minigame");
+        SceneManager.LoadScene("minigame1");
     }
     
     public void ExitButton()
