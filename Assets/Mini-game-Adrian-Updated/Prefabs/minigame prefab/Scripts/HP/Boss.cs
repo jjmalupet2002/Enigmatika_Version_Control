@@ -8,6 +8,7 @@ public class Boss : MonoBehaviour
     public int currentHealth;
 
     public BossHealthBar bosshealthBar;
+    public MissionComplete missioncompleteManager;
 
     AudioManager audioManager;
 
@@ -46,7 +47,8 @@ public class Boss : MonoBehaviour
         if (currentHealth <= 0)
         {
             Debug.Log("Boss Defeated!");
-            // Add any additional logic for when the boss is defeated
+
+            Die();
         }
     }
 
@@ -59,5 +61,13 @@ public class Boss : MonoBehaviour
         currentHealth = Mathf.Max(currentHealth, 0);
 
         bosshealthBar.SetHealth(currentHealth);
+    }
+
+    void Die()
+    {
+        Debug.Log("Boss Died!");
+
+        missioncompleteManager.ShowMissionComplete(); // Shows Game Over Screen
+
     }
 }
