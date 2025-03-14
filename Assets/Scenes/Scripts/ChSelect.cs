@@ -20,17 +20,12 @@ public class ChSelect : MonoBehaviour
         SceneManager.LoadSceneAsync(2);
     }
 
-    //WIP: Chapter agnostic load code
-    //public void playChX(int leveltoLoad)
-    //{
-    //    // Hide chapter select then, show loading screen
-    //    chSelect.SetActive(false);
-    //    loadCh1.SetActive(true); // WIP: figure out how to load specific loading screen
+    public void playChapterTwo()
+    {
+        UnityEngine.Debug.Log("Playing Chapter 2...");
+        SceneManager.LoadSceneAsync(4); // Loads Chapter 2 (Scene Index 3)
+    }
 
-    //    // Go to Chapter X
-    //    // Ensure index of the said scene in the Scene Manager is 2, else change the value below
-    //    StartCoroutine(LoadLevelAsync(leveltoLoad));
-    //}
 
     IEnumerator LoadLevelAsync(int leveltoLoad)
     {
