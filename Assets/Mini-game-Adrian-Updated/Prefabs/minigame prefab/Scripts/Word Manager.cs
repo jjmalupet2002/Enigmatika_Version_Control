@@ -12,8 +12,6 @@ public class WordManager : MonoBehaviour
     [Header("Questions/Hints")]
     [SerializeField] private Dictionary<string, string> wordToQuestionMap; // Maps words to questions
 
-    [Header("Word Container")]
-    [SerializeField] private GameObject WordContainer; // Reference to the WordContainer
 
     private void Awake()
     {
@@ -107,12 +105,5 @@ public class WordManager : MonoBehaviour
             Debug.LogWarning("WordManager is not initialized. Secret word is missing.");
         }
         return initialized;
-    }
-
-    // Method to set the WordContainer reference
-    public void SetWordContainer(GameObject wordContainer)
-    {
-        WordContainer = wordContainer;
-        Debug.Log("WordContainer reference updated in WordManager: " + WordContainer);
     }
 }

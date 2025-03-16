@@ -10,9 +10,6 @@ public class CameraManager : MonoBehaviour
     [Header("Camera Switch Settings")]
     [SerializeField] private float topDownDuration = 5f; // Duration in seconds for the top-down view
 
-    [Header("Word Container")]
-    [SerializeField] private GameObject WordContainer; // Assign the Word Container GameObject
-
     [Header("Player Controls")]
     [SerializeField] private GameObject playerJoystick; // Assign the player's Joystick GameObject
     [SerializeField] private GameObject playerAttackButton; // Assign the player's Attack Button GameObject
@@ -29,12 +26,6 @@ public class CameraManager : MonoBehaviour
     [Header("Projectile Shooters")]
     [SerializeField] private ProjectileShooter[] projectileShooters; // Array of ProjectileShooter scripts
 
-    // Method to set the WordContainer reference
-    public void SetWordContainer(GameObject wordContainer)
-    {
-        WordContainer = wordContainer;
-        Debug.Log("WordContainer reference updated in CameraManager: " + WordContainer);
-    }
 
     public void SwitchToCloseUpCamera()
     {
@@ -63,15 +54,6 @@ public class CameraManager : MonoBehaviour
                 Debug.LogWarning("Player Attack Button is not assigned!");
             }
 
-            // Enable the word container during close-up camera
-            if (WordContainer != null)
-            {
-                WordContainer.SetActive(true);
-            }
-            else
-            {
-                Debug.LogWarning("Word Container is not assigned!");
-            }
 
             // Switch billboard scripts
             SwitchBillboard(closeUpBillboard, topDownBillboard);
@@ -112,15 +94,6 @@ public class CameraManager : MonoBehaviour
                 Debug.LogWarning("Player Attack Button is not assigned!");
             }
 
-            // Disable the word container during top-down camera
-            if (WordContainer != null)
-            {
-                WordContainer.SetActive(false);
-            }
-            else
-            {
-                Debug.LogWarning("Word Container is not assigned!");
-            }
 
             // Switch billboard scripts
             SwitchBillboard(topDownBillboard, closeUpBillboard);
