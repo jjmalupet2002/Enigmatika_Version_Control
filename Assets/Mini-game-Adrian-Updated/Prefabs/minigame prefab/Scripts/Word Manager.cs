@@ -10,7 +10,8 @@ public class WordManager : MonoBehaviour
     private string secretWord; // The chosen secret word
 
     [Header("Questions/Hints")]
-    [SerializeField] private Dictionary<string, string> wordToQuestionMap; // Maps words to questions
+    [SerializeField] private Dictionary<string, WordQuestionCategory> wordToQuestionMap; // Maps words to questions and categories
+
 
 
     private void Awake()
@@ -31,24 +32,41 @@ public class WordManager : MonoBehaviour
         InitializeWordToQuestionMap(); // Initialize the word-to-question mapping
         ChooseRandomSecretWord(); // Choose a random secret word
     }
+    
+    [System.Serializable]
+    public class WordQuestionCategory
+    {
+        public string Question;
+        public string Category;
+        
+
+        public WordQuestionCategory(string question, string category)
+        {
+            Question = question;
+            Category = category;
+        }
+    }
+
 
     private void InitializeWordToQuestionMap()
     {
         // Initialize the dictionary with word-to-question mappings
-        wordToQuestionMap = new Dictionary<string, string>
+        wordToQuestionMap = new Dictionary<string, WordQuestionCategory>
         {
-            { "AUDACIOUS", "What word describes someone who is bold, daring, or willing to take risks?" },
-            { "PARAMOUNT", "What term means something of the highest importance or significance?" },
-            { "TREASURES", "What word refers to valuable items like gold, jewels, or other prized possessions?" },
-            { "STANDOFFS", "What term describes a situation where two opposing forces are locked in a tense confrontation?" },
-            { "NOTORIOUS", "What word describes someone or something that is widely known for being bad or infamous?" },
-            { "COMMANDED", "What word means to give an official order or directive with authority?" },
-            { "STRATEGIC", "What term describes actions or plans that are carefully designed to achieve a specific goal?" },
-            { "COMMENCED", "What word means to begin or start something, like a project or event?" },
-            { "RECOVERED", "What term means to retrieve something that was lost or stolen?" },
-            { "INFORMANT", "What word describes someone who provides information, often secretly, to help solve a problem?" },
+            { "AUDACIOUS", new WordQuestionCategory("What word describes someone who is bold, daring, or willing to take risks?", "focus") },
+            { "PARAMOUNT", new WordQuestionCategory("What term means something of the highest importance or significance?", "focus") },
+            { "TREASURES", new WordQuestionCategory("What word refers to valuable items like gold, jewels, or other prized possessions?", "focus") },
+            { "STANDOFFS", new WordQuestionCategory("What term describes a situation where two opposing forces are locked in a tense confrontation?", "focus") },
+            { "NOTORIOUS", new WordQuestionCategory("What word describes someone or something that is widely known for being bad or infamous?", "focus") },
+            { "COMMANDED", new WordQuestionCategory("What word means to give an official order or directive with authority?", "focus") },
+            { "STRATEGIC", new WordQuestionCategory("What term describes actions or plans that are carefully designed to achieve a specific goal?", "focus") },
+            { "COMMENCED", new WordQuestionCategory("What word means to begin or start something, like a project or event?", "focus") },
+            { "RECOVERED", new WordQuestionCategory("What term means to retrieve something that was lost or stolen?", "focus") },
+            { "INFORMANT", new WordQuestionCategory("What word describes someone who provides information, often secretly, to help solve a problem?", "focus") },
         };
     }
+    
+    
 
     public void ChooseRandomSecretWord()
     {
@@ -78,16 +96,9 @@ public class WordManager : MonoBehaviour
 
     public string GetQuestionForSecretWord()
     {
-        // Check if the secret word has a corresponding question
-        if (string.IsNullOrEmpty(secretWord))
-        {
-            Debug.LogWarning("Secret word is not initialized. Call ChooseRandomSecretWord() first.");
-            return "No question available.";
-        }
-
         if (wordToQuestionMap.ContainsKey(secretWord))
         {
-            return wordToQuestionMap[secretWord];
+            return wordToQuestionMap[secretWord].Question; // Access the Question property
         }
         else
         {
@@ -95,6 +106,7 @@ public class WordManager : MonoBehaviour
             return "No question available.";
         }
     }
+
 
     public bool IsInitialized()
     {
