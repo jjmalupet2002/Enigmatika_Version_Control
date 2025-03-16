@@ -1,7 +1,7 @@
-﻿// Script by Marcelli Michele
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class MoveRuller : MonoBehaviour
 {
@@ -9,16 +9,13 @@ public class MoveRuller : MonoBehaviour
     PadLockEmissionColor _pLockColor;
 
     [HideInInspector]
-    public List <GameObject> _rullers = new List<GameObject>();
-    private int _scroolRuller = 0;
-    private int _changeRuller = 0;
+    public List<GameObject> _rullers = new List<GameObject>();
     [HideInInspector]
-    public int[] _numberArray = {0,0,0,0};
+    public int[] _numberArray = { 0, 0, 0, 0 };
 
-    private int _numberRuller = 0;
-
-    private bool _isActveEmission = false;
-
+    private GameObject _selectedRuller;
+    private Vector2 _startTouchPos;
+    private bool _isSwiping = false;
 
     void Awake()
     {
@@ -29,94 +26,71 @@ public class MoveRuller : MonoBehaviour
         _rullers.Add(GameObject.Find("Ruller2"));
         _rullers.Add(GameObject.Find("Ruller3"));
         _rullers.Add(GameObject.Find("Ruller4"));
-
-        foreach (GameObject r in _rullers)
-        {
-            r.transform.Rotate(-144, 0, 0, Space.Self);
-        }
     }
+
     void Update()
     {
-        MoveRulles();
-        RotateRullers();
-        _lockPassword.Password();
+        HandleTouchInput();
     }
 
-    void MoveRulles()
+    void HandleTouchInput()
     {
-        if (Input.GetKeyDown(KeyCode.D)) 
+        if (Input.touchCount > 0)
         {
-            _isActveEmission = true;
-            _changeRuller ++;
-            _numberRuller += 1;
+            Touch touch = Input.GetTouch(0);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            RaycastHit hit;
 
-            if (_numberRuller > 3)
+            switch (touch.phase)
             {
-                _numberRuller = 0;
+                case UnityEngine.TouchPhase.Began:
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        if (_rullers.Contains(hit.collider.gameObject))
+                        {
+                            _selectedRuller = hit.collider.gameObject;
+                            HighlightRuller(_selectedRuller, true);
+                            _startTouchPos = touch.position;
+                            _isSwiping = true;
+                        }
+                    }
+                    break;
+
+                case UnityEngine.TouchPhase.Moved:
+                    if (_isSwiping && _selectedRuller != null)
+                    {
+                        float swipeDelta = touch.position.y - _startTouchPos.y;
+                        if (Mathf.Abs(swipeDelta) > 30) // Threshold to detect a swipe
+                        {
+                            RotateSelectedRuller(swipeDelta > 0 ? 1 : -1);
+                            _startTouchPos = touch.position;
+                        }
+                    }
+                    break;
+
+                case UnityEngine.TouchPhase.Ended:
+                    _isSwiping = false;
+                    break;
             }
         }
-        if (Input.GetKeyDown(KeyCode.A)) 
-        {
-            _isActveEmission = true;
-            _changeRuller --;
-            _numberRuller -= 1;
-
-            if (_numberRuller < 0)
-            {
-                _numberRuller = 3;
-            }
-        }
-        _changeRuller = (_changeRuller + _rullers.Count) % _rullers.Count;
-
-
-        for (int i = 0; i < _rullers.Count; i++)
-        {
-            if (_isActveEmission)
-            {
-                if (_changeRuller == i)
-                {
-
-                    _rullers[i].GetComponent<PadLockEmissionColor>()._isSelect = true;
-                    _rullers[i].GetComponent<PadLockEmissionColor>().BlinkingMaterial();
-                }
-                else
-                {
-                    _rullers[i].GetComponent<PadLockEmissionColor>()._isSelect = false;
-                    _rullers[i].GetComponent<PadLockEmissionColor>().BlinkingMaterial();
-                }
-            }
-        }
-
     }
 
-    void RotateRullers()
+    void HighlightRuller(GameObject ruller, bool highlight)
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        foreach (GameObject r in _rullers)
         {
-            _isActveEmission = true;
-            _scroolRuller = 36;
-            _rullers[_changeRuller].transform.Rotate(-_scroolRuller, 0, 0, Space.Self);
-
-            _numberArray[_changeRuller] += 1;
-
-            if (_numberArray[_changeRuller] > 9)
-            {
-                _numberArray[_changeRuller] = 0;
-            }
+            r.GetComponent<PadLockEmissionColor>()._isSelect = (r == ruller && highlight);
+            r.GetComponent<PadLockEmissionColor>().BlinkingMaterial();
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.S))
+    void RotateSelectedRuller(int direction)
+    {
+        if (_selectedRuller != null)
         {
-            _isActveEmission = true;
-            _scroolRuller = 36;
-            _rullers[_changeRuller].transform.Rotate(_scroolRuller, 0, 0, Space.Self);
-
-            _numberArray[_changeRuller] -= 1;
-
-            if (_numberArray[_changeRuller] < 0)
-            {
-                _numberArray[_changeRuller] = 9;
-            }
+            int index = _rullers.IndexOf(_selectedRuller);
+            _selectedRuller.transform.Rotate(-direction * 36, 0, 0, Space.Self);
+            _numberArray[index] = (_numberArray[index] + direction + 10) % 10;
         }
     }
 }

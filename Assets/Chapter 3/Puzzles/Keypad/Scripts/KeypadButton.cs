@@ -17,12 +17,30 @@ namespace NavKeypad
 
         public void PressButton()
         {
+            UnityEngine.Debug.Log($"[KeypadButton] Button Press Attempt: {gameObject.name}, Value: {value}");
+
             if (!moving)
             {
-                keypad.AddInput(value);
-                StartCoroutine(MoveSmooth());
+                UnityEngine.Debug.Log($"[KeypadButton] Button Pressed: {value}, Keypad Reference: {(keypad != null ? "Valid" : "NULL")}");
+
+                if (keypad != null)
+                {
+                    UnityEngine.Debug.Log($"[KeypadButton] Sending value '{value}' to Keypad.");
+                    keypad.AddInput(value);
+                    StartCoroutine(MoveSmooth());
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError($"[KeypadButton] ERROR: Keypad reference is missing on {gameObject.name}");
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.Log($"[KeypadButton] Button {gameObject.name} is already moving, ignoring press.");
             }
         }
+
+
         private bool moving;
 
         private IEnumerator MoveSmooth()
