@@ -94,8 +94,28 @@ public class MiniGameLoader : MonoBehaviour
 
     private void LoadMiniGameScene()
     {
-        UnityEngine.Debug.Log("End Button clicked, loading minigame1...");
-        SceneManager.LoadScene("minigame1");
+        string currentScene = SceneManager.GetActiveScene().name; // Get the current scene name
+        string miniGameScene = "";
+
+        // Determine the corresponding mini-game scene
+        switch (currentScene)
+        {
+            case "Level 1":
+                miniGameScene = "minigame1";
+                break;
+            case "Level 2":
+                miniGameScene = "minigame2";
+                break;
+            case "Level 3":
+                miniGameScene = "minigame3";
+                break;
+            default:
+                UnityEngine.Debug.LogWarning("No matching minigame scene for: " + currentScene);
+                return; // Exit if no valid mapping is found
+        }
+
+        UnityEngine.Debug.Log("Loading minigame scene: " + miniGameScene);
+        SceneManager.LoadScene(miniGameScene);
     }
 
     // Save the EscapeText and miniGameStarter states
