@@ -7,6 +7,9 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Camera closeUpCamera; // Assign your close-up camera
     [SerializeField] private Camera topDownCamera; // Assign your top-down camera
 
+    [Header("Question Display")]
+    [SerializeField] private GameObject questionDisplay; // Assign the QuestionDisplay GameObject
+
     [Header("Camera Switch Settings")]
     [SerializeField] private float topDownDuration = 5f; // Duration in seconds for the top-down view
 
@@ -26,13 +29,18 @@ public class CameraManager : MonoBehaviour
     [Header("Projectile Shooters")]
     [SerializeField] private ProjectileShooter[] projectileShooters; // Array of ProjectileShooter scripts
 
-
     public void SwitchToCloseUpCamera()
     {
         if (closeUpCamera != null && topDownCamera != null)
         {
             closeUpCamera.enabled = true;
             topDownCamera.enabled = false;
+
+            // Show the question display when in close-up camera
+            if (questionDisplay != null)
+            {
+                questionDisplay.SetActive(true);
+            }
 
             // Disable the player's Joystick during close-up camera
             if (playerJoystick != null)
@@ -54,7 +62,6 @@ public class CameraManager : MonoBehaviour
                 Debug.LogWarning("Player Attack Button is not assigned!");
             }
 
-
             // Switch billboard scripts
             SwitchBillboard(closeUpBillboard, topDownBillboard);
 
@@ -73,6 +80,12 @@ public class CameraManager : MonoBehaviour
         {
             closeUpCamera.enabled = false;
             topDownCamera.enabled = true;
+
+            // Hide the question display when in top-down camera
+            if (questionDisplay != null)
+            {
+                questionDisplay.SetActive(false);
+            }
 
             // Enable the player's Joystick during top-down camera
             if (playerJoystick != null)
@@ -94,7 +107,6 @@ public class CameraManager : MonoBehaviour
                 Debug.LogWarning("Player Attack Button is not assigned!");
             }
 
-
             // Switch billboard scripts
             SwitchBillboard(topDownBillboard, closeUpBillboard);
 
@@ -109,7 +121,7 @@ public class CameraManager : MonoBehaviour
             Debug.LogError("Cameras are not assigned!");
         }
     }
-
+    
     private IEnumerator SwitchBackToCloseUpAfterDelay()
     {
         // Wait for the specified duration

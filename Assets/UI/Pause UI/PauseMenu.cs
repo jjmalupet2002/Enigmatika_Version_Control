@@ -3,9 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
-
 {
-
     public Button pauseButton;
     public GameObject pauseUI;
     public Button resumeButton;
@@ -14,6 +12,9 @@ public class PauseMenu : MonoBehaviour
     public Button yesButton;
     public Button noButton;
     public SaveUI saveUI;
+
+    // Array to hold game objects to hide
+    public GameObject[] gameObjectsToHide;
 
     private void Start()
     {
@@ -34,12 +35,24 @@ public class PauseMenu : MonoBehaviour
         pauseUI.SetActive(true);
         Time.timeScale = 0f; // Pause the game
         saveUI.OnPauseMenuOpened();
+
+        // Hide specified game objects
+        foreach (GameObject obj in gameObjectsToHide)
+        {
+            obj.SetActive(false);
+        }
     }
 
     private void ResumeGame()
     {
         pauseUI.SetActive(false);
         Time.timeScale = 1f; // Resume the game
+
+        // Show the hidden game objects again
+        foreach (GameObject obj in gameObjectsToHide)
+        {
+            obj.SetActive(true);
+        }
     }
 
     private void ShowQuitAlert()

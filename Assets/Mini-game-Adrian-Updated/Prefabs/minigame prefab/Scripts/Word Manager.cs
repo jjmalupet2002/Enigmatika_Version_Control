@@ -10,7 +10,7 @@ public class WordManager : MonoBehaviour
     private string secretWord; // The chosen secret word
 
     [Header("Questions/Hints")]
-    [SerializeField] private Dictionary<string, WordQuestionCategory> wordToQuestionMap; // Maps words to questions and categories
+    [SerializeField] public Dictionary<string, WordQuestionCategory> wordToQuestionMap; // Maps words to questions and categories
 
 
 
