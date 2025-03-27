@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -8,6 +6,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private WordContainer wordContainerPrefab;
     [SerializeField] private Transform wordContainerParent;
     [SerializeField] private Boss boss; // Reference to Boss
+    [SerializeField] private ScoreManager scoreManager; // Reference to ScoreManager
+
 
     [Header("Camera Manager")]
     [SerializeField] private CameraManager cameraManager; // Reference to CameraManager
@@ -21,12 +21,6 @@ public class InputManager : MonoBehaviour
 
         KeyboardKey.onKeyPressed += KeyPressedCallback;
         cameraManager.SwitchToCloseUpCamera(); // Start with the close-up camera
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void Initialize()
@@ -90,9 +84,11 @@ public class InputManager : MonoBehaviour
             if (boss != null)
             {
                 boss.TakeDamage(20); // Deal 20 damage to the boss
+                scoreManager.RecordCorrectAnswer(); 
             }
             else
             {
+                
                 Debug.LogError("Boss reference is missing!");
             }
 
@@ -111,6 +107,8 @@ public class InputManager : MonoBehaviour
             Debug.Log("Wrong Answer!");
 
             boss.HealDamage(20); // Heal 20 damage to the boss
+            
+            scoreManager.RecordWrongAnswer();
 
             // Switch to top-down camera for incorrect answer
             cameraManager.SwitchToTopDownCamera();
