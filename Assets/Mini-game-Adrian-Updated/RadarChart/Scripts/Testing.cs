@@ -9,24 +9,9 @@ public class Testing : MonoBehaviour {
 
     private void Start() {
         // Example of how to check the answer
-        string playerAnswer = "AUDACIOUS"; // This should be the player's input
-        CheckAnswer(playerAnswer);
+        string playerAnswer = "AUDACIOUS"; // This should be the player's inpu
     }
-
-    private void CheckAnswer(string playerAnswer) {
-        string secretWord = WordManager.instance.GetSecretWord();
-        
-        if (playerAnswer.ToUpper() == secretWord) {
-            Debug.Log("Correct Answer!");
-
-            // Get the corresponding category
-            if (WordManager.instance.wordToQuestionMap.TryGetValue(secretWord, out WordManager.WordQuestionCategory category)) {
-                UpdateStats(category.Category);
-            }
-        } else {
-            Debug.Log("Wrong Answer!");
-        }
-    }
+    
 
     private void UpdateStats(string category) {
         Stats stats = new Stats(0, 0, 0, 0, 0); // Initialize stats
