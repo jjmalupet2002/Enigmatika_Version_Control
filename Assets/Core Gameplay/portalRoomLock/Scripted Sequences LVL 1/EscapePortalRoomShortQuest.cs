@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 using Save;
@@ -23,9 +21,22 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     public float portalInteractRange = 5f;
     public float exitPortalRoomInteractRange = 5f;
 
+    [Header("Door Highlighting")]
+    public GameObject doorObject; // The door GameObject to highlight
+    public Material whiteBlinkMaterial; // The blinking white material
+    public float blinkDuration = 2f;
+    public float blinkInterval = 0.2f;
+    private bool isBlinking = false;
+
+    private Material originalDoorMaterial;
+    private Renderer doorRenderer;
+
+
     [Header("Saving and Loading")]
     public bool IntroQuestFinished = false;
     public Tutorial_IntroQuestSaveObject tutorialSaveObject;
+
+    public GameObject arrowUI; // Assign the ArrowPointer prefab
 
     private enum QuestState
     {
@@ -55,8 +66,66 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
         SaveEvents.OnLoadGame -= LoadQuestState;
     }
 
+    private IEnumerator ShowArrowBlink()
+    {
+        arrowUI.SetActive(true);
+
+        // Blink effect
+        float duration = 2.5f;
+        float blinkInterval = 0.3f;
+        float elapsedTime = 0f;
+
+        Image arrowImage = arrowUI.GetComponentInChildren<Image>();
+        if (arrowImage == null)
+        {
+            UnityEngine.Debug.LogWarning("No Image found on arrow UI.");
+            yield break;
+        }
+
+        while (elapsedTime < duration)
+        {
+            arrowImage.enabled = !arrowImage.enabled; // Toggle visibility
+            yield return new WaitForSeconds(blinkInterval);
+            elapsedTime += blinkInterval;
+        }
+
+        arrowImage.enabled = true; // Ensure it’s visible when done
+        arrowUI.SetActive(false);
+    }
+
+    private IEnumerator BlinkDoorMaterial()
+    {
+        if (doorRenderer == null || whiteBlinkMaterial == null || originalDoorMaterial == null)
+        {
+            yield break; // Early exit if any of the materials or renderer are not assigned
+        }
+
+        float elapsedTime = 0f;
+        bool useWhite = true;
+
+        while (elapsedTime < blinkDuration)
+        {
+            doorRenderer.material = useWhite ? whiteBlinkMaterial : originalDoorMaterial;
+            useWhite = !useWhite;
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsedTime += blinkInterval;
+        }
+
+        doorRenderer.material = originalDoorMaterial; // Ensure original material is restored
+    }
+
     void Start()
     {
+        if (doorObject != null)
+        {
+            doorRenderer = doorObject.GetComponent<Renderer>();
+            if (doorRenderer != null)
+            {
+                originalDoorMaterial = doorRenderer.material;
+            }
+        }
+
         if (portalCollider == null)
         {
             UnityEngine.Debug.LogError("portalCollider is not assigned!", this);
@@ -100,6 +169,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
             case QuestState.WaitForHoodedFigureUI:
                 if (!hoodedFigureUI.activeSelf)
                 {
+                    StartCoroutine(ShowArrowBlink()); // Show the arrow when book opens
                     currentState = QuestState.ReadTheBook;
                     UpdateObjectiveText();
                 }
@@ -178,9 +248,14 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
                 break;
             case QuestState.ExitPortalRoom:
                 objectiveText.text = "Go out the Portal Room";
+                // Start blinking effect on the door
+                if (doorRenderer != null && whiteBlinkMaterial != null)
+                {
+                    StartCoroutine(BlinkDoorMaterial());
+                }
                 break;
             case QuestState.Complete:
-                objectiveText.text = "Quest Complete!";
+                objectiveText.text = "Talk to the hooded figure";
                 IntroQuestFinished = true;
                 break;
         }
