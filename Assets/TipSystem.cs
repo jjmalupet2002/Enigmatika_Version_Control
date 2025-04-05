@@ -1,23 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TipSystem : MonoBehaviour
 {
     [Header("UI Elements")]
-    public GameObject tipButton;        // The button that triggers the Tip UI
-    public GameObject tipUI;            // The UI that shows the tip
-    public Text tipText;                // Text element to display the tip
-    public Button exitTipButton;        // Button to close the tip UI
+    public GameObject tipButton;
+    public GameObject tipUI;
+    public Text tipText;
+    public Button exitTipButton;
 
     [Header("Tip Management")]
-    public List<string> tips = new List<string>(); // List of tips
+    public List<string> tips = new List<string>();
     private int currentTipIndex = -1;
 
     [Header("Timing")]
-    private float tipCooldown = 50f;  // 50 seconds for testing
+    public float tipCooldown = 15f;
     private float nextTipTime = 0f;
 
     [Header("Audio")]
@@ -28,13 +28,18 @@ public class TipSystem : MonoBehaviour
 
     private bool tipButtonShown = false;
 
+    [Header("Tip Button Animation")]
+    public float minScale = 0.9f;
+    public float maxScale = 1.1f;
+    public float pulseDuration = 3f;
+    public float pulseSpeed = 2f;
+
     void Start()
     {
         tipUI.SetActive(false);
         tipButton.SetActive(false);
         exitTipButton.onClick.AddListener(CloseTipUI);
 
-        // Add the ShowTipUI listener to the tipButton OnClick
         Button tipButtonComponent = tipButton.GetComponent<Button>();
         if (tipButtonComponent != null)
         {
@@ -47,16 +52,17 @@ public class TipSystem : MonoBehaviour
 
     void Update()
     {
-        // Debug log to confirm if the tip button should appear now
         if (Time.time >= nextTipTime && !tipButtonShown)
         {
             tipButton.SetActive(true);
             tipButtonShown = true;
-            UnityEngine.Debug.Log("Tip button should appear now"); // Added debug log
 
-            // Play the tip button appear sound
+            // Play sound
             if (audioSource != null && tipButtonAppearSound != null)
                 audioSource.PlayOneShot(tipButtonAppearSound);
+
+            // Start the pulse animation
+            StartCoroutine(PulseTipButton());
         }
     }
 
@@ -67,7 +73,6 @@ public class TipSystem : MonoBehaviour
         tipButton.SetActive(false);
         tipButtonShown = false;
 
-        // Play open sound
         if (audioSource != null && tipOpenSound != null)
             audioSource.PlayOneShot(tipOpenSound);
 
@@ -78,7 +83,6 @@ public class TipSystem : MonoBehaviour
     {
         tipUI.SetActive(false);
 
-        // Play close sound
         if (audioSource != null && tipCloseSound != null)
             audioSource.PlayOneShot(tipCloseSound);
     }
@@ -94,5 +98,21 @@ public class TipSystem : MonoBehaviour
         {
             tipText.text = "No tips available.";
         }
+    }
+
+    private IEnumerator PulseTipButton()
+    {
+        float timer = 0f;
+
+        while (timer < pulseDuration)
+        {
+            float scale = Mathf.Lerp(minScale, maxScale, (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f);
+            tipButton.transform.localScale = new Vector3(scale, scale, 1f);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // Reset to default scale after animation
+        tipButton.transform.localScale = Vector3.one;
     }
 }
