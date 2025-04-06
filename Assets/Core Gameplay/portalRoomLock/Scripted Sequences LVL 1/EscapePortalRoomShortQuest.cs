@@ -28,6 +28,13 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     public float blinkInterval = 0.2f;
     private bool isBlinking = false;
 
+    [Header("Book Pointer Hand")]
+    public SwitchCamera switchCamera; // Reference to the SwitchCamera script
+    public RectTransform pointerHandUI; // The UI pointer hand object
+    private bool isPointerShown = false;
+
+    private Coroutine pointerRoutine;
+
     private Material originalDoorMaterial;
     private Renderer doorRenderer;
 
@@ -35,7 +42,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     [Header("Saving and Loading")]
     public bool IntroQuestFinished = false;
     public Tutorial_IntroQuestSaveObject tutorialSaveObject;
-
+  
     public GameObject arrowUI; // Assign the ArrowPointer prefab
 
     private enum QuestState
@@ -64,6 +71,77 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
         // Unsubscribe from the save and load events
         SaveEvents.OnSaveGame -= SaveQuestState;
         SaveEvents.OnLoadGame -= LoadQuestState;
+    }
+    private void ShowPointerToBook()
+    {
+        if (pointerHandUI == null || isPointerShown)
+            return;
+
+        isPointerShown = true;
+
+        if (pointerRoutine != null)
+        {
+            StopCoroutine(pointerRoutine);
+        }
+
+        pointerRoutine = StartCoroutine(AnimatePointerHand());
+    }
+
+    private void HidePointerHand()
+    {
+        if (pointerRoutine != null)
+        {
+            StopCoroutine(pointerRoutine);
+            pointerRoutine = null;
+        }
+
+        if (pointerHandUI != null)
+            pointerHandUI.gameObject.SetActive(false);
+
+        isPointerShown = false;
+    }
+
+    private Coroutine pointerCoroutine;
+
+    private IEnumerator AnimatePointerHand()
+    {
+        pointerHandUI.gameObject.SetActive(true);
+
+        CanvasGroup pointerCanvasGroup = pointerHandUI.GetComponent<CanvasGroup>();
+        if (pointerCanvasGroup == null)
+        {
+            pointerCanvasGroup = pointerHandUI.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        while (currentState == QuestState.ReadTheBook && switchCamera.currentCameraState == CameraState.CloseUp)
+        {
+            // Fade out
+            float t = 0f;
+            while (t < 1f)
+            {
+                pointerCanvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
+                t += Time.deltaTime * 2f;
+                yield return null;
+            }
+
+            pointerCanvasGroup.alpha = 0f;
+            yield return new WaitForSeconds(0.2f);
+
+            // Fade in
+            t = 0f;
+            while (t < 1f)
+            {
+                pointerCanvasGroup.alpha = Mathf.Lerp(0f, 1f, t);
+                t += Time.deltaTime * 2f;
+                yield return null;
+            }
+
+            pointerCanvasGroup.alpha = 1f;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        // Clean up
+        pointerHandUI.gameObject.SetActive(false);
     }
 
     private IEnumerator ShowArrowBlink()
@@ -179,6 +257,12 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
                 if (bookUI.activeSelf)
                 {
                     currentState = QuestState.WaitForBookUI;
+                    HidePointerHand(); // Hide when player opens book
+                }
+
+                if (switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp)
+                {
+                    ShowPointerToBook();
                 }
                 break;
 

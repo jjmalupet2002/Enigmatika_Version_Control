@@ -35,14 +35,23 @@ public class QuestButtonHandler : MonoBehaviour
 
     void Update()
     {
+        bool dialogueCurrentlyActive = false;
+
         if (dialogueUI != null)
         {
-            bool dialogueCurrentlyActive = dialogueUI.activeSelf;
+            dialogueCurrentlyActive = dialogueUI.activeSelf;
 
             if (!hasTalkedToNPC && dialogueWasActiveLastFrame && !dialogueCurrentlyActive)
             {
-                hasTalkedToNPC = true;
-                TriggerQuestButtonBlink();
+                if (playerTransform != null)
+                {
+                    float distance = Vector3.Distance(transform.position, playerTransform.position);
+                    if (distance <= interactRange)
+                    {
+                        hasTalkedToNPC = true;
+                        TriggerQuestButtonBlink();
+                    }
+                }
             }
 
             dialogueWasActiveLastFrame = dialogueCurrentlyActive;
@@ -54,7 +63,6 @@ public class QuestButtonHandler : MonoBehaviour
 
             if (distance <= interactRange)
             {
-                // After NPC is talked to once, allow normal quest button behavior
                 if (hasTalkedToNPC && !blinkingInProgress)
                 {
                     openQuestButton.SetActive(true);
@@ -67,6 +75,7 @@ public class QuestButtonHandler : MonoBehaviour
             }
         }
     }
+
 
     void TriggerQuestButtonBlink()
     {
@@ -120,7 +129,7 @@ public class QuestButtonHandler : MonoBehaviour
                 openQuestButton.SetActive(false);
         }
     }
-
+     
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
