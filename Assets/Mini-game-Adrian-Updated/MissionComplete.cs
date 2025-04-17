@@ -34,7 +34,7 @@ public class MissionComplete : MonoBehaviour
     }
     public void MenuButton()
     {
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("Chapter Select");
     }
 
     
