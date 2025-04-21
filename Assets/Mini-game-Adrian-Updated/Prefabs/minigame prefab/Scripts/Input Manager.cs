@@ -96,7 +96,7 @@ public class InputManager : MonoBehaviour
             cameraManager.SwitchToCloseUpCamera();
 
             // Get a new secret word from WordManager
-            WordManager.instance.ChooseRandomSecretWord();
+            WordManager.instance.ChooseWordUsingLeitnerSystem();
             string newSecretWord = WordManager.instance.GetSecretWord();
 
             // Reinitialize the keyboard with the new secret word
