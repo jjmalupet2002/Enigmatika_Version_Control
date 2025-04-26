@@ -21,6 +21,15 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     public float portalInteractRange = 5f;
     public float exitPortalRoomInteractRange = 5f;
 
+    [Header("Quest Objective Texts")]
+    public string escapePortalObjectiveText = "Escape through the portal";
+    public string talkToHoodedFigureObjectiveText = "Talk to the Hooded figure";
+    public string waitForHoodedFigureUIObjectiveText = "Complete your interaction with the Hooded figure";
+    public string readTheBookObjectiveText = "Read the book";
+    public string waitForBookUIObjectiveText = "Finish reading the book";
+    public string exitPortalRoomObjectiveText = "Go out the Portal Room";
+    public string completeObjectiveText = "Talk to the hooded figure";
+
     [Header("Door Highlighting")]
     public GameObject doorObject; // The door GameObject to highlight
     public Material whiteBlinkMaterial; // The blinking white material
@@ -42,7 +51,7 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
     [Header("Saving and Loading")]
     public bool IntroQuestFinished = false;
     public Tutorial_IntroQuestSaveObject tutorialSaveObject;
-  
+
     public GameObject arrowUI; // Assign the ArrowPointer prefab
 
     private enum QuestState
@@ -316,30 +325,29 @@ public class EscapePortalRoomShortQuest : MonoBehaviour
         switch (currentState)
         {
             case QuestState.EscapePortal:
-                objectiveText.text = "Escape through the portal";
+                objectiveText.text = escapePortalObjectiveText;
                 break;
             case QuestState.TalkToHoodedFigure:
-                objectiveText.text = "Talk to the Hooded figure";
+                objectiveText.text = talkToHoodedFigureObjectiveText;
                 break;
             case QuestState.WaitForHoodedFigureUI:
-                objectiveText.text = "Complete your interaction with the Hooded figure";
+                objectiveText.text = waitForHoodedFigureUIObjectiveText;
                 break;
             case QuestState.ReadTheBook:
-                objectiveText.text = "Read the book";
+                objectiveText.text = readTheBookObjectiveText;
                 break;
             case QuestState.WaitForBookUI:
-                objectiveText.text = "Finish reading the book";
+                objectiveText.text = waitForBookUIObjectiveText;
                 break;
             case QuestState.ExitPortalRoom:
-                objectiveText.text = "Go out the Portal Room";
-                // Start blinking effect on the door
+                objectiveText.text = exitPortalRoomObjectiveText;
                 if (doorRenderer != null && whiteBlinkMaterial != null)
                 {
                     StartCoroutine(BlinkDoorMaterial());
                 }
                 break;
             case QuestState.Complete:
-                objectiveText.text = "Talk to the hooded figure";
+                objectiveText.text = completeObjectiveText;
                 IntroQuestFinished = true;
                 break;
         }
