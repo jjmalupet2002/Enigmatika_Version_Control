@@ -59,11 +59,23 @@ public class InteractableDrawerClosetChest : MonoBehaviour
     {
         // Set initial positions and rotations based on the type of object (closet, drawer, chest)
         if (isCloset)
+        {
             transform.localRotation = Quaternion.Euler(0f, closedYRotation, 0f);
+        }
         else if (isDrawer)
+        {
             closedPosition = transform.localPosition;
+        }
         else if (isChest)
+        {
             transform.localRotation = Quaternion.Euler(closedXRotation, 0f, 0f);
+
+            if (chestObject == null)
+            {
+                // Chest object reference is missing, silently skip further actions if needed
+                return;
+            }
+        }
 
         // Subscribe to OnItemUsed event
         InventoryManager.Instance.OnItemUsed += OnItemUsed;
@@ -71,14 +83,13 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         // Ensure that the back button is properly set up
         if (backButton != null)
         {
-            // Attach the HideUnlockUI method to the back button click event
             backButton.onClick.AddListener(HideUnlockUI);
         }
 
         // If unlockUI is a button, set up listener for showing the unlock UI
         if (unlockUI != null && unlockUI.GetComponent<Button>() != null)
         {
-            unlockUI.GetComponent<Button>().onClick.AddListener(OnUnlockButtonClick); // Listen for button click
+            unlockUI.GetComponent<Button>().onClick.AddListener(OnUnlockButtonClick);
         }
     }
 
@@ -203,7 +214,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         return false;
     }
 
-    private void Open()
+    public void Open()
     {
         isOpen = true;
         isMoving = true;
@@ -217,7 +228,7 @@ public class InteractableDrawerClosetChest : MonoBehaviour
 
     }
 
-    private void Close()
+    public void Close()
     {
         isOpen = false;
         isMoving = true;
@@ -288,6 +299,34 @@ public class InteractableDrawerClosetChest : MonoBehaviour
         currentItem = item; // Store the used item
 
         // Log to show that the key has been used
+    }
+
+    public GameObject chestObject; // Drag the chest object here in the Inspector
+
+    public void UnlockChestExternally()
+    {
+        if (isChest)
+        {
+            isChestLocked = false;
+            PlaySound(OpenUsingKeyAudio);
+            onUnlockChest.Invoke();
+
+            if (chestLockedText != null)
+            {
+                chestLockedText.gameObject.SetActive(false);
+            }
+
+            if (chestObject != null)
+            {
+                StartCoroutine(DisableChestAfterDelay());
+            }
+        }
+    }
+
+    private IEnumerator DisableChestAfterDelay()
+    {
+        yield return new WaitForSeconds(50f);
+        chestObject.SetActive(false);
     }
 
     // Flag to track if the key has been used
