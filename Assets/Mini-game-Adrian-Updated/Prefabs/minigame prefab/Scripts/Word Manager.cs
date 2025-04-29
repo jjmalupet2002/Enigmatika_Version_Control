@@ -13,6 +13,10 @@ public class WordManager : MonoBehaviour
 
     [Header("Questions/Hints")]
     [SerializeField] private Dictionary<string, string> wordToQuestionMap; // Maps words to questions
+    
+    [Header("Word Categories")]
+    [SerializeField] private Dictionary<string, string> wordToCategoryMap; // Maps words to their categories
+    [SerializeField] private List<string> availableCategories; // List of all available categories
 
     [Header("Leitner System Settings")]
     [SerializeField] private int numberOfBoxes = 3; // Number of difficulty levels
@@ -38,6 +42,7 @@ public class WordManager : MonoBehaviour
     private const string MEDIUM_BOX_KEY = "LeitnerMediumBox";
     private const string HARD_BOX_KEY = "LeitnerHardBox";
     private const string PERFORMANCE_KEY = "LeitnerPerformance";
+    private const string CATEGORIES_KEY = "WordCategories";
 
     private void Awake()
     {
@@ -53,6 +58,7 @@ public class WordManager : MonoBehaviour
         }
 
         InitializeWordToQuestionMap(); // Initialize the word-to-question mapping
+        InitializeWordCategoryMap(); // Initialize the word-to-category mapping
         InitializeLeitnerSystem(); // Set up the Leitner system
         ChooseWordUsingLeitnerSystem(); // Choose word using Leitner system
     }
@@ -72,6 +78,59 @@ public class WordManager : MonoBehaviour
             { "RECOVERED", "What term means to retrieve something that was lost or stolen?" },
             { "INFORMANT", "What word describes someone who provides information, often secretly, to help solve a problem?" },
         };
+    }
+
+    private void InitializeWordCategoryMap()
+    {
+        // Define available categories
+        availableCategories = new List<string>
+        {
+            "Personality Traits",
+            "Action Words",
+            "Planning & Strategy",
+            "Value & Worth"
+        };
+
+        wordToCategoryMap = new Dictionary<string, string>
+        {
+            { "AUDACIOUS", "Personality Traits" },
+            { "PARAMOUNT", "Value & Worth" },
+            { "TREASURES", "Value & Worth" },
+            { "STANDOFFS", "Action Words" },
+            { "NOTORIOUS", "Personality Traits" },
+            { "COMMANDED", "Action Words" },
+            { "STRATEGIC", "Planning & Strategy" },
+            { "COMMENCED", "Action Words" },
+            { "RECOVERED", "Action Words" },
+            { "INFORMANT", "Planning & Strategy" }
+        };
+
+        // Verify all words have categories
+        foreach (string word in secretWords)
+        {
+            string upperWord = word.ToUpper();
+            if (!wordToCategoryMap.ContainsKey(upperWord))
+            {
+                Debug.LogWarning($"Word '{upperWord}' has no assigned category!");
+                wordToCategoryMap[upperWord] = "Uncategorized";
+                
+                if (!availableCategories.Contains("Uncategorized"))
+                {
+                    availableCategories.Add("Uncategorized");
+                }
+            }
+        }
+
+        // Log categories
+        if (enableDebugLogs)
+        {
+            Debug.Log($"Word categories initialized with {availableCategories.Count} categories");
+            foreach (var category in availableCategories)
+            {
+                int wordCount = wordToCategoryMap.Count(kvp => kvp.Value == category);
+                Debug.Log($"Category '{category}': {wordCount} words");
+            }
+        }
     }
 
     private void InitializeLeitnerSystem()
@@ -120,19 +179,19 @@ public class WordManager : MonoBehaviour
             Debug.Log("--- EASY BOX WORDS ---");
             foreach (var word in easyBox.Keys)
             {
-                Debug.Log($"EASY: {word} (Performance: {wordPerformance[word]})");
+                Debug.Log($"EASY: {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
             }
 
             Debug.Log("--- MEDIUM BOX WORDS ---");
             foreach (var word in mediumBox.Keys)
             {
-                Debug.Log($"MEDIUM: {word} (Performance: {wordPerformance[word]})");
+                Debug.Log($"MEDIUM: {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
             }
 
             Debug.Log("--- HARD BOX WORDS ---");
             foreach (var word in hardBox.Keys)
             {
-                Debug.Log($"HARD: {word} (Performance: {wordPerformance[word]})");
+                Debug.Log($"HARD: {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
             }
         }
     }
@@ -306,6 +365,7 @@ public class WordManager : MonoBehaviour
         {
             Debug.Log($"========= WORD SELECTION =========");
             Debug.Log($"Selected word '{secretWord}' from {boxSelected} box");
+            Debug.Log($"Category: {GetCategoryForWord(secretWord)}");
             Debug.Log($"Current performance score: {wordPerformance[secretWord]}");
             Debug.Log($"Box distribution - Easy: {easyBox.Count}, Medium: {mediumBox.Count}, Hard: {hardBox.Count}");
             Debug.Log($"Random value: {randomValue} (Easy threshold: {easyWordSelectionChance}, Medium threshold: {easyWordSelectionChance + mediumWordSelectionChance})");
@@ -332,6 +392,7 @@ public class WordManager : MonoBehaviour
             if (enableDebugLogs)
             {
                 Debug.Log($"✓ Word '{secretWord}' answered CORRECTLY");
+                Debug.Log($"Category: {GetCategoryForWord(secretWord)}");
                 Debug.Log($"Performance score increased to {wordPerformance[secretWord]}");
                 Debug.Log($"Current box: {GetBoxForWord(secretWord)}");
                 Debug.Log($"Promotion threshold: {PROMOTION_THRESHOLD}");
@@ -342,6 +403,12 @@ public class WordManager : MonoBehaviour
             {
                 PromoteWord(secretWord);
                 wordPerformance[secretWord] = 0; // Reset counter after promotion
+            }
+            
+            // Notify score manager with category info
+            if (ScoreManager.instance != null)
+            {
+                ScoreManager.instance.RecordCorrectAnswer(GetCategoryForWord(secretWord));
             }
         }
 
@@ -361,6 +428,7 @@ public class WordManager : MonoBehaviour
             if (enableDebugLogs)
             {
                 Debug.Log($"✗ Word '{secretWord}' answered INCORRECTLY");
+                Debug.Log($"Category: {GetCategoryForWord(secretWord)}");
                 Debug.Log($"Performance score decreased to {wordPerformance[secretWord]}");
                 Debug.Log($"Current box: {GetBoxForWord(secretWord)}");
                 Debug.Log($"Demotion threshold: {DEMOTION_THRESHOLD}");
@@ -371,6 +439,12 @@ public class WordManager : MonoBehaviour
             {
                 DemoteWord(secretWord);
                 wordPerformance[secretWord] = 0; // Reset counter after demotion
+            }
+            
+            // Notify score manager with category info
+            if (ScoreManager.instance != null)
+            {
+                ScoreManager.instance.RecordWrongAnswer(GetCategoryForWord(secretWord));
             }
         }
 
@@ -457,6 +531,21 @@ public class WordManager : MonoBehaviour
         else
             return "NOT FOUND";
     }
+    
+    // Helper method to get a word's category
+    public string GetCategoryForWord(string word)
+    {
+        if (wordToCategoryMap.ContainsKey(word))
+            return wordToCategoryMap[word];
+        else
+            return "Uncategorized";
+    }
+    
+    // Get all available categories
+    public List<string> GetAllCategories()
+    {
+        return availableCategories;
+    }
 
     // Helper method to print box distribution
     private void PrintBoxDistribution()
@@ -508,19 +597,19 @@ public class WordManager : MonoBehaviour
         status.AppendLine($"EASY box ({easyBox.Count} words):");
         foreach (var word in easyBox.Keys)
         {
-            status.AppendLine($"  - {word} (Performance: {wordPerformance[word]})");
+            status.AppendLine($"  - {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
         }
 
         status.AppendLine($"MEDIUM box ({mediumBox.Count} words):");
         foreach (var word in mediumBox.Keys)
         {
-            status.AppendLine($"  - {word} (Performance: {wordPerformance[word]})");
+            status.AppendLine($"  - {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
         }
 
         status.AppendLine($"HARD box ({hardBox.Count} words):");
         foreach (var word in hardBox.Keys)
         {
-            status.AppendLine($"  - {word} (Performance: {wordPerformance[word]})");
+            status.AppendLine($"  - {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
         }
 
         return status.ToString();
