@@ -85,6 +85,9 @@ public class InputManager : MonoBehaviour
             {
                 boss.TakeDamage(20); // Deal 20 damage to the boss
                 scoreManager.RecordCorrectAnswer(); 
+                WordManager.instance.WordAnsweredCorrectly();
+                
+
             }
             else
             {
@@ -109,6 +112,8 @@ public class InputManager : MonoBehaviour
             boss.HealDamage(20); // Heal 20 damage to the boss
             
             scoreManager.RecordWrongAnswer();
+            WordManager.instance.WordAnsweredIncorrectly();
+
 
             // Switch to top-down camera for incorrect answer
             cameraManager.SwitchToTopDownCamera();

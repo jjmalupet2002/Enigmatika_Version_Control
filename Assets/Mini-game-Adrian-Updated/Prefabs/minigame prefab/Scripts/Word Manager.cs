@@ -33,6 +33,12 @@ public class WordManager : MonoBehaviour
     private const int PROMOTION_THRESHOLD = 2; // Get word right this many times to promote
     private const int DEMOTION_THRESHOLD = -1; // Get word wrong this many times to demote
 
+    // Player prefs keys
+    private const string EASY_BOX_KEY = "LeitnerEasyBox";
+    private const string MEDIUM_BOX_KEY = "LeitnerMediumBox";
+    private const string HARD_BOX_KEY = "LeitnerHardBox";
+    private const string PERFORMANCE_KEY = "LeitnerPerformance";
+
     private void Awake()
     {
         if (instance == null)
@@ -47,7 +53,7 @@ public class WordManager : MonoBehaviour
         }
 
         InitializeWordToQuestionMap(); // Initialize the word-to-question mapping
-        InitializeLeitnerSystem(); // Setup the Leitner system
+        InitializeLeitnerSystem(); // Set up the Leitner system
         ChooseWordUsingLeitnerSystem(); // Choose word using Leitner system
     }
 
@@ -70,18 +76,39 @@ public class WordManager : MonoBehaviour
 
     private void InitializeLeitnerSystem()
     {
-        // Initialize performance tracking for all words
+        // Initialize word performance tracking
         foreach (string word in secretWords)
         {
             string upperWord = word.ToUpper();
-            wordPerformance[upperWord] = 0;
-
-            // Initially place all words in the hard box
-            hardBox[upperWord] = 0;
+            if (!wordPerformance.ContainsKey(upperWord))
+            {
+                wordPerformance[upperWord] = 0;
+            }
         }
 
-        // If you have saved data, you would load it here
-        LoadLeitnerSystemState();
+        // Load saved Leitner system state
+        bool savedDataExists = LoadLeitnerSystemState();
+
+        // If no saved data, initialize all words in hard box
+        if (!savedDataExists)
+        {
+            if (enableDebugLogs)
+            {
+                Debug.Log("No saved Leitner data found. Initializing all words in hard box.");
+            }
+
+            // Clear existing boxes just to be safe
+            easyBox.Clear();
+            mediumBox.Clear();
+            hardBox.Clear();
+
+            // Place all words in the hard box
+            foreach (string word in secretWords)
+            {
+                string upperWord = word.ToUpper();
+                hardBox[upperWord] = 0;
+            }
+        }
 
         // Print detailed status of the Leitner system
         if (enableDebugLogs)
@@ -110,43 +137,120 @@ public class WordManager : MonoBehaviour
         }
     }
 
-    private void LoadLeitnerSystemState()
+    private bool LoadLeitnerSystemState()
     {
-        // For now, this is just a placeholder
-        // In a real implementation, you would load saved data from PlayerPrefs or a file
-
-        // Example implementation could be:
-        // if (PlayerPrefs.HasKey("LeitnerSystemData"))
-        // {
-        //     string jsonData = PlayerPrefs.GetString("LeitnerSystemData");
-        //     LeitnerData data = JsonUtility.FromJson<LeitnerData>(jsonData);
-        //     // Populate boxes from saved data
-        // }
-
-        if (enableDebugLogs)
+        // Check if we have saved data
+        if (PlayerPrefs.HasKey(EASY_BOX_KEY) || PlayerPrefs.HasKey(MEDIUM_BOX_KEY) || PlayerPrefs.HasKey(HARD_BOX_KEY))
         {
-            Debug.Log("LoadLeitnerSystemState: No saved data found, using default initialization");
+            // Clear existing boxes before loading
+            easyBox.Clear();
+            mediumBox.Clear();
+            hardBox.Clear();
+
+            // Load easy box
+            string easyBoxData = PlayerPrefs.GetString(EASY_BOX_KEY, "");
+            if (!string.IsNullOrEmpty(easyBoxData))
+            {
+                string[] easyWords = easyBoxData.Split(',');
+                foreach (string word in easyWords)
+                {
+                    if (!string.IsNullOrEmpty(word))
+                    {
+                        easyBox[word] = 0;
+                    }
+                }
+            }
+
+            // Load medium box
+            string mediumBoxData = PlayerPrefs.GetString(MEDIUM_BOX_KEY, "");
+            if (!string.IsNullOrEmpty(mediumBoxData))
+            {
+                string[] mediumWords = mediumBoxData.Split(',');
+                foreach (string word in mediumWords)
+                {
+                    if (!string.IsNullOrEmpty(word))
+                    {
+                        mediumBox[word] = 0;
+                    }
+                }
+            }
+
+            // Load hard box
+            string hardBoxData = PlayerPrefs.GetString(HARD_BOX_KEY, "");
+            if (!string.IsNullOrEmpty(hardBoxData))
+            {
+                string[] hardWords = hardBoxData.Split(',');
+                foreach (string word in hardWords)
+                {
+                    if (!string.IsNullOrEmpty(word))
+                    {
+                        hardBox[word] = 0;
+                    }
+                }
+            }
+
+            // Load performance data
+            string performanceData = PlayerPrefs.GetString(PERFORMANCE_KEY, "");
+            if (!string.IsNullOrEmpty(performanceData))
+            {
+                string[] performanceEntries = performanceData.Split(';');
+                foreach (string entry in performanceEntries)
+                {
+                    if (!string.IsNullOrEmpty(entry) && entry.Contains(":"))
+                    {
+                        string[] parts = entry.Split(':');
+                        if (parts.Length == 2)
+                        {
+                            string word = parts[0];
+                            if (int.TryParse(parts[1], out int performance))
+                            {
+                                wordPerformance[word] = performance;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (enableDebugLogs)
+            {
+                Debug.Log("Leitner system state loaded successfully");
+            }
+
+            return true;
         }
+
+        return false;
     }
 
     private void SaveLeitnerSystemState()
     {
-        // For now, this is just a placeholder
-        // In a real implementation, you would save data to PlayerPrefs or a file
+        // Save easy box words
+        string easyBoxData = string.Join(",", easyBox.Keys);
+        PlayerPrefs.SetString(EASY_BOX_KEY, easyBoxData);
 
-        // Example implementation could be:
-        // LeitnerData data = new LeitnerData();
-        // data.easyWords = easyBox.Keys.ToList();
-        // data.mediumWords = mediumBox.Keys.ToList();
-        // data.hardWords = hardBox.Keys.ToList();
-        // data.wordPerformance = wordPerformance;
-        // string jsonData = JsonUtility.ToJson(data);
-        // PlayerPrefs.SetString("LeitnerSystemData", jsonData);
-        // PlayerPrefs.Save();
+        // Save medium box words
+        string mediumBoxData = string.Join(",", mediumBox.Keys);
+        PlayerPrefs.SetString(MEDIUM_BOX_KEY, mediumBoxData);
+
+        // Save hard box words
+        string hardBoxData = string.Join(",", hardBox.Keys);
+        PlayerPrefs.SetString(HARD_BOX_KEY, hardBoxData);
+
+        // Save performance data
+        List<string> performanceEntries = new List<string>();
+        foreach (var entry in wordPerformance)
+        {
+            performanceEntries.Add($"{entry.Key}:{entry.Value}");
+        }
+        string performanceData = string.Join(";", performanceEntries);
+        PlayerPrefs.SetString(PERFORMANCE_KEY, performanceData);
+
+        // Save changes
+        PlayerPrefs.Save();
 
         if (enableDebugLogs)
         {
-            Debug.Log("SaveLeitnerSystemState: Leitner system state saved");
+            Debug.Log("Leitner system state saved successfully");
         }
     }
 
@@ -188,6 +292,12 @@ public class WordManager : MonoBehaviour
                 int randomIndex = Random.Range(0, secretWords.Count);
                 secretWord = secretWords[randomIndex].ToUpper();
                 boxSelected = "RANDOM (Hard box empty)";
+
+                // Add the word to the hard box if it's not in any box
+                if (GetBoxForWord(secretWord) == "NOT FOUND")
+                {
+                    hardBox[secretWord] = 0;
+                }
             }
         }
 
