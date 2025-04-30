@@ -17,6 +17,8 @@ public class WordManager : MonoBehaviour
     [Header("Word Categories")]
     [SerializeField] private Dictionary<string, string> wordToCategoryMap; // Maps words to their categories
     [SerializeField] private List<string> availableCategories; // List of all available categories
+    [SerializeField] private int minCategoryDiversity = 5; // Minimum number of different categories to include
+    [SerializeField] private List<string> recentlyUsedCategories = new List<string>(); // Track recently used categories
 
     [Header("Leitner System Settings")]
     [SerializeField] private int numberOfBoxes = 3; // Number of difficulty levels
@@ -43,6 +45,7 @@ public class WordManager : MonoBehaviour
     private const string HARD_BOX_KEY = "LeitnerHardBox";
     private const string PERFORMANCE_KEY = "LeitnerPerformance";
     private const string CATEGORIES_KEY = "WordCategories";
+    private const string RECENT_CATEGORIES_KEY = "RecentCategories";
 
     private void Awake()
     {
@@ -60,6 +63,7 @@ public class WordManager : MonoBehaviour
         InitializeWordToQuestionMap(); // Initialize the word-to-question mapping
         InitializeWordCategoryMap(); // Initialize the word-to-category mapping
         InitializeLeitnerSystem(); // Set up the Leitner system
+        LoadRecentCategories(); // Load recently used categories
         ChooseWordUsingLeitnerSystem(); // Choose word using Leitner system
     }
 
@@ -67,7 +71,7 @@ public class WordManager : MonoBehaviour
     {
         wordToQuestionMap = new Dictionary<string, string>
         {
-            { "AUDACIOUS", "What word describes someone who is bold, daring, or willing to take risks?" },
+            { "AUDACIOUS", "What word describes someone who is bold, daring, or willing to take risks?" }, // Understanding Vocabulary
             { "PARAMOUNT", "What term means something of the highest importance or significance?" },
             { "TREASURES", "What word refers to valuable items like gold, jewels, or other prized possessions?" },
             { "STANDOFFS", "What term describes a situation where two opposing forces are locked in a tense confrontation?" },
@@ -77,6 +81,39 @@ public class WordManager : MonoBehaviour
             { "COMMENCED", "What word means to begin or start something, like a project or event?" },
             { "RECOVERED", "What term means to retrieve something that was lost or stolen?" },
             { "INFORMANT", "What word describes someone who provides information, often secretly, to help solve a problem?" },
+            
+            { "KINGDOM", "Where did the story take place?" }, // Identifying Key Details
+            { "DUST", "What was dancing in the light in the King’s hall?" },
+            { "ANGRY", "What was the King's mood at the beginning?" },
+            { "GARETH", "Who is the King's advisor?" },
+            { "WARS", "What had recently depleted the kingdom's funds?" },
+            { "NUGGET", "What kind of gift was given by the Eastern Emperor?" },
+            { "VAULT", "Where was the nugget kept before it was stolen?" },
+            { "SHADOW", "Who is the notorious thief mentioned?" },
+            { "TAVERN", "Where did Gareth go to retrieve the nugget?" },
+            { "CASTLE", "What was the nugget meant to fund?" },
+            
+            { "PUNISH", "What might the King do if Gareth fails" }, // Making Predictions
+            { "RETURN", "What could the Shadow do after escaping?" },
+            { "GUARDS", "How can Gareth prevent future thefts?" },
+            { "FOREST", "Where might the Shadow flee after the tavern" },
+            { "ESCAPE", "What could happen if the guild helped the Shadow" },
+            { "SECURE", "What will likely happen to the nugget now?" },
+            { "POWER", "If the King is betrayed again, what might he lose?" },
+            { "LISTEN", "What might Gareth do with his informants next?" },
+            { "REFORM", "What could the King do to strengthen his rule?" },
+            { "REVENGE", "What might the Shadow seek after his loss?" },
+            
+            { "LOYAL", "What is one word to describe Gareth?" }, // Character Analysis
+            { "CLUMSY", "What flaw does Gareth have?" },
+            { "STERN", "What trait best describes the King?" },
+            { "EXPAND", "What is the King’s goal for the kingdom?" },
+            { "STEALTHY", "What word describes the Shadow’s methods?" },
+            { "CLEVER", "Why is Gareth still effective despite his flaws?" },
+            { "FURY", "What emotion does the King show when angry?" },
+            { "GREED", "What might motivate the Shadow?" },
+            { "HONOR", "What does Gareth value most in his duty?" },
+            { "JUST", "What best defines the King’s leadership?" },
         };
     }
 
@@ -121,7 +158,38 @@ public class WordManager : MonoBehaviour
             { "STRATEGIC", "Understanding Vocabulary" },
             { "COMMENCED", "Understanding Vocabulary" },
             { "RECOVERED", "Understanding Vocabulary" },
-            { "INFORMANT", "Understanding Vocabulary" }
+            { "INFORMANT", "Understanding Vocabulary" },
+            { "KINGDOM", "Identifying Key Details" },
+            { "DUST", "Identifying Key Details" },
+            { "ANGRY", "Identifying Key Details" },
+            { "GARETH", "Identifying Key Details" },
+            { "WARS", "Identifying Key Details" },
+            { "NUGGET", "Identifying Key Details" },
+            { "VAULT", "Identifying Key Details" },
+            { "SHADOW", "Identifying Key Details" },
+            { "TAVERN", "Identifying Key Details" },
+            { "CASTLE", "Identifying Key Details" },
+            { "PUNISH", "Making Predictions" },
+            { "RETURN", "Making Predictions" },
+            { "GUARDS", "Making Predictions" },
+            { "FOREST", "Making Predictions" },
+            { "ESCAPE", "Making Predictions" },
+            { "SECURE", "Making Predictions" },
+            { "POWER", "Making Predictions" },
+            { "LISTEN", "Making Predictions" },
+            { "REFORM", "Making Predictions" },
+            { "REVENGE", "Making Predictions" },
+            { "LOYAL", "Character Analysis" },
+            { "CLUMSY", "Character Analysis" },
+            { "STERN", "Character Analysis" },
+            { "EXPAND", "Character Analysis" },
+            { "STEALTHY", "Character Analysis" },
+            { "CLEVER", "Character Analysis" },
+            { "FURY", "Character Analysis" },
+            { "GREED", "Character Analysis" },
+            { "HONOR", "Character Analysis" },
+            { "JUST", "Character Analysis" },
+            
         };
 
         // Verify all words have categories
@@ -300,6 +368,33 @@ public class WordManager : MonoBehaviour
         return false;
     }
 
+    private void LoadRecentCategories()
+    {
+        string savedCategories = PlayerPrefs.GetString(RECENT_CATEGORIES_KEY, "");
+        if (!string.IsNullOrEmpty(savedCategories))
+        {
+            string[] categories = savedCategories.Split(',');
+            recentlyUsedCategories = new List<string>(categories);
+            
+            if (enableDebugLogs)
+            {
+                Debug.Log($"Loaded {recentlyUsedCategories.Count} recently used categories");
+            }
+        }
+    }
+
+    private void SaveRecentCategories()
+    {
+        string categoriesToSave = string.Join(",", recentlyUsedCategories);
+        PlayerPrefs.SetString(RECENT_CATEGORIES_KEY, categoriesToSave);
+        PlayerPrefs.Save();
+        
+        if (enableDebugLogs)
+        {
+            Debug.Log($"Saved {recentlyUsedCategories.Count} recently used categories");
+        }
+    }
+
     private void SaveLeitnerSystemState()
     {
         // Save easy box words
@@ -340,55 +435,162 @@ public class WordManager : MonoBehaviour
             return;
         }
 
-        float randomValue = Random.value; // Random value between 0 and 1
-        string boxSelected = ""; // Track which box we're selecting from
+        // First, get words from each Leitner box
+        Dictionary<string, List<string>> categorizedEasyWords = GetCategorizedWords(easyBox);
+        Dictionary<string, List<string>> categorizedMediumWords = GetCategorizedWords(mediumBox);
+        Dictionary<string, List<string>> categorizedHardWords = GetCategorizedWords(hardBox);
 
-        // Choose a box based on probability
+        // Check if we have enough diverse categories to work with
+        HashSet<string> allAvailableCategories = new HashSet<string>();
+        foreach (var category in categorizedEasyWords.Keys) allAvailableCategories.Add(category);
+        foreach (var category in categorizedMediumWords.Keys) allAvailableCategories.Add(category);
+        foreach (var category in categorizedHardWords.Keys) allAvailableCategories.Add(category);
+
+        if (enableDebugLogs)
+        {
+            Debug.Log($"Found {allAvailableCategories.Count} different categories across all Leitner boxes");
+        }
+
+        // Select box based on probability
+        float randomValue = Random.value;
+        Dictionary<string, List<string>> selectedBoxWords;
+        string boxSelected;
+
         if (randomValue < easyWordSelectionChance && easyBox.Count > 0)
         {
-            // Select from easy box
-            secretWord = SelectRandomWordFromBox(easyBox);
+            selectedBoxWords = categorizedEasyWords;
             boxSelected = "EASY";
         }
         else if (randomValue < easyWordSelectionChance + mediumWordSelectionChance && mediumBox.Count > 0)
         {
-            // Select from medium box
-            secretWord = SelectRandomWordFromBox(mediumBox);
+            selectedBoxWords = categorizedMediumWords;
             boxSelected = "MEDIUM";
         }
         else
         {
-            // Select from hard box (or default to random if empty)
-            if (hardBox.Count > 0)
+            selectedBoxWords = categorizedHardWords;
+            boxSelected = "HARD";
+        }
+
+        // If selected box is empty, fall back to hard box or random selection
+        if (selectedBoxWords.Count == 0)
+        {
+            if (categorizedHardWords.Count > 0)
             {
-                secretWord = SelectRandomWordFromBox(hardBox);
-                boxSelected = "HARD";
+                selectedBoxWords = categorizedHardWords;
+                boxSelected = "HARD (fallback)";
             }
             else
             {
-                // Fallback to random selection if no words in hard box
+                // Last resort: choose randomly from all words
                 int randomIndex = Random.Range(0, secretWords.Count);
                 secretWord = secretWords[randomIndex].ToUpper();
-                boxSelected = "RANDOM (Hard box empty)";
+                boxSelected = "RANDOM (all boxes empty)";
 
-                // Add the word to the hard box if it's not in any box
+                // Add to hard box if not found in any box
                 if (GetBoxForWord(secretWord) == "NOT FOUND")
                 {
                     hardBox[secretWord] = 0;
                 }
+
+                // Update recently used categories
+                UpdateRecentlyUsedCategories(GetCategoryForWord(secretWord));
+                
+                // Log selection info
+                if (enableDebugLogs)
+                {
+                    Debug.Log($"========= WORD SELECTION =========");
+                    Debug.Log($"Selected word '{secretWord}' from {boxSelected}");
+                    Debug.Log($"Category: {GetCategoryForWord(secretWord)}");
+                    Debug.Log($"Current performance score: {wordPerformance[secretWord]}");
+                }
+                
+                return;
             }
         }
+
+        // Prioritize categories that haven't been used recently
+        List<string> priorityCategories = new List<string>();
+        foreach (var category in selectedBoxWords.Keys)
+        {
+            if (!recentlyUsedCategories.Contains(category))
+            {
+                priorityCategories.Add(category);
+            }
+        }
+
+        // If we have priority categories, select from those first
+        string selectedCategory;
+        if (priorityCategories.Count > 0)
+        {
+            int randomCategoryIndex = Random.Range(0, priorityCategories.Count);
+            selectedCategory = priorityCategories[randomCategoryIndex];
+        }
+        else
+        {
+            // Otherwise select any category
+            List<string> availableCategories = new List<string>(selectedBoxWords.Keys);
+            int randomCategoryIndex = Random.Range(0, availableCategories.Count);
+            selectedCategory = availableCategories[randomCategoryIndex];
+        }
+
+        // Select a random word from the chosen category
+        List<string> wordsInCategory = selectedBoxWords[selectedCategory];
+        int randomWordIndex = Random.Range(0, wordsInCategory.Count);
+        secretWord = wordsInCategory[randomWordIndex];
+
+        // Update recently used categories
+        UpdateRecentlyUsedCategories(selectedCategory);
 
         // Print detailed selection info
         if (enableDebugLogs)
         {
             Debug.Log($"========= WORD SELECTION =========");
             Debug.Log($"Selected word '{secretWord}' from {boxSelected} box");
-            Debug.Log($"Category: {GetCategoryForWord(secretWord)}");
+            Debug.Log($"Category: {selectedCategory}");
             Debug.Log($"Current performance score: {wordPerformance[secretWord]}");
             Debug.Log($"Box distribution - Easy: {easyBox.Count}, Medium: {mediumBox.Count}, Hard: {hardBox.Count}");
             Debug.Log($"Random value: {randomValue} (Easy threshold: {easyWordSelectionChance}, Medium threshold: {easyWordSelectionChance + mediumWordSelectionChance})");
+            Debug.Log($"Recently used categories: {string.Join(", ", recentlyUsedCategories)}");
         }
+    }
+
+    private Dictionary<string, List<string>> GetCategorizedWords(Dictionary<string, int> box)
+    {
+        // Group words by category
+        Dictionary<string, List<string>> categorizedWords = new Dictionary<string, List<string>>();
+        
+        foreach (string word in box.Keys)
+        {
+            string category = GetCategoryForWord(word);
+            
+            if (!categorizedWords.ContainsKey(category))
+            {
+                categorizedWords[category] = new List<string>();
+            }
+            
+            categorizedWords[category].Add(word);
+        }
+        
+        return categorizedWords;
+    }
+
+    private void UpdateRecentlyUsedCategories(string categoryUsed)
+    {
+        // Add the category to the recently used list
+        if (!recentlyUsedCategories.Contains(categoryUsed))
+        {
+            recentlyUsedCategories.Add(categoryUsed);
+        }
+        
+        // Keep only the most recent categories (limited by minCategoryDiversity)
+        while (recentlyUsedCategories.Count > minCategoryDiversity)
+        {
+            recentlyUsedCategories.RemoveAt(0); // Remove the oldest category
+        }
+        
+        // Save the updated list
+        SaveRecentCategories();
     }
 
     private string SelectRandomWordFromBox(Dictionary<string, int> box)
@@ -631,6 +833,8 @@ public class WordManager : MonoBehaviour
             status.AppendLine($"  - {word} (Performance: {wordPerformance[word]}, Category: {GetCategoryForWord(word)})");
         }
 
+        status.AppendLine($"Recently used categories: {string.Join(", ", recentlyUsedCategories)}");
+
         return status.ToString();
     }
 
@@ -654,6 +858,13 @@ public class WordManager : MonoBehaviour
             easyWordSelectionChance = Mathf.Min(easyWordSelectionChance, 1.0f);
             mediumWordSelectionChance = Mathf.Min(mediumWordSelectionChance, 1.0f - easyWordSelectionChance);
         }
+        
+        // Validate minimum category diversity
+        if (minCategoryDiversity < 1)
+        {
+            Debug.LogWarning("Minimum category diversity must be at least 1. Setting to 1.");
+            minCategoryDiversity = 1;
+        }
     }
     
     public void ResetLeitnerSystem()
@@ -667,6 +878,7 @@ public class WordManager : MonoBehaviour
         mediumBox.Clear();
         hardBox.Clear();
         wordPerformance.Clear();
+        recentlyUsedCategories.Clear();
 
         foreach (string word in secretWords)
         {
@@ -676,11 +888,11 @@ public class WordManager : MonoBehaviour
         }
 
         SaveLeitnerSystemState();
+        SaveRecentCategories();
 
         if (enableDebugLogs)
         {
             Debug.Log("Leitner system has been reset.");
         }
     }
-
 }

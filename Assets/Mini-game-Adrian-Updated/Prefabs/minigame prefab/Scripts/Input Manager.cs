@@ -24,7 +24,6 @@ public class InputManager : MonoBehaviour
 
     private void Initialize()
     {
-
         // Ensure secret word matches the letter container length
         string secretWord = WordManager.instance?.GetSecretWord();
         if (string.IsNullOrEmpty(secretWord))
@@ -49,6 +48,8 @@ public class InputManager : MonoBehaviour
                 
                 // Get the new secret word before creating a new container
                 string newSecretWord = WordManager.instance.GetSecretWord();
+                
+                // Create a new word container with the appropriate length
                 CreateNewWordContainer(newSecretWord.Length);
             }
         }
@@ -102,7 +103,10 @@ public class InputManager : MonoBehaviour
             // Get a new secret word from WordManager
             WordManager.instance.ChooseWordUsingLeitnerSystem();
             string newSecretWord = WordManager.instance.GetSecretWord();
-
+            
+            // Hide the completed WordContainer BEFORE reinitializing the keyboard
+            currentWordContainer.gameObject.SetActive(false);
+            
             // Reinitialize the keyboard with the new secret word
             InitializeKeyboard(newSecretWord);
         }
@@ -117,10 +121,10 @@ public class InputManager : MonoBehaviour
 
             // Switch to top-down camera for incorrect answer
             cameraManager.SwitchToTopDownCamera();
+            
+            // Hide the completed WordContainer
+            currentWordContainer.gameObject.SetActive(false);
         }
-
-        // Hide the completed WordContainer
-        currentWordContainer.gameObject.SetActive(false);
     }
 
     private void CreateNewWordContainer(int wordLength)
@@ -143,24 +147,34 @@ public class InputManager : MonoBehaviour
         char[] letters = secretWord.ToCharArray();
         ShuffleArray(letters);
 
-        KeyboardKey[] keys = FindObjectsOfType<KeyboardKey>();
+        KeyboardKey[] keys = FindObjectsOfType<KeyboardKey>(true); // Include inactive keys
 
         if (keys == null || keys.Length == 0)
         {
+            Debug.LogError("No KeyboardKey components found in the scene!");
             return;
         }
 
-        // Activate/deactivate keyboard keys based on the word length
+        Debug.Log($"Found {keys.Length} keyboard keys for word of length {letters.Length}");
+
+        // FIRST: Activate ALL keys (in case any were deactivated)
+        foreach (var key in keys)
+        {
+            key.gameObject.SetActive(true);
+        }
+
+        // SECOND: Assign letters to needed keys
         for (int i = 0; i < keys.Length; i++)
         {
             if (i < letters.Length)
             {
-                keys[i].gameObject.SetActive(true);
                 keys[i].SetLetter(letters[i]);
+                Debug.Log($"Key {i} set to letter {letters[i]}");
             }
             else
             {
-                keys[i].gameObject.SetActive(false);
+                // Clear any unused keys (optional visual cleanup)
+                keys[i].SetLetter(' '); // Or use a different clear method
             }
         }
     }

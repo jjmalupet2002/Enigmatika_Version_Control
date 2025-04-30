@@ -25,16 +25,40 @@ public class KeyboardKey : MonoBehaviour
     {
 
     }
+    
 
     private void SendKeyPressedEvent()
     {
-        onKeyPressed?.Invoke(letterText.text[0]);
+        if (letterText != null && letterText.text.Length > 0)
+        {
+            onKeyPressed?.Invoke(letterText.text[0]);
+        }
     }
 
     public void SetLetter(char letter)
     {
-        letterText.text = letter.ToString();
-        gameObject.SetActive(true); // Ensure the button is active
+        // Make sure this method is only called on active GameObjects
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true); // Force activate if needed
+        }
+    
+        if (letterText != null)
+        {
+            letterText.text = letter.ToString();
+            Debug.Log($"KeyboardKey set to letter: {letter}");
+        }
+        else
+        {
+            Debug.LogError("Letter text is null in KeyboardKey!");
+        }
     }
-
+    
+    public void ClearKey()
+    {
+        if (letterText != null)
+        {
+            letterText.text = " ";
+        }
+    }
 }
