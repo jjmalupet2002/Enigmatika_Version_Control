@@ -8,19 +8,6 @@ public class LetterContainer : MonoBehaviour
     [Header("TextMeshPro Letter")]
     [SerializeField] private TextMeshProUGUI letter;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Start is called before the first frame update
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Update is called once per frame
-    }
-
     public void Initialize()
     {
         letter.text = "";
@@ -33,7 +20,7 @@ public class LetterContainer : MonoBehaviour
 
     public char GetLetter()
     {
-        return letter.text[0];
+        // Check if text is empty to avoid index out of range errors
+        return letter.text.Length > 0 ? letter.text[0] : ' ';
     }
-
 }

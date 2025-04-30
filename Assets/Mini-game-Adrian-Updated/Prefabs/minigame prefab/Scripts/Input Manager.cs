@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Boss boss; // Reference to Boss
     [SerializeField] private ScoreManager scoreManager; // Reference to ScoreManager
 
-
     [Header("Camera Manager")]
     [SerializeField] private CameraManager cameraManager; // Reference to CameraManager
 
@@ -25,15 +24,16 @@ public class InputManager : MonoBehaviour
 
     private void Initialize()
     {
-        CreateNewWordContainer();
 
         // Ensure secret word matches the letter container length
         string secretWord = WordManager.instance?.GetSecretWord();
-        if (!string.IsNullOrEmpty(secretWord) && secretWord.Length != currentWordContainer.GetLetterContainerCount())
+        if (string.IsNullOrEmpty(secretWord))
         {
-            Debug.LogError("Secret word length does not match the number of LetterContainers!");
+            Debug.LogError("Secret word is null or empty!");
+            return;
         }
-
+        
+        CreateNewWordContainer(secretWord.Length);
         InitializeKeyboard(secretWord); // Set keyboard buttons
     }
 
@@ -46,7 +46,10 @@ public class InputManager : MonoBehaviour
             if (currentWordContainer.IsComplete())
             {
                 CheckWord();
-                CreateNewWordContainer();
+                
+                // Get the new secret word before creating a new container
+                string newSecretWord = WordManager.instance.GetSecretWord();
+                CreateNewWordContainer(newSecretWord.Length);
             }
         }
         else
@@ -84,8 +87,6 @@ public class InputManager : MonoBehaviour
             if (boss != null)
             {
                 boss.TakeDamage(20); // Deal 20 damage to the boss
-                // Remove this line to prevent double counting
-                // scoreManager.RecordCorrectAnswer(); 
                 
                 // This will handle both updating the performance tracking and notifying ScoreManager with category info
                 WordManager.instance.WordAnsweredCorrectly();
@@ -111,9 +112,6 @@ public class InputManager : MonoBehaviour
 
             boss.HealDamage(20); // Heal 20 damage to the boss
             
-            // Remove this line to prevent double counting
-            // scoreManager.RecordWrongAnswer();
-            
             // This will handle both updating the performance tracking and notifying ScoreManager with category info
             WordManager.instance.WordAnsweredIncorrectly();
 
@@ -125,10 +123,10 @@ public class InputManager : MonoBehaviour
         currentWordContainer.gameObject.SetActive(false);
     }
 
-    private void CreateNewWordContainer()
+    private void CreateNewWordContainer(int wordLength)
     {
         currentWordContainer = Instantiate(wordContainerPrefab, wordContainerParent);
-        currentWordContainer.Initialize();
+        currentWordContainer.Initialize(wordLength);
     }
 
     private void InitializeKeyboard(string secretWord)
@@ -152,10 +150,12 @@ public class InputManager : MonoBehaviour
             return;
         }
 
+        // Activate/deactivate keyboard keys based on the word length
         for (int i = 0; i < keys.Length; i++)
         {
             if (i < letters.Length)
             {
+                keys[i].gameObject.SetActive(true);
                 keys[i].SetLetter(letters[i]);
             }
             else

@@ -655,4 +655,32 @@ public class WordManager : MonoBehaviour
             mediumWordSelectionChance = Mathf.Min(mediumWordSelectionChance, 1.0f - easyWordSelectionChance);
         }
     }
+    
+    public void ResetLeitnerSystem()
+    {
+        if (enableDebugLogs)
+        {
+            Debug.Log("Resetting Leitner system...");
+        }
+
+        easyBox.Clear();
+        mediumBox.Clear();
+        hardBox.Clear();
+        wordPerformance.Clear();
+
+        foreach (string word in secretWords)
+        {
+            string upperWord = word.ToUpper();
+            hardBox[upperWord] = 0;
+            wordPerformance[upperWord] = 0;
+        }
+
+        SaveLeitnerSystemState();
+
+        if (enableDebugLogs)
+        {
+            Debug.Log("Leitner system has been reset.");
+        }
+    }
+
 }

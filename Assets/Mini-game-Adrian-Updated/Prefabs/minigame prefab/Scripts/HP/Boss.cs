@@ -65,9 +65,13 @@ public class Boss : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Boss Died!");
+        // Reset Leitner system
+        if (WordManager.instance != null)
+        {
+            WordManager.instance.ResetLeitnerSystem();
+        }
 
         missioncompleteManager.ShowMissionComplete(); // Shows Game Over Screen
-
     }
+
 }
