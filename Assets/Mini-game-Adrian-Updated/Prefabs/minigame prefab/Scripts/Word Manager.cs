@@ -82,27 +82,46 @@ public class WordManager : MonoBehaviour
 
     private void InitializeWordCategoryMap()
     {
-        // Define available categories
-        availableCategories = new List<string>
+        // Initialize default categories if the list is empty
+        if (availableCategories == null || availableCategories.Count == 0)
         {
-            "Personality Traits",
-            "Action Words",
-            "Planning & Strategy",
-            "Value & Worth"
-        };
+            availableCategories = new List<string>
+            {
+                "Identifying Key Details",
+                "Making Predictions",
+                "Character Analysis",
+                "Understanding Vocabulary"
+            };
+        
+            if (enableDebugLogs)
+            {
+                Debug.Log("No categories found in Inspector. Using default categories.");
+            }
+        }
+        else if (enableDebugLogs)
+        {
+            Debug.Log($"Using {availableCategories.Count} categories from Inspector.");
+        }
 
+        // Make sure "Uncategorized" is available if needed
+        if (!availableCategories.Contains("Uncategorized"))
+        {
+            availableCategories.Add("Uncategorized");
+        }
+        
+        // Initialize word-to-category mapping
         wordToCategoryMap = new Dictionary<string, string>
         {
-            { "AUDACIOUS", "Personality Traits" },
-            { "PARAMOUNT", "Value & Worth" },
-            { "TREASURES", "Value & Worth" },
-            { "STANDOFFS", "Action Words" },
-            { "NOTORIOUS", "Personality Traits" },
-            { "COMMANDED", "Action Words" },
-            { "STRATEGIC", "Planning & Strategy" },
-            { "COMMENCED", "Action Words" },
-            { "RECOVERED", "Action Words" },
-            { "INFORMANT", "Planning & Strategy" }
+            { "AUDACIOUS", "Understanding Vocabulary" },
+            { "PARAMOUNT", "Understanding Vocabulary" },
+            { "TREASURES", "Understanding Vocabulary" },
+            { "STANDOFFS", "Understanding Vocabulary" },
+            { "NOTORIOUS", "Understanding Vocabulary" },
+            { "COMMANDED", "Understanding Vocabulary" },
+            { "STRATEGIC", "Understanding Vocabulary" },
+            { "COMMENCED", "Understanding Vocabulary" },
+            { "RECOVERED", "Understanding Vocabulary" },
+            { "INFORMANT", "Understanding Vocabulary" }
         };
 
         // Verify all words have categories

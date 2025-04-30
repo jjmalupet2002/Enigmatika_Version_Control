@@ -84,14 +84,14 @@ public class InputManager : MonoBehaviour
             if (boss != null)
             {
                 boss.TakeDamage(20); // Deal 20 damage to the boss
-                scoreManager.RecordCorrectAnswer(); 
-                WordManager.instance.WordAnsweredCorrectly();
+                // Remove this line to prevent double counting
+                // scoreManager.RecordCorrectAnswer(); 
                 
-
+                // This will handle both updating the performance tracking and notifying ScoreManager with category info
+                WordManager.instance.WordAnsweredCorrectly();
             }
             else
             {
-                
                 Debug.LogError("Boss reference is missing!");
             }
 
@@ -111,9 +111,11 @@ public class InputManager : MonoBehaviour
 
             boss.HealDamage(20); // Heal 20 damage to the boss
             
-            scoreManager.RecordWrongAnswer();
+            // Remove this line to prevent double counting
+            // scoreManager.RecordWrongAnswer();
+            
+            // This will handle both updating the performance tracking and notifying ScoreManager with category info
             WordManager.instance.WordAnsweredIncorrectly();
-
 
             // Switch to top-down camera for incorrect answer
             cameraManager.SwitchToTopDownCamera();

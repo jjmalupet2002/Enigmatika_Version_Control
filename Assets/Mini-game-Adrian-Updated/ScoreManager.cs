@@ -17,7 +17,7 @@ public class ScoreManager : MonoBehaviour
     private Dictionary<string, int> wrongAnswersByCategory = new Dictionary<string, int>();
 
     [Header("UI Elements")]
-    [SerializeField] private TMP_Text scoreText; // Reference to the TextMeshPro component
+    [SerializeField] private TMP_Text scoreText; // Reference to the basic score TextMeshPro component
     [SerializeField] private GameObject missionCompleteScreen; // Reference to the mission complete screen
     [SerializeField] private TMP_Text categoryStatsText; // Reference to category stats text
     [SerializeField] private bool showDetailedStats = true; // Toggle to show/hide detailed category stats
@@ -97,20 +97,17 @@ public class ScoreManager : MonoBehaviour
     // Update the score display
     private void UpdateScoreDisplay()
     {
-        StringBuilder scoreBuilder = new StringBuilder();
-        
-        // Add basic score information
-        scoreBuilder.AppendLine($"Correct Answers: {correctAnswers}");
-        scoreBuilder.AppendLine();
-        scoreBuilder.AppendLine($"Wrong Answers: {wrongAnswers}");
-        
-        // Update the basic score text
+        // Update basic score display if available
         if (scoreText != null)
         {
+            StringBuilder scoreBuilder = new StringBuilder();
+            scoreBuilder.AppendLine($"Correct Answers: {correctAnswers}");
+            scoreBuilder.AppendLine();
+            scoreBuilder.AppendLine($"Wrong Answers: {wrongAnswers}");
             scoreText.text = scoreBuilder.ToString();
         }
         
-        // Update category stats if the text component exists
+        // Update category stats if available
         if (categoryStatsText != null && showDetailedStats)
         {
             UpdateCategoryStats();
@@ -127,8 +124,8 @@ public class ScoreManager : MonoBehaviour
         
         // Sort categories by number of correct answers (descending)
         var sortedCategories = correctAnswersByCategory.OrderByDescending(c => c.Value)
-                                                       .Select(c => c.Key)
-                                                       .ToList();
+                                                    .Select(c => c.Key)
+                                                    .ToList();
         
         foreach (string category in sortedCategories)
         {
@@ -141,6 +138,18 @@ public class ScoreManager : MonoBehaviour
                 float accuracy = total > 0 ? (float)correct / total * 100 : 0;
                 statsBuilder.AppendLine($"{category}: {correct}/{total} ({accuracy:F0}%)");
             }
+        }
+        
+        // Add summary at the end
+        statsBuilder.AppendLine();
+        statsBuilder.AppendLine("--- Summary ---");
+        statsBuilder.AppendLine($"Total Correct: {correctAnswers}");
+        statsBuilder.AppendLine($"Total Wrong: {wrongAnswers}");
+        
+        if (correctAnswers + wrongAnswers > 0)
+        {
+            float overallAccuracy = (float)correctAnswers / (correctAnswers + wrongAnswers) * 100;
+            statsBuilder.AppendLine($"Overall Accuracy: {overallAccuracy:F0}%");
         }
         
         categoryStatsText.text = statsBuilder.ToString();
