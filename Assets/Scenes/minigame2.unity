@@ -1113,6 +1113,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1907158926}
   missionCompleteScreen: {fileID: 554223376}
+  categoryStatsText: {fileID: 1907158926}
+  showDetailedStats: 1
 --- !u!1 &481126168
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,7 +2151,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.50024414, y: 8.922974}
+  m_AnchoredPosition: {x: 0.5004883, y: 8.923096}
   m_SizeDelta: {x: 320.65002, y: 179.66992}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &554223378
@@ -2471,17 +2473,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &664638037 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7123322776901192478, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
-  m_PrefabInstance: {fileID: 2366333637035106924}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb7002c371d5b714bbd4dbbce1b6986c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &685526024 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 438290754860845160, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
@@ -2726,6 +2717,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b87938720df4c5e46894db08c571f9c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &828397681 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7123322776901192478, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
+  m_PrefabInstance: {fileID: 2366333637035106924}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7002c371d5b714bbd4dbbce1b6986c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &836649231 stripped
@@ -2999,7 +3001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00024414062, y: -0.6374512}
+  m_AnchoredPosition: {x: 0.00048828125, y: -0.6374512}
   m_SizeDelta: {x: -319.65, y: -160.69}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1074854609
@@ -4797,6 +4799,34 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8750032043337951477, guid: b9274f768b55f664989eee527dcfd809, type: 3}
   m_PrefabInstance: {fileID: 5805001386396799461}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1682064210 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7325148282504497098, guid: 5829701bcaf59aa4b91986eedf42cbb1, type: 3}
+  m_PrefabInstance: {fileID: 7890612655470492387}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1682064212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682064210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1749980919
 GameObject:
   m_ObjectHideFlags: 0
@@ -4981,8 +5011,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000059128, y: 0.000002861}
-  m_SizeDelta: {x: 547.945, y: 165.3942}
+  m_AnchoredPosition: {x: 2.5529, y: -8.5097}
+  m_SizeDelta: {x: 672.1868, y: 398.5607}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1907158926
 MonoBehaviour:
@@ -5035,7 +5065,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.4
+  m_fontSize: 58
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5928,7 +5958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3946675577439894529, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
       propertyPath: maxHealth
-      value: 200
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 3946675577439894529, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
       propertyPath: missioncompleteManager
@@ -6042,6 +6072,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 7123322776901192478, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
+      propertyPath: letterContainerPrefab
+      value: 
+      objectReference: {fileID: 736928899470553639, guid: 5768e5fcfb309c04a88c77010624f9b0, type: 3}
     - target: {fileID: 7280250812945172465, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -6075,10 +6109,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2660364320570566400}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3408281594257664080, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
+    - {fileID: 1037880692208512494, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 438290754860845160, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
-      insertIndex: 1
+      insertIndex: 0
       addedObject: {fileID: 1527210744}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce48e372231c5334385c9067fbf5bbf1, type: 3}
@@ -7394,7 +7430,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 338232902027302239, guid: 5829701bcaf59aa4b91986eedf42cbb1, type: 3}
       insertIndex: 2
       addedObject: {fileID: 516748005}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7325148282504497098, guid: 5829701bcaf59aa4b91986eedf42cbb1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1682064212}
   m_SourcePrefab: {fileID: 100100000, guid: 5829701bcaf59aa4b91986eedf42cbb1, type: 3}
 --- !u!114 &8268273679633554961 stripped
 MonoBehaviour:
@@ -7442,7 +7481,7 @@ PrefabInstance:
     - target: {fileID: 3290219642334268183, guid: b2003e7fd3e099d4ea870bb4697a4d3a, type: 3}
       propertyPath: wordContainerPrefab
       value: 
-      objectReference: {fileID: 664638037}
+      objectReference: {fileID: 828397681}
     - target: {fileID: 5008810573350048086, guid: b2003e7fd3e099d4ea870bb4697a4d3a, type: 3}
       propertyPath: m_Name
       value: Input Manager
@@ -7502,7 +7541,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.size
-      value: 10
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[0]
@@ -7514,11 +7553,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[2]
-      value: TREASURES
+      value: TREASURE
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[3]
-      value: STANDOFFS
+      value: STANDOFF
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[4]
@@ -7526,23 +7565,183 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[5]
-      value: COMMANDED
+      value: COMMAND
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[6]
-      value: STRATEGIC
+      value: STRATEGY
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[7]
-      value: COMMENCED
+      value: COMMENCE
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[8]
-      value: RECOVERED
+      value: RECOVER
       objectReference: {fileID: 0}
     - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: secretWords.Array.data[9]
+      value: KINGDOM
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[10]
+      value: DUSTY
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[11]
+      value: ANGRY
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[12]
+      value: GARETH
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[13]
+      value: WARS
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[14]
+      value: NUGGET
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[15]
+      value: VAULT
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[16]
+      value: SHADOW
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[17]
+      value: TAVERN
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[18]
+      value: CASTLE
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[19]
       value: INFORMANT
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[20]
+      value: PUNISH
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[21]
+      value: RETURN
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[22]
+      value: GUARDS
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[23]
+      value: FOREST
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[24]
+      value: ESCAPE
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[25]
+      value: SECURE
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[26]
+      value: POWER
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[27]
+      value: LISTEN
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[28]
+      value: REFORM
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[29]
+      value: REVENGE
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[30]
+      value: LOYAL
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[31]
+      value: CLUMSY
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[32]
+      value: STERN
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[33]
+      value: EXPAND
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[34]
+      value: STEALTHY
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[35]
+      value: CLEVER
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[36]
+      value: FURIOUS
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[37]
+      value: GREEDY
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[38]
+      value: HONOR
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: secretWords.Array.data[39]
+      value: JUST
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: availableCategories.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: availableCategories.Array.data[0]
+      value: Identifying Key Details
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: availableCategories.Array.data[1]
+      value: Making Predictions
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: availableCategories.Array.data[2]
+      value: Character Analysis
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: availableCategories.Array.data[3]
+      value: Understanding Vocabulary
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: recentlyUsedCategories.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: recentlyUsedCategories.Array.data[0]
+      value: Identifying Key Details
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: recentlyUsedCategories.Array.data[1]
+      value: Making Predictions
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: recentlyUsedCategories.Array.data[2]
+      value: Character Analysis
+      objectReference: {fileID: 0}
+    - target: {fileID: 119385911408381469, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
+      propertyPath: recentlyUsedCategories.Array.data[3]
+      value: Understanding Vocabulary
       objectReference: {fileID: 0}
     - target: {fileID: 4182517062374686154, guid: 357564850db175c48a7ec2a8de62f2db, type: 3}
       propertyPath: m_LocalPosition.x

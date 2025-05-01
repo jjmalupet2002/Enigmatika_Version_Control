@@ -90,7 +90,6 @@ public class QuestButtonHandler : MonoBehaviour
         blinkingInProgress = true;
 
         Color originalColor = questButtonImage.color;
-        // Color #984325 with semi-transparency (Alpha = 0.5)
         Color blinkColor = new Color(152f / 255f, 67f / 255f, 37f / 255f, 0.5f);
 
         float duration = 2.6f;
@@ -101,16 +100,38 @@ public class QuestButtonHandler : MonoBehaviour
 
         while (timer < duration)
         {
+            if (playerTransform == null || Vector3.Distance(transform.position, playerTransform.position) > interactRange)
+            {
+                openQuestButton.SetActive(false);
+                blinkingInProgress = false;
+                yield break; // Stop blinking early if player is too far
+            }
+
             questButtonImage.color = blinkColor;
             yield return new WaitForSeconds(blinkRate);
+
+            if (playerTransform == null || Vector3.Distance(transform.position, playerTransform.position) > interactRange)
+            {
+                openQuestButton.SetActive(false);
+                blinkingInProgress = false;
+                yield break;
+            }
+
             questButtonImage.color = originalColor;
             yield return new WaitForSeconds(blinkRate);
             timer += blinkRate * 2;
         }
 
+        // Final check in case the player moved away at the end of blinking
+        if (playerTransform == null || Vector3.Distance(transform.position, playerTransform.position) > interactRange)
+        {
+            openQuestButton.SetActive(false);
+        }
+
         questButtonImage.color = originalColor;
         blinkingInProgress = false;
     }
+
 
     void OnCollisionEnter(Collision collision)
     {

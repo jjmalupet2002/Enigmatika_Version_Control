@@ -17,7 +17,7 @@ public class QuestManager : MonoBehaviour
     public Dictionary<string, MainQuest> activeQuests = new Dictionary<string, MainQuest>();
     public QuestSavingSaveObject QuestSaveObject;
     public QuestUIManager questUIManager;
-
+    public CompassArrow compass; // Assign this in the Inspector
 
     private void OnEnable()
     {
@@ -83,27 +83,30 @@ public class QuestManager : MonoBehaviour
     // Set the highest priority criteria to InProgress
     public void SetHighestPriorityCriteriaInProgress(MainQuest quest)
     {
-        // Sort the criteria list by priority
-        quest.questCriteriaList.Sort((a, b) => a.priority.CompareTo(b.priority)); // Sort by priority ascending
+        quest.questCriteriaList.Sort((a, b) => a.priority.CompareTo(b.priority));
 
-        // Set the first (highest priority) criteria to InProgress if it's not already completed
         if (quest.questCriteriaList.Count > 0)
         {
             var highestPriorityCriteria = quest.questCriteriaList[0];
 
-            // Only set the status to InProgress if the criteria is not already completed
             if (highestPriorityCriteria.CriteriaStatus != QuestEnums.QuestCriteriaStatus.Completed)
             {
                 highestPriorityCriteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.InProgress;
 
-                // Enable the associated quest object
                 if (highestPriorityCriteria.associatedQuestObject != null)
                 {
                     highestPriorityCriteria.associatedQuestObject.gameObject.SetActive(true);
+
+                    // Set compass target here
+                    if (compass != null)
+                    {
+                        compass.SetTarget(highestPriorityCriteria.associatedQuestObject.transform);
+                    }
                 }
             }
         }
     }
+
 
     // Coroutine to disable the quest object after a delay
     private IEnumerator DisableAfterDelay(GameObject questObject, float delay)
@@ -112,7 +115,6 @@ public class QuestManager : MonoBehaviour
         questObject.SetActive(false);
     }
 
-    // Set the next active criteria
     public void SetNextActiveCriteria(MainQuest quest, int currentIndex)
     {
         // Disable the associated quest object of the completed criteria
@@ -121,7 +123,6 @@ public class QuestManager : MonoBehaviour
             var completedCriteria = quest.questCriteriaList[currentIndex];
             if (completedCriteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed)
             {
-                // Disable the associated quest object for Talk, Explore, and Escape criteria types
                 if (completedCriteria.associatedQuestObject != null)
                 {
                     float delay = 0f;
@@ -136,10 +137,27 @@ public class QuestManager : MonoBehaviour
                         delay = 3f; // 3 seconds for Explore and Escape criteria
                     }
 
-                    // Start the coroutine with the correct delay
                     if (delay > 0)
                     {
                         StartCoroutine(DisableAfterDelay(completedCriteria.associatedQuestObject.gameObject, delay));
+                    }
+                }
+
+                // Activate the next criteria (if any)
+                int nextIndex = currentIndex + 1;
+                if (nextIndex < quest.questCriteriaList.Count)
+                {
+                    var nextCriteria = quest.questCriteriaList[nextIndex];
+
+                    if (nextCriteria.associatedQuestObject != null)
+                    {
+                        nextCriteria.associatedQuestObject.gameObject.SetActive(true);
+
+                        // Update compass target
+                        if (compass != null)
+                        {
+                            compass.SetTarget(nextCriteria.associatedQuestObject.transform);
+                        }
                     }
                 }
 
