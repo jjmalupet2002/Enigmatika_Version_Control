@@ -22,9 +22,9 @@ public class WordManager : MonoBehaviour
 
     [Header("Leitner System Settings")]
     [SerializeField] private int numberOfBoxes = 3; // Number of difficulty levels
-    [SerializeField] private float easyWordSelectionChance = 0.2f; // 20% chance to select from easy box
-    [SerializeField] private float mediumWordSelectionChance = 0.3f; // 30% chance to select from medium box
-    // Hard words get the remaining 50% chance
+    [SerializeField] private float easyWordSelectionChance = 0.01f; // 1% chance to select from easy box
+    [SerializeField] private float mediumWordSelectionChance = 0.1f; // 10% chance to select from medium box
+    [SerializeField] private float hardWordSelectionChance = 0.98f;// Hard words get the remaining 98% chance
     [SerializeField] private bool enableDebugLogs = true; // Toggle for detailed debug logs
 
     // Leitner system boxes (dictionaries store word:correctness_count pairs)
@@ -36,7 +36,7 @@ public class WordManager : MonoBehaviour
     private Dictionary<string, int> wordPerformance = new Dictionary<string, int>();
 
     // Constants for performance tracking
-    private const int PROMOTION_THRESHOLD = 2; // Get word right this many times to promote
+    private const int PROMOTION_THRESHOLD = 1; // Get word right this many times to promote
     private const int DEMOTION_THRESHOLD = -1; // Get word wrong this many times to demote
 
     // Player prefs keys
