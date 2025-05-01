@@ -162,21 +162,57 @@ public class InputManager : MonoBehaviour
         {
             key.gameObject.SetActive(true);
         }
+        
+        // SECOND: Apply shuffling for keys
+        // Assuming keys and letters are defined, with keys.Length >= letters.Length
 
-        // SECOND: Assign letters to needed keys
-        for (int i = 0; i < keys.Length; i++)
+        System.Random random = new System.Random();
+
+        // Calculate how many random filler letters are needed
+        int totalKeys = keys.Length;
+        int correctLetterCount = letters.Length;
+        int fillerCount = totalKeys - correctLetterCount;
+
+        // Generate random filler letters
+        char[] fillerLetters = new char[fillerCount];
+        for (int i = 0; i < fillerCount; i++)
         {
-            if (i < letters.Length)
-            {
-                keys[i].SetLetter(letters[i]);
-                Debug.Log($"Key {i} set to letter {letters[i]}");
-            }
-            else
-            {
-                // Clear any unused keys (optional visual cleanup)
-                keys[i].SetLetter(' '); // Or use a different clear method
-            }
+            fillerLetters[i] = (char)random.Next('A', 'Z' + 1);
         }
+
+        // Combine correct letters and filler letters into one array
+        char[] combinedLetters = new char[totalKeys];
+
+        // Fill combinedLetters with random filler letters first
+        for (int i = 0; i < fillerCount; i++)
+        {
+            combinedLetters[i] = fillerLetters[i];
+        }
+
+        // Then fill combinedLetters with correct letters
+        for (int i = 0; i < correctLetterCount; i++)
+        {
+            combinedLetters[fillerCount + i] = letters[i];
+        }
+
+        // Apply Durstenfeld shuffle to combinedLetters
+        for (int i = totalKeys - 1; i > 0; i--)
+        {
+            int j = random.Next(i + 1);
+            char temp = combinedLetters[i];
+            combinedLetters[i] = combinedLetters[j];
+            combinedLetters[j] = temp;
+        }
+
+        // Assign shuffled letters to keys
+        for (int i = 0; i < totalKeys; i++)
+        {
+            keys[i].SetLetter(combinedLetters[i]);
+            Debug.Log($"Key {i} set to letter {combinedLetters[i]}");
+        }
+
+
+
     }
 
     private void ShuffleArray(char[] array)
