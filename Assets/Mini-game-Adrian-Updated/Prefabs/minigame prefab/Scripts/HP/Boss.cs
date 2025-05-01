@@ -27,10 +27,7 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            TakeDamage(20); // Debugging: Damage boss with 'B' key
-        }
+       
     }
 
     // Make TakeDamage public so it can be called by other scripts

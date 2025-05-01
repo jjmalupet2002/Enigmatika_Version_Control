@@ -60,73 +60,80 @@ public class InputManager : MonoBehaviour
     }
 
     private void CheckWord()
+{
+    string wordToCheck = currentWordContainer.GetWord();
+    string secretWord = WordManager.instance?.GetSecretWord();
+
+    if (string.IsNullOrEmpty(secretWord))
     {
-        string wordToCheck = currentWordContainer.GetWord();
-        string secretWord = WordManager.instance?.GetSecretWord();
+        Debug.LogError("Secret word is null or empty!");
+        return;
+    }
 
-        if (string.IsNullOrEmpty(secretWord))
+    // Debug log for comparison
+    Debug.Log($"Word to Check: {wordToCheck}, Secret Word: {secretWord}");
+
+    // Ensure lengths match before comparing
+    if (wordToCheck.Length != secretWord.Length)
+    {
+        Debug.LogError($"Word length mismatch! WordToCheck: {wordToCheck.Length}, SecretWord: {secretWord.Length}");
+        return;
+    }
+
+    if (wordToCheck == secretWord)
+    {
+        Debug.Log("Correct Answer! Hit Boss");
+
+        // If the word is correct, damage the boss
+        if (boss != null)
         {
-            Debug.LogError("Secret word is null or empty!");
-            return;
-        }
-
-        // Debug log for comparison
-        Debug.Log($"Word to Check: {wordToCheck}, Secret Word: {secretWord}");
-
-        // Ensure lengths match before comparing
-        if (wordToCheck.Length != secretWord.Length)
-        {
-            Debug.LogError($"Word length mismatch! WordToCheck: {wordToCheck.Length}, SecretWord: {secretWord.Length}");
-            return;
-        }
-
-        if (wordToCheck == secretWord)
-        {
-            Debug.Log("Correct Answer! Hit Boss");
-
-            // If the word is correct, damage the boss
-            if (boss != null)
-            {
-                boss.TakeDamage(20); // Deal 20 damage to the boss
-                
-                // This will handle both updating the performance tracking and notifying ScoreManager with category info
-                WordManager.instance.WordAnsweredCorrectly();
-            }
-            else
-            {
-                Debug.LogError("Boss reference is missing!");
-            }
-
-            // Switch to close-up camera for correct answer
-            cameraManager.SwitchToCloseUpCamera();
-
-            // Get a new secret word from WordManager
-            WordManager.instance.ChooseWordUsingLeitnerSystem();
-            string newSecretWord = WordManager.instance.GetSecretWord();
+            boss.TakeDamage(20); // Deal 20 damage to the boss
             
-            // Hide the completed WordContainer BEFORE reinitializing the keyboard
-            currentWordContainer.gameObject.SetActive(false);
-            
-            // Reinitialize the keyboard with the new secret word
-            InitializeKeyboard(newSecretWord);
+            // This will handle both updating the performance tracking and notifying ScoreManager with category info
+            WordManager.instance.WordAnsweredCorrectly();
         }
         else
         {
-            Debug.Log("Wrong Answer!");
-
-            boss.HealDamage(20); // Heal 20 damage to the boss
-            
-            // This will handle both updating the performance tracking and notifying ScoreManager with category info
-            WordManager.instance.WordAnsweredIncorrectly();
-
-            // Switch to top-down camera for incorrect answer
-            cameraManager.SwitchToTopDownCamera();
-            
-            // Hide the completed WordContainer
-            currentWordContainer.gameObject.SetActive(false);
+            Debug.LogError("Boss reference is missing!");
         }
-    }
 
+        // Switch to close-up camera for correct answer
+        cameraManager.SwitchToCloseUpCamera();
+
+        // Get a new secret word from WordManager
+        WordManager.instance.ChooseWordUsingLeitnerSystem();
+        string newSecretWord = WordManager.instance.GetSecretWord();
+        
+        // Hide the completed WordContainer BEFORE reinitializing the keyboard
+        currentWordContainer.gameObject.SetActive(false);
+        
+        // Reinitialize the keyboard with the new secret word
+        InitializeKeyboard(newSecretWord);
+    }
+    else
+    {
+        Debug.Log("Wrong Answer!");
+
+        boss.HealDamage(20); // Heal 20 damage to the boss
+        
+        // This will handle both updating the performance tracking and notifying ScoreManager with category info
+        WordManager.instance.WordAnsweredIncorrectly();
+
+        // Switch to top-down camera for incorrect answer
+        cameraManager.SwitchToTopDownCamera();
+        
+        // Hide the completed WordContainer
+        currentWordContainer.gameObject.SetActive(false);
+
+        // Get a new secret word from WordManager
+        WordManager.instance.ChooseWordUsingLeitnerSystem();
+        string newSecretWord = WordManager.instance.GetSecretWord();
+
+        // Reinitialize the keyboard and word container with the new secret word
+        InitializeKeyboard(newSecretWord);
+        CreateNewWordContainer(newSecretWord.Length);
+    }
+}
     private void CreateNewWordContainer(int wordLength)
     {
         currentWordContainer = Instantiate(wordContainerPrefab, wordContainerParent);

@@ -111,7 +111,7 @@ public class WordManager : MonoBehaviour
             { "STEALTHY", "What word describes the Shadow’s methods?" },
             { "CLEVER", "Why is Gareth still effective despite his flaws?" },
             { "FURIOUS", "What emotion does the King show when angry?" },
-            { "GREEDY", "What might motivate the Shadow?" },
+            { "GREED", "What might motivate the Shadow?" },
             { "HONOR", "What does Gareth value most in his duty?" },
             { "JUST", "What best defines the King’s leadership?" },
         };
