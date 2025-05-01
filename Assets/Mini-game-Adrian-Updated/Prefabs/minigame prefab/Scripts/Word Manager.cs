@@ -160,7 +160,7 @@ public class WordManager : MonoBehaviour
             { "RECOVER", "Understanding Vocabulary" },
             { "INFORMANT", "Understanding Vocabulary" },
             { "KINGDOM", "Identifying Key Details" },
-            { "DUSTY", "Identifying Key Details" },
+            { "DUST", "Identifying Key Details" },
             { "ANGRY", "Identifying Key Details" },
             { "GARETH", "Identifying Key Details" },
             { "WARS", "Identifying Key Details" },
