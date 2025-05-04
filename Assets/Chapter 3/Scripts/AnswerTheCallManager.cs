@@ -14,6 +14,7 @@ public class AnswerTheCallManager : MonoBehaviour
 
     [Header("Flashing Settings")]
     public float flashInterval = 0.5f; // Image flash interval
+    public GameObject phone; // Phone GameObject to disable
 
     [Header("Light Flickering Settings")]
     public float minFlickerInterval = 0.05f;
@@ -22,6 +23,8 @@ public class AnswerTheCallManager : MonoBehaviour
     private bool isPlaying = false;
     private Coroutine flashingCoroutine;
     private Coroutine lightFlickerCoroutine;
+    private Coroutine disablePhoneCoroutine;
+
 
     private void Start()
     {
@@ -67,6 +70,14 @@ public class AnswerTheCallManager : MonoBehaviour
         {
             flashingCoroutine = StartCoroutine(FlashImage());
         }
+
+        // Start phone disable countdown
+        if (disablePhoneCoroutine != null)
+        {
+            StopCoroutine(disablePhoneCoroutine);
+        }
+        disablePhoneCoroutine = StartCoroutine(DisablePhoneAfterDelay(60f));
+
         isPlaying = true;
     }
 
@@ -105,4 +116,14 @@ public class AnswerTheCallManager : MonoBehaviour
             yield return new WaitForSeconds(randomInterval);
         }
     }
+
+    private IEnumerator DisablePhoneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (phone != null)
+        {
+            phone.SetActive(false);
+        }
+    }
 }
+
