@@ -26,6 +26,11 @@ public class ChSelect : MonoBehaviour
         SceneManager.LoadSceneAsync(4); // Loads Chapter 2 (Scene Index 3)
     }
 
+    public void playChapterThree()
+    {
+        UnityEngine.Debug.Log("Playing Chapter 3...");
+        SceneManager.LoadSceneAsync(6); // Loads Chapter 2 (Scene Index 3)
+    }
 
     IEnumerator LoadLevelAsync(int leveltoLoad)
     {
