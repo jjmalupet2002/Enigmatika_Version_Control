@@ -87,7 +87,7 @@ public class QuestLog : MonoBehaviour
 
                 if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed)
                 {
-                    criteriaTextList[i].text = "✔️ <s>" + criteria.criteriaName + "</s>";
+                    criteriaTextList[i].text = criteria.criteriaName;
 
                     // Enable corresponding checkmark GameObject
                     if (i < checkmarkList.Count)
