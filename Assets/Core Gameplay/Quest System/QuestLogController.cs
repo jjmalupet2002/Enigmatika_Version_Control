@@ -3,54 +3,82 @@ using UnityEngine.UI;
 
 public class QuestLogController : MonoBehaviour
 {
-    // Public references to UI elements
-    public Button questLogButton;
+    // Panels
     public GameObject questUIPanel;
-    public Button inventoryTabButton;
-    public Button backButton;
+    public GameObject inventoryPanel;
+    public GameObject caseFilePanel;
+
+    // Buttons
+    public Button questLogButton;       // Opens Quest Log from Inventory
+    public Button inventoryTabButton;   // Opens Inventory from Quest Log
+    public Button backButton;           // Closes Quest Log
+
+    public Button caseFileButton;       // Opens Case File from anywhere
+    public Button caseFileBackButton;   // Closes Case File
+
+    public Button questFromCaseFileButton;       // Opens Quest Log from Case File
+    public Button inventoryFromCaseFileButton;   // Opens Inventory from Case File
+    public Button caseFileFromInventoryButton;   // NEW: Opens Case File from Inventory
 
     void Start()
-    {     
-
-        // Add listeners to the buttons to handle clicks
+    {
+        // Quest Log buttons
         if (questLogButton != null)
-        {
             questLogButton.onClick.AddListener(OpenQuestLog);
-        }
+
         if (inventoryTabButton != null)
-        {
-            inventoryTabButton.onClick.AddListener(CloseQuestLog);
-        }
+            inventoryTabButton.onClick.AddListener(OpenInventory);
+
         if (backButton != null)
-        {
-            backButton.onClick.AddListener(CloseAllUI);
-        }
+            backButton.onClick.AddListener(CloseQuestLog);
+
+        // Case File buttons
+        if (caseFileButton != null)
+            caseFileButton.onClick.AddListener(OpenCaseFile);
+
+        if (caseFileBackButton != null)
+            caseFileBackButton.onClick.AddListener(CloseCaseFile);
+
+        if (questFromCaseFileButton != null)
+            questFromCaseFileButton.onClick.AddListener(OpenQuestLog);
+
+        if (inventoryFromCaseFileButton != null)
+            inventoryFromCaseFileButton.onClick.AddListener(OpenInventory);
+
+        if (caseFileFromInventoryButton != null)
+            caseFileFromInventoryButton.onClick.AddListener(OpenCaseFile); // Assign new action
     }
 
-    // Method to open the quest log UI
+    // ----------------------
+    // Panel Logic
     void OpenQuestLog()
     {
-        if (questUIPanel != null)
-        {
-            questUIPanel.SetActive(true);
-        }
+        questUIPanel?.SetActive(true);
+        inventoryPanel?.SetActive(false);
+        caseFilePanel?.SetActive(false);
     }
 
-    // Method to close the quest log UI
     void CloseQuestLog()
     {
-        if (questUIPanel != null)
-        {
-            questUIPanel.SetActive(false);
-        }
+        questUIPanel?.SetActive(false);
     }
 
-    // Method to close the quest log UI (used by the back button)
-    void CloseAllUI()
+    void OpenInventory()
     {
-        if (questUIPanel != null)
-        {
-            questUIPanel.SetActive(false);
-        }
+        inventoryPanel?.SetActive(true);
+        questUIPanel?.SetActive(false);
+        caseFilePanel?.SetActive(false);
+    }
+
+    void OpenCaseFile()
+    {
+        caseFilePanel?.SetActive(true);
+        questUIPanel?.SetActive(false);
+        inventoryPanel?.SetActive(false);
+    }
+
+    void CloseCaseFile()
+    {
+        caseFilePanel?.SetActive(false);
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
@@ -6,56 +7,61 @@ public class GameStateManager : MonoBehaviour
 
     private bool canPlayerMove = true;
 
-    // References to UI elements
-    public GameObject interactUI; // Assign in Inspector
-    public CanvasGroup joystickCanvasGroup; // Assign in Inspector
+    public GameObject interactUI;
+    public CanvasGroup joystickCanvasGroup;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // Persist the GameStateManager
+            SceneManager.sceneLoaded += OnSceneLoaded; // Listen for scene changes
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
     }
 
-    public bool CanPlayerMove()
+    private void OnDestroy()
     {
-        return canPlayerMove;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public void SetPlayerMovementState(bool state)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        canPlayerMove = state;
+        TryFindUIReferences();
     }
 
-    // Methods to enable/disable UI elements
+    public void TryFindUIReferences()
+    {
+        interactUI = GameObject.FindWithTag("InteractUI");
+        joystickCanvasGroup = GameObject.FindWithTag("JoystickUI")?.GetComponent<CanvasGroup>();
+    }
+
+    public bool CanPlayerMove() => canPlayerMove;
+
+    public void SetPlayerMovementState(bool state) => canPlayerMove = state;
+
     public void DisableUIElements()
     {
         if (interactUI != null) interactUI.SetActive(false);
-     
-
         if (joystickCanvasGroup != null)
         {
-            joystickCanvasGroup.gameObject.SetActive(false); // Disable the whole CanvasGroup
+            joystickCanvasGroup.gameObject.SetActive(false);
         }
     }
 
     public void EnableUIElements()
     {
         if (interactUI != null) interactUI.SetActive(true);
-        
-
         if (joystickCanvasGroup != null)
         {
-            joystickCanvasGroup.gameObject.SetActive(true); // Enable the whole CanvasGroup
+            joystickCanvasGroup.gameObject.SetActive(true);
             joystickCanvasGroup.interactable = true;
             joystickCanvasGroup.blocksRaycasts = true;
-            joystickCanvasGroup.alpha = 1f; // Show joystick
+            joystickCanvasGroup.alpha = 1f;
         }
     }
 }

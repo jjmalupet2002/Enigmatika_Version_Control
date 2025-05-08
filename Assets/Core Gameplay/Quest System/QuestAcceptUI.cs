@@ -39,6 +39,7 @@ public class QuestAcceptUI : MonoBehaviour
     public ItemEventHandler itemHandler;
     public InventoryManager inventoryManager;
     public QuestSavingSaveObject QuestSaveObject;
+    private bool isQuestSaveObjectReady = false;
 
 
     void Start()
@@ -77,16 +78,43 @@ public class QuestAcceptUI : MonoBehaviour
         // Add listener for turn in button
         turnInItemButton.onClick.AddListener(TryTurnIn); // Listen for button click
 
+        // Null checks for QuestSaveObject
+        if (QuestSaveObject == null)
+        {
+            UnityEngine.Debug.LogWarning("QuestSaveObject is null.");
+            return;
+        }
+
+        if (QuestSaveObject.questCompletionList == null)
+        {
+            UnityEngine.Debug.LogWarning("questCompletionList is null.");
+            return;
+        }
+
+        if (QuestSaveObject.questCompletionList.Value == null)
+        {
+            UnityEngine.Debug.LogWarning("questCompletionList.Value is null.");
+            return;
+        }
+
+        // Proceed with loading quest if all checks pass
+        LoadQuestAccept();
+
+        // Ensure that QuestSaveObject is ready before subscribing to the event
+        if (QuestSaveObject != null)
+        {
+            SaveEvents.OnSaveGame += SaveQuestAccept;
+            SaveEvents.OnLoadGame += LoadQuestAccept;
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("QuestSaveObject is still null when trying to subscribe.");
+        }
     }
 
-    private void OnEnable()
+    void OnDisable()
     {
-        SaveEvents.OnSaveGame += SaveQuestAccept;
-        SaveEvents.OnLoadGame += LoadQuestAccept;
-    }
-
-    private void OnDisable()
-    {
+        // Unsubscribe from the events to prevent memory leaks
         SaveEvents.OnSaveGame -= SaveQuestAccept;
         SaveEvents.OnLoadGame -= LoadQuestAccept;
     }
@@ -107,6 +135,26 @@ public class QuestAcceptUI : MonoBehaviour
 
     private void LoadQuestAccept()
     {
+        // Check if QuestSaveObject is ready
+        if (!isQuestSaveObjectReady || QuestSaveObject == null)
+        {
+            UnityEngine.Debug.LogError("QuestSaveObject is not ready in LoadQuestAccept.");
+            return;
+        }
+
+        // Proceed with the rest of the loading process
+        if (QuestSaveObject.questCompletionList == null)
+        {
+            UnityEngine.Debug.LogError("questCompletionList is null in LoadQuestAccept.");
+            return;
+        }
+
+        if (QuestSaveObject.questCompletionList.Value == null)
+        {
+            UnityEngine.Debug.LogError("questCompletionList.Value is null in LoadQuestAccept.");
+            return;
+        }
+
         List<bool> loadedQuestCompletion = QuestSaveObject.questCompletionList.Value;
 
         if (loadedQuestCompletion == null)
@@ -119,7 +167,7 @@ public class QuestAcceptUI : MonoBehaviour
         {
             if (pages[i].quest != null)
             {
-                pages[i].isQuestComplete = loadedQuestCompletion[i]; // Restore completion status
+                pages[i].isQuestComplete = loadedQuestCompletion[i];
             }
         }
 

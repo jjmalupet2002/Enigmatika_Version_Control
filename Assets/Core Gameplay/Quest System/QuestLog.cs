@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class QuestLog : MonoBehaviour
@@ -9,116 +8,121 @@ public class QuestLog : MonoBehaviour
     public QuestManager questManager;
     public List<MainQuest> mainQuestList;
 
-    [Header("Quest Buttons")]
-    public Button quest1BTN;
-    public Button quest2BTN;
-    public Button quest3BTN;
-    public Button quest4BTN;
-
-    [Header("Page List (Logical Representation)")]
-    public List<int> pageList = new List<int> { 0, 1, 2, 3 }; // Logical representation of pages
-
     [Header("Objective View Settings")]
+    public TextMeshProUGUI QuestNameText;
     public TextMeshProUGUI mainObjectiveText;
     public TextMeshProUGUI activeCriteriaText;
     public GameObject scrollView;
-    public TextMeshProUGUI notCompletedText; // Separate Not Completed TextMeshProUGUI
+    public TextMeshProUGUI notCompletedText;
 
     [Header("Criteria Text List")]
     public List<TextMeshProUGUI> criteriaTextList;
+
+    [Header("Checkmark List")]
+    public List<GameObject> checkmarkList;  // List to reference the 30 checkmark GameObjects
 
     private int currentQuestIndex = -1;
 
     private void Start()
     {
-        // Initialize button listeners
-        quest1BTN.onClick.AddListener(() => DisplayQuest(0));
-        quest2BTN.onClick.AddListener(() => DisplayQuest(1));
-        quest3BTN.onClick.AddListener(() => DisplayQuest(2));
-        quest4BTN.onClick.AddListener(() => DisplayQuest(3));
-
-        // Initialize the scroll view and not completed text as disabled
         scrollView.SetActive(false);
         notCompletedText.gameObject.SetActive(false);
+        DisplayActiveQuest();
     }
 
     private void Update()
     {
-        // Refresh the active quest display in real-time
-        if (currentQuestIndex >= 0)
-        {
-            DisplayQuest(currentQuestIndex);
-        }
+        DisplayActiveQuest();
     }
 
-    private void DisplayQuest(int questIndex)
+    private void DisplayActiveQuest()
     {
-        if (questIndex < 0 || questIndex >= mainQuestList.Count)
+        MainQuest activeQuest = mainQuestList.Find(q => q.status == QuestEnums.QuestStatus.InProgress);
+
+        if (activeQuest == null)
         {
-            return;
-        }
-
-        currentQuestIndex = questIndex; // Track the currently displayed quest index
-        MainQuest selectedQuest = mainQuestList[questIndex];
-
-        // For each quest page, show "Not Started" text when the quest is not started
-        notCompletedText.text = "Quest " + (questIndex + 1) + " Not Started";
-
-        if (selectedQuest.status == QuestEnums.QuestStatus.NotStarted)
-        {
-            // Quest not started, disable the scroll view and show "Not completed" text
+            currentQuestIndex = -1;
             scrollView.SetActive(false);
             notCompletedText.gameObject.SetActive(true);
+            notCompletedText.text = "Quest Not Started";
+
+            QuestNameText.text = "";
             mainObjectiveText.text = "";
             activeCriteriaText.text = "";
+
             foreach (TextMeshProUGUI criteriaText in criteriaTextList)
             {
                 criteriaText.text = "";
             }
-        }
-        else
-        {
-            // Quest is active or completed, display the quest information
-            scrollView.SetActive(true);
-            notCompletedText.gameObject.SetActive(false);
-            mainObjectiveText.text = selectedQuest.questDescription;
 
-            // Find the active criteria and display it
-            QuestCriteria activeCriteria = selectedQuest.questCriteriaList.Find(criteria => criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress);
-            if (activeCriteria != null)
+            // Disable all checkmarks if no active quest
+            foreach (GameObject checkmark in checkmarkList)
             {
-                activeCriteriaText.text = "In Progress: " + activeCriteria.criteriaName;
+                checkmark.SetActive(false);
+            }
+
+            return;
+        }
+
+        currentQuestIndex = mainQuestList.IndexOf(activeQuest);
+
+        // Display quest info
+        scrollView.SetActive(true);
+        notCompletedText.gameObject.SetActive(false);
+
+        QuestNameText.text = activeQuest.questName;
+        mainObjectiveText.text = activeQuest.questDescription;
+
+        QuestCriteria activeCriteria = activeQuest.questCriteriaList.Find(c => c.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress);
+        activeCriteriaText.text = activeCriteria != null
+            ? "In Progress: " + activeCriteria.criteriaName
+            : "All criteria completed";
+
+        // Show all criteria with status and update checkmark list
+        for (int i = 0; i < criteriaTextList.Count; i++)
+        {
+            if (i < activeQuest.questCriteriaList.Count)
+            {
+                QuestCriteria criteria = activeQuest.questCriteriaList[i];
+
+                if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed)
+                {
+                    criteriaTextList[i].text = "✔️ <s>" + criteria.criteriaName + "</s>";
+
+                    // Enable corresponding checkmark GameObject
+                    if (i < checkmarkList.Count)
+                    {
+                        checkmarkList[i].SetActive(true);
+                    }
+                }
+                else
+                {
+                    criteriaTextList[i].text = criteria.criteriaName;
+
+                    // Disable corresponding checkmark GameObject
+                    if (i < checkmarkList.Count)
+                    {
+                        checkmarkList[i].SetActive(false);
+                    }
+                }
             }
             else
             {
-                activeCriteriaText.text = "All criteria completed";
-            }
-
-            // Display all completed criteria
-            int criteriaIndex = 0;
-            foreach (QuestCriteria criteria in selectedQuest.questCriteriaList)
-            {
-                if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.Completed && criteriaIndex < criteriaTextList.Count)
-                {
-                    criteriaTextList[criteriaIndex].text = criteria.criteriaName;
-                    criteriaIndex++;
-                }
-            }
-
-            // Clear remaining criteria text slots
-            for (int i = criteriaIndex; i < criteriaTextList.Count; i++)
-            {
                 criteriaTextList[i].text = "";
+                // Ensure no checkmarks are active if there are fewer criteria than available slots
+                if (i < checkmarkList.Count)
+                {
+                    checkmarkList[i].SetActive(false);
+                }
             }
         }
     }
 
     public void UpdateQuestLog()
     {
-        // Method to be called when a quest criteria is updated
-        for (int i = 0; i < mainQuestList.Count; i++)
+        if (currentQuestIndex >= 0 && currentQuestIndex < mainQuestList.Count)
         {
-            MainQuest quest = mainQuestList[i];
+            MainQuest quest = mainQuestList[currentQuestIndex];
             bool criteriaUpdated = false;
 
             foreach (QuestCriteria criteria in quest.questCriteriaList)
@@ -129,9 +133,9 @@ public class QuestLog : MonoBehaviour
                 }
             }
 
-            if (criteriaUpdated && i == currentQuestIndex)
+            if (criteriaUpdated)
             {
-                DisplayQuest(i);
+                DisplayActiveQuest();
             }
         }
     }
