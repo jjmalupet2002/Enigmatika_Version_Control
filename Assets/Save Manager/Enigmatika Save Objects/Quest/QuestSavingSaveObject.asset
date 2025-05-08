@@ -16,11 +16,37 @@ MonoBehaviour:
   saveKey: 3394ad6a-9814-4b62-8c81-fab2927058f1
   activeQuestNames:
     key: activeQuestNames
-    value: []
+    value:
+    - The Melody
     defaultValue: []
   questDataList:
     key: questDataList
-    value: []
+    value:
+    - questName: The Melody
+      questStatus: 1
+      criteriaStatuses:
+      - criteriaName: Explore the Museum
+        criteriaStatus: 2
+      - criteriaName: Talk to the Curator
+        criteriaStatus: 2
+      - criteriaName: Investigate the office
+        criteriaStatus: 1
+      - criteriaName: Deliver the clue item to the Hooded figure
+        criteriaStatus: 0
+      - criteriaName: Go back and find the correct clue
+        criteriaStatus: 0
+      criteriaCompletionStatus: 0101000000
+      questObjectStates:
+      - criteriaName: Explore the Museum
+        isActive: 0
+      - criteriaName: Talk to the Curator
+        isActive: 1
+      - criteriaName: Investigate the office
+        isActive: 1
+      - criteriaName: Deliver the clue item to the Hooded figure
+        isActive: 0
+      - criteriaName: Go back and find the correct clue
+        isActive: 0
     defaultValue: []
   questCompletionList:
     key: questCompletionList
