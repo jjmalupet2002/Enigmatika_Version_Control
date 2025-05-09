@@ -7,15 +7,7 @@ public class DoorManagerScript : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject); // Ensure only one instance
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Persist across scenes
-        }
+      Instance = this;
     }
 
     public void InteractWithNearestDoor()

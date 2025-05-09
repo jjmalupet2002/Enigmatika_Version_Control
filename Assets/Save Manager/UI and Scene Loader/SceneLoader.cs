@@ -45,7 +45,8 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator LoadSavedGameData()
     {
+        // Wait for the end of frame to ensure all objects are awake
+        yield return new WaitForEndOfFrame();
         SaveEvents.LoadGame();
-        yield return null; // Ensures coroutine continues after LoadGame() runs
     }
 }

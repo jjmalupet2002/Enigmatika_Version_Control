@@ -6,8 +6,8 @@ public class MainQuest : MonoBehaviour
     // Quest Details
     public string questName;
     public string questDescription;
-    public GameObject questReward;
-    public GameObject questGiver;
+    public string readingQuestion;
+    public string readingSkill;
     public QuestEnums.QuestStatus status;
     public List<QuestCriteria> questCriteriaList = new List<QuestCriteria>();
 
