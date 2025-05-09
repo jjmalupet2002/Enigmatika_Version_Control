@@ -36,14 +36,7 @@ public class NoteInspectionManager : MonoBehaviour
     private void Awake()
     {
         // Check if an instance already exists
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject); // Destroy this instance if it already exists
-            return;
-        }
-
-        Instance = this; // Set the singleton instance
-        DontDestroyOnLoad(gameObject); // Optional: Keep it between scene loads
+        Instance = this;
 
         // Find the SwitchCamera instance
         switchCamera = FindObjectOfType<SwitchCamera>();

@@ -12,14 +12,8 @@ public class NoteUIController : MonoBehaviour
     private void Awake()
     {
         // Singleton pattern to ensure only one instance exists
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject); // Destroy this instance if it already exists
-            return;
-        }
-
-        Instance = this; // Set the singleton instance
-        DontDestroyOnLoad(gameObject); // Optional: Keep it between scene loads
+        // Check if an instance already exists
+        Instance = this;
 
         // Ensure the read button is initially disabled
         if (readButton != null)
