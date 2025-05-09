@@ -29,6 +29,7 @@ public class TapeRecorderPuzzle : MonoBehaviour
     private bool wasCloseUpActive = false;
     private bool isConfirmButtonMoving = false;
     private bool confirmPressed = false;
+    private bool puzzleSolved = false; // Track puzzle solved state
 
     [Header("Event Data")]
     public List<EventData> cassette1Events = new List<EventData>();
@@ -81,8 +82,8 @@ public class TapeRecorderPuzzle : MonoBehaviour
         // Only show rotate buttons if THIS specific switchCamera instance is in CloseUp mode
         bool isCloseUpActive = switchCamera != null && switchCamera.currentCameraState == CameraState.CloseUp;
 
-        rotateButton1.gameObject.SetActive(isCloseUpActive);
-        rotateButton2.gameObject.SetActive(isCloseUpActive);
+        rotateButton1.gameObject.SetActive(isCloseUpActive && !puzzleSolved); // Disable buttons if puzzle is solved
+        rotateButton2.gameObject.SetActive(isCloseUpActive && !puzzleSolved); // Disable buttons if puzzle is solved
 
         if (!isCloseUpActive && wasCloseUpActive)
         {
@@ -192,6 +193,7 @@ public class TapeRecorderPuzzle : MonoBehaviour
         if (cassette1Index == correctAnswer[0] && cassette2Index == correctAnswer[1])
         {
             UnityEngine.Debug.Log("Correct Pair! Puzzle unlocked.");
+            puzzleSolved = true; // Puzzle solved, disable spin buttons
             PlayCorrectSequence();
             MoveHiddenNote(); // Call the new method when puzzle is solved
         }

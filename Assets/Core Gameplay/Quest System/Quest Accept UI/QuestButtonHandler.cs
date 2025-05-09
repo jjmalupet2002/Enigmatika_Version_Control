@@ -9,13 +9,9 @@ public class QuestButtonHandler : MonoBehaviour
     public GameObject openQuestButton; // Reference to the Quest button
     public float interactRange = 5f;   // Interaction range for the NPC (visualization)
 
-    [Header("Dialogue UI Reference")]
-    public GameObject dialogueUI; // Reference to the Dialogue UI
-
     private Transform playerTransform;
     private Collider npcCollider;
 
-    private bool dialogueWasActiveLastFrame = false;
     private bool hasTalkedToNPC = false;
     private bool blinkingInProgress = false;
 
@@ -35,34 +31,18 @@ public class QuestButtonHandler : MonoBehaviour
 
     void Update()
     {
-        bool dialogueCurrentlyActive = false;
-
-        if (dialogueUI != null)
-        {
-            dialogueCurrentlyActive = dialogueUI.activeSelf;
-
-            if (!hasTalkedToNPC && dialogueWasActiveLastFrame && !dialogueCurrentlyActive)
-            {
-                if (playerTransform != null)
-                {
-                    float distance = Vector3.Distance(transform.position, playerTransform.position);
-                    if (distance <= interactRange)
-                    {
-                        hasTalkedToNPC = true;
-                        TriggerQuestButtonBlink();
-                    }
-                }
-            }
-
-            dialogueWasActiveLastFrame = dialogueCurrentlyActive;
-        }
-
         if (playerTransform != null)
         {
             float distance = Vector3.Distance(transform.position, playerTransform.position);
 
             if (distance <= interactRange)
             {
+                if (!hasTalkedToNPC && !blinkingInProgress)
+                {
+                    hasTalkedToNPC = true;
+                    TriggerQuestButtonBlink();
+                }
+
                 if (hasTalkedToNPC && !blinkingInProgress)
                 {
                     openQuestButton.SetActive(true);
@@ -75,7 +55,6 @@ public class QuestButtonHandler : MonoBehaviour
             }
         }
     }
-
 
     void TriggerQuestButtonBlink()
     {
@@ -132,7 +111,6 @@ public class QuestButtonHandler : MonoBehaviour
         blinkingInProgress = false;
     }
 
-
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -150,7 +128,7 @@ public class QuestButtonHandler : MonoBehaviour
                 openQuestButton.SetActive(false);
         }
     }
-     
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

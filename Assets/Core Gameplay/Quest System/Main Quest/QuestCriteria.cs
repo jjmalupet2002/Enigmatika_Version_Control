@@ -21,7 +21,7 @@ public class QuestCriteria
 
     public void CompleteCriteria()
     {
-        // Trigger the event when the criteria is completed
+        // Invoke any UnityEvent actions assigned in the Inspector for this specific criteria
         if (OnCriteriaCompleted != null)
         {
             OnCriteriaCompleted.Invoke();
