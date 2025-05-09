@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class QuestCriteria
@@ -8,11 +10,22 @@ public class QuestCriteria
     public int priority;  // Higher number = lower priority
     public QuestEnums.QuestCriteriaStatus CriteriaStatus;  // Use the new enum here
 
-
     // Add a reference to QuestObject
     public QuestObject associatedQuestObject;  // Reference to the QuestObject
     public string criteriaContext;
-    // Add any criteria-specific data, such as spawn zones, NPC references, etc.
+
     public GameObject spawnZone;  // Example for Find/Explore criteria
-   
+
+    // Use UnityEvent for the completion event
+    public UnityEvent OnCriteriaCompleted;
+
+    public void CompleteCriteria()
+    {
+        // Trigger the event when the criteria is completed
+        if (OnCriteriaCompleted != null)
+        {
+            OnCriteriaCompleted.Invoke();
+        }
+    }
 }
+

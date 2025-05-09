@@ -12,7 +12,7 @@ public class MainQuest : MonoBehaviour
     public List<QuestCriteria> questCriteriaList = new List<QuestCriteria>();
 
     // Add Criteria to the quest
-    public void AddCriteria(string name, QuestEnums.QuestCriteriaType type, GameObject spawnZone, int priority)
+    public void AddCriteria(string name, QuestEnums.QuestCriteriaType type, GameObject spawnZone, int priority, string criteriaContext)
     {
         QuestCriteria newCriteria = new QuestCriteria
         {
@@ -21,8 +21,10 @@ public class MainQuest : MonoBehaviour
             spawnZone = spawnZone,
             priority = priority,
             CriteriaStatus = QuestEnums.QuestCriteriaStatus.NotStarted,
+            criteriaContext = criteriaContext
         };
 
+        // Add the new criteria to the list
         questCriteriaList.Add(newCriteria);
     }
 
@@ -33,6 +35,10 @@ public class MainQuest : MonoBehaviour
         if (criteria != null)
         {
             criteria.CriteriaStatus = status;
+            if (status == QuestEnums.QuestCriteriaStatus.Completed)
+            {
+                criteria.CompleteCriteria();  // This will trigger the UnityEvent
+            }
         }
     }
 
@@ -53,6 +59,7 @@ public class MainQuest : MonoBehaviour
             {
                 activeCriteriaFound = true;
                 UnityEngine.Debug.Log("Task: " + criteria.criteriaName + " (Priority: " + criteria.priority + ")");
+                UnityEngine.Debug.Log("Context: " + criteria.criteriaContext);  // Log the criteria context as well
             }
         }
 

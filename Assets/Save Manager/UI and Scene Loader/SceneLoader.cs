@@ -48,5 +48,6 @@ public class SceneLoader : MonoBehaviour
         // Wait for the end of frame to ensure all objects are awake
         yield return new WaitForEndOfFrame();
         SaveEvents.LoadGame();
+        SaveManager.Load(); // More explicit than SaveEvents.LoadGame()
     }
 }

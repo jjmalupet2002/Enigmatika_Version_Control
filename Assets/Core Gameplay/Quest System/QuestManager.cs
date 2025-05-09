@@ -12,6 +12,8 @@ public class QuestManager : MonoBehaviour
     public event QuestEventHandler OnQuestAcceptedEvent;
     public event QuestEventHandler OnNextCriteriaStartedEvent;
     public event QuestEventHandler OnQuestCompletedEvent;
+    public delegate void QuestCriteriaEventHandler(MainQuest quest, QuestCriteria criteria);
+    public event QuestCriteriaEventHandler OnCriteriaCompletedEvent;
 
     public List<MainQuest> mainQuestObjects;
     public Dictionary<string, MainQuest> activeQuests = new Dictionary<string, MainQuest>();
@@ -212,6 +214,7 @@ public class QuestManager : MonoBehaviour
                     // If found, mark as completed and continue to next criteria
                     criteria.CriteriaStatus = QuestEnums.QuestCriteriaStatus.Completed;
 
+                    OnCriteriaCompleted(quest, criteria);  // Trigger criteria completed logic
 
                     // Set the next available criteria to InProgress
                     SetNextActiveCriteria(quest, i);
@@ -374,6 +377,11 @@ public class QuestManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnCriteriaCompleted(MainQuest quest, QuestCriteria criteria)
+    {
+        OnCriteriaCompletedEvent?.Invoke(quest, criteria); // Notify listeners about the completed criterion
     }
 
     // Optional event to handle quest acceptance
