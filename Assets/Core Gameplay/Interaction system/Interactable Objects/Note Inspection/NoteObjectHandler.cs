@@ -9,9 +9,6 @@ public class NoteObjectHandler : MonoBehaviour
     [Header("Note Page")]
     public List<GameObject> notePages; // List to store pages of the note
 
-    [Header("Note Audio")]
-    public AudioClip noteAudioClip;
-
     [Header("Trigger Event when Note is active")]
     public UnityEvent onNoteUIActive;  // UnityEvent to trigger when note UI is active
     
@@ -24,11 +21,6 @@ public class NoteObjectHandler : MonoBehaviour
         {
             UnityEngine.Debug.LogWarning($"[{name}] No pages assigned to the NoteObjectHandler.");
             return;
-        }
-
-        if (noteAudioClip == null)
-        {
-            UnityEngine.Debug.LogWarning($"[{name}] No audio clip assigned to the NoteObjectHandler.");
         }
 
         // Register this note with the NoteInspectionManager

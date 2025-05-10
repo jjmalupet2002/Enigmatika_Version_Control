@@ -1,118 +1,88 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(NoteObjectHandler))]
 public class NoteAudioPlayer : MonoBehaviour
 {
-    [Header("UI Buttons")]
-    public GameObject playButtonObj;    // UI object containing the Play Button
-    public GameObject pauseButtonObj;   // UI object containing the Pause Button
-
-    private Button playButton;
-    private Button pauseButton;
-
-    public NoteObjectHandler noteHandler;
-    public AudioSource audioSource;
-
-    private void Awake()
+    [System.Serializable]
+    public class NoteEntry
     {
-        noteHandler = GetComponent<NoteObjectHandler>();
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.playOnAwake = false;
-
-        if (noteHandler == null)
-        {
-            enabled = false;
-            return;
-        }
-
-        if (noteHandler.noteAudioClip == null)
-        {
-            return;
-        }
-        else
-        {
-            audioSource.clip = noteHandler.noteAudioClip;
-        }
-
-        if (noteHandler.notePages == null || noteHandler.notePages.Count == 0)
-        {
-            return;
-        }
-
-        if (playButtonObj != null)
-        {
-            playButton = playButtonObj.GetComponent<Button>();
-            playButtonObj.SetActive(false); // Hide by default
-        }
-
-        if (pauseButtonObj != null)
-        {
-            pauseButton = pauseButtonObj.GetComponent<Button>();
-            pauseButtonObj.SetActive(false); // Hide by default
-        }
+        public GameObject noteUI;   // The UI object for the note
+        public AudioClip audioClip; // The associated audio clip
     }
 
-    private void OnEnable()
+    public List<NoteEntry> noteEntries = new List<NoteEntry>(); // List to hold all entries
+    public Button playButton;  // Play button
+    public Button pauseButton; // Pause button
+    private AudioSource audioSource; // AudioSource to play the clip
+
+    private bool wasAnyNoteUIActive = false; // Flag to track if any note UI was active
+
+    private void Start()
     {
-        if (playButton != null)
-            playButton.onClick.AddListener(PlayAudio);
+        audioSource = GetComponent<AudioSource>();
 
-        if (pauseButton != null)
-            pauseButton.onClick.AddListener(PauseAudio);
-    }
+        // Add listeners to the buttons
+        playButton.onClick.AddListener(PlayAudio);
+        pauseButton.onClick.AddListener(PauseAudio);
 
-    private void OnDisable()
-    {
-        if (playButton != null)
-            playButton.onClick.RemoveListener(PlayAudio);
-
-        if (pauseButton != null)
-            pauseButton.onClick.RemoveListener(PauseAudio);
+        // Initially hide the buttons (already done in inspector, so this may be redundant)
+        playButton.gameObject.SetActive(false);
+        pauseButton.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if (noteHandler == null || noteHandler.notePages == null || noteHandler.notePages.Count == 0)
-            return;
+        // Update button visibility based on active noteUI
+        SetButtonVisibility();
+    }
 
-        bool anyPageActive = false;
-        foreach (GameObject page in noteHandler.notePages)
+    private void SetButtonVisibility()
+    {
+        bool isAnyNoteUIActive = false;
+
+        foreach (var entry in noteEntries)
         {
-            if (page != null && page.activeInHierarchy)
+            // Check if any note UI is active
+            if (entry.noteUI.activeSelf)
             {
-                anyPageActive = true;
+                isAnyNoteUIActive = true;
                 break;
             }
         }
 
-        // Show/Hide buttons based on note activity and playback state
-        if (playButtonObj != null)
-            playButtonObj.SetActive(anyPageActive && !audioSource.isPlaying);
-
-        if (pauseButtonObj != null)
-            pauseButtonObj.SetActive(audioSource.isPlaying);
-
-        // Stop audio if all note pages are inactive
-        if (!anyPageActive && audioSource.isPlaying)
+        // If the state has changed, update the button visibility
+        if (isAnyNoteUIActive != wasAnyNoteUIActive)
         {
-            audioSource.Stop();
+            if (isAnyNoteUIActive)
+            {
+                playButton.gameObject.SetActive(true);  // Show play button
+                pauseButton.gameObject.SetActive(false); // Hide pause button
+            }
+            else
+            {
+                playButton.gameObject.SetActive(false); // Hide play button
+                pauseButton.gameObject.SetActive(false); // Hide pause button
+            }
+
+            // Update the flag to the new state
+            wasAnyNoteUIActive = isAnyNoteUIActive;
         }
     }
 
     private void PlayAudio()
     {
-        if (noteHandler.noteAudioClip == null || !AnyPageActive())
+        foreach (var entry in noteEntries)
         {
-            return;
-        }
-
-        if (!audioSource.isPlaying)
-        {
-            audioSource.clip = noteHandler.noteAudioClip;
-            audioSource.Play();
+            // Play audio if the note UI is active
+            if (entry.noteUI.activeSelf)
+            {
+                audioSource.clip = entry.audioClip;
+                audioSource.Play();
+                playButton.gameObject.SetActive(false); // Hide play button after playing
+                pauseButton.gameObject.SetActive(true); // Show pause button
+                break;
+            }
         }
     }
 
@@ -121,16 +91,8 @@ public class NoteAudioPlayer : MonoBehaviour
         if (audioSource.isPlaying)
         {
             audioSource.Pause();
+            pauseButton.gameObject.SetActive(false); // Hide pause button after pausing
+            playButton.gameObject.SetActive(true);  // Show play button again
         }
-    }
-
-    private bool AnyPageActive()
-    {
-        foreach (GameObject page in noteHandler.notePages)
-        {
-            if (page != null && page.activeInHierarchy)
-                return true;
-        }
-        return false;
     }
 }
