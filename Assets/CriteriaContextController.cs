@@ -25,7 +25,6 @@ public class CriteriaContextController : MonoBehaviour
             {
                 if (criteria.CriteriaStatus == QuestEnums.QuestCriteriaStatus.InProgress)
                 {
-                    UnityEngine.Debug.Log("Displaying InProgress Criteria Context: " + criteria.criteriaContext);
                     tipTextUI.text = criteria.criteriaContext;
                     return; // Show only one in-progress criteria at a time
                 }

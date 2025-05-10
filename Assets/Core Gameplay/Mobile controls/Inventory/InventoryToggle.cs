@@ -11,6 +11,7 @@ public class InventoryToggle : MonoBehaviour
     public GameObject joystickCanvasGroup; // Reference to the GameObject for the joystick canvas group
     public GameObject inventoryUI; // Reference to the actual Inventory UI
     public GameObject ObjectiveText;
+    public GameObject IntroQuestText;
 
     private bool isInventoryOpen = false; // Track the state of the inventory
     private TalkandInteract talkandInteract; // Reference to TalkandInteract script
@@ -62,6 +63,7 @@ public class InventoryToggle : MonoBehaviour
         inventoryUI.SetActive(false); // Hide the inventory UI
         SetControlsActive(true);
         ObjectiveText.gameObject.SetActive(true);
+        IntroQuestText.gameObject.SetActive(true);
 
         // Enable player movement and joystick input only if we're not in close-up view
         if (Camera.main != null && Camera.main.enabled)
@@ -107,6 +109,7 @@ public class InventoryToggle : MonoBehaviour
                 TalkButton.gameObject.SetActive(false);
                 InteractButton.gameObject.SetActive(false);
                 ObjectiveText.gameObject.SetActive(false);
+                IntroQuestText.gameObject.SetActive(false);
             }
         }
 
