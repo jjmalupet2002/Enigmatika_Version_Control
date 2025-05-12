@@ -1,4 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class AIChaseController : MonoBehaviour
     public Transform enemy;
     public Transform playerStartPosition;
     public Transform enemyStartPosition;
+    public Transform enemyStopCheckpoint; // NEW
+
     public AudioSource chaseMusic;
     public AudioSource backgroundMusic;
     public CanvasGroup blackScreenCanvasGroup;
@@ -19,15 +22,20 @@ public class AIChaseController : MonoBehaviour
     private Rigidbody playerRigidbody;
 
     [Header("Chase Settings")]
-    public float detectionRadius = 5f; // Radius for player detection
+    public float detectionRadius = 5f;
     public float chaseSpeed = 5f;
     public float fadeDuration = 1.5f;
     public float chaseCooldown = 2f;
+    public float slowDownRadius = 2f;       // NEW
+    public float stopSpeedThreshold = 0.1f; // NEW
+    public float decelerationRate = 1.5f;   // NEW
+
+    private float currentSpeed;
 
     private bool isChasing = false;
     private bool isOnCooldown = false;
+    private bool isSlowingDown = false;
 
-    // Reference to the ShootingToggle script
     private ShootingToggle shootingToggle;
 
     void Start()
@@ -36,27 +44,22 @@ public class AIChaseController : MonoBehaviour
         enemyRigidbody = enemy.GetComponent<Rigidbody>();
         playerRigidbody = player.GetComponent<Rigidbody>();
 
-        shootingToggle = player.GetComponent<ShootingToggle>(); // Get the ShootingToggle component on the player
-
-        if (enemyAgent == null)
+        // Assuming "ProjectileShoot" is a separate GameObject with ShootingToggle attached.
+        // Find the GameObject and get the ShootingToggle component.
+        GameObject projectileShootObject = GameObject.Find("ProjectileShoot"); // or reference directly if it's assigned
+        if (projectileShootObject != null)
         {
-            UnityEngine.Debug.LogError("NavMeshAgent component is missing on the enemy GameObject.");
+            shootingToggle = projectileShootObject.GetComponent<ShootingToggle>();
+        }
+
+        if (enemyAgent == null || enemyRigidbody == null || playerRigidbody == null || shootingToggle == null)
+        {
+            UnityEngine.Debug.LogError("Missing required components.");
             return;
         }
 
-        if (enemyRigidbody == null)
-        {
-            UnityEngine.Debug.LogError("Rigidbody component is missing on the enemy GameObject.");
-            return;
-        }
-
-        if (playerRigidbody == null)
-        {
-            UnityEngine.Debug.LogError("Rigidbody component is missing on the player GameObject.");
-            return;
-        }
-
-        enemyAgent.speed = chaseSpeed;
+        currentSpeed = chaseSpeed;
+        enemyAgent.speed = currentSpeed;
         enemyAgent.isStopped = true;
 
         if (blackScreenCanvasGroup != null)
@@ -69,9 +72,14 @@ public class AIChaseController : MonoBehaviour
         {
             DetectPlayer();
         }
-        else if (isChasing)
+        else if (isChasing && !isSlowingDown)
         {
             ChasePlayer();
+            CheckForStopCheckpoint();
+        }
+        else if (isSlowingDown)
+        {
+            SlowDownAtCheckpoint();
         }
     }
 
@@ -80,16 +88,18 @@ public class AIChaseController : MonoBehaviour
         if (Vector3.Distance(player.position, enemy.position) <= detectionRadius)
         {
             StartChase();
-            EnableShooting();
+            EnableShooting(true);
+            UnityEngine.Debug.Log("Shooting has been ENABLED.");
         }
     }
 
     private void ChasePlayer()
     {
-        if (enemyAgent != null)
+        if (enemyAgent != null && player != null)
         {
             enemyAgent.SetDestination(player.position);
             enemyAgent.isStopped = false;
+            enemyAgent.speed = chaseSpeed;
         }
     }
 
@@ -99,23 +109,45 @@ public class AIChaseController : MonoBehaviour
         {
             isChasing = true;
 
-            if (backgroundMusic != null && backgroundMusic.isPlaying)
-            {
-                backgroundMusic.Stop();
-            }
-
+            backgroundMusic?.Stop();
             if (chaseMusic != null && !chaseMusic.isPlaying)
-            {
                 chaseMusic.Play();
+        }
+    }
+
+    private void CheckForStopCheckpoint()
+    {
+        if (enemyStopCheckpoint != null &&
+            Vector3.Distance(enemy.position, enemyStopCheckpoint.position) <= slowDownRadius)
+        {
+            isSlowingDown = true;
+        }
+    }
+
+    private void SlowDownAtCheckpoint()
+    {
+        if (enemyAgent != null)
+        {
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, Time.deltaTime * decelerationRate);
+            enemyAgent.speed = currentSpeed;
+
+            if (currentSpeed <= stopSpeedThreshold)
+            {
+                enemyAgent.speed = 0f;
+                enemyAgent.isStopped = true;
+
+                EnableShooting(false);
+                isChasing = false;
+                isSlowingDown = false;
             }
         }
     }
 
-    private void EnableShooting()
+    private void EnableShooting(bool value)
     {
         if (shootingToggle != null)
         {
-            shootingToggle.GetType().GetField("enableShooting", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(shootingToggle, true); // Enable shooting
+            shootingToggle.SetShootingEnabled(value);
         }
     }
 
@@ -129,30 +161,23 @@ public class AIChaseController : MonoBehaviour
         isChasing = false;
         isOnCooldown = true;
 
-        if (chaseMusic != null)
-            chaseMusic.Stop();
-
-        if (enemyAgent != null)
-            enemyAgent.isStopped = true;
+        chaseMusic?.Stop();
+        enemyAgent.isStopped = true;
 
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(false);
-
-        yield return StartCoroutine(FadeScreen(1)); // Fade to black
+        yield return StartCoroutine(FadeScreen(1));
 
         ResetPlayerPosition();
         ResetEnemyPosition();
 
         yield return new WaitForSeconds(0.5f);
-        yield return StartCoroutine(FadeScreen(0)); // Fade back to normal
+        yield return StartCoroutine(FadeScreen(0));
 
         yield return new WaitForSeconds(chaseCooldown);
         isOnCooldown = false;
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(true);
 
-        if (backgroundMusic != null)
-        {
-            backgroundMusic.Play();
-        }
+        backgroundMusic?.Play();
     }
 
     private void ResetPlayerPosition()
@@ -176,6 +201,9 @@ public class AIChaseController : MonoBehaviour
             enemyAgent.Warp(enemyStartPosition.position);
             enemyAgent.isStopped = true;
         }
+
+        currentSpeed = chaseSpeed;
+        isSlowingDown = false;
     }
 
     private IEnumerator FadeScreen(float targetAlpha)
@@ -193,3 +221,4 @@ public class AIChaseController : MonoBehaviour
         blackScreenCanvasGroup.alpha = targetAlpha;
     }
 }
+

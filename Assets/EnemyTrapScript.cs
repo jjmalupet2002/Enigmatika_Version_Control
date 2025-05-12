@@ -19,6 +19,7 @@ public class EnemyTrapScript : MonoBehaviour
 
     [Header("Detection Settings")]
     public float interactionDistance = 2f;
+    public float detectionRadius = 3f; // Public variable for the detection radius
 
     private bool isPlayerNearLever = false;
     private bool isLoweringTrap = false;
@@ -41,11 +42,20 @@ public class EnemyTrapScript : MonoBehaviour
 
     private void Update()
     {
-        // Check distance between player and lever
-        if (player != null && leverObject != null)
+        // Use physics overlap to check if the player is within the detection radius of the lever
+        if (leverObject != null && player != null)
         {
-            float distance = Vector3.Distance(player.transform.position, leverObject.transform.position);
-            isPlayerNearLever = distance <= interactionDistance;
+            Collider[] hitColliders = Physics.OverlapSphere(leverObject.transform.position, detectionRadius);
+            isPlayerNearLever = false;
+
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.gameObject == player)
+                {
+                    isPlayerNearLever = true;
+                    break;
+                }
+            }
         }
 
         // Smoothly lower trap gate
@@ -73,6 +83,16 @@ public class EnemyTrapScript : MonoBehaviour
             }
 
             isLoweringTrap = true;
+        }
+    }
+
+    // Draw the detection radius in the editor for visualization
+    private void OnDrawGizmos()
+    {
+        if (leverObject != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(leverObject.transform.position, detectionRadius);
         }
     }
 }

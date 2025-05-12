@@ -5,7 +5,6 @@ public class ShootingToggle : MonoBehaviour
 {
     private ProjectileShooter projectileShooter;
 
-    // This variable will be shown as a checkbox in the inspector
     [SerializeField]
     private bool enableShooting;
 
@@ -16,7 +15,6 @@ public class ShootingToggle : MonoBehaviour
 
     private void Update()
     {
-        // Enable or disable shooting based on the checkbox
         if (enableShooting)
         {
             projectileShooter.EnableShooting();
@@ -25,5 +23,11 @@ public class ShootingToggle : MonoBehaviour
         {
             projectileShooter.DisableShooting();
         }
+    }
+
+    // Public method to toggle shooting cleanly
+    public void SetShootingEnabled(bool enabled)
+    {
+        enableShooting = enabled;
     }
 }
