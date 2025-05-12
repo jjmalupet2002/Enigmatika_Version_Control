@@ -12,7 +12,7 @@ public class PlayerDetective : MonoBehaviour
 
     AudioManager audioManager;
 
-    public bool canDie = true; // <--- Add this flag to control death behavior
+    public bool canDie = false; // <--- Add this flag to control death behavior
 
     private void Awake()
     {
