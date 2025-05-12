@@ -11,8 +11,8 @@ public class AIChaseController : MonoBehaviour
     public Transform playerStartPosition;
     public Transform enemyStartPosition;
     public AudioSource chaseMusic;
-    public AudioSource backgroundMusic; // Reference to background music
-    public CanvasGroup blackScreenCanvasGroup; // Using CanvasGroup instead of Image
+    public AudioSource backgroundMusic;
+    public CanvasGroup blackScreenCanvasGroup;
 
     private NavMeshAgent enemyAgent;
     private Rigidbody enemyRigidbody;
@@ -21,17 +21,22 @@ public class AIChaseController : MonoBehaviour
     [Header("Chase Settings")]
     public float detectionRadius = 5f; // Radius for player detection
     public float chaseSpeed = 5f;
-    public float fadeDuration = 1.5f; // Time for fade effect
-    public float chaseCooldown = 2f; // Cooldown before AI chases again
+    public float fadeDuration = 1.5f;
+    public float chaseCooldown = 2f;
 
     private bool isChasing = false;
-    private bool isOnCooldown = false; // Flag to track cooldown state
+    private bool isOnCooldown = false;
+
+    // Reference to the ShootingToggle script
+    private ShootingToggle shootingToggle;
 
     void Start()
     {
         enemyAgent = enemy.GetComponent<NavMeshAgent>();
         enemyRigidbody = enemy.GetComponent<Rigidbody>();
         playerRigidbody = player.GetComponent<Rigidbody>();
+
+        shootingToggle = player.GetComponent<ShootingToggle>(); // Get the ShootingToggle component on the player
 
         if (enemyAgent == null)
         {
@@ -75,6 +80,7 @@ public class AIChaseController : MonoBehaviour
         if (Vector3.Distance(player.position, enemy.position) <= detectionRadius)
         {
             StartChase();
+            EnableShooting();
         }
     }
 
@@ -89,21 +95,27 @@ public class AIChaseController : MonoBehaviour
 
     private void StartChase()
     {
-        if (!isChasing && !isOnCooldown) // Ensure chase does not start during cooldown
+        if (!isChasing && !isOnCooldown)
         {
             isChasing = true;
 
-            // Stop background music if it's playing
             if (backgroundMusic != null && backgroundMusic.isPlaying)
             {
                 backgroundMusic.Stop();
             }
 
-            // Start chase music if it's not playing
             if (chaseMusic != null && !chaseMusic.isPlaying)
             {
                 chaseMusic.Play();
             }
+        }
+    }
+
+    private void EnableShooting()
+    {
+        if (shootingToggle != null)
+        {
+            shootingToggle.GetType().GetField("enableShooting", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(shootingToggle, true); // Enable shooting
         }
     }
 
@@ -123,24 +135,20 @@ public class AIChaseController : MonoBehaviour
         if (enemyAgent != null)
             enemyAgent.isStopped = true;
 
-        // **Disable Player Input Before Resetting**
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(false);
 
         yield return StartCoroutine(FadeScreen(1)); // Fade to black
 
-        // Reset positions
         ResetPlayerPosition();
         ResetEnemyPosition();
 
         yield return new WaitForSeconds(0.5f);
         yield return StartCoroutine(FadeScreen(0)); // Fade back to normal
 
-        // **Enable Player Input After Cooldown**
         yield return new WaitForSeconds(chaseCooldown);
         isOnCooldown = false;
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(true);
 
-        // Resume background music when chase ends
         if (backgroundMusic != null)
         {
             backgroundMusic.Play();
@@ -151,8 +159,7 @@ public class AIChaseController : MonoBehaviour
     {
         if (playerRigidbody != null)
         {
-            // **Use MovePosition() instead of isKinematic**
-            playerRigidbody.velocity = Vector3.zero; // Stop movement
+            playerRigidbody.velocity = Vector3.zero;
             playerRigidbody.angularVelocity = Vector3.zero;
             playerRigidbody.MovePosition(playerStartPosition.position);
         }
