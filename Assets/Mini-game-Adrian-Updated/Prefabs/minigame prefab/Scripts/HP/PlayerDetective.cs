@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class PlayerDetective : MonoBehaviour
@@ -14,7 +15,19 @@ public class PlayerDetective : MonoBehaviour
 
     private void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+        if (audioObject != null)
+        {
+            audioManager = audioObject.GetComponent<AudioManager>();
+            if (audioManager == null)
+            {
+                UnityEngine.Debug.LogError("AudioManager component not found on the object with tag 'Audio'.");
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("No GameObject with tag 'Audio' found.");
+        }
     }
 
     // Start is called before the first frame update
@@ -37,7 +50,7 @@ public class PlayerDetective : MonoBehaviour
     {
         audioManager.PlaySFX(audioManager.bonecrack); // Play damage sound effect
 
-        Debug.Log($"Player took damage: {damage}");
+        UnityEngine.Debug.Log($"Player took damage: {damage}");
         currentHealth -= damage;
 
         // Clamp health to avoid negative values
@@ -55,7 +68,7 @@ public class PlayerDetective : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Player Died!");
+        UnityEngine.Debug.Log("Player Died!");
 
         gameObject.SetActive(false); // Disable player
             

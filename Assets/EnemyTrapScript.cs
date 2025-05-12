@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemyTrapScript : MonoBehaviour
@@ -19,10 +20,22 @@ public class EnemyTrapScript : MonoBehaviour
 
     [Header("Detection Settings")]
     public float interactionDistance = 2f;
-    public float detectionRadius = 3f; // Public variable for the detection radius
+    public float detectionRadius = 3f;
+
+    [Header("Manual Testing")]
+    public bool triggerLoweringManually = false;
+    public bool resetTrapGate = false; // ✅ NEW reset trigger
 
     private bool isPlayerNearLever = false;
     private bool isLoweringTrap = false;
+    private bool isRaisingTrap = false; // ✅ NEW state flag
+
+    [Header("Projectile Control")]
+    public List<ShootingToggle> shootingToggles; // Assign all relevant toggles in the inspector
+
+    [Header("Sound Settings")]
+    public AudioClip leverSound;
+    private AudioSource audioSource;
 
     private void Start()
     {
@@ -31,18 +44,38 @@ public class EnemyTrapScript : MonoBehaviour
             interactButton.onClick.AddListener(OnInteractPressed);
         }
 
-        // Ensure the trap gate starts at the defined Y position
         if (trapGate != null)
         {
             Vector3 pos = trapGate.transform.position;
-            pos.y = startYPosition;
-            trapGate.transform.position = pos;
+            startYPosition = pos.y;
+        }
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
     private void Update()
     {
-        // Use physics overlap to check if the player is within the detection radius of the lever
+        // Manual trigger
+        if (triggerLoweringManually)
+        {
+            isLoweringTrap = true;
+            isRaisingTrap = false;
+            triggerLoweringManually = false;
+        }
+
+        // Reset trigger
+        if (resetTrapGate)
+        {
+            isRaisingTrap = true;
+            isLoweringTrap = false;
+            resetTrapGate = false;
+        }
+
+        // Proximity detection
         if (leverObject != null && player != null)
         {
             Collider[] hitColliders = Physics.OverlapSphere(leverObject.transform.position, detectionRadius);
@@ -58,17 +91,29 @@ public class EnemyTrapScript : MonoBehaviour
             }
         }
 
-        // Smoothly lower trap gate
+        // Lowering trap
         if (isLoweringTrap && trapGate != null)
         {
             Vector3 currentPos = trapGate.transform.position;
-            float newY = Mathf.Lerp(currentPos.y, targetYPosition, Time.deltaTime * loweringSpeed);
+            float newY = Mathf.MoveTowards(currentPos.y, targetYPosition, loweringSpeed * Time.deltaTime);
             trapGate.transform.position = new Vector3(currentPos.x, newY, currentPos.z);
 
-            // Stop lowering if close enough to target Y
-            if (Mathf.Abs(currentPos.y - targetYPosition) < 0.05f)
+            if (Mathf.Approximately(newY, targetYPosition))
             {
                 isLoweringTrap = false;
+            }
+        }
+
+        // Raising trap (reset)
+        if (isRaisingTrap && trapGate != null)
+        {
+            Vector3 currentPos = trapGate.transform.position;
+            float newY = Mathf.MoveTowards(currentPos.y, startYPosition, loweringSpeed * Time.deltaTime);
+            trapGate.transform.position = new Vector3(currentPos.x, newY, currentPos.z);
+
+            if (Mathf.Approximately(newY, startYPosition))
+            {
+                isRaisingTrap = false;
             }
         }
     }
@@ -77,16 +122,25 @@ public class EnemyTrapScript : MonoBehaviour
     {
         if (isPlayerNearLever)
         {
-            if (leverAnimator != null)
+            leverAnimator?.SetTrigger("LeverDown");
+            isLoweringTrap = true;
+            isRaisingTrap = false;
+
+            // Play sound
+            if (leverSound != null && audioSource != null)
             {
-                leverAnimator.SetTrigger("LeverDown");
+                audioSource.PlayOneShot(leverSound);
             }
 
-            isLoweringTrap = true;
+            // Disable all shooting toggles
+            foreach (var toggle in shootingToggles)
+            {
+                if (toggle != null)
+                    toggle.SetShootingEnabled(false);
+            }
         }
     }
 
-    // Draw the detection radius in the editor for visualization
     private void OnDrawGizmos()
     {
         if (leverObject != null)
