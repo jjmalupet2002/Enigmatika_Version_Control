@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class PlayerDetective : MonoBehaviour
@@ -12,6 +11,8 @@ public class PlayerDetective : MonoBehaviour
     public GameOver gameOverManager;
 
     AudioManager audioManager;
+
+    public bool canDie = true; // <--- Add this flag to control death behavior
 
     private void Awake()
     {
@@ -30,14 +31,12 @@ public class PlayerDetective : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
         playerhealthBar.SetMaxHealth(maxHealth);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -60,7 +59,7 @@ public class PlayerDetective : MonoBehaviour
         playerhealthBar.SetHealth(currentHealth);
 
         // Check if the player is dead
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && canDie)
         {
             Die();
         }
@@ -71,9 +70,7 @@ public class PlayerDetective : MonoBehaviour
         UnityEngine.Debug.Log("Player Died!");
 
         gameObject.SetActive(false); // Disable player
-            
-        gameOverManager.ShowGameOver(); // Shows Game Over Screen
-       
-    }
 
+        gameOverManager.ShowGameOver(); // Shows Game Over Screen
+    }
 }

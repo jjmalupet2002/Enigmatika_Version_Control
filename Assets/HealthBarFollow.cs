@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +20,15 @@ public class HealthBarFollow : MonoBehaviour
 
     [Header("Checkpoint Settings")]
     public Transform playerDieCheckpoint; // Player's death checkpoint position
+    public Transform hpTriggerCheckpoint; // New checkpoint for proximity detection to enable HP UI
     public float interactRange = 5f;      // Distance at which HP UI appears
 
+    [Header("Music References")]
+    public AudioSource mainBackgroundMusic;
+    public AudioSource challengeMusic;
+
+    private bool isPlayerInRange = false;
+    private bool wasPlayerInRangeLastFrame = false;
     private bool isDead = false;          // Flag to check if the player is dead
 
     void LateUpdate()
@@ -31,11 +39,11 @@ public class HealthBarFollow : MonoBehaviour
             transform.position = target.position + offset;
         }
 
-        // Check player distance to checkpoint using overlap sphere
-        bool isPlayerInRange = false;
-        if (playerDieCheckpoint != null)
+        // Check player distance to hpTriggerCheckpoint using overlap sphere
+        isPlayerInRange = false;
+        if (hpTriggerCheckpoint != null)
         {
-            Collider[] hits = Physics.OverlapSphere(playerDieCheckpoint.position, interactRange);
+            Collider[] hits = Physics.OverlapSphere(hpTriggerCheckpoint.position, interactRange);
             foreach (var hit in hits)
             {
                 if (hit.transform == target)
@@ -46,60 +54,102 @@ public class HealthBarFollow : MonoBehaviour
             }
         }
 
-        // Show or hide HP UI based on proximity
+        // Show or hide HP UI based on proximity to hpTriggerCheckpoint
         if (hpFillImage != null) hpFillImage.enabled = isPlayerInRange;
         if (hpBorderImage != null) hpBorderImage.enabled = isPlayerInRange;
+
+        // Play or stop challenge music based on proximity
+        HandleMusicSwitching();
 
         // If health reaches 0, trigger death logic
         if (playerHealthBar != null && playerHealthBar.slider.value <= 0 && !isDead)
         {
-            isDead = true;  // Flag that the player is dead
+            isDead = true;
 
-            // Fade out the black background (simulating death screen fade)
             if (blackBackground != null)
             {
                 StartCoroutine(FadeOutBlackBackground());
             }
+        }
 
-            // Reset player position to the checkpoint (simultaneously with fade)
-            ResetPlayerPosition();
+        wasPlayerInRangeLastFrame = isPlayerInRange;
+    }
+
+    private void HandleMusicSwitching()
+    {
+        if (isPlayerInRange && !wasPlayerInRangeLastFrame)
+        {
+            if (mainBackgroundMusic != null && mainBackgroundMusic.isPlaying)
+                mainBackgroundMusic.Stop();
+
+            if (challengeMusic != null && !challengeMusic.isPlaying)
+                challengeMusic.Play();
+        }
+        else if (!isPlayerInRange && wasPlayerInRangeLastFrame)
+        {
+            if (challengeMusic != null && challengeMusic.isPlaying)
+                challengeMusic.Stop();
+
+            if (mainBackgroundMusic != null && !mainBackgroundMusic.isPlaying)
+                mainBackgroundMusic.Play();
         }
     }
 
-    // Coroutine to fade out the black background
+    // Coroutine to fade out and in the black background (total 1.5 seconds)
     private IEnumerator FadeOutBlackBackground()
     {
-        float fadeDuration = 2f; // Duration for the fade
-        float startAlpha = blackBackground.alpha;
-        float targetAlpha = 1f; // Fully visible (black background)
+        float halfFadeDuration = 0.75f; // Half of the total 1.5s for each fade
 
+        // Fade to black
         float elapsedTime = 0f;
-        while (elapsedTime < fadeDuration)
+        float startAlpha = blackBackground.alpha;
+        float targetAlpha = 1f;
+
+        while (elapsedTime < halfFadeDuration)
         {
-            blackBackground.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / fadeDuration);
+            blackBackground.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / halfFadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        blackBackground.alpha = targetAlpha; // Ensure it's fully faded
+        blackBackground.alpha = targetAlpha;
+
+        // Reset player position *after* fade out is complete
+        ResetPlayerPosition();
+
+        // Fade back to transparent
+        elapsedTime = 0f;
+        startAlpha = blackBackground.alpha;
+        targetAlpha = 0f;
+
+        while (elapsedTime < halfFadeDuration)
+        {
+            blackBackground.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / halfFadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        blackBackground.alpha = targetAlpha;
     }
 
-    // Method to reset the player position to the checkpoint
     private void ResetPlayerPosition()
     {
         if (target != null && playerDieCheckpoint != null)
         {
-            target.position = playerDieCheckpoint.position; // Reset to checkpoint
-            playerHealthBar.SetHealth((int)playerHealthBar.slider.maxValue); // Reset health to max
+            target.gameObject.SetActive(true); // Reactivate player if disabled
+            target.position = playerDieCheckpoint.position;
+            playerHealthBar.SetHealth((int)playerHealthBar.slider.maxValue);
+
+            // Reset death flag
+            isDead = false;
         }
     }
 
     // Optional: draw the interaction range in the scene view
     private void OnDrawGizmosSelected()
     {
-        if (playerDieCheckpoint != null)
+        if (hpTriggerCheckpoint != null)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(playerDieCheckpoint.position, interactRange);
+            Gizmos.DrawWireSphere(hpTriggerCheckpoint.position, interactRange);
         }
     }
 }
