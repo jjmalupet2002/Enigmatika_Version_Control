@@ -13,6 +13,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     public GameObject scoringUI; // <-- New reference for scoring UI
     public Text scoreRemarkText; // <-- New reference for score remark
     public Text scoreText; // <-- New reference for displaying score
+    public Text detailsFoundText; // <-- New Details Found Text reference
 
     [System.Serializable]
     public class KeyDetailEntry
@@ -46,7 +47,10 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
             entry.keyDetailButton.onClick.AddListener(() => OnKeyDetailSelected(entry));
             entry.correctButton.onClick.AddListener(() => OnAnswerSelected(entry, "Correct"));
             entry.wrongButton.onClick.AddListener(() => OnAnswerSelected(entry, "Wrong"));
-            entry.exitFeedbackUIButton.onClick.AddListener(() => entry.feedbackUI.SetActive(false));
+            entry.exitFeedbackUIButton.onClick.AddListener(() => {
+                entry.feedbackUI.SetActive(false);
+                selectedAnswerText.gameObject.SetActive(false); // Disable the GameObject
+            });
         }
     }
 
@@ -75,10 +79,12 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         if (selectedAnswer == "Correct")
         {
             selectedAnswerText.text = "Selected Answer: Correct";
+            selectedAnswerText.gameObject.SetActive(true);
         }
         else
         {
             selectedAnswerText.text = "Selected Answer: Wrong";
+            selectedAnswerText.gameObject.SetActive(true);
         }
 
         // Display feedback based on the answer
@@ -156,4 +162,19 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         scrollViewContent.SetActive(false);
         startExaminationBG.SetActive(true);
     }
+
+    // NEW METHOD
+    private void UpdateDetailsFoundText()
+    {
+        int foundCount = 0;
+        foreach (var entry in keyDetails)
+        {
+            if (entry.hasBeenAnswered)
+                foundCount++;
+        }
+
+        if (detailsFoundText != null)
+            detailsFoundText.text = $"Details Found: {foundCount}";
+    }
 }
+
