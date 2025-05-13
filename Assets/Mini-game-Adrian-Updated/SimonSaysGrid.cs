@@ -1,22 +1,30 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 
 public class SimonSaysGrid : MonoBehaviour
 {
     [System.Serializable]
     public class TileRow
     {
-        public GameObject[] tiles = new GameObject[3]; // Assumes 3 columns
+        public GameObject[] tiles = new GameObject[3];
     }
 
     [Header("Grid Settings")]
-    public TileRow[] grid = new TileRow[3]; // Assumes 3 rows
+    public TileRow[] grid = new TileRow[3];
 
     [Header("Game Settings")]
-    public float intervalTime = 3f;
+    public float showTextDelay = 2f;
+    public float postCountdownPause = 0.5f;
+    public float hideDuration = 2f;
+
+    [Header("UI")]
     public Text safeTileText;
+    public Text countdownText;
+
+    [Header("Player Freeze Settings")]
+    [Tooltip("Drag the GameObject you want to disable during freeze (usually the movement root or player body).")]
+    public GameObject movementObject;
 
     private int rows => grid.Length;
     private int cols => grid[0].tiles.Length;
@@ -30,16 +38,24 @@ public class SimonSaysGrid : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(intervalTime);
-
             int safeRow = Random.Range(0, rows);
             int safeCol = Random.Range(0, cols);
 
-            // Update UI
             if (safeTileText != null)
                 safeTileText.text = $"Safe Tile: ({safeCol + 1}, {safeRow + 1})";
 
-            // Activate only the safe tile
+            if (countdownText != null)
+                StartCoroutine(CountdownTimer(showTextDelay));
+
+            yield return new WaitForSeconds(showTextDelay);
+
+            // ✅ Disable player movement object
+            if (movementObject != null)
+                movementObject.SetActive(false);
+
+            yield return new WaitForSeconds(postCountdownPause);
+
+            // Remove tiles except the safe one
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < cols; c++)
@@ -49,9 +65,12 @@ public class SimonSaysGrid : MonoBehaviour
                 }
             }
 
-            // Wait again before resetting the grid
-            yield return new WaitForSeconds(intervalTime);
+            if (countdownText != null)
+                countdownText.text = "";
 
+            yield return new WaitForSeconds(hideDuration);
+
+            // Reactivate all tiles
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < cols; c++)
@@ -60,6 +79,27 @@ public class SimonSaysGrid : MonoBehaviour
                         grid[r].tiles[c].SetActive(true);
                 }
             }
+
+            // ✅ Re-enable player movement object
+            if (movementObject != null)
+                movementObject.SetActive(true);
+
+            yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    IEnumerator CountdownTimer(float timeLeft)
+    {
+        while (timeLeft > 0f)
+        {
+            if (countdownText != null)
+                countdownText.text = $"{timeLeft:F1}s";
+
+            yield return new WaitForSeconds(0.1f);
+            timeLeft -= 0.1f;
+        }
+
+        if (countdownText != null)
+            countdownText.text = "Stop!";
     }
 }
