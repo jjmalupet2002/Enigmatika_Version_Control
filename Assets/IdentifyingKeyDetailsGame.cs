@@ -9,6 +9,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     public GameObject scrollViewContent;
     public GameObject startExaminationBG; // <-- New reference
     public Button startClueExaminationButton;
+    public Text selectedAnswerText; // <-- New field for displaying selected answer
 
     [System.Serializable]
     public class KeyDetailEntry
@@ -16,7 +17,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         public Button keyDetailButton;
         public string associatedWord;
         public string buttonAnswer; // "Correct" or "Wrong"
-        public string question; // <-- New field for the question
+        public string question; // <-- Question field
         public GameObject feedbackUI;
         public string wrongFeedback;
         public string correctFeedback;
@@ -60,10 +61,22 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     {
         entry.feedbackUI.SetActive(true);
         entry.feedbackText.text = entry.question; // Display the question first
+        selectedAnswerText.text = ""; // Clear previous selected answer
     }
 
     private void OnAnswerSelected(KeyDetailEntry entry, string selectedAnswer)
     {
+        // Set the selected answer text based on the button pressed
+        if (selectedAnswer == "Correct")
+        {
+            selectedAnswerText.text = "Selected Answer: Correct";
+        }
+        else
+        {
+            selectedAnswerText.text = "Selected Answer: Wrong";
+        }
+
+        // Display feedback based on the answer
         if (selectedAnswer == entry.buttonAnswer)
         {
             entry.feedbackText.text = entry.correctFeedback;
@@ -73,6 +86,10 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
             entry.feedbackText.text = entry.wrongFeedback;
         }
 
+        // Disable the GameObject for the correct and wrong buttons
+        entry.correctButton.gameObject.SetActive(false);
+        entry.wrongButton.gameObject.SetActive(false);
+
         StopAllCoroutines();
         StartCoroutine(AutoHideFeedback(entry));
     }
@@ -81,5 +98,6 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     {
         yield return new WaitForSeconds(10f);
         entry.feedbackUI.SetActive(false);
+        selectedAnswerText.text = ""; // Clear previous selected answer
     }
 }
