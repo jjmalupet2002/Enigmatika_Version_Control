@@ -29,6 +29,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         public Button wrongButton;
         public Button exitFeedbackUIButton;
         public bool hasBeenAnswered; // <-- Boolean to track if the entry has been answered
+        public GameObject highlightObject; // <-- Add this for highlighting when answered
     }
 
     [Header("Key Detail Entries")]
@@ -96,6 +97,10 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
 
         // Mark the entry as answered
         entry.hasBeenAnswered = true;
+
+        // Enable highlight object if it's assigned
+        if (entry.highlightObject != null)
+            entry.highlightObject.SetActive(true);
 
         StopAllCoroutines();
         StartCoroutine(AutoHideFeedback(entry));
