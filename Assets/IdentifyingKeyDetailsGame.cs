@@ -16,6 +16,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         public Button keyDetailButton;
         public string associatedWord;
         public string buttonAnswer; // "Correct" or "Wrong"
+        public string question; // <-- New field for the question
         public GameObject feedbackUI;
         public string wrongFeedback;
         public string correctFeedback;
@@ -58,7 +59,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     private void OnKeyDetailSelected(KeyDetailEntry entry)
     {
         entry.feedbackUI.SetActive(true);
-        entry.feedbackText.text = ""; // Clear previous feedback
+        entry.feedbackText.text = entry.question; // Display the question first
     }
 
     private void OnAnswerSelected(KeyDetailEntry entry, string selectedAnswer)
