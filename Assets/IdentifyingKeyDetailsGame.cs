@@ -10,6 +10,9 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     public GameObject startExaminationBG; // <-- New reference
     public Button startClueExaminationButton;
     public Text selectedAnswerText; // <-- New field for displaying selected answer
+    public GameObject scoringUI; // <-- New reference for scoring UI
+    public Text scoreRemarkText; // <-- New reference for score remark
+    public Text scoreText; // <-- New reference for displaying score
 
     [System.Serializable]
     public class KeyDetailEntry
@@ -25,6 +28,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         public Button correctButton;
         public Button wrongButton;
         public Button exitFeedbackUIButton;
+        public bool hasBeenAnswered; // <-- Boolean to track if the entry has been answered
     }
 
     [Header("Key Detail Entries")]
@@ -90,8 +94,14 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         entry.correctButton.gameObject.SetActive(false);
         entry.wrongButton.gameObject.SetActive(false);
 
+        // Mark the entry as answered
+        entry.hasBeenAnswered = true;
+
         StopAllCoroutines();
         StartCoroutine(AutoHideFeedback(entry));
+
+        // Check if all entries have been answered
+        CheckAllAnswered();
     }
 
     private IEnumerator AutoHideFeedback(KeyDetailEntry entry)
@@ -99,5 +109,46 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         yield return new WaitForSeconds(10f);
         entry.feedbackUI.SetActive(false);
         selectedAnswerText.text = ""; // Clear previous selected answer
+    }
+
+    private void CheckAllAnswered()
+    {
+        // Check if all entries have been answered
+        bool allAnswered = true;
+        foreach (var entry in keyDetails)
+        {
+            if (!entry.hasBeenAnswered)
+            {
+                allAnswered = false;
+                break;
+            }
+        }
+
+        if (allAnswered)
+        {
+            DisplayScoreUI();
+        }
+    }
+
+    private void DisplayScoreUI()
+    {
+        // Calculate score: Correct answers divided by total entries
+        int correctAnswers = 0;
+        foreach (var entry in keyDetails)
+        {
+            if (entry.buttonAnswer == "Correct" && entry.hasBeenAnswered)
+            {
+                correctAnswers++;
+            }
+        }
+
+        // Display scoring UI
+        scoringUI.SetActive(true);
+        scoreRemarkText.text = "Well done!"; // Example score remark, you can adjust this based on score
+        scoreText.text = $"Score: {correctAnswers}/{keyDetails.Count}";
+
+        // Disable scroll view content and enable the background
+        scrollViewContent.SetActive(false);
+        startExaminationBG.SetActive(true);
     }
 }
