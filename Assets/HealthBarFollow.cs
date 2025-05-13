@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +28,8 @@ public class HealthBarFollow : MonoBehaviour
 
     private bool isPlayerInRange = false;
     private bool wasPlayerInRangeLastFrame = false;
-    private bool isDead = false;          // Flag to check if the player is dead
+    private bool isDead = false; // Flag to check if the player is dead
+    private bool isRespawning = false; // NEW flag
 
     void LateUpdate()
     {
@@ -62,16 +62,14 @@ public class HealthBarFollow : MonoBehaviour
         HandleMusicSwitching();
 
         // If health reaches 0, trigger death logic
-        if (playerHealthBar != null && playerHealthBar.slider.value <= 0 && !isDead)
+        if (playerHealthBar != null && playerHealthBar.slider.value <= 0 && !isDead && !isRespawning)
         {
             isDead = true;
-
-            if (blackBackground != null)
-            {
-                StartCoroutine(FadeOutBlackBackground());
-            }
+            isRespawning = true;
+            StartCoroutine(FadeOutBlackBackground());
         }
 
+        // Update last frame flag
         wasPlayerInRangeLastFrame = isPlayerInRange;
     }
 
@@ -98,36 +96,34 @@ public class HealthBarFollow : MonoBehaviour
     // Coroutine to fade out and in the black background (total 1.5 seconds)
     private IEnumerator FadeOutBlackBackground()
     {
-        float halfFadeDuration = 0.75f; // Half of the total 1.5s for each fade
+        float halfFadeDuration = 0.75f;
 
         // Fade to black
         float elapsedTime = 0f;
-        float startAlpha = blackBackground.alpha;
-        float targetAlpha = 1f;
-
         while (elapsedTime < halfFadeDuration)
         {
-            blackBackground.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / halfFadeDuration);
+            blackBackground.alpha = Mathf.Lerp(0f, 1f, elapsedTime / halfFadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        blackBackground.alpha = targetAlpha;
+        blackBackground.alpha = 1f;
 
-        // Reset player position *after* fade out is complete
+        // Respawn
         ResetPlayerPosition();
 
         // Fade back to transparent
         elapsedTime = 0f;
-        startAlpha = blackBackground.alpha;
-        targetAlpha = 0f;
-
         while (elapsedTime < halfFadeDuration)
         {
-            blackBackground.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / halfFadeDuration);
+            blackBackground.alpha = Mathf.Lerp(1f, 0f, elapsedTime / halfFadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        blackBackground.alpha = targetAlpha;
+        blackBackground.alpha = 0f;
+
+        // Safe to reset both flags here
+        isDead = false;
+        isRespawning = false;
     }
 
     private void ResetPlayerPosition()
