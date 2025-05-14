@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Diagnostics;
 
 public class IdentifyingKeyDetailsGame : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         public Button keyDetailButton;
         public string associatedWord;
         public string buttonAnswer; // "Correct" or "Wrong"
+        public string selectedAnswer; // <-- Track what the user chose
         public string question; // <-- Question field
         public GameObject feedbackUI;
         public string wrongFeedback;
@@ -99,6 +101,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
 
         // Feedback message
         entry.feedbackText.text = selectedAnswer == entry.buttonAnswer ? entry.correctFeedback : entry.wrongFeedback;
+        entry.selectedAnswer = selectedAnswer;
 
         // Disable answer buttons
         entry.correctButton.gameObject.SetActive(false);
@@ -110,6 +113,17 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         // Highlight
         if (entry.highlightObject != null)
             entry.highlightObject.SetActive(true);
+
+        // 🔍 LOGGING SECTION
+        string result = selectedAnswer == entry.buttonAnswer ? "Correct" : "Wrong";
+        int currentScore = 0;
+        foreach (var e in keyDetails)
+        {
+            if (e.hasBeenAnswered && e.selectedAnswer == e.buttonAnswer)
+                currentScore++;
+        }
+
+        UnityEngine.Debug.Log($"[LOG] Button Selected: {selectedAnswer} | Result: {result} | Correct Answer: {entry.buttonAnswer} | Current Score: {currentScore}/{keyDetails.Count}");
 
         StopAllCoroutines();
         StartCoroutine(AutoHideFeedback(entry));
@@ -152,7 +166,7 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         int correctAnswers = 0;
         foreach (var entry in keyDetails)
         {
-            if (entry.buttonAnswer == "Correct" && entry.hasBeenAnswered)
+            if (entry.hasBeenAnswered && entry.selectedAnswer == entry.buttonAnswer)
             {
                 correctAnswers++;
             }

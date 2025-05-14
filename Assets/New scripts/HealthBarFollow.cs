@@ -1,26 +1,27 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBarFollow : MonoBehaviour
 {
     [Header("Tracking Settings")]
-    public Transform target; // Reference to the player
-    public Vector3 offset = new Vector3(0, 2, 0); // Offset above the player
+    public Transform target;
+    public Vector3 offset = new Vector3(0, 2, 0);
 
     [Header("HP UI References")]
-    public Image hpFillImage;         // Reference to the fill image (disable in inspector)
-    public RawImage hpBorderImage;    // Reference to the border image (disable in inspector)
-    public PlayerHealthBar playerHealthBar; // Reference to the PlayerHealthBar script
+    public Image hpFillImage;
+    public RawImage hpBorderImage;
+    public PlayerHealthBar playerHealthBar;
 
     [Header("Black Background Fade Settings")]
-    public CanvasGroup blackBackground;  // Reference to the black background image with CanvasGroup
+    public CanvasGroup blackBackground;
 
     [Header("Checkpoint Settings")]
-    public Transform playerDieCheckpoint; // Player's death checkpoint position
-    public Transform hpTriggerCheckpoint; // New checkpoint for proximity detection to enable HP UI
-    public float interactRange = 5f;      // Distance at which HP UI appears
+    public Transform playerDieCheckpoint;
+    public Transform hpTriggerCheckpoint;
+    public float interactRange = 5f;
 
     [Header("Music References")]
     public AudioSource mainBackgroundMusic;
@@ -28,8 +29,10 @@ public class HealthBarFollow : MonoBehaviour
 
     private bool isPlayerInRange = false;
     private bool wasPlayerInRangeLastFrame = false;
-    private bool isDead = false; // Flag to check if the player is dead
-    private bool isRespawning = false; // NEW flag
+    private bool isDead = false;
+    private bool isRespawning = false;
+
+    private float previousHealth = -1f; // Initialize to -1 to force update on start
 
     void LateUpdate()
     {
@@ -39,7 +42,7 @@ public class HealthBarFollow : MonoBehaviour
             transform.position = target.position + offset;
         }
 
-        // Check player distance to hpTriggerCheckpoint using overlap sphere
+        // Check player distance to hpTriggerCheckpoint
         isPlayerInRange = false;
         if (hpTriggerCheckpoint != null)
         {
@@ -54,22 +57,33 @@ public class HealthBarFollow : MonoBehaviour
             }
         }
 
-        // Show or hide HP UI based on proximity to hpTriggerCheckpoint
+        // Show or hide HP UI
         if (hpFillImage != null) hpFillImage.enabled = isPlayerInRange;
         if (hpBorderImage != null) hpBorderImage.enabled = isPlayerInRange;
 
-        // Play or stop challenge music based on proximity
+        // Play or stop challenge music
         HandleMusicSwitching();
 
-        // If health reaches 0, trigger death logic
-        if (playerHealthBar != null && playerHealthBar.slider.value <= 0 && !isDead && !isRespawning)
+        // Log health reduction
+        if (playerHealthBar != null)
         {
-            isDead = true;
-            isRespawning = true;
-            StartCoroutine(FadeOutBlackBackground());
+            float currentHealth = playerHealthBar.slider.value;
+            if (previousHealth >= 0 && currentHealth < previousHealth)
+            {
+                UnityEngine.Debug.Log($"[Health Log] Player health reduced: {previousHealth} → {currentHealth}");
+            }
+            previousHealth = currentHealth;
+
+            // If health reaches 0, trigger death logic
+            if (currentHealth <= 0 && !isDead && !isRespawning)
+            {
+                UnityEngine.Debug.Log("[Health Log] Player has died.");
+                isDead = true;
+                isRespawning = true;
+                StartCoroutine(FadeOutBlackBackground());
+            }
         }
 
-        // Update last frame flag
         wasPlayerInRangeLastFrame = isPlayerInRange;
     }
 
@@ -93,12 +107,10 @@ public class HealthBarFollow : MonoBehaviour
         }
     }
 
-    // Coroutine to fade out and in the black background (total 1.5 seconds)
     private IEnumerator FadeOutBlackBackground()
     {
         float halfFadeDuration = 0.75f;
 
-        // Fade to black
         float elapsedTime = 0f;
         while (elapsedTime < halfFadeDuration)
         {
@@ -111,7 +123,6 @@ public class HealthBarFollow : MonoBehaviour
         // Respawn
         ResetPlayerPosition();
 
-        // Fade back to transparent
         elapsedTime = 0f;
         while (elapsedTime < halfFadeDuration)
         {
@@ -121,7 +132,6 @@ public class HealthBarFollow : MonoBehaviour
         }
         blackBackground.alpha = 0f;
 
-        // Safe to reset both flags here
         isDead = false;
         isRespawning = false;
     }
@@ -130,16 +140,18 @@ public class HealthBarFollow : MonoBehaviour
     {
         if (target != null && playerDieCheckpoint != null)
         {
-            target.gameObject.SetActive(true); // Reactivate player if disabled
+            UnityEngine.Debug.Log("[Health Log] Player position reset to checkpoint.");
+            target.gameObject.SetActive(true);
             target.position = playerDieCheckpoint.position;
             playerHealthBar.SetHealth((int)playerHealthBar.slider.maxValue);
 
-            // Reset death flag
+            // Reset health tracker
+            previousHealth = playerHealthBar.slider.value;
+
             isDead = false;
         }
     }
 
-    // Optional: draw the interaction range in the scene view
     private void OnDrawGizmosSelected()
     {
         if (hpTriggerCheckpoint != null)
