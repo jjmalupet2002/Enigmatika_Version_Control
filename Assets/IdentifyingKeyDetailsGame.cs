@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class IdentifyingKeyDetailsGame : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
     public Text scoreRemarkText; // <-- New reference for score remark
     public Text scoreText; // <-- New reference for displaying score
     public Text detailsFoundText; // <-- New Details Found Text reference
+    
+    [Header("Events")]
+    public UnityEvent notifyLearningModule; // <-- New UnityEvent
 
     [System.Serializable]
     public class KeyDetailEntry
@@ -161,6 +165,9 @@ public class IdentifyingKeyDetailsGame : MonoBehaviour
         // Disable scroll view content and enable the background
         scrollViewContent.SetActive(false);
         startExaminationBG.SetActive(true);
+
+        // Invoke the UnityEvent to notify listeners
+        notifyLearningModule?.Invoke();
     }
 
     // NEW METHOD
