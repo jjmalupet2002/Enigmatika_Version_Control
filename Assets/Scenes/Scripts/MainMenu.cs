@@ -6,6 +6,10 @@ using CarterGames.Assets.SaveManager;
 
 public class Play : MonoBehaviour
 {
+    [Header("Main Menu UI")]
+    [SerializeField] private GameObject titleScreen;
+    [SerializeField] private GameObject chSelect;
+
     [Header("UI Buttons")]
     public Button newGameButton;   // Assign in Inspector
     public Button continueButton;  // Assign in Inspector
@@ -39,8 +43,8 @@ public class Play : MonoBehaviour
         PlayerPrefs.SetInt("havePlayed", 1);
         PlayerPrefs.Save();
 
-        // Load the first chapter (Scene index 1)
-        SceneManager.LoadSceneAsync(1);
+        titleScreen.SetActive(false);
+        chSelect.SetActive(true);
     }
 
     public void ContinueGame()
