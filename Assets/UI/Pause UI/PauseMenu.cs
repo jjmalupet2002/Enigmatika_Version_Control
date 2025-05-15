@@ -48,6 +48,13 @@ public class PauseMenu : MonoBehaviour
     private void QuitToMainMenu()
     {
         Time.timeScale = 1f; // Ensure the game is not paused when loading the main menu
+
+        // Clear inventory before quitting
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.inventory.Clear();
+        }
+
         SceneManager.LoadScene("Main Menu");
     }
 
