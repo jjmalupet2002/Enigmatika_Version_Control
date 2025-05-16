@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,18 +25,21 @@ public class EnemyTrapScript : MonoBehaviour
 
     [Header("Manual Testing")]
     public bool triggerLoweringManually = false;
-    public bool resetTrapGate = false; // ✅ NEW reset trigger
+    public bool resetTrapGate = false;
 
     private bool isPlayerNearLever = false;
     private bool isLoweringTrap = false;
-    private bool isRaisingTrap = false; // ✅ NEW state flag
+    private bool isRaisingTrap = false;
 
     [Header("Projectile Control")]
-    public List<ShootingToggle> shootingToggles; // Assign all relevant toggles in the inspector
+    public List<ShootingToggle> shootingToggles;
 
     [Header("Sound Settings")]
     public AudioClip leverSound;
     private AudioSource audioSource;
+
+    public GameObject chaseControllerObject;
+    private AIChaseController aiChaseController;
 
     private void Start()
     {
@@ -55,11 +59,27 @@ public class EnemyTrapScript : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+
+        if (chaseControllerObject != null)
+        {
+            aiChaseController = chaseControllerObject.GetComponent<AIChaseController>();
+            if (aiChaseController != null)
+            {
+                UnityEngine.Debug.Log(" AIChaseController component successfully found.");
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning(" AIChaseController component not found on chaseControllerObject.");
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning(" chaseControllerObject not assigned.");
+        }
     }
 
     private void Update()
     {
-        // Manual trigger
         if (triggerLoweringManually)
         {
             isLoweringTrap = true;
@@ -67,7 +87,6 @@ public class EnemyTrapScript : MonoBehaviour
             triggerLoweringManually = false;
         }
 
-        // Reset trigger
         if (resetTrapGate)
         {
             isRaisingTrap = true;
@@ -75,7 +94,6 @@ public class EnemyTrapScript : MonoBehaviour
             resetTrapGate = false;
         }
 
-        // Proximity detection
         if (leverObject != null && player != null)
         {
             Collider[] hitColliders = Physics.OverlapSphere(leverObject.transform.position, detectionRadius);
@@ -91,7 +109,6 @@ public class EnemyTrapScript : MonoBehaviour
             }
         }
 
-        // Lowering trap
         if (isLoweringTrap && trapGate != null)
         {
             Vector3 currentPos = trapGate.transform.position;
@@ -104,7 +121,6 @@ public class EnemyTrapScript : MonoBehaviour
             }
         }
 
-        // Raising trap (reset)
         if (isRaisingTrap && trapGate != null)
         {
             Vector3 currentPos = trapGate.transform.position;
@@ -126,17 +142,37 @@ public class EnemyTrapScript : MonoBehaviour
             isLoweringTrap = true;
             isRaisingTrap = false;
 
-            // Play sound
             if (leverSound != null && audioSource != null)
             {
                 audioSource.PlayOneShot(leverSound);
             }
 
-            // Disable all shooting toggles
             foreach (var toggle in shootingToggles)
             {
                 if (toggle != null)
                     toggle.SetShootingEnabled(false);
+            }
+
+            if (aiChaseController != null)
+            {
+                if (aiChaseController.chaseMusic != null)
+                {
+                    aiChaseController.chaseMusic.Stop();
+                    UnityEngine.Debug.Log(" Chase music stopped.");
+                }
+                if (aiChaseController.backgroundMusic != null)
+                {
+                    aiChaseController.backgroundMusic.Play();
+                }
+
+                foreach (var enemy in aiChaseController.enemies)
+                {
+                    enemy.hasBeenTriggered = true;
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning(" aiChaseController is null in OnInteractPressed.");
             }
         }
     }
