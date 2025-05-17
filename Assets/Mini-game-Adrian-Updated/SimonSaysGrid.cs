@@ -51,6 +51,16 @@ public class SimonSaysGrid : MonoBehaviour
     public float postCountdownPause = 0.5f;
     public float hideDuration = 2f;
 
+    [Header("Additional Objects")]
+    [Tooltip("Additional objects to remove during the freeze period")]
+    public GameObject[] additionalObjects;
+    [Tooltip("Should additional objects disappear with normal tiles?")]
+    public bool hideAdditionalWithTiles = true;
+    [Tooltip("Should additional objects fade out instead of instantly disappearing?")]
+    public bool fadeOutAdditional = false;
+    [Tooltip("If fading is enabled, how long should the fade take?")]
+    public float fadeOutDuration = 0.5f;
+
     [Header("Riddle Settings")]
     [Tooltip("Add riddles/hints that will be used to reveal the safe tile")]
     public List<RiddleEntry> safePositionHints = new List<RiddleEntry>();
@@ -71,6 +81,30 @@ public class SimonSaysGrid : MonoBehaviour
 
     private int rows => grid.Length;
     private int cols => grid[0].tiles.Length;
+    
+    // Store original states of additional objects
+    private Dictionary<GameObject, bool> originalObjectStates = new Dictionary<GameObject, bool>();
+    // Store original renderers for fade effects
+    private Dictionary<GameObject, Renderer[]> objectRenderers = new Dictionary<GameObject, Renderer[]>();
+
+    void Awake()
+    {
+        // Store the initial state of additional objects
+        if (additionalObjects != null)
+        {
+            foreach (var obj in additionalObjects)
+            {
+                if (obj != null)
+                {
+                    originalObjectStates[obj] = obj.activeSelf;
+                    if (fadeOutAdditional)
+                    {
+                        objectRenderers[obj] = obj.GetComponentsInChildren<Renderer>();
+                    }
+                }
+            }
+        }
+    }
 
     void Start()
     {
@@ -125,6 +159,25 @@ public class SimonSaysGrid : MonoBehaviour
 
             yield return new WaitForSeconds(postCountdownPause);
 
+            // Handle additional objects before removing tiles if configured that way
+            if (hideAdditionalWithTiles && additionalObjects != null)
+            {
+                foreach (var obj in additionalObjects)
+                {
+                    if (obj != null)
+                    {
+                        if (fadeOutAdditional && objectRenderers.ContainsKey(obj))
+                        {
+                            StartCoroutine(FadeOutObject(obj, fadeOutDuration));
+                        }
+                        else
+                        {
+                            obj.SetActive(false);
+                        }
+                    }
+                }
+            }
+
             // Remove tiles except the safe one
             for (int r = 0; r < rows; r++)
             {
@@ -150,12 +203,77 @@ public class SimonSaysGrid : MonoBehaviour
                 }
             }
 
+            // Restore additional objects
+            if (additionalObjects != null)
+            {
+                foreach (var obj in additionalObjects)
+                {
+                    if (obj != null)
+                    {
+                        // If we were fading, make sure all renderers are fully visible again
+                        if (fadeOutAdditional && objectRenderers.ContainsKey(obj))
+                        {
+                            foreach (var renderer in objectRenderers[obj])
+                            {
+                                if (renderer != null)
+                                {
+                                    Color color = renderer.material.color;
+                                    color.a = 1f;
+                                    renderer.material.color = color;
+                                }
+                            }
+                        }
+                        // Set object active state back to its original state
+                        obj.SetActive(originalObjectStates.ContainsKey(obj) ? originalObjectStates[obj] : true);
+                    }
+                }
+            }
+
             // Re-enable player movement object
             if (movementObject != null)
                 movementObject.SetActive(true);
 
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    IEnumerator FadeOutObject(GameObject obj, float duration)
+    {
+        if (!objectRenderers.ContainsKey(obj))
+            yield break;
+
+        // Store original alpha values
+        Dictionary<Renderer, float> originalAlpha = new Dictionary<Renderer, float>();
+        foreach (var renderer in objectRenderers[obj])
+        {
+            if (renderer != null)
+            {
+                originalAlpha[renderer] = renderer.material.color.a;
+            }
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float normalizedTime = Mathf.Clamp01(elapsed / duration);
+            
+            // Update alpha for all renderers
+            foreach (var renderer in objectRenderers[obj])
+            {
+                if (renderer != null)
+                {
+                    Color color = renderer.material.color;
+                    color.a = Mathf.Lerp(originalAlpha[renderer], 0f, normalizedTime);
+                    renderer.material.color = color;
+                }
+            }
+            
+            yield return null;
+        }
+        
+        // Fully hide the object at the end of fade
+        obj.SetActive(false);
     }
 
     string GetNextHint(int safeRow, int safeCol)
