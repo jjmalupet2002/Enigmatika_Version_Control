@@ -22,31 +22,38 @@ public class WaterTrap : MonoBehaviour
     private bool isResetting = false;
     private float riseSpeed = 1f;
     private float elapsedTime = 0f;
-    private float totalRiseDuration = 180f; // 3 minutes
+    private float totalRiseDuration = 300f; // 5 minutes
+
+    [Header("Audio Settings")]
+    public AudioSource audioSource;
+    public AudioClip waterTrapMusic;
+    public AudioClip backgroundMusic;
+
+    [Header("UI & Reset")]
+    public GameObject gameOverUI;
+    public GameObject continueButton;
+    public Transform resetPosition;
+    public GameObject player;
+
+    [Header("Extra Trigger Effect")]
+    public GameObject escapeObject;
 
     private void Start()
     {
-        if (waterObject == null)
+        if (waterObject == null || triggerPoint == null || waterInstruction == null)
         {
-            return;
-        }
-
-        if (triggerPoint == null)
-        {
-            return;
-        }
-
-        if (waterInstruction == null)
-        {
+            UnityEngine.Debug.LogWarning("Missing one or more required references.");
             return;
         }
 
         initialYPosition = waterObject.transform.position.y;
+
+        if (gameOverUI != null)
+            gameOverUI.SetActive(false);
     }
 
     private void Update()
     {
-        // Check if instruction was shown and now turned off
         if (!triggerEnabled)
         {
             if (waterInstruction.activeSelf)
@@ -82,6 +89,16 @@ public class WaterTrap : MonoBehaviour
                 {
                     UnityEngine.Debug.Log("Water rising triggered by player.");
                     StartWaterRise();
+                    if (escapeObject != null) escapeObject.SetActive(false);
+
+                    // Audio transition
+                    if (audioSource != null)
+                    {
+                        audioSource.Stop();
+                        audioSource.clip = waterTrapMusic;
+                        audioSource.Play();
+                    }
+
                     break;
                 }
             }
@@ -106,6 +123,24 @@ public class WaterTrap : MonoBehaviour
         isResetting = true;
         isRising = false;
         elapsedTime = 0f;
+
+        if (player != null && resetPosition != null)
+        {
+            player.transform.position = resetPosition.position;
+        }
+
+        if (gameOverUI != null)
+            gameOverUI.SetActive(false);
+
+        if (audioSource != null && backgroundMusic != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = backgroundMusic;
+            audioSource.Play();
+        }
+
+        if (escapeObject != null)
+            escapeObject.SetActive(true);
     }
 
     private void RaiseWater()
@@ -117,7 +152,12 @@ public class WaterTrap : MonoBehaviour
         waterObject.transform.position = new Vector3(currentPos.x, newY, currentPos.z);
 
         if (Mathf.Approximately(newY, targetYPosition))
+        {
             isRising = false;
+
+            if (gameOverUI != null)
+                gameOverUI.SetActive(true);
+        }
     }
 
     private void ResetWater()
