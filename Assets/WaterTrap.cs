@@ -22,7 +22,7 @@ public class WaterTrap : MonoBehaviour
     private bool isResetting = false;
     private float riseSpeed = 1f;
     private float elapsedTime = 0f;
-    private float totalRiseDuration = 300f; // 5 minutes
+    public float totalRiseDuration; // 5 minutes
 
     [Header("Audio Settings")]
     public AudioSource audioSource;
@@ -37,6 +37,7 @@ public class WaterTrap : MonoBehaviour
 
     [Header("Extra Trigger Effect")]
     public GameObject escapeObject;
+    private bool hasTriggered = false;
 
     private void Start()
     {
@@ -47,9 +48,6 @@ public class WaterTrap : MonoBehaviour
         }
 
         initialYPosition = waterObject.transform.position.y;
-
-        if (gameOverUI != null)
-            gameOverUI.SetActive(false);
     }
 
     private void Update()
@@ -66,7 +64,7 @@ public class WaterTrap : MonoBehaviour
             }
         }
 
-        if (triggerEnabled)
+        if (triggerEnabled && !isRising && !(gameOverUI != null && gameOverUI.activeSelf))
         {
             CheckForTrigger();
         }
@@ -80,33 +78,35 @@ public class WaterTrap : MonoBehaviour
 
     private void CheckForTrigger()
     {
-        if (!isRising)
+        Collider[] hits = Physics.OverlapSphere(triggerPoint.transform.position, triggerRadius);
+        foreach (var hit in hits)
         {
-            Collider[] hits = Physics.OverlapSphere(triggerPoint.transform.position, triggerRadius);
-            foreach (var hit in hits)
+            if (hit.CompareTag("Player"))
             {
-                if (hit.CompareTag("Player"))
+                UnityEngine.Debug.Log("Water rising triggered by player.");
+                StartWaterRise();
+
+                if (escapeObject != null)
+                    escapeObject.SetActive(false);
+
+                if (audioSource != null)
                 {
-                    UnityEngine.Debug.Log("Water rising triggered by player.");
-                    StartWaterRise();
-                    if (escapeObject != null) escapeObject.SetActive(false);
-
-                    // Audio transition
-                    if (audioSource != null)
-                    {
-                        audioSource.Stop();
-                        audioSource.clip = waterTrapMusic;
-                        audioSource.Play();
-                    }
-
-                    break;
+                    audioSource.Stop();
+                    audioSource.clip = waterTrapMusic;
+                    audioSource.Play();
                 }
+
+                break;
             }
         }
     }
 
     public void StartWaterRise()
     {
+        if (hasTriggered || (gameOverUI != null && gameOverUI.activeSelf))
+            return;
+
+        hasTriggered = true;
         isRising = true;
         isResetting = false;
         elapsedTime = 0f;
@@ -123,6 +123,7 @@ public class WaterTrap : MonoBehaviour
         isResetting = true;
         isRising = false;
         elapsedTime = 0f;
+        hasTriggered = false;
 
         if (player != null && resetPosition != null)
         {
