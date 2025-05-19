@@ -220,6 +220,10 @@ MonoBehaviour:
   onCameraStateChange:
     m_PersistentCalls:
       m_Calls: []
+  QuestHolder: {fileID: 0}
+  QuestPopUpPrefab: {fileID: 1031452306680826, guid: 6ca7b6e9d0b595a4db701994f9b78698, type: 3}
+  CriteriaUITemplatePrefab: {fileID: 180918, guid: 1c67a39858ff7cf4abe3e91ae2a48f8a, type: 3}
+  QuestUITemplatePrefab: {fileID: 140556, guid: 17a5a2cac7b25ab45a39412d430a3001, type: 3}
 --- !u!114 &3595018823486996913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,7 +358,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.23, z: 0.5}
+  m_Size: {x: 0.7, y: 0.2, z: 0.8}
   m_Center: {x: -0.015, y: -0.496, z: 0}
 --- !u!114 &2293775034047108627
 MonoBehaviour:
@@ -391,6 +395,10 @@ MonoBehaviour:
   onCameraStateChange:
     m_PersistentCalls:
       m_Calls: []
+  QuestHolder: {fileID: 0}
+  QuestPopUpPrefab: {fileID: 1031452306680826, guid: 6ca7b6e9d0b595a4db701994f9b78698, type: 3}
+  CriteriaUITemplatePrefab: {fileID: 180918, guid: 1c67a39858ff7cf4abe3e91ae2a48f8a, type: 3}
+  QuestUITemplatePrefab: {fileID: 140556, guid: 17a5a2cac7b25ab45a39412d430a3001, type: 3}
 --- !u!1 &1240858869341810069
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,6 +867,7 @@ GameObject:
   - component: {fileID: 7511852298117924722}
   - component: {fileID: 3637676520950906315}
   - component: {fileID: 6092430670343363166}
+  - component: {fileID: 8837950497243184394}
   m_Layer: 0
   m_Name: Example Note Object 3
   m_TagString: Book
@@ -966,6 +975,31 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8837950497243184394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2821214777693670082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Garett's Diary
+  itemIcon: {fileID: 21300000, guid: 4b61215c56174cb489119b1357a5b77c, type: 3}
+  itemDescription: This is the King's Assistant's personal diary. Who knows? He might
+    be hiding something sinister.
+  keyId: 
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 0
+  isNote: 1
+  is3dObject: 0
+  notificationText: {fileID: 0}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &2901371020069458699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1364,6 +1398,8 @@ GameObject:
   - component: {fileID: 6762580858857302464}
   - component: {fileID: 624765184638288720}
   - component: {fileID: 267524757569641542}
+  - component: {fileID: 5665346468408655269}
+  - component: {fileID: 8418054234731586318}
   m_Layer: 0
   m_Name: drawer2
   m_TagString: Untagged
@@ -1478,9 +1514,10 @@ MonoBehaviour:
   chestOpenCloseAudio: {fileID: 0}
   drawerLockedAudioSource: {fileID: 267524757569641542}
   chestLockedAudioSource: {fileID: 0}
+  OpenUsingKeyAudio: {fileID: 5665346468408655269}
   openDistance: 0.3
   openCloseSpeedDrawer: 3
-  isDrawerLocked: 0
+  isDrawerLocked: 1
   drawerLockedText: {fileID: 0}
   onUnlockDrawer:
     m_PersistentCalls:
@@ -1496,6 +1533,10 @@ MonoBehaviour:
   closedYRotation: 0
   openYRotation: 90
   openCloseSpeedCloset: 2
+  requiredKeyId: golden
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
+  backButton: {fileID: 0}
+  unlockUI: {fileID: 0}
 --- !u!82 &624765184638288720
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1688,6 +1729,124 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &5665346468408655269
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3881422193290767807}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 774bf8310a6cf3942b5940b21f20af01, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 60
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.7
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8418054234731586318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3881422193290767807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f83d5d88aa822e47b98b905418745c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsButton: 0
+  IsLever: 0
+  buttonAnimator: {fileID: 0}
+  leverAnimator: {fileID: 0}
+  drawerChestHandler: {fileID: 0}
+  unlockedChestUI: {fileID: 0}
+  unlockedDrawerUI: {fileID: 0}
+  inputActionAsset: {fileID: -944628639613478452, guid: 2ffb3733f12b70b4bbeac0f08de6c154, type: 3}
+  buttonSound: {fileID: 0}
+  leverSound: {fileID: 0}
 --- !u!1 &4400429676269457230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1940,6 +2099,7 @@ MonoBehaviour:
   itemName: Random Note
   itemIcon: {fileID: 21300000, guid: 745c230e29c9393469cb614114618353, type: 3}
   itemDescription: A new random Note. What does it say?
+  keyId: 
   isClueItem: 0
   isGeneralItem: 1
   isUsable: 0
@@ -2055,6 +2215,7 @@ MonoBehaviour:
   chestOpenCloseAudio: {fileID: 0}
   drawerLockedAudioSource: {fileID: 6489248328763945519}
   chestLockedAudioSource: {fileID: 0}
+  OpenUsingKeyAudio: {fileID: 0}
   openDistance: 0.3
   openCloseSpeedDrawer: 3
   isDrawerLocked: 1
@@ -2073,6 +2234,10 @@ MonoBehaviour:
   closedYRotation: 0
   openYRotation: 90
   openCloseSpeedCloset: 2
+  requiredKeyId: 
+  inventoryManager: {fileID: 0}
+  backButton: {fileID: 0}
+  unlockUI: {fileID: 0}
 --- !u!65 &8571844862130941240
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2407,6 +2572,7 @@ MonoBehaviour:
   chestOpenCloseAudio: {fileID: 0}
   drawerLockedAudioSource: {fileID: 0}
   chestLockedAudioSource: {fileID: 0}
+  OpenUsingKeyAudio: {fileID: 0}
   openDistance: 0.5
   openCloseSpeedDrawer: 3
   isDrawerLocked: 0
@@ -2425,6 +2591,10 @@ MonoBehaviour:
   closedYRotation: 0
   openYRotation: -90
   openCloseSpeedCloset: 3
+  requiredKeyId: 
+  inventoryManager: {fileID: 0}
+  backButton: {fileID: 0}
+  unlockUI: {fileID: 0}
 --- !u!82 &3502420017684631285
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2731,6 +2901,7 @@ MonoBehaviour:
   chestOpenCloseAudio: {fileID: 0}
   drawerLockedAudioSource: {fileID: 0}
   chestLockedAudioSource: {fileID: 0}
+  OpenUsingKeyAudio: {fileID: 0}
   openDistance: 0.5
   openCloseSpeedDrawer: 3
   isDrawerLocked: 0
@@ -2749,6 +2920,10 @@ MonoBehaviour:
   closedYRotation: 0
   openYRotation: 90
   openCloseSpeedCloset: 3
+  requiredKeyId: 
+  inventoryManager: {fileID: 0}
+  backButton: {fileID: 0}
+  unlockUI: {fileID: 0}
 --- !u!82 &6945223126248394526
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3006,6 +3181,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1171608699615133761, guid: 5bbc0ec83dface3418b0ae505a847eb0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2688850126532666289}
+    - targetCorrespondingSourceObject: {fileID: 1171608699615133761, guid: 5bbc0ec83dface3418b0ae505a847eb0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7530304789359220346}
   m_SourcePrefab: {fileID: 100100000, guid: 5bbc0ec83dface3418b0ae505a847eb0, type: 3}
 --- !u!1 &988960404672015127 stripped
 GameObject:
@@ -3129,6 +3307,31 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7530304789359220346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988960404672015127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Access Card
+  itemIcon: {fileID: 21300000, guid: 87a7c4321fd50514c8e41d6779a071da, type: 3}
+  itemDescription: What gate can this card unlock? Try it and let's see if you can
+    get out.
+  keyId: 
+  isClueItem: 0
+  isGeneralItem: 1
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 0}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!4 &8508807046973838394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7777231900749397868, guid: 5bbc0ec83dface3418b0ae505a847eb0, type: 3}

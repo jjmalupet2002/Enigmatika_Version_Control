@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 4956703204778178474}
   - component: {fileID: 6841869889774250249}
   - component: {fileID: 3662986698088862121}
+  - component: {fileID: 4686445065849365386}
   m_Layer: 0
   m_Name: Gem
   m_TagString: Untagged
@@ -259,6 +260,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4686445065849365386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2755423145140764434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc721c96fce0f74fa6d4015a6a410c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3423371255419440464
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +283,7 @@ GameObject:
   - component: {fileID: 3515506024969334940}
   - component: {fileID: 3289055972259360658}
   - component: {fileID: 1133539808768695662}
+  - component: {fileID: 5678289302181881781}
   m_Layer: 0
   m_Name: Gem_Green
   m_TagString: Untagged
@@ -410,6 +424,31 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5678289302181881781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3423371255419440464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1b66b95b9ae744973293dfda93769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Emerald Gem
+  itemIcon: {fileID: 21300000, guid: 1fe19ffae1abab0479d7d9716bcbbb9c, type: 3}
+  itemDescription: This is an Emerald Gem from Adrian. You can try to trade it with
+    other villagers.
+  keyId: 
+  isClueItem: 1
+  isGeneralItem: 0
+  isUsable: 1
+  isNote: 0
+  is3dObject: 1
+  notificationText: {fileID: 0}
+  noteUI: {fileID: 0}
+  inventoryManager: {fileID: 11400000, guid: 96b550d4fe8c98e459ecd0f032e22d1f, type: 2}
 --- !u!1 &3697869999165536293
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +529,10 @@ MonoBehaviour:
   onCameraStateChange:
     m_PersistentCalls:
       m_Calls: []
+  QuestHolder: {fileID: 0}
+  QuestPopUpPrefab: {fileID: 1031452306680826, guid: 6ca7b6e9d0b595a4db701994f9b78698, type: 3}
+  CriteriaUITemplatePrefab: {fileID: 180918, guid: 1c67a39858ff7cf4abe3e91ae2a48f8a, type: 3}
+  QuestUITemplatePrefab: {fileID: 140556, guid: 17a5a2cac7b25ab45a39412d430a3001, type: 3}
 --- !u!114 &8729623194801560423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,6 +934,7 @@ MonoBehaviour:
   chestOpenCloseAudio: {fileID: 7417590173457098962}
   drawerLockedAudioSource: {fileID: 0}
   chestLockedAudioSource: {fileID: 8492292738606066688}
+  OpenUsingKeyAudio: {fileID: 0}
   openDistance: 0.5
   openCloseSpeedDrawer: 2
   isDrawerLocked: 0
@@ -909,6 +953,10 @@ MonoBehaviour:
   closedYRotation: 0
   openYRotation: 90
   openCloseSpeedCloset: 2
+  requiredKeyId: 
+  inventoryManager: {fileID: 0}
+  backButton: {fileID: 0}
+  unlockUI: {fileID: 0}
 --- !u!65 &7610470779808280922
 BoxCollider:
   m_ObjectHideFlags: 0
