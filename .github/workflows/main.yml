@@ -1,39 +1,48 @@
-name: Unity Build Only 🚀
+name: Unity Build and Release 🚀
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (format: v1.2.3)'
+        required: true
+        type: string
   # [push, pull_request]
 
 jobs:
-  build:
-    name: Build for ${{ matrix.targetPlatform }}
+  validate-version:
+    name: Validate Version Format
+    runs-on: ubuntu-latest
+    outputs:
+      is_valid: ${{ steps.check-version.outputs.is_valid }}
+      version: ${{ github.event.inputs.version }}
+    steps:
+      - name: Check version format
+        id: check-version
+        run: |
+          if [[ "${{ github.event.inputs.version }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Version format is valid"
+            echo "is_valid=true" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid version format. Must be in the format v1.2.3"
+            echo "is_valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+  # Android Build Job
+  build-android:
+    name: Build for Android
     runs-on: ubuntu-latest
     timeout-minutes: 75
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - Android
-          # - StandaloneWindows64
-          # - WebGL
-
+    needs: validate-version
+    if: needs.validate-version.outputs.is_valid == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: false
 
-      - name: Activate Unity License 🔑
-        uses: game-ci/unity-activate@v2
-        env:
-          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: ${{ env.UNITY_VERSION }}
-
-      - name: Free up disk space on runner 🧹
-        if: matrix.targetPlatform == 'Android'
+      - name: Free up disk space on Ubuntu runner 🧹
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
           tool-cache: true
@@ -43,9 +52,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-${{ matrix.targetPlatform }}-
+            Library-Android-
 
       - name: Build project 🏗️
         id: build_unity
@@ -55,19 +64,43 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: ${{ matrix.targetPlatform }}
+          targetPlatform: Android
           unityVersion: ${{ env.UNITY_VERSION }}
+          versioning: Custom
+          version: ${{ needs.validate-version.outputs.version }}
 
       - name: Upload Build Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          name: Android-${{ needs.validate-version.outputs.version }}
+          path: build/Android
+          compression-level: 0
+          if-no-files-found: error
+          
+  # Refer to other workflow file in bak file extension for Apple build job.
+  # Apple build requires a performant runner or self-hosted runner.
 
-      - name: Return Unity License ↩️
-        if: steps.build_unity.outcome == 'failure'
-        uses: game-ci/unity-return-license@v2
-        env:
-          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [validate-version, build-android]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: builds
+          merge-multiple: false
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.validate-version.outputs.version }}
+          name: Release ${{ needs.validate-version.outputs.version }}
+          draft: false
+          prerelease: false
+          files: builds/**/*
+          fail_on_unmatched_files: true
+          generate_release_notes: true
