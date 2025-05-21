@@ -12,19 +12,31 @@ public class PlayerDetective : MonoBehaviour
 
     AudioManager audioManager;
 
+    public bool canDie = false; // <--- Add this flag to control death behavior
+
     private void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+        if (audioObject != null)
+        {
+            audioManager = audioObject.GetComponent<AudioManager>();
+            if (audioManager == null)
+            {
+                UnityEngine.Debug.LogError("AudioManager component not found on the object with tag 'Audio'.");
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("No GameObject with tag 'Audio' found.");
+        }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
         playerhealthBar.SetMaxHealth(maxHealth);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -37,7 +49,7 @@ public class PlayerDetective : MonoBehaviour
     {
         audioManager.PlaySFX(audioManager.bonecrack); // Play damage sound effect
 
-        Debug.Log($"Player took damage: {damage}");
+        UnityEngine.Debug.Log($"Player took damage: {damage}");
         currentHealth -= damage;
 
         // Clamp health to avoid negative values
@@ -47,7 +59,7 @@ public class PlayerDetective : MonoBehaviour
         playerhealthBar.SetHealth(currentHealth);
 
         // Check if the player is dead
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && canDie)
         {
             Die();
         }
@@ -55,12 +67,10 @@ public class PlayerDetective : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Player Died!");
+        UnityEngine.Debug.Log("Player Died!");
 
         gameObject.SetActive(false); // Disable player
-            
-        gameOverManager.ShowGameOver(); // Shows Game Over Screen
-       
-    }
 
+        gameOverManager.ShowGameOver(); // Shows Game Over Screen
+    }
 }

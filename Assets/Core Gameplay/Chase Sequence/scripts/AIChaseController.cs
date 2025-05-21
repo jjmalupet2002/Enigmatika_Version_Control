@@ -1,58 +1,51 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class AIChaseController : MonoBehaviour
 {
+    [System.Serializable]
+    public class EnemyData
+    {
+        public GameObject enemyObject;
+        public GameObject triggerZone;
+        public float moveSpeed = 3f;
+        public bool moveInZ = true;
+        public float targetZ;
+        public bool moveInX = false;
+        public float targetX;
+        public float collisionRange = 1f;
+        public float triggerRange = 1f;    // Custom range for trigger zone detection
+
+        [HideInInspector] public Vector3 startPosition;
+        [HideInInspector] public bool hasBeenTriggered = false;
+    }
+
     [Header("References")]
     public Transform player;
-    public Transform enemy;
     public Transform playerStartPosition;
-    public Transform enemyStartPosition;
+    public EnemyTrapScript trapScript;
+    public CanvasGroup blackScreenCanvasGroup;
     public AudioSource chaseMusic;
-    public AudioSource backgroundMusic; // Reference to background music
-    public CanvasGroup blackScreenCanvasGroup; // Using CanvasGroup instead of Image
+    public AudioSource backgroundMusic;
 
-    private NavMeshAgent enemyAgent;
-    private Rigidbody enemyRigidbody;
-    private Rigidbody playerRigidbody;
+    [Header("Enemies")]
+    public List<EnemyData> enemies = new List<EnemyData>();
 
-    [Header("Chase Settings")]
-    public float detectionRadius = 5f; // Radius for player detection
-    public float chaseSpeed = 5f;
-    public float fadeDuration = 1.5f; // Time for fade effect
-    public float chaseCooldown = 2f; // Cooldown before AI chases again
+    [Header("Settings")]
+    public float fadeDuration = 1.5f;
 
-    private bool isChasing = false;
-    private bool isOnCooldown = false; // Flag to track cooldown state
+    private Rigidbody playerRb;
 
     void Start()
     {
-        enemyAgent = enemy.GetComponent<NavMeshAgent>();
-        enemyRigidbody = enemy.GetComponent<Rigidbody>();
-        playerRigidbody = player.GetComponent<Rigidbody>();
+        playerRb = player.GetComponent<Rigidbody>();
 
-        if (enemyAgent == null)
+        foreach (var enemy in enemies)
         {
-            UnityEngine.Debug.LogError("NavMeshAgent component is missing on the enemy GameObject.");
-            return;
+            enemy.startPosition = enemy.enemyObject.transform.position;
         }
-
-        if (enemyRigidbody == null)
-        {
-            UnityEngine.Debug.LogError("Rigidbody component is missing on the enemy GameObject.");
-            return;
-        }
-
-        if (playerRigidbody == null)
-        {
-            UnityEngine.Debug.LogError("Rigidbody component is missing on the player GameObject.");
-            return;
-        }
-
-        enemyAgent.speed = chaseSpeed;
-        enemyAgent.isStopped = true;
 
         if (blackScreenCanvasGroup != null)
             blackScreenCanvasGroup.alpha = 0f;
@@ -60,114 +53,98 @@ public class AIChaseController : MonoBehaviour
 
     void Update()
     {
-        if (!isChasing && !isOnCooldown)
+        foreach (var enemy in enemies)
         {
-            DetectPlayer();
-        }
-        else if (isChasing)
-        {
-            ChasePlayer();
-        }
-    }
-
-    private void DetectPlayer()
-    {
-        if (Vector3.Distance(player.position, enemy.position) <= detectionRadius)
-        {
-            StartChase();
-        }
-    }
-
-    private void ChasePlayer()
-    {
-        if (enemyAgent != null)
-        {
-            enemyAgent.SetDestination(player.position);
-            enemyAgent.isStopped = false;
-        }
-    }
-
-    private void StartChase()
-    {
-        if (!isChasing && !isOnCooldown) // Ensure chase does not start during cooldown
-        {
-            isChasing = true;
-
-            // Stop background music if it's playing
-            if (backgroundMusic != null && backgroundMusic.isPlaying)
+            if (!enemy.hasBeenTriggered)
             {
-                backgroundMusic.Stop();
+                // Check if player overlaps trigger zone with customizable range
+                if (enemy.triggerZone != null &&
+                    Physics.OverlapSphere(enemy.triggerZone.transform.position, enemy.triggerRange).Length > 0)
+                {
+                    foreach (var hit in Physics.OverlapSphere(enemy.triggerZone.transform.position, enemy.triggerRange))
+                    {
+                        if (hit.transform == player)
+                        {
+                            enemy.hasBeenTriggered = true;
+                            chaseMusic?.Play();
+                        }
+                    }
+                }
             }
-
-            // Start chase music if it's not playing
-            if (chaseMusic != null && !chaseMusic.isPlaying)
+            else
             {
-                chaseMusic.Play();
+                MoveEnemy(enemy);
+                CheckPlayerCollision(enemy);
             }
         }
     }
 
-    public void OnPlayerCaught()
+    private void MoveEnemy(EnemyData enemy)
     {
-        StartCoroutine(HandlePlayerCaught());
+        Vector3 currentPos = enemy.enemyObject.transform.position;
+        Vector3 targetPos = currentPos;
+
+        if (enemy.moveInZ)
+            targetPos.z = enemy.targetZ;
+
+        if (enemy.moveInX)
+            targetPos.x = enemy.targetX;
+
+        Vector3 direction = (targetPos - currentPos).normalized;
+        enemy.enemyObject.transform.position += direction * enemy.moveSpeed * Time.deltaTime;
+    }
+
+    private void CheckPlayerCollision(EnemyData enemy)
+    {
+        float dist = Vector3.Distance(enemy.enemyObject.transform.position, player.position);
+        if (dist <= enemy.collisionRange)
+        {
+            StartCoroutine(HandlePlayerCaught());
+        }
     }
 
     private IEnumerator HandlePlayerCaught()
     {
-        isChasing = false;
-        isOnCooldown = true;
-
-        if (chaseMusic != null)
-            chaseMusic.Stop();
-
-        if (enemyAgent != null)
-            enemyAgent.isStopped = true;
-
-        // **Disable Player Input Before Resetting**
+        // Disable player movement temporarily
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(false);
+        chaseMusic?.Stop();
+        backgroundMusic?.Stop();
 
-        yield return StartCoroutine(FadeScreen(1)); // Fade to black
+        yield return StartCoroutine(FadeScreen(1));
 
-        // Reset positions
         ResetPlayerPosition();
-        ResetEnemyPosition();
+        ResetEnemies();
 
         yield return new WaitForSeconds(0.5f);
-        yield return StartCoroutine(FadeScreen(0)); // Fade back to normal
+        yield return StartCoroutine(FadeScreen(0));
 
-        // **Enable Player Input After Cooldown**
-        yield return new WaitForSeconds(chaseCooldown);
-        isOnCooldown = false;
         player.GetComponent<PlayerJoystickControl>().SetInputEnabled(true);
-
-        // Resume background music when chase ends
-        if (backgroundMusic != null)
-        {
-            backgroundMusic.Play();
-        }
+        backgroundMusic?.Play();
     }
 
     private void ResetPlayerPosition()
     {
-        if (playerRigidbody != null)
+        if (playerRb != null)
         {
-            // **Use MovePosition() instead of isKinematic**
-            playerRigidbody.velocity = Vector3.zero; // Stop movement
-            playerRigidbody.angularVelocity = Vector3.zero;
-            playerRigidbody.MovePosition(playerStartPosition.position);
+            playerRb.velocity = Vector3.zero;
+            playerRb.angularVelocity = Vector3.zero;
+            playerRb.MovePosition(playerStartPosition.position);
         }
         else
         {
             player.position = playerStartPosition.position;
         }
+
+        if (trapScript != null)
+            trapScript.resetTrapGate = true;
     }
 
-    private void ResetEnemyPosition()
+    private void ResetEnemies()
     {
-        if (enemyAgent != null)
+        foreach (var enemy in enemies)
         {
-            enemyAgent.Warp(enemyStartPosition.position);
-            enemyAgent.isStopped = true;
+            enemy.enemyObject.transform.position = enemy.startPosition;
+            enemy.hasBeenTriggered = false;
         }
     }
 
@@ -184,5 +161,24 @@ public class AIChaseController : MonoBehaviour
         }
 
         blackScreenCanvasGroup.alpha = targetAlpha;
+    }
+
+    // Optional: visualize trigger and collision areas
+    private void OnDrawGizmosSelected()
+    {
+        foreach (var enemy in enemies)
+        {
+            if (enemy.triggerZone != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(enemy.triggerZone.transform.position, enemy.triggerRange); // Use dynamic range
+            }
+
+            if (enemy.enemyObject != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(enemy.enemyObject.transform.position, enemy.collisionRange);
+            }
+        }
     }
 }

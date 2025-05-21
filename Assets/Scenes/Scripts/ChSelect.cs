@@ -8,44 +8,33 @@ using System.ComponentModel;
 
 public class ChSelect : MonoBehaviour
 {
-
     [Header("Main Menu UI")]
+    [SerializeField] private GameObject titleScreen;
     [SerializeField] private GameObject chSelect;
 
-    public void playChOne()
+    [Header("Loading Screens")]
+    [SerializeField] private GameObject[] loadingScreens; // Index 0 = Ch1, 1 = Ch2, etc.
+
+    // Map chapter index (starting at 0) to scene index
+    [SerializeField] private int[] sceneIndices = { 1, 3, 5 };
+
+    public void PlayChapter(int chapter)
     {
-        UnityEngine.Debug.Log("Playing Chapter 1...");
-
-        // **Always load Level 1 (Scene Index 2)**
-        SceneManager.LoadSceneAsync(2);
-    }
-
-    public void playChapterTwo()
-    {
-        UnityEngine.Debug.Log("Playing Chapter 2...");
-        SceneManager.LoadSceneAsync(4); // Loads Chapter 2 (Scene Index 3)
-    }
-
-    public void playChapterThree()
-    {
-        UnityEngine.Debug.Log("Playing Chapter 3...");
-        SceneManager.LoadSceneAsync(6); // Loads Chapter 2 (Scene Index 3)
-    }
-
-    IEnumerator LoadLevelAsync(int leveltoLoad)
-    {
-        UnityEngine.AsyncOperation loadOperation = SceneManager.LoadSceneAsync(leveltoLoad);
-
-        while (!loadOperation.isDone)
+        if (chapter < 0 || chapter >= loadingScreens.Length || chapter >= sceneIndices.Length)
         {
-            yield return null;
+            UnityEngine.Debug.LogWarning("Invalid chapter selected.");
+            return;
         }
+
+        UnityEngine.Debug.Log($"Playing Chapter {chapter + 1}...");
+        chSelect.SetActive(false);
+        loadingScreens[chapter].SetActive(true);
+        SceneManager.LoadSceneAsync(sceneIndices[chapter]);
     }
 
-    public void mainMenu()
+    public void MainMenu()
     {
-        // Go back to Main Menu
-        // Ensure index of the said scene in the Scene Manager is 0, else change the value below
-        SceneManager.LoadSceneAsync(0);
+        chSelect.SetActive(false);
+        titleScreen.SetActive(true);
     }
 }

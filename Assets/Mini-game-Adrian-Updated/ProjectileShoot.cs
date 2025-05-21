@@ -17,6 +17,9 @@ public class ProjectileShooter : MonoBehaviour
     // Define a static event for projectile spawn
     public static System.Action OnProjectileSpawned;
 
+    [Header("Shooting Mode")]
+    public bool shootStraight = false; // If true, projectiles shoot forward
+
     void Start()
     {
         // Start the shooting coroutine, but it will only shoot when isShootingEnabled is true
@@ -40,29 +43,32 @@ public class ProjectileShooter : MonoBehaviour
 
     private void ShootProjectileAtPlayer()
     {
-        // Instantiate the projectile at the shoot point
         GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
-
-        // Add the projectile to the list of active projectiles
         activeProjectiles.Add(projectile);
 
-        // Calculate the direction to the player on the same horizontal plane (ignore height)
-        Vector3 directionToPlayer = (player.position - shootPoint.position).normalized;
-        directionToPlayer.y = 0; // Ignore the Y-axis to keep the projectile on the same horizontal level
-        directionToPlayer.Normalize();
-
-        // Set the projectile's velocity
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = directionToPlayer * projectileSpeed;
+            Vector3 direction;
+
+            if (shootStraight)
+            {
+                // Shoot straight in the forward direction of the shoot point
+                direction = shootPoint.forward;
+            }
+            else
+            {
+                // Shoot toward the player (horizontal only)
+                direction = (player.position - shootPoint.position);
+                direction.y = 0;
+                direction.Normalize();
+            }
+
+            rb.velocity = direction * projectileSpeed;
         }
 
-        // Invoke the projectile spawned event
         OnProjectileSpawned?.Invoke();
-
-        // Destroy the projectile after a certain time to prevent clutter
-        Destroy(projectile, 5f); // Adjust time as needed
+        Destroy(projectile, 5f);
     }
 
     // Enable shooting (called when switching to top-down camera)

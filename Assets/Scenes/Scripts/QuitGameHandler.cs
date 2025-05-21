@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,7 @@ public class QuitGameHandler : MonoBehaviour
         // Add listeners for the buttons
         exitButton.onClick.AddListener(OnExitButtonPressed);
         noButton.onClick.AddListener(OnNoButtonPressed);
+        yesButton.onClick.AddListener(OnYesButtonPressed); // Add this!
     }
 
     // Display the quit alert UI when the exit button is pressed
@@ -31,9 +33,14 @@ public class QuitGameHandler : MonoBehaviour
         quitAlertUI.SetActive(false);
     }
 
-    // Hide the quit alert UI when the no button is pressed
+    // Log and quit the game
     void OnYesButtonPressed()
     {
+        UnityEngine.Debug.Log("Game is quitting...");
         Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Stop play mode in the editor
+#endif
     }
 }

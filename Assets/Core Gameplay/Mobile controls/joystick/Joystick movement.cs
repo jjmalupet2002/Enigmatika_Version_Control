@@ -25,6 +25,10 @@ public class PlayerJoystickControl : MonoBehaviour
     [Header("Save System:")]
     public PlayerPositionSaveObject playerPositionSaveObject; // Reference to your PlayerPositionSaveObject
 
+    [Header("Movement Inversion:")]
+    public bool invertMovement = false; // Toggle to invert movement
+    public GameObject cloakObject;
+
     private Vector2 movementInput; // Stores joystick input
     private bool isInputEnabled = true; // Flag to control input processing
     private bool isOnStairs = false; // Flag to check if the player is on stairs
@@ -96,6 +100,7 @@ public class PlayerJoystickControl : MonoBehaviour
             MovePlayer();
             ClimbStairs();
             ApplyGravity();
+            UpdateInvertMovementBasedOnCloak();
         }
     }
 
@@ -123,7 +128,8 @@ public class PlayerJoystickControl : MonoBehaviour
     {
         if (isInputEnabled && GameStateManager.Instance.CanPlayerMove())
         {
-            movementInput = context.ReadValue<Vector2>() * -1f;
+            Vector2 rawInput = context.ReadValue<Vector2>();
+            movementInput = invertMovement ? rawInput : -rawInput;
             idleTimer = 0f; // Reset idle timer on movement
         }
     }
@@ -134,6 +140,19 @@ public class PlayerJoystickControl : MonoBehaviour
         {
             movementInput = Vector2.zero;
         }
+    }
+
+    private void UpdateInvertMovementBasedOnCloak()
+    {
+        if (cloakObject != null)
+        {
+            invertMovement = cloakObject.activeInHierarchy;
+        }
+    }
+
+    private Vector2 GetProcessedMovementInput(Vector2 rawInput)
+    {
+        return invertMovement ? -rawInput : rawInput;
     }
 
     private void MovePlayer()
