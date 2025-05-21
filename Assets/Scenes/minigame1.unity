@@ -6138,8 +6138,12 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   playerhealthBar: {fileID: 1656881441}
-  gameOverManager: {fileID: 1136530788}
-  canDie: 0
+  onGameOver:
+    m_PersistentCalls:
+      m_Calls: []
+  gameOverHandler: {fileID: 0}
+  gameOverMethodName: ShowGameOver
+  canDie: 1
 --- !u!54 &2660364320570566409 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 1570224738228325552, guid: b9274f768b55f664989eee527dcfd809, type: 3}
@@ -7895,6 +7899,10 @@ PrefabInstance:
     - target: {fileID: 1227535153445496286, guid: c41bb7aac924ca449927d85514add2f2, type: 3}
       propertyPath: m_Name
       value: Camera Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227535153445496286, guid: c41bb7aac924ca449927d85514add2f2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1392761991276752935, guid: c41bb7aac924ca449927d85514add2f2, type: 3}
       propertyPath: m_LocalPosition.x
