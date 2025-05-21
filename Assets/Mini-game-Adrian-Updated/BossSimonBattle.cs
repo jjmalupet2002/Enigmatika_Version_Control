@@ -67,17 +67,17 @@ public class BossSimonBattle : MonoBehaviour
             // This happens after showTextDelay + postCountdownPause in SimonSaysGrid
             yield return new WaitForSeconds(simonGrid.showTextDelay + simonGrid.postCountdownPause + 0.5f);
             
+            // Check if player is on the safe tile
+            CheckPlayerOnSafeTile();
             
             // Wait until tiles reappear and player can move again
             yield return new WaitForSeconds(simonGrid.hideDuration - 1f);
             
-            // Check if player is on the safe tile
-            CheckPlayerOnSafeTile();
             
             // Process the result and allow damage if player was on safe tile
             ProcessSimonSaysResult();
             
-            // If auto-damage is enabled, damage the boss immediately
+            // If auto-damage is enabled and player survived (was on safe tile), damage the boss immediately
             if (autoDamageBoss && playerWasOnSafeTile)
             {
                 AttemptDamageBoss();
@@ -107,29 +107,14 @@ public class BossSimonBattle : MonoBehaviour
         
         if (playerWasOnSafeTile)
         {
-            // Player is on the safe tile
+            // Player is on the safe tile - they avoided damage
             if (statusText != null)
                 statusText.text = "You found the safe tile!";
                 
             if (playerSuccessEffect != null)
                 Instantiate(playerSuccessEffect, playerObject.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            // Player is not on the safe tile
-            if (statusText != null)
-                statusText.text = "You missed the safe tile!";
                 
-            if (playerFailEffect != null)
-                Instantiate(playerFailEffect, playerObject.transform.position, Quaternion.identity);
-        }
-    }
-    
-    void ProcessSimonSaysResult()
-    {
-        if (playerWasOnSafeTile)
-        {
-            // Allow player to damage the boss
+            // Player avoided damage, so they can now damage the boss
             canDamageBoss = true;
             
             if (statusText != null)
@@ -138,7 +123,7 @@ public class BossSimonBattle : MonoBehaviour
             // Optional: Add visual indicator that boss can be damaged
             if (boss != null)
             {
-                // For example, change color or add particle effect to boss
+                // Change color or add particle effect to boss
                 Renderer bossRenderer = boss.GetComponent<Renderer>();
                 if (bossRenderer != null)
                     StartCoroutine(FlashVulnerable(bossRenderer));
@@ -146,9 +131,27 @@ public class BossSimonBattle : MonoBehaviour
         }
         else
         {
-            // Player failed, boss is not vulnerable
+            // Player is not on the safe tile - they took damage
+            if (statusText != null)
+                statusText.text = "You missed the safe tile!";
+                
+            if (playerFailEffect != null)
+                Instantiate(playerFailEffect, playerObject.transform.position, Quaternion.identity);
+                
+            // Player took damage, so they cannot damage the boss
             canDamageBoss = false;
             
+            // Apply damage to player if needed
+            // You could add player damage logic here or use your existing ZoneDamage system
+        }
+    }
+    
+    void ProcessSimonSaysResult()
+    {
+        // This function is now simplified since we handle the vulnerability logic directly in CheckPlayerOnSafeTile
+        if (!playerWasOnSafeTile)
+        {
+            // Player failed, boss is not vulnerable
             if (statusText != null)
                 statusText.text = "You cannot damage the boss!";
         }

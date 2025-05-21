@@ -50,6 +50,22 @@ public class SimonSaysGrid : MonoBehaviour
     public float showTextDelay = 2f;
     public float postCountdownPause = 0.5f;
     public float hideDuration = 2f;
+    [Tooltip("Number of rounds before game over")]
+    public int maxRounds = 5;
+    [Tooltip("Delay between rounds")]
+    public float roundDelay = 0.5f;
+
+    [Header("Game Over Settings")]
+    [Tooltip("Object to activate when game is over")]
+    public GameObject gameOverObject;
+    [Tooltip("Optional text to update with round information")]
+    public Text roundInfoText;
+    [Tooltip("Text to display in round info (use {current} and {max} as placeholders)")]
+    public string roundInfoFormat = "Round {current}/{max}";
+    [Tooltip("Enable to restart game automatically after all rounds")]
+    public bool autoRestart = false;
+    [Tooltip("Time to wait before restarting if autoRestart is enabled")]
+    public float restartDelay = 3f;
 
     [Header("Additional Objects")]
     [Tooltip("Additional objects to remove during the freeze period")]
@@ -70,6 +86,7 @@ public class SimonSaysGrid : MonoBehaviour
     public List<TileColor> tileColors = new List<TileColor>();
     
     private int currentHintIndex = 0;
+    private int currentRound = 0;
 
     [Header("UI")]
     public Text safeTileText;
@@ -86,6 +103,9 @@ public class SimonSaysGrid : MonoBehaviour
     private Dictionary<GameObject, bool> originalObjectStates = new Dictionary<GameObject, bool>();
     // Store original renderers for fade effects
     private Dictionary<GameObject, Renderer[]> objectRenderers = new Dictionary<GameObject, Renderer[]>();
+    
+    // Flag to indicate if the game is over
+    private bool isGameOver = false;
 
     void Awake()
     {
@@ -103,6 +123,12 @@ public class SimonSaysGrid : MonoBehaviour
                     }
                 }
             }
+        }
+        
+        // Make sure game over object is hidden at start
+        if (gameOverObject != null)
+        {
+            gameOverObject.SetActive(false);
         }
     }
 
@@ -130,13 +156,54 @@ public class SimonSaysGrid : MonoBehaviour
             });
         }
 
+        // Reset round counter
+        currentRound = 0;
+        isGameOver = false;
+        
+        // Update round info text if available
+        UpdateRoundInfoText();
+
+        StartCoroutine(SimonSaysLoop());
+    }
+    
+    // New public method to restart the game
+    public void RestartGame()
+    {
+        // Hide game over object
+        if (gameOverObject != null)
+        {
+            gameOverObject.SetActive(false);
+        }
+        
+        // Reset round counter
+        currentRound = 0;
+        isGameOver = false;
+        
+        // Update round info text
+        UpdateRoundInfoText();
+        
+        // Restart the game loop
+        StopAllCoroutines();
         StartCoroutine(SimonSaysLoop());
     }
 
     IEnumerator SimonSaysLoop()
     {
-        while (true)
+        while (!isGameOver)
         {
+            // Increment round counter
+            currentRound++;
+            
+            // Update round info text
+            UpdateRoundInfoText();
+            
+            // Check if we've reached max rounds
+            if (currentRound > maxRounds)
+            {
+                ShowGameOver();
+                yield break;
+            }
+
             // Select a random safe position using 0-based indices internally
             int safeRow = Random.Range(0, rows);
             int safeCol = Random.Range(0, cols);
@@ -233,8 +300,49 @@ public class SimonSaysGrid : MonoBehaviour
             if (movementObject != null)
                 movementObject.SetActive(true);
 
-            yield return new WaitForSeconds(0.5f);
+            // Wait between rounds
+            yield return new WaitForSeconds(roundDelay);
         }
+    }
+    
+    void UpdateRoundInfoText()
+    {
+        if (roundInfoText != null)
+        {
+            string infoText = roundInfoFormat
+                .Replace("{current}", currentRound.ToString())
+                .Replace("{max}", maxRounds.ToString());
+            
+            roundInfoText.text = infoText;
+        }
+    }
+    
+    void ShowGameOver()
+    {
+        isGameOver = true;
+        
+        if (gameOverObject != null)
+        {
+            gameOverObject.SetActive(true);
+        }
+        
+        // Make sure player is enabled at game over
+        if (movementObject != null)
+        {
+            movementObject.SetActive(true);
+        }
+        
+        // Auto restart if enabled
+        if (autoRestart)
+        {
+            StartCoroutine(AutoRestartAfterDelay());
+        }
+    }
+    
+    IEnumerator AutoRestartAfterDelay()
+    {
+        yield return new WaitForSeconds(restartDelay);
+        RestartGame();
     }
 
     IEnumerator FadeOutObject(GameObject obj, float duration)
