@@ -56,7 +56,9 @@ public class SimonSaysGrid : MonoBehaviour
     public float roundDelay = 0.5f;
 
     [Header("Game Over Settings")]
-    [Tooltip("Object to activate when game is over")]
+    [Tooltip("Reference to GameOver2 script component")]
+    public GameOverWin gameOverScript;
+    [Tooltip("Optional: legacy game over object (will be deprecated)")]
     public GameObject gameOverObject;
     [Tooltip("Optional text to update with round information")]
     public Text roundInfoText;
@@ -129,6 +131,16 @@ public class SimonSaysGrid : MonoBehaviour
         if (gameOverObject != null)
         {
             gameOverObject.SetActive(false);
+        }
+        
+        // Find GameOver2 script if not assigned
+        if (gameOverScript == null)
+        {
+            gameOverScript = FindObjectOfType<GameOverWin>();
+            if (gameOverScript == null)
+            {
+                Debug.LogWarning("GameOver2 script not found in the scene. Game over functionality may not work properly.");
+            }
         }
     }
 
@@ -320,18 +332,28 @@ public class SimonSaysGrid : MonoBehaviour
     void ShowGameOver()
     {
         isGameOver = true;
-        
-        if (gameOverObject != null)
+    
+        // Use GameOver2 script if available - Pass true to indicate this is a "Win" screen
+        if (gameOverScript != null)
+        {
+            gameOverScript.ShowGameOver(true); // Pass true to indicate this is a win screen
+        }
+        // Fall back to legacy behavior if GameOver2 script is not available
+        else if (gameOverObject != null)
         {
             gameOverObject.SetActive(true);
         }
-        
+        else
+        {
+            Debug.LogError("No game over system found! Please assign either GameOver2 script or gameOverObject.");
+        }
+    
         // Make sure player is enabled at game over
         if (movementObject != null)
         {
             movementObject.SetActive(true);
         }
-        
+    
         // Auto restart if enabled
         if (autoRestart)
         {

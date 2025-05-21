@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerDetective : MonoBehaviour
 {
@@ -8,11 +9,19 @@ public class PlayerDetective : MonoBehaviour
     public int currentHealth;
 
     public PlayerHealthBar playerhealthBar;
-    public GameOver gameOverManager;
+    
+    // Replace specific GameOver reference with a more flexible system
+    public UnityEvent onGameOver;  // Unity event that will be triggered on game over
+    
+    // Optional reference for GameObject that handles game over
+    public MonoBehaviour gameOverHandler;  // Can be any component/script
+    
+    // Method name to call on the gameOverHandler
+    public string gameOverMethodName = "ShowGameOver";
 
     AudioManager audioManager;
 
-    public bool canDie = false; // <--- Add this flag to control death behavior
+    public bool canDie = false;
 
     private void Awake()
     {
@@ -29,6 +38,10 @@ public class PlayerDetective : MonoBehaviour
         {
             UnityEngine.Debug.LogError("No GameObject with tag 'Audio' found.");
         }
+        
+        // Initialize UnityEvent if null
+        if (onGameOver == null)
+            onGameOver = new UnityEvent();
     }
 
     void Start()
@@ -47,7 +60,8 @@ public class PlayerDetective : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        audioManager.PlaySFX(audioManager.bonecrack); // Play damage sound effect
+        if (audioManager != null)
+            audioManager.PlaySFX(audioManager.bonecrack); // Play damage sound effect
 
         UnityEngine.Debug.Log($"Player took damage: {damage}");
         currentHealth -= damage;
@@ -56,7 +70,8 @@ public class PlayerDetective : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         // Update the health bar
-        playerhealthBar.SetHealth(currentHealth);
+        if (playerhealthBar != null)
+            playerhealthBar.SetHealth(currentHealth);
 
         // Check if the player is dead
         if (currentHealth <= 0 && canDie)
@@ -69,8 +84,21 @@ public class PlayerDetective : MonoBehaviour
     {
         UnityEngine.Debug.Log("Player Died!");
 
+        // Trigger game over with multiple options
+        TriggerGameOver();
+        
         gameObject.SetActive(false); // Disable player
-
-        gameOverManager.ShowGameOver(); // Shows Game Over Screen
+    }
+    
+    private void TriggerGameOver()
+    {
+        // Option 1: Invoke the Unity Event
+        onGameOver.Invoke();
+        
+        // Option 2: Use the gameOverHandler if provided
+        if (gameOverHandler != null && !string.IsNullOrEmpty(gameOverMethodName))
+        {
+            gameOverHandler.SendMessage(gameOverMethodName, SendMessageOptions.DontRequireReceiver);
+        }
     }
 }

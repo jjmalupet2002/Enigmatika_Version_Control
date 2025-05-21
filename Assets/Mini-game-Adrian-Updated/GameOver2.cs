@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameOver : MonoBehaviour
+public class GameOver2 : MonoBehaviour
 {
     public GameObject gameOverPanel; // Reference to the Game Over UI Panel
     public GameObject[] otherCanvases; // Array to store other UI Canvases
@@ -34,16 +34,13 @@ public class GameOver : MonoBehaviour
     }
     public void RestartButton()
     {
-        SceneManager.LoadScene("minigame1");
+        SceneManager.LoadScene("minigame2");
     }
     
     public void ExitButton()
     {
         SceneManager.LoadScene("Main Menu");
 
-        // If running in the editor, stop play mode
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+        
     }
 }
